@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoParty - Directorio de Proveedores Verificados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        goparty: { yellow: '#FFD93D', pink: '#FF6B9D', blue: '#4ECDC4', dark: '#2C3E50', gold: '#D4AF37' }
+                    },
+                    fontFamily: { sans: ['Manrope', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+        .gradient-hero { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4ECDC4 100%); }
+        .gradient-btn { background: linear-gradient(135deg, #FF6B9D 0%, #4ECDC4 100%); }
+        .category-checkbox:checked + div { border-color: #FF6B9D; background-color: #FFF0F5; }
+        .category-checkbox:checked + div .check-icon { opacity: 1; transform: scale(1); }
+        .plan-radio:checked + div { border-color: #FF6B9D; background-color: #FFF0F5; transform: scale(1.02); }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hidden-view { display: none; }
+        .gold-border { border: 2px solid #D4AF37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- NAVIGATION -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="showView('home')">
+                    <div class="text-2xl font-extrabold"><span class="text-goparty-yellow">GO</span><span class="text-goparty-pink">PARTY</span></div>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <button onclick="showView('home')" class="text-gray-700 hover:text-goparty-pink font-medium">Explorar</button>
+                    <button onclick="showView('register')" class="gradient-btn text-white px-5 py-2 rounded-full font-semibold hover:shadow-lg transition">Soy Proveedor</button>
+                    <button onclick="showView('admin')" class="text-gray-700 hover:text-goparty-pink font-medium"><i class="fas fa-lock mr-1"></i> Admin</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- VIEW: HOME / DIRECTORY -->
+    <div id="view-home" class="view-section fade-in">
+        <section class="gradient-hero py-16 px-4">
+            <div class="container mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Haz que tu fiesta sea inolvidable</h1>
+                <p class="text-xl text-white mb-8 max-w-2xl mx-auto">Encuentra a los mejores proveedores verificados en Xalapa</p>
+                <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-4">
+                    <div class="grid md:grid-cols-3 gap-3">
+                        <select id="filter-category" onchange="filterProviders()" class="px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                            <option value="">Todas las categorías</option>
+                            <option value="Salones">🏰 Salones</option><option value="Alimentos">️ Alimentos</option>
+                            <option value="Fotografía">📸 Fotografía</option><option value="Música">🎵 Música/DJ</option>
+                            <option value="Decoración">🎈 Decoración</option><option value="Animación">🎪 Animación</option>
+                        </select>
+                        <select id="filter-plan" onchange="filterProviders()" class="px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                            <option value="">Cualquier plan</option>
+                            <option value="Gold">👑 Solo Gold (Destacados)</option>
+                            <option value="Pro">⭐ Pro</option>
+                        </select>
+                        <button onclick="filterProviders()" class="gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition"><i class="fas fa-search mr-2"></i>Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 px-4 container mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800">Proveedores Destacados</h2>
+                <span class="text-gray-500" id="provider-count">0 proveedores</span>
+            </div>
+            <div id="providers-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+    </div>
+
+    <!-- VIEW: PROVIDER REGISTRATION (4 PASOS) -->
+    <div id="view-register" class="view-section hidden-view fade-in min-h-screen py-12 px-4">
+        <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-goparty-dark mb-2">Únete a GoParty</h2>
+                <p class="text-gray-600">Completa tu perfil y elige tu plan de crecimiento</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="flex justify-between mb-8 px-4">
+                <div class="flex flex-col items-center"><div id="ind-1" class="w-8 h-8 rounded-full bg-goparty-pink text-white flex items-center justify-center font-bold">1</div><span class="text-xs mt-1 text-goparty-pink">Datos</span></div>
+                <div class="flex flex-col items-center"><div id="ind-2" class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">2</div><span class="text-xs mt-1 text-gray-500">Servicios</span></div>
+                <div class="flex flex-col items-center"><div id="ind-3" class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">3</div><span class="text-xs mt-1 text-gray-500">Plan</span></div>
+                <div class="flex flex-col items-center"><div id="ind-4" class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">4</div><span class="text-xs mt-1 text-gray-500">Docs</span></div>
+            </div>
+
+            <form id="provider-form" onsubmit="registerProvider(event)">
+                <!-- PASO 1 -->
+                <div id="step-1" class="step-content fade-in">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">1. Información Básica</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="text" id="reg-business" required placeholder="Nombre del Negocio *" class="md:col-span-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                        <input type="text" id="reg-name" required placeholder="Tu Nombre *" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                        <input type="email" id="reg-email" required placeholder="Email *" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                        <input type="tel" id="reg-whatsapp" required placeholder="WhatsApp (10 dígitos) *" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                        <select id="reg-city" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                            <option value="">Ciudad *</option><option value="Xalapa">Xalapa</option><option value="Veracruz">Veracruz</option><option value="Córdoba">Córdoba</option>
+                        </select>
+                        <textarea id="reg-description" rows="3" placeholder="Descripción de tu negocio..." class="md:col-span-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></textarea>
+                    </div>
+                    <div class="mt-6 flex justify-end"><button type="button" onclick="nextStep(2)" class="gradient-btn text-white px-8 py-3 rounded-full font-bold">Siguiente <i class="fas fa-arrow-right ml-2"></i></button></div>
+                </div>
+
+                <!-- PASO 2 -->
+                <div id="step-2" class="step-content hidden fade-in">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">2. ¿Qué servicios ofreces?</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Salones"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">🏰</span><span class="font-bold text-sm">Salones</span></div></label>
+                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Alimentos"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">🍽️</span><span class="font-bold text-sm">Alimentos</span></div></label>
+                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Fotografía"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">📸</span><span class="font-bold text-sm">Fotografía</span></div></label>
+                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Música"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block"></span><span class="font-bold text-sm">Música/DJ</span></div></label>
+                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Decoración"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">🎈</span><span class="font-bold text-sm">Decoración</span></div></label>
+                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Animación"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block"></span><span class="font-bold text-sm">Animación</span></div></label>
+                    </div>
+                    <div class="mt-6 flex justify-between"><button type="button" onclick="nextStep(1)" class="text-gray-600 font-semibold px-6 py-3"><i class="fas fa-arrow-left mr-2"></i>Atrás</button><button type="button" onclick="nextStep(3)" class="gradient-btn text-white px-8 py-3 rounded-full font-bold">Siguiente <i class="fas fa-arrow-right ml-2"></i></button></div>
+                </div>
+
+                <!-- PASO 3 -->
+                <div id="step-3" class="step-content hidden fade-in">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">3. Elige tu Plan de Crecimiento</h3>
+                    <p class="text-sm text-gray-500 mb-6">Puedes cambiar o cancelar tu plan en cualquier momento desde tu dashboard.</p>
+                    <div class="space-y-4 mb-6">
+                        <label class="cursor-pointer block"><input type="radio" name="plan" value="Basic" class="plan-radio hidden" checked><div class="border-2 border-gray-200 rounded-xl p-5 flex justify-between items-center transition hover:border-gray-400"><div><h4 class="font-bold text-lg text-gray-800">Plan Básico</h4><p class="text-sm text-gray-500">Aparece en el directorio general.</p></div><div class="text-right"><span class="text-2xl font-bold text-gray-800">Gratis</span></div></div></label>
+                        <label class="cursor-pointer block"><input type="radio" name="plan" value="Pro" class="plan-radio hidden"><div class="border-2 border-gray-200 rounded-xl p-5 flex justify-between items-center transition hover:border-gray-400 relative"><div class="absolute -top-3 left-4 bg-goparty-blue text-white text-xs font-bold px-2 py-1 rounded-full">POPULAR</div><div><h4 class="font-bold text-lg text-gray-800">Plan Pro</h4><p class="text-sm text-gray-500">Sello verificado + Aparecer en búsquedas filtradas.</p></div><div class="text-right"><span class="text-2xl font-bold text-goparty-blue">$299</span><span class="text-gray-500 text-sm">/mes</span></div></div></label>
+                        <label class="cursor-pointer block"><input type="radio" name="plan" value="Gold" class="plan-radio hidden"><div class="border-2 border-goparty-gold/50 bg-yellow-50/50 rounded-xl p-5 flex justify-between items-center transition hover:border-goparty-gold relative"><div class="absolute -top-3 left-4 bg-goparty-gold text-white text-xs font-bold px-2 py-1 rounded-full">👑 PREMIUM</div><div><h4 class="font-bold text-lg text-goparty-dark">Plan Gold</h4><p class="text-sm text-gray-600">Top de búsquedas + Borde dorado + Soporte prioritario.</p></div><div class="text-right"><span class="text-2xl font-bold text-goparty-gold">$599</span><span class="text-gray-500 text-sm">/mes</span></div></div></label>
+                    </div>
+                    <div class="mt-6 flex justify-between"><button type="button" onclick="nextStep(2)" class="text-gray-600 font-semibold px-6 py-3"><i class="fas fa-arrow-left mr-2"></i>Atrás</button><button type="button" onclick="nextStep(4)" class="gradient-btn text-white px-8 py-3 rounded-full font-bold">Siguiente <i class="fas fa-arrow-right ml-2"></i></button></div>
+                </div>
+
+                <!-- PASO 4 -->
+                <div id="step-4" class="step-content hidden fade-in">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">4. Verificación y Sello GoParty</h3>
+                    <p class="text-sm text-gray-500 mb-6">Para obtener el <span class="text-goparty-pink font-bold">Sello de Verificación</span>, sube tus documentos. (Simulación para el prototipo).</p>
+                    <div class="space-y-4 mb-6">
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-goparty-pink hover:bg-pink-50/30 transition cursor-pointer"><i class="fas fa-id-card text-3xl text-goparty-pink mb-2"></i><p class="font-semibold text-gray-700">Identificación Oficial (INE/IFE)</p><p class="text-xs text-gray-500">Haz clic para simular la carga</p></div>
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-goparty-pink hover:bg-pink-50/30 transition cursor-pointer"><i class="fas fa-file-invoice-dollar text-3xl text-goparty-blue mb-2"></i><p class="font-semibold text-gray-700">Constancia de Situación Fiscal</p><p class="text-xs text-gray-500">Opcional, pero recomendado para Plan Gold</p></div>
+                    </div>
+                    <div class="flex items-start gap-3 mb-6"><input type="checkbox" id="terms" required class="mt-1 w-5 h-5 text-goparty-pink rounded focus:ring-goparty-pink border-gray-300"><label for="terms" class="text-sm text-gray-600">Acepto los Términos y Condiciones. Entiendo que mi perfil será revisado por el equipo de GoParty antes de activarse.</label></div>
+                    <div class="mt-6 flex justify-between"><button type="button" onclick="nextStep(3)" class="text-gray-600 font-semibold px-6 py-3"><i class="fas fa-arrow-left mr-2"></i>Atrás</button><button type="submit" class="gradient-btn text-white px-8 py-3 rounded-full font-bold flex items-center"><i class="fas fa-check-circle mr-2"></i>Enviar Registro</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- VIEW: ADMIN PANEL -->
+    <div id="view-admin" class="view-section hidden-view fade-in min-h-screen py-12 px-4">
+        <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-goparty-dark">Panel de Administración</h2>
+                <button onclick="showView('home')" class="text-gray-600 hover:text-goparty-pink"><i class="fas fa-arrow-left mr-2"></i>Volver</button>
+            </div>
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-clock text-yellow-500 mr-2"></i>Pendientes de Verificación</h3>
+                <div id="admin-pending" class="space-y-4"></div>
+            </div>
+            <div class="border-t pt-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i>Proveedores Activos</h3>
+                <div id="admin-verified" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: PROVIDER PROFILE -->
+    <div id="view-profile" class="view-section hidden-view fade-in min-h-screen py-12 px-4">
+        <div class="max-w-4xl mx-auto">
+            <button onclick="showView('home')" class="mb-4 text-gray-600 hover:text-goparty-pink"><i class="fas fa-arrow-left mr-2"></i>Volver</button>
+            <div id="profile-content" class="bg-white rounded-3xl shadow-xl overflow-hidden"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-goparty-dark text-white px-6 py-3 rounded-full shadow-2xl transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-50"><span id="toast-message">Mensaje</span></div>
+
+    <script>
+        // MOCK DATABASE
+        const DB_KEY = 'goparty_providers_master';
+        function initDB() {
+            if (!localStorage.getItem(DB_KEY)) {
+                const sampleData = [
+                    { id: 1, business: 'Elite Flavors Catering', name: 'Elena Martínez', email: 'elena@elite.com', whatsapp: '5212281234567', city: 'Xalapa', categories: ['Alimentos', 'Decoración'], price: 250, description: 'Catering gourmet con más de 10 años de experiencia.', verified: true, plan: 'Gold', rating: 4.9, reviews: 84, documents: ['INE_Elena.pdf'] },
+                    { id: 2, business: 'DJ SoundMaster Pro', name: 'Carlos Ruiz', email: 'carlos@sound.com', whatsapp: '5212289876543', city: 'Xalapa', categories: ['Música'], price: 2800, description: 'DJ profesional con equipo de última generación.', verified: true, plan: 'Pro', rating: 4.8, reviews: 62, documents: ['INE_Carlos.pdf'] },
+                    { id: 3, business: 'Fotos Mágicas', name: 'Ana López', email: 'ana@fotos.com', whatsapp: '5212281112222', city: 'Veracruz', categories: ['Fotografía'], price: 3500, description: 'Capturamos tus mejores momentos.', verified: false, plan: 'Basic', rating: 0, reviews: 0, documents: ['INE_Ana.pdf'] }
+                ];
+                localStorage.setItem(DB_KEY, JSON.stringify(sampleData));
+            }
+        }
+        function getProviders() { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); }
+        function saveProvider(provider) {
+            const providers = getProviders(); provider.id = Date.now(); provider.verified = false; provider.rating = 0; provider.reviews = 0; provider.documents = ['INE_Simulada.pdf'];
+            providers.push(provider); localStorage.setItem(DB_KEY, JSON.stringify(providers));
+        }
+        function updateProvider(id, updates) {
+            const providers = getProviders(); const index = providers.findIndex(p => p.id === id);
+            if (index !== -1) { providers[index] = { ...providers[index], ...updates }; localStorage.setItem(DB_KEY, JSON.stringify(providers)); }
+        }
+
+        // NAVIGATION
+        function showView(viewName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden-view'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden-view');
+            window.scrollTo(0, 0);
+            if (viewName === 'home') loadProviders(); if (viewName === 'admin') loadAdminPanel();
+        }
+
+        // MULTI-STEP FORM
+        let currentStep = 1;
+        function nextStep(step) {
+            if(step === 3) { const cats = document.querySelectorAll('.category-checkbox:checked'); if(cats.length === 0) { showToast('Selecciona al menos una categoría', 'error'); return; } }
+            document.getElementById(`step-${currentStep}`).classList.add('hidden'); document.getElementById(`step-${step}`).classList.remove('hidden');
+            document.getElementById(`ind-${currentStep}`).classList.remove('bg-goparty-pink', 'text-white'); document.getElementById(`ind-${currentStep}`).classList.add('bg-green-500', 'text-white'); document.getElementById(`ind-${currentStep}`).innerHTML = '<i class="fas fa-check"></i>';
+            document.getElementById(`ind-${step}`).classList.remove('bg-gray-200', 'text-gray-500'); document.getElementById(`ind-${step}`).classList.add('bg-goparty-pink', 'text-white');
+            currentStep = step;
+        }
+
+        // FILTER & LOAD PROVIDERS
+        function filterProviders() { const category = document.getElementById('filter-category').value; const plan = document.getElementById('filter-plan').value; loadProviders(category, plan); }
+        function loadProviders(filterCategory = '', filterPlan = '') {
+            let providers = getProviders().filter(p => p.verified);
+            providers.sort((a, b) => { const order = { 'Gold': 3, 'Pro': 2, 'Basic': 1 }; return order[b.plan] - order[a.plan]; });
+            if (filterCategory) providers = providers.filter(p => p.categories.includes(filterCategory));
+            if (filterPlan) providers = providers.filter(p => p.plan === filterPlan);
+            document.getElementById('provider-count').textContent = `${providers.length} proveedor${providers.length !== 1 ? 'es' : ''}`;
+            const grid = document.getElementById('providers-grid');
+            if (providers.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-12"><i class="fas fa-search text-6xl text-gray-300 mb-4"></i><p class="text-gray-500 text-lg">No se encontraron proveedores</p></div>`; return; }
+            grid.innerHTML = providers.map(p => {
+                const isGold = p.plan === 'Gold'; const badgeColor = p.plan === 'Gold' ? 'bg-goparty-gold' : (p.plan === 'Pro' ? 'bg-goparty-blue' : 'bg-gray-400');
+                const planIcon = p.plan === 'Gold' ? '<i class="fas fa-crown mr-1"></i>' : (p.plan === 'Pro' ? '<i class="fas fa-star mr-1"></i>' : '');
+                return `<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer ${isGold ? 'gold-border' : ''}" onclick="showProfile(${p.id})">
+                    <div class="h-48 bg-gradient-to-br from-goparty-pink to-goparty-blue flex items-center justify-center relative"><i class="fas fa-camera text-6xl text-white/50"></i>
+                        <div class="absolute top-4 right-4 ${badgeColor} text-white px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-lg">${planIcon} ${p.plan}</div>
+                    </div>
+                    <div class="p-6"><h3 class="font-bold text-xl text-gray-800 mb-2">${p.business}</h3><p class="text-gray-600 text-sm mb-3"><i class="fas fa-map-marker-alt text-goparty-pink mr-2"></i>${p.city}</p>
+                        <div class="flex flex-wrap gap-2 mb-4">${p.categories.map(cat => `<span class="px-3 py-1 bg-pink-100 text-goparty-pink rounded-full text-xs font-semibold">${cat}</span>`).join('')}</div>
+                        <div class="flex items-center justify-between pt-4 border-t"><div><span class="text-gray-500 text-sm">Desde</span><p class="text-2xl font-bold text-goparty-pink">$${p.price}<span class="text-sm text-gray-500 font-normal">MXN</span></p></div>
+                        <div class="flex items-center"><i class="fas fa-star text-goparty-yellow mr-1"></i><span class="font-bold text-gray-800">${p.rating}</span><span class="text-gray-500 text-sm ml-1">(${p.reviews})</span></div></div>
+                    </div></div>`;
+            }).join('');
+        }
+
+        // REGISTER PROVIDER
+        function registerProvider(e) {
+            e.preventDefault(); const categories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value); const plan = document.querySelector('input[name="plan"]:checked').value;
+            const provider = { business: document.getElementById('reg-business').value, name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, whatsapp: document.getElementById('reg-whatsapp').value, city: document.getElementById('reg-city').value, categories: categories, price: 0, description: document.getElementById('reg-description').value, plan: plan };
+            saveProvider(provider); showToast('✅ Registro enviado. Revisaremos tus documentos en 24h.');
+            document.getElementById('provider-form').reset(); currentStep = 1;
+            for(let i=1; i<=4; i++) { document.getElementById(`ind-${i}`).classList.remove('bg-green-500', 'bg-goparty-pink', 'text-white'); document.getElementById(`ind-${i}`).classList.add(i===1 ? 'bg-goparty-pink' : 'bg-gray-200', i===1 ? 'text-white' : 'text-gray-500'); document.getElementById(`ind-${i}`).innerHTML = i; }
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden')); document.getElementById('step-1').classList.remove('hidden');
+            setTimeout(() => showView('home'), 2000);
+        }
+
+        // SHOW PROFILE
+        function showProfile(id) {
+            const p = getProviders().find(pr => pr.id === id); if (!p) return;
+            const whatsappLink = `https://wa.me/${p.whatsapp}?text=${encodeURIComponent(`Hola ${p.business}, vi tu perfil en GoParty.`)}`;
+            const isGold = p.plan === 'Gold';
+            const planBadge = isGold ? '<span class="bg-goparty-gold text-white px-4 py-2 rounded-full font-bold"><i class="fas fa-crown mr-2"></i>Proveedor Gold</span>' : (p.plan === 'Pro' ? '<span class="bg-goparty-blue text-white px-4 py-2 rounded-full font-bold"><i class="fas fa-star mr-2"></i>Proveedor Pro</span>' : '<span class="bg-gray-400 text-white px-4 py-2 rounded-full text-sm">Plan Básico</span>');
+            document.getElementById('profile-content').innerHTML = `
+                <div class="h-64 bg-gradient-to-br from-goparty-pink to-goparty-blue flex items-center justify-center ${isGold ? 'border-b-4 border-goparty-gold' : ''}"><i class="fas fa-camera text-8xl text-white/50"></i></div>
+                <div class="p-8">
+                    <div class="flex justify-between items-start mb-6 flex-wrap gap-4"><div><h1 class="text-3xl font-bold text-gray-800 mb-2">${p.business}</h1><p class="text-gray-600"><i class="fas fa-user mr-2"></i>${p.name}</p></div>${planBadge}</div>
+                    <div class="grid md:grid-cols-3 gap-6 mb-8"><div class="bg-gray-50 p-4 rounded-xl"><i class="fas fa-map-marker-alt text-goparty-pink text-2xl mb-2"></i><p class="font-semibold text-gray-800">${p.city}</p></div><div class="bg-gray-50 p-4 rounded-xl"><i class="fas fa-star text-goparty-yellow text-2xl mb-2"></i><p class="font-semibold text-gray-800">${p.rating} (${p.reviews} reseñas)</p></div><div class="bg-gray-50 p-4 rounded-xl"><i class="fas fa-tags text-goparty-blue text-2xl mb-2"></i><p class="font-semibold text-gray-800">Desde $${p.price} MXN</p></div></div>
+                    <div class="mb-8"><h3 class="text-xl font-bold text-gray-800 mb-3">Categorías</h3><div class="flex flex-wrap gap-2">${p.categories.map(cat => `<span class="px-4 py-2 bg-gradient-to-r from-goparty-pink to-goparty-blue text-white rounded-full font-semibold">${cat}</span>`).join('')}</div></div>
+                    <div class="mb-8"><h3 class="text-xl font-bold text-gray-800 mb-3">Descripción</h3><p class="text-gray-600 leading-relaxed">${p.description || 'Sin descripción'}</p></div>
+                    <div class="flex gap-4 flex-wrap"><a href="${whatsappLink}" target="_blank" class="flex-1 min-w-[200px] bg-green-500 text-white text-center py-4 rounded-xl font-bold hover:bg-green-600 transition shadow-lg"><i class="fab fa-whatsapp mr-2"></i>Cotizar por WhatsApp</a><button onclick="showView('home')" class="flex-1 min-w-[200px] border-2 border-gray-300 text-gray-700 py-4 rounded-xl font-bold hover:border-goparty-pink hover:text-goparty-pink transition"><i class="fas fa-arrow-left mr-2"></i>Volver</button></div>
+                </div>`;
+            showView('profile');
+        }
+
+        // ADMIN PANEL
+        function loadAdminPanel() {
+            const providers = getProviders(); const pending = providers.filter(p => !p.verified); const verified = providers.filter(p => p.verified);
+            document.getElementById('admin-pending').innerHTML = pending.length === 0 ? '<p class="text-gray-500 text-center py-8">No hay pendientes</p>' :
+                pending.map(p => `<div class="border-2 border-yellow-200 bg-yellow-50 p-4 rounded-xl"><div class="flex justify-between items-start flex-wrap gap-4"><div><h4 class="font-bold text-gray-800 text-lg">${p.business} <span class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full ml-2">Plan: ${p.plan}</span></h4><p class="text-sm text-gray-600">${p.email} | ${p.city} | ${p.categories.join(', ')}</p><div class="mt-2 flex gap-2"><span class="text-xs bg-white border px-2 py-1 rounded text-gray-600"><i class="fas fa-file-pdf text-red-500 mr-1"></i>${p.documents ? p.documents[0] : 'Doc.pdf'}</span></div></div><div class="flex gap-2"><button onclick="approveProvider(${p.id}, 'Pro')" class="bg-goparty-blue text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition text-sm"><i class="fas fa-star mr-1"></i>Aprobar Pro</button><button onclick="approveProvider(${p.id}, 'Gold')" class="bg-goparty-gold text-white px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition text-sm"><i class="fas fa-crown mr-1"></i>Aprobar Gold</button><button onclick="deleteProvider(${p.id})" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition text-sm"><i class="fas fa-trash"></i></button></div></div></div>`).join('');
+            document.getElementById('admin-verified').innerHTML = verified.length === 0 ? '<p class="text-gray-500 text-center py-8">No hay verificados</p>' :
+                verified.map(p => `<div class="border-2 border-green-200 bg-green-50 p-4 rounded-xl"><div class="flex justify-between items-start flex-wrap gap-4"><div><h4 class="font-bold text-gray-800 text-lg">${p.business} <span class="text-green-600 text-sm ml-2">✓ Verificado</span> <span class="text-xs bg-goparty-gold/20 text-goparty-gold px-2 py-1 rounded-full ml-2">Plan: ${p.plan}</span></h4><p class="text-sm text-gray-600">${p.categories.join(', ')} | ${p.city}</p></div><button onclick="deleteProvider(${p.id})" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition text-sm"><i class="fas fa-trash"></i></button></div></div>`).join('');
+        }
+        function approveProvider(id, plan) { updateProvider(id, { verified: true, plan: plan }); showToast(`✅ Proveedor aprobado con Plan ${plan}`); loadAdminPanel(); }
+        function deleteProvider(id) { if (!confirm('¿Eliminar este proveedor?')) return; const providers = getProviders().filter(p => p.id !== id); localStorage.setItem(DB_KEY, JSON.stringify(providers)); showToast('🗑️ Proveedor eliminado'); loadAdminPanel(); }
+        function showToast(message) { const toast = document.getElementById('toast'); document.getElementById('toast-message').textContent = message; toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none'); setTimeout(() => toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none'), 3000); }
+
+        initDB(); loadProviders();
+    </script>
+</body>
+</html>

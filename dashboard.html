@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoParty - Dashboard del Proveedor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        goparty: { 
+                            yellow: '#FFD93D', pink: '#FF6B9D', blue: '#4ECDC4', 
+                            dark: '#2C3E50', gold: '#D4AF37', light: '#F8F9FA'
+                        }
+                    },
+                    fontFamily: { sans: ['Manrope', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+        .gradient-btn { background: linear-gradient(135deg, #FF6B9D 0%, #4ECDC4 100%); }
+        .gradient-header { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4ECDC4 100%); }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden-section { display: none !important; }
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: white; border-radius: 16px; padding: 32px; max-width: 700px; width: 90%; max-height: 85vh; overflow-y: auto; }
+        .sidebar-item { transition: all 0.3s; }
+        .sidebar-item:hover, .sidebar-item.active { background: linear-gradient(135deg, #FF6B9D 0%, #4ECDC4 100%); color: white; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-pending { background: #FEF3C7; color: #92400E; }
+        .status-approved { background: #D1FAE5; color: #065F46; }
+        .status-rejected { background: #FEE2E2; color: #991B1B; }
+        .photo-upload { position: relative; overflow: hidden; display: inline-block; }
+        .photo-upload input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .pending-banner { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-left: 4px solid #F59E0B; }
+        .sidebar { transition: all 0.3s ease-in-out; }
+        .sidebar.collapsed { width: 80px; }
+        .sidebar-text { transition: opacity 0.3s; }
+        .sidebar.collapsed .sidebar-text { opacity: 0; pointer-events: none; }
+        .sidebar-overlay { display: none; }
+        .sidebar-overlay.active { display: block; }
+        
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; height: 100vh; }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar.collapsed { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- LOGIN/REGISTER SCREEN -->
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center gradient-header">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full fade-in">
+            <div class="text-center mb-8">
+                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo" class="h-20 w-auto mx-auto mb-4" onerror="this.src='https://via.placeholder.com/150x50?text=GoParty'">
+                <h1 class="text-2xl font-bold text-goparty-dark">Dashboard del Proveedor</h1>
+                <p class="text-gray-600 text-sm mt-2">Accede a tu panel de control</p>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-xl">
+                <button onclick="showTab('login')" id="tab-login" class="flex-1 py-3 rounded-lg font-semibold transition tab-active">
+                    Iniciar Sesión
+                </button>
+                <button onclick="showTab('register')" id="tab-register" class="flex-1 py-3 rounded-lg font-semibold transition text-gray-600">
+                    Registrarse
+                </button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <div id="login-form" class="space-y-4">
+                <button onclick="loginWithGoogle()" class="w-full bg-white border-2 border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-3">
+                    <i class="fab fa-google text-xl"></i> Continuar con Google
+                </button>
+                
+                <div class="relative my-4">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div>
+                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-gray-500">O con email</span></div>
+                </div>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                        <input type="email" id="login-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="tu@empresa.com">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Contraseña</label>
+                        <input type="password" id="login-password" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="w-full gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
+                    </button>
+                </form>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div id="register-form" class="space-y-4 hidden-section">
+                <button onclick="registerWithGoogle()" class="w-full bg-white border-2 border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-3">
+                    <i class="fab fa-google text-xl"></i> Registrarme con Google
+                </button>
+                
+                <div class="relative my-4">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div>
+                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-gray-500">O con email</span></div>
+                </div>
+                
+                <form onsubmit="handleRegister(event)">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="col-span-2 mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre del Negocio *</label>
+                            <input type="text" id="reg-business" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="Mi Empresa">
+                        </div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de Contacto *</label>
+                            <input type="text" id="reg-name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="Tu nombre">
+                        </div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp *</label>
+                            <input type="tel" id="reg-whatsapp" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="2281234567">
+                        </div>
+                        <div class="col-span-2 mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                            <input type="email" id="reg-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="tu@empresa.com">
+                        </div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Ciudad *</label>
+                            <input type="text" id="reg-city" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="Ciudad">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Contraseña (mín. 6) *</label>
+                            <input type="password" id="reg-password" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition">
+                        <i class="fas fa-user-plus mr-2"></i>Crear Cuenta de Proveedor
+                    </button>
+                </form>
+            </div>
+
+            <p class="text-center text-xs text-gray-500 mt-6">
+                Al registrarte, aceptas los términos y condiciones de GoParty
+            </p>
+        </div>
+    </div>
+
+    <!-- PROVIDER DASHBOARD -->
+    <div id="provider-dashboard" class="hidden-section min-h-screen flex">
+        <!-- Sidebar Overlay (Mobile) -->
+        <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" onclick="toggleSidebar()"></div>
+        
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 bg-white border-r border-gray-200 flex flex-col shadow-lg flex-shrink-0">
+            <div class="p-6 border-b border-gray-200 bg-white">
+                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty" class="h-10 w-auto mb-2" onerror="this.src='https://via.placeholder.com/100x30?text=GoParty'">
+                <p class="text-xs text-gray-500 sidebar-text">Panel del Proveedor</p>
+            </div>
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <button onclick="showSection('overview')" class="sidebar-item active w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="overview">
+                    <i class="fas fa-chart-line w-5"></i>
+                    <span class="sidebar-text">Mi Dashboard</span>
+                </button>
+                <button onclick="showSection('quotes')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="quotes">
+                    <i class="fas fa-file-invoice-dollar w-5"></i>
+                    <span class="sidebar-text">Cotizaciones</span>
+                    <span id="quotes-badge" class="ml-auto bg-goparty-pink text-white text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
+                </button>
+                <button onclick="showSection('profile')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="profile">
+                    <i class="fas fa-user-edit w-5"></i>
+                    <span class="sidebar-text">Mi Perfil</span>
+                </button>
+                <button onclick="showSection('pending')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="pending">
+                    <i class="fas fa-clock w-5"></i>
+                    <span class="sidebar-text">Cambios Pendientes</span>
+                    <span id="pending-badge" class="ml-auto bg-goparty-yellow text-goparty-dark text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
+                </button>
+                <button onclick="showSection('membership')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="membership">
+                    <i class="fas fa-crown w-5"></i>
+                    <span class="sidebar-text">Membresía</span>
+                </button>
+                <button onclick="showSection('messages')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="messages">
+                    <i class="fas fa-envelope w-5"></i>
+                    <span class="sidebar-text">Mensajes Admin</span>
+                    <span id="messages-badge" class="ml-auto bg-goparty-yellow text-goparty-dark text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
+                </button>
+            </nav>
+            <div class="p-4 border-t border-gray-200">
+                <button onclick="logout()" class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-red-50 text-gray-700 transition">
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    <span class="sidebar-text">Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-50">
+            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center sticky top-0 z-40">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="text-gray-600 hover:text-goparty-pink transition p-2 rounded-lg hover:bg-gray-100">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty" class="h-8 w-auto" onerror="this.src='https://via.placeholder.com/80x25?text=GoParty'">
+                    <h2 id="section-title" class="text-2xl font-bold text-goparty-dark">Mi Dashboard</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="window.open('index.html', '_blank')" class="text-gray-600 hover:text-goparty-pink transition hidden md:block">
+                        <i class="fas fa-external-link-alt mr-2"></i>Ver Sitio
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-gray-800" id="header-provider-name">Proveedor</p>
+                            <p class="text-xs text-goparty-pink font-semibold" id="header-provider-plan">Plan Basic</p>
+                        </div>
+                        <div class="w-10 h-10 gradient-btn rounded-full flex items-center justify-center text-white font-bold shadow-lg" id="header-avatar">P</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-8 space-y-6">
+                
+                <!-- OVERVIEW -->
+                <div id="section-overview" class="section-content fade-in space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-goparty-pink card-hover">
+                            <div class="flex justify-between items-start">
+                                <div><p class="text-sm text-gray-600 mb-1">Vistas al Perfil</p><p class="text-3xl font-bold text-gray-800" id="kpi-views">0</p></div>
+                                <i class="fas fa-eye text-3xl text-goparty-pink"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-goparty-blue card-hover">
+                            <div class="flex justify-between items-start">
+                                <div><p class="text-sm text-gray-600 mb-1">Cotizaciones</p><p class="text-3xl font-bold text-gray-800" id="kpi-quotes">0</p></div>
+                                <i class="fas fa-file-invoice text-3xl text-goparty-blue"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-goparty-gold card-hover">
+                            <div class="flex justify-between items-start">
+                                <div><p class="text-sm text-gray-600 mb-1">Tasa Respuesta</p><p class="text-3xl font-bold text-gray-800" id="kpi-response-rate">0%</p></div>
+                                <i class="fas fa-percentage text-3xl text-goparty-gold"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500 card-hover">
+                            <div class="flex justify-between items-start">
+                                <div><p class="text-sm text-gray-600 mb-1">Calificación</p><p class="text-3xl font-bold text-gray-800" id="kpi-rating">0.0</p></div>
+                                <i class="fas fa-star text-3xl text-goparty-yellow"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pending-banner" class="pending-banner p-6 rounded-2xl hidden">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-exclamation-triangle text-3xl text-yellow-600"></i>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 text-lg">Tienes cambios pendientes de aprobación</h3>
+                                <p class="text-sm text-gray-700 mt-1">El equipo de GoParty está revisando tus últimas modificaciones.</p>
+                                <button onclick="showSection('pending')" class="mt-3 bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-yellow-700 transition">
+                                    Ver Cambios Pendientes <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm card-hover">
+                        <h3 class="font-bold text-lg text-gray-800 mb-6">Cotizaciones Recientes</h3>
+                        <div id="recent-quotes-list" class="space-y-3">
+                            <p class="text-gray-500 text-sm text-center py-4">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COTIZACIONES -->
+                <div id="section-quotes" class="section-content hidden-section fade-in">
+                    <div class="flex justify-between items-center mb-6">
+                        <div><h3 class="text-xl font-bold text-gray-800">Buzón de Cotizaciones</h3><p class="text-sm text-gray-600">Solicitudes asignadas por GoParty</p></div>
+                        <select id="filter-quote-status" onchange="renderQuotes()" class="px-4 py-2 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
+                            <option value="all">Todas</option><option value="pending">Pendientes</option><option value="responded">Respondidas</option>
+                        </select>
+                    </div>
+                    <div id="quotes-list" class="space-y-4"><p class="text-gray-500 text-center py-8">Cargando...</p></div>
+                </div>
+
+                <!-- MI PERFIL -->
+                <div id="section-profile" class="section-content hidden-section fade-in space-y-6">
+                    <div class="bg-blue-50 border-l-4 border-goparty-blue p-4 rounded-xl">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-info-circle text-goparty-blue text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Sistema de Verificación de Cambios</h4>
+                                <p class="text-sm text-gray-600">Por seguridad, cualquier modificación será revisada por el equipo de GoParty antes de publicarse.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6 card-hover">
+                        <h3 class="text-xl font-bold text-goparty-dark flex items-center gap-2 mb-6"><i class="fas fa-info-circle text-goparty-pink"></i> Información General</h3>
+                        <form onsubmit="submitProfileUpdate(event)" class="grid md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-2">Nombre del Negocio</label><input type="text" id="profile-business" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de Contacto</label><input type="text" id="profile-name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">Email</label><input type="email" id="profile-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp</label><input type="tel" id="profile-whatsapp" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">Ciudad</label><input type="text" id="profile-city" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div class="md:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-2">Descripción del Negocio</label><textarea id="profile-description" rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></textarea></div>
+                            <div class="md:col-span-2 pt-4 border-t"><button type="submit" class="gradient-btn text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg transition"><i class="fas fa-paper-plane mr-2"></i>Enviar Cambios para Aprobación</button></div>
+                        </form>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6 card-hover">
+                        <h3 class="text-xl font-bold text-goparty-dark flex items-center gap-2 mb-6"><i class="fas fa-share-alt text-goparty-blue"></i> Redes Sociales</h3>
+                        <form onsubmit="submitSocialUpdate(event)" class="grid md:grid-cols-2 gap-6">
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fab fa-instagram text-pink-500 mr-2"></i>Instagram</label><input type="text" id="social-instagram" placeholder="@tuempresa" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fab fa-facebook text-blue-600 mr-2"></i>Facebook</label><input type="text" id="social-facebook" placeholder="facebook.com/tuempresa" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fab fa-tiktok text-black mr-2"></i>TikTok</label><input type="text" id="social-tiktok" placeholder="@tuempresa" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-globe text-goparty-blue mr-2"></i>Sitio Web</label><input type="url" id="social-website" placeholder="https://tuempresa.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
+                            <div class="md:col-span-2 pt-4 border-t"><button type="submit" class="gradient-btn text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg transition"><i class="fas fa-paper-plane mr-2"></i>Enviar Redes para Aprobación</button></div>
+                        </form>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6 card-hover">
+                        <h3 class="text-xl font-bold text-goparty-dark flex items-center gap-2 mb-6"><i class="fas fa-images text-goparty-gold"></i> Galería de Fotos</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="photo-gallery"></div>
+                        <div class="photo-upload w-full">
+                            <button class="w-full border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-goparty-pink hover:bg-pink-50 transition">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-goparty-pink mb-2"></i>
+                                <p class="font-semibold text-gray-700">Subir Nueva Foto</p>
+                                <p class="text-xs text-gray-500">JPG, PNG (Max 5MB) - Requiere aprobación</p>
+                            </button>
+                            <input type="file" accept="image/*" onchange="submitPhotoUpload(event)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMBIOS PENDIENTES -->
+                <div id="section-pending" class="section-content hidden-section fade-in">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6"><i class="fas fa-clock text-goparty-yellow mr-2"></i> Mis Cambios Pendientes de Aprobación</h3>
+                        <div id="pending-changes-list" class="space-y-4">
+                            <p class="text-gray-500 text-center py-8">No tienes cambios pendientes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MEMBRESÍA -->
+                <div id="section-membership" class="section-content hidden-section fade-in">
+                    <div class="bg-gradient-to-r from-goparty-dark to-gray-800 rounded-2xl shadow-lg p-8 text-white mb-6">
+                        <div class="flex justify-between items-start flex-wrap gap-4">
+                            <div>
+                                <p class="text-sm text-gray-300 mb-2">Tu Plan Actual</p>
+                                <h3 class="text-4xl font-bold mb-2" id="current-plan-name">Basic</h3>
+                                <p class="text-gray-300" id="current-plan-desc">Directorio general</p>
+                            </div>
+                            <div class="text-right"><p class="text-sm text-gray-300 mb-2">Estado</p><span class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold">Activo</span></div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-gray-200">
+                            <div class="text-center mb-6"><h4 class="text-2xl font-bold text-gray-800 mb-2">Basic</h4><p class="text-4xl font-bold text-gray-800">Gratis</p></div>
+                            <ul class="space-y-3 mb-6 text-sm text-gray-600"><li><i class="fas fa-check text-green-500 mr-2"></i>Aparecer en el directorio</li><li><i class="fas fa-check text-green-500 mr-2"></i>Perfil básico</li></ul>
+                            <button class="w-full bg-gray-200 text-gray-600 font-bold py-3 rounded-xl cursor-not-allowed">Plan Actual</button>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-goparty-blue relative">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-goparty-blue text-white text-xs font-bold px-4 py-1 rounded-full">POPULAR</div>
+                            <div class="text-center mb-6"><h4 class="text-2xl font-bold text-gray-800 mb-2">Pro</h4><p class="text-4xl font-bold text-goparty-blue">$299<span class="text-lg text-gray-500">/mes</span></p></div>
+                            <ul class="space-y-3 mb-6 text-sm text-gray-600"><li><i class="fas fa-check text-green-500 mr-2"></i>Todo lo de Basic</li><li><i class="fas fa-check text-green-500 mr-2"></i>Sello de verificación</li><li><i class="fas fa-check text-green-500 mr-2"></i>Mayor visibilidad</li></ul>
+                            <button onclick="upgradePlan('Pro')" class="w-full gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition"><i class="fas fa-arrow-up mr-2"></i>Actualizar a Pro</button>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-goparty-gold">
+                            <div class="text-center mb-6"><h4 class="text-2xl font-bold text-gray-800 mb-2">Gold</h4><p class="text-4xl font-bold text-goparty-gold">$599<span class="text-lg text-gray-500">/mes</span></p></div>
+                            <ul class="space-y-3 mb-6 text-sm text-gray-600"><li><i class="fas fa-check text-green-500 mr-2"></i>Todo lo de Pro</li><li><i class="fas fa-check text-green-500 mr-2"></i>Posición destacada</li><li><i class="fas fa-check text-green-500 mr-2"></i>Borde dorado</li></ul>
+                            <button onclick="upgradePlan('Gold')" class="w-full bg-goparty-gold text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition"><i class="fas fa-crown mr-2"></i>Actualizar a Gold</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENSAJES ADMIN -->
+                <div id="section-messages" class="section-content hidden-section fade-in">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Mensajes del Equipo GoParty</h3>
+                        <div id="admin-messages-list" class="space-y-4">
+                            <p class="text-gray-500 text-center py-8">No hay mensajes</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL: Quote Details -->
+    <div id="quote-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-goparty-dark">Detalle de Cotización</h2>
+                <button onclick="closeModal('quote')" class="text-gray-500 hover:text-gray-700 text-2xl"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="quote-details-content" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
+            authDomain: "goparty-marketplace.firebaseapp.com",
+            projectId: "goparty-marketplace",
+            storageBucket: "goparty-marketplace.firebasestorage.app",
+            messagingSenderId: "95947882678",
+            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        let currentSection = 'overview';
+        let currentProvider = null;
+        let allQuotes = [], allMessages = [], pendingChanges = [];
+
+        // ==================== SIDEBAR TOGGLE ====================
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (window.innerWidth < 768) {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+            } else {
+                sidebar.classList.toggle('collapsed');
+            }
+        }
+
+        // ==================== AUTH TABS ====================
+        function showTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('login-form').classList.remove('hidden-section');
+                document.getElementById('register-form').classList.add('hidden-section');
+                document.getElementById('tab-login').classList.add('tab-active');
+                document.getElementById('tab-login').classList.remove('text-gray-600');
+                document.getElementById('tab-register').classList.remove('tab-active');
+                document.getElementById('tab-register').classList.add('text-gray-600');
+            } else {
+                document.getElementById('login-form').classList.add('hidden-section');
+                document.getElementById('register-form').classList.remove('hidden-section');
+                document.getElementById('tab-register').classList.add('tab-active');
+                document.getElementById('tab-register').classList.remove('text-gray-600');
+                document.getElementById('tab-login').classList.remove('tab-active');
+                document.getElementById('tab-login').classList.add('text-gray-600');
+            }
+        }
+
+        // ==================== AUTHENTICATION ====================
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => checkProviderAccount(result.user.email, result.user))
+                .catch((error) => showToast('Error al iniciar sesión con Google', 'error'));
+        }
+
+        function registerWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    db.collection('providers').where('email', '==', result.user.email).get()
+                        .then((snapshot) => {
+                            if (!snapshot.empty) { 
+                                showToast('Este email ya está registrado', 'error'); 
+                                return; 
+                            }
+                            createProviderAccount(result.user);
+                        });
+                })
+                .catch((error) => showToast('Error al registrar con Google', 'error'));
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => checkProviderAccount(email))
+                .catch(() => showToast('Credenciales incorrectas', 'error'));
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const business = document.getElementById('reg-business').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const whatsapp = document.getElementById('reg-whatsapp').value.trim();
+            const city = document.getElementById('reg-city').value.trim();
+            const password = document.getElementById('reg-password').value;
+            
+            db.collection('providers').where('email', '==', email).get()
+                .then((snapshot) => {
+                    if (!snapshot.empty) { 
+                        showToast('Este email ya está registrado', 'error'); 
+                        return; 
+                    }
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .then((userCredential) => createProviderAccount(userCredential.user, { business, name, email, whatsapp, city }))
+                        .catch((error) => showToast('Error al crear cuenta: ' + error.message, 'error'));
+                })
+                .catch((error) => showToast('Error al verificar email', 'error'));
+        }
+
+        async function createProviderAccount(user, additionalData = {}) {
+            const providerData = {
+                business: additionalData.business || user.displayName || 'Nuevo Proveedor',
+                name: additionalData.name || user.displayName || 'Proveedor',
+                email: user.email,
+                whatsapp: additionalData.whatsapp || '',
+                city: additionalData.city || '',
+                plan: 'Basic',
+                verified: false,
+                rating: 0,
+                reviews: 0,
+                views: 0,
+                categories: [],
+                description: '',
+                social: {},
+                photos: [],
+                userId: user.uid,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            try {
+                await db.collection('providers').add(providerData);
+                showToast('✅ Cuenta creada exitosamente. Ahora puedes iniciar sesión.');
+                showTab('login');
+                document.getElementById('login-email').value = user.email;
+            } catch (error) { 
+                showToast('Error al guardar datos', 'error'); 
+            }
+        }
+
+        async function checkProviderAccount(email, user = null) {
+            try {
+                const providerDoc = await db.collection('providers').where('email', '==', email).get();
+                if (!providerDoc.empty) {
+                    currentProvider = { id: providerDoc.docs[0].id, ...providerDoc.docs[0].data() };
+                    document.getElementById('auth-screen').classList.add('hidden-section');
+                    document.getElementById('provider-dashboard').classList.remove('hidden-section');
+                    document.body.classList.remove('gradient-bg');
+                    loadProviderData();
+                } else {
+                    showToast('No encontramos una cuenta de proveedor con este email', 'error');
+                    if (user) auth.signOut();
+                }
+            } catch (error) { 
+                showToast('Error al verificar cuenta', 'error'); 
+            }
+        }
+
+        function logout() {
+            auth.signOut().then(() => {
+                document.getElementById('provider-dashboard').classList.add('hidden-section');
+                document.getElementById('auth-screen').classList.remove('hidden-section');
+                document.body.classList.add('gradient-bg');
+                currentProvider = null;
+            });
+        }
+
+        // ==================== NAVIGATION ====================
+        function showSection(sectionName) {
+            document.querySelectorAll('.section-content').forEach(el => el.classList.add('hidden-section'));
+            document.getElementById(`section-${sectionName}`).classList.remove('hidden-section');
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
+            
+            const titles = {
+                'overview': 'Mi Dashboard', 
+                'quotes': 'Cotizaciones', 
+                'profile': 'Mi Perfil',
+                'pending': 'Cambios Pendientes',
+                'membership': 'Membresía',
+                'messages': 'Mensajes Admin'
+            };
+            document.getElementById('section-title').textContent = titles[sectionName];
+            currentSection = sectionName;
+            
+            if (sectionName === 'overview') updateDashboardKPIs();
+            if (sectionName === 'quotes') renderQuotes();
+            if (sectionName === 'profile') loadProfileData();
+            if (sectionName === 'pending') renderPendingChanges();
+            if (sectionName === 'membership') loadMembershipData();
+            if (sectionName === 'messages') loadAdminMessages();
+            
+            // Close sidebar on mobile after selection
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').classList.remove('active');
+            }
+        }
+
+        // ==================== LOAD DATA ====================
+        async function loadProviderData() {
+            try {
+                document.getElementById('header-provider-name').textContent = currentProvider.business || 'Proveedor';
+                document.getElementById('header-provider-plan').textContent = `Plan ${currentProvider.plan || 'Basic'}`;
+                document.getElementById('header-avatar').textContent = (currentProvider.business || 'P').charAt(0);
+                
+                const quotesSnapshot = await db.collection('quotes').where('assignedTo', '==', currentProvider.email).get();
+                allQuotes = []; quotesSnapshot.forEach(doc => allQuotes.push({ id: doc.id, ...doc.data() }));
+                
+                const messagesSnapshot = await db.collection('adminMessages').where('providerId', '==', currentProvider.id).get();
+                allMessages = []; messagesSnapshot.forEach(doc => allMessages.push({ id: doc.id, ...doc.data() }));
+
+                const pendingSnapshot = await db.collection('pendingChanges').where('providerId', '==', currentProvider.id).where('status', '==', 'pending').get();
+                pendingChanges = []; pendingSnapshot.forEach(doc => pendingChanges.push({ id: doc.id, ...doc.data() }));
+                
+                updateDashboardKPIs();
+                updatePendingBanner();
+            } catch (error) { 
+                console.error('Error loading data:', error); 
+            }
+        }
+
+        function updateDashboardKPIs() {
+            document.getElementById('kpi-views').textContent = currentProvider.views || Math.floor(Math.random() * 500);
+            document.getElementById('kpi-quotes').textContent = allQuotes.length;
+            document.getElementById('kpi-response-rate').textContent = '85%';
+            document.getElementById('kpi-rating').textContent = currentProvider.rating || '4.8';
+            
+            const recentQuotes = allQuotes.slice(0, 3);
+            document.getElementById('recent-quotes-list').innerHTML = recentQuotes.length > 0 ? recentQuotes.map(q => `
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <div><p class="font-semibold text-gray-800">${q.title || 'Solicitud'}</p><p class="text-xs text-gray-500">${q.location} • ${q.date}</p></div>
+                    <span class="status-badge ${q.status === 'pending' ? 'status-pending' : 'status-approved'}">${q.status === 'pending' ? 'Pendiente' : 'Respondida'}</span>
+                </div>
+            `).join('') : '<p class="text-gray-500 text-center py-4">No hay cotizaciones</p>';
+        }
+
+        function updatePendingBanner() {
+            const banner = document.getElementById('pending-banner');
+            const badge = document.getElementById('pending-badge');
+            if (pendingChanges.length > 0) {
+                banner.classList.remove('hidden');
+                badge.textContent = pendingChanges.length;
+                badge.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+                badge.classList.add('hidden');
+            }
+        }
+
+        // ==================== COTIZACIONES ====================
+        function renderQuotes() {
+            const filter = document.getElementById('filter-quote-status').value;
+            let filtered = allQuotes;
+            if (filter !== 'all') filtered = allQuotes.filter(q => q.status === filter);
+            
+            const badge = document.getElementById('quotes-badge');
+            const pendingCount = allQuotes.filter(q => q.status === 'pending').length;
+            if (badge) { 
+                badge.textContent = pendingCount; 
+                badge.classList.toggle('hidden', pendingCount === 0); 
+            }
+
+            document.getElementById('quotes-list').innerHTML = filtered.length > 0 ? filtered.map(q => `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 ${q.status === 'pending' ? 'border-goparty-pink' : 'border-green-500'} card-hover">
+                    <div class="flex justify-between items-start flex-wrap gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <h4 class="font-bold text-lg text-gray-800">${q.title || 'Solicitud'}</h4>
+                                <span class="status-badge ${q.status === 'pending' ? 'status-pending' : 'status-approved'}">${q.status === 'pending' ? 'Pendiente' : 'Respondida'}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-1"><i class="fas fa-user mr-2 text-goparty-pink"></i>${q.clientName}</p>
+                            <p class="text-sm text-gray-600 mb-1"><i class="fas fa-map-marker-alt mr-2 text-goparty-pink"></i>${q.location} • <i class="fas fa-calendar mr-2 text-goparty-blue"></i>${q.date}</p>
+                            <p class="text-sm font-bold text-goparty-dark mt-2"><i class="fas fa-dollar-sign mr-2"></i>Presupuesto: $${q.budget || 'No especificado'}</p>
+                            <p class="text-sm text-gray-600 mt-2"><i class="fas fa-tags mr-2 text-goparty-gold"></i>${q.keywords || ''}</p>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button onclick="viewQuoteDetails('${q.id}')" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300 transition"><i class="fas fa-eye mr-1"></i>Ver</button>
+                            ${q.status === 'pending' ? `<button onclick="respondQuote('${q.id}')" class="bg-goparty-blue text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition"><i class="fas fa-reply mr-1"></i>Responder</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-gray-500 text-center py-8">No hay cotizaciones</p>';
+        }
+
+        function viewQuoteDetails(id) {
+            const q = allQuotes.find(item => item.id === id);
+            if (!q) return;
+            document.getElementById('quote-details-content').innerHTML = `
+                <div class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div><label class="text-xs text-gray-500">Cliente</label><p class="font-semibold">${q.clientName} (${q.clientEmail})</p></div>
+                        <div><label class="text-xs text-gray-500">Presupuesto</label><p class="font-semibold">$${q.budget || 'No especificado'}</p></div>
+                        <div><label class="text-xs text-gray-500">Fecha</label><p class="font-semibold">${q.date}</p></div>
+                        <div><label class="text-xs text-gray-500">Lugar</label><p class="font-semibold">${q.location}</p></div>
+                        <div><label class="text-xs text-gray-500">Personas</label><p class="font-semibold">${q.guests || 'No especificado'}</p></div>
+                    </div>
+                    <div><label class="text-xs text-gray-500">Keywords</label><p class="text-gray-700">${q.keywords}</p></div>
+                    <div><label class="text-xs text-gray-500">Descripción</label><p class="text-gray-700 bg-gray-50 p-4 rounded-xl">${q.description || 'Sin descripción'}</p></div>
+                    ${q.referenceImage ? `<div><label class="text-xs text-gray-500">Imagen de Referencia</label><img src="${q.referenceImage}" class="mt-2 rounded-xl max-h-64 object-cover border"></div>` : ''}
+                </div>
+            `;
+            document.getElementById('quote-modal').classList.add('active');
+        }
+
+        function respondQuote(id) {
+            const q = allQuotes.find(item => item.id === id);
+            if (!q) return;
+            const message = encodeURIComponent(`Hola ${q.clientName}, vi tu solicitud en GoParty para tu evento el ${q.date} en ${q.location}. ¿Podemos agendar una llamada?`);
+            const whatsappLink = `https://wa.me/52${currentProvider.whatsapp}?text=${message}`;
+            if (confirm('¿Responder esta cotización? Se abrirá WhatsApp.')) {
+                window.open(whatsappLink, '_blank');
+                db.collection('quotes').doc(id).update({ status: 'responded', respondedAt: firebase.firestore.FieldValue.serverTimestamp() })
+                    .then(() => { 
+                        showToast('✅ Cotización respondida'); 
+                        loadProviderData(); 
+                        renderQuotes(); 
+                    })
+                    .catch(() => showToast('Error', 'error'));
+            }
+        }
+
+        // ==================== MI PERFIL (CON APROBACIÓN) ====================
+        function loadProfileData() {
+            document.getElementById('profile-business').value = currentProvider.business || '';
+            document.getElementById('profile-name').value = currentProvider.name || '';
+            document.getElementById('profile-email').value = currentProvider.email || '';
+            document.getElementById('profile-whatsapp').value = currentProvider.whatsapp || '';
+            document.getElementById('profile-city').value = currentProvider.city || '';
+            document.getElementById('profile-description').value = currentProvider.description || '';
+            document.getElementById('social-instagram').value = currentProvider.social?.instagram || '';
+            document.getElementById('social-facebook').value = currentProvider.social?.facebook || '';
+            document.getElementById('social-tiktok').value = currentProvider.social?.tiktok || '';
+            document.getElementById('social-website').value = currentProvider.social?.website || '';
+            loadPhotoGallery();
+        }
+
+        async function submitProfileUpdate(e) {
+            e.preventDefault();
+            const newValues = {
+                business: document.getElementById('profile-business').value,
+                name: document.getElementById('profile-name').value,
+                email: document.getElementById('profile-email').value,
+                whatsapp: document.getElementById('profile-whatsapp').value,
+                city: document.getElementById('profile-city').value,
+                description: document.getElementById('profile-description').value
+            };
+
+            const changes = {};
+            Object.keys(newValues).forEach(key => {
+                if (newValues[key] !== currentProvider[key]) {
+                    changes[key] = { from: currentProvider[key], to: newValues[key] };
+                }
+            });
+
+            if (Object.keys(changes).length === 0) {
+                showToast('No hay cambios para enviar', 'error');
+                return;
+            }
+
+            try {
+                await db.collection('pendingChanges').add({
+                    providerId: currentProvider.id,
+                    providerName: currentProvider.business,
+                    providerEmail: currentProvider.email,
+                    changeType: 'profile_update',
+                    changes: changes,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('✅ Cambios enviados para aprobación');
+                await loadProviderData();
+            } catch (error) { 
+                showToast('Error al enviar cambios', 'error'); 
+            }
+        }
+
+        async function submitSocialUpdate(e) {
+            e.preventDefault();
+            const newSocial = {
+                instagram: document.getElementById('social-instagram').value,
+                facebook: document.getElementById('social-facebook').value,
+                tiktok: document.getElementById('social-tiktok').value,
+                website: document.getElementById('social-website').value
+            };
+            const currentSocial = currentProvider.social || {};
+            
+            const changes = {};
+            Object.keys(newSocial).forEach(key => {
+                if (newSocial[key] !== currentSocial[key]) {
+                    changes[`social.${key}`] = { from: currentSocial[key] || '', to: newSocial[key] };
+                }
+            });
+
+            if (Object.keys(changes).length === 0) {
+                showToast('No hay cambios para enviar', 'error');
+                return;
+            }
+
+            try {
+                await db.collection('pendingChanges').add({
+                    providerId: currentProvider.id,
+                    providerName: currentProvider.business,
+                    providerEmail: currentProvider.email,
+                    changeType: 'social_update',
+                    changes: changes,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('✅ Redes sociales enviadas para aprobación');
+                await loadProviderData();
+            } catch (error) { 
+                showToast('Error al enviar', 'error'); 
+            }
+        }
+
+        function submitPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('La imagen es muy grande (máx 5MB)', 'error');
+                    return;
+                }
+                db.collection('pendingChanges').add({
+                    providerId: currentProvider.id,
+                    providerName: currentProvider.business,
+                    providerEmail: currentProvider.email,
+                    changeType: 'photo_upload',
+                    changes: { newPhoto: { from: null, to: file.name } },
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    showToast('📸 Foto enviada para aprobación');
+                    loadProviderData();
+                }).catch(() => showToast('Error al subir', 'error'));
+            }
+        }
+
+        function loadPhotoGallery() {
+            const gallery = document.getElementById('photo-gallery');
+            const photos = currentProvider.photos || [
+                'https://via.placeholder.com/300x200?text=Foto+1', 
+                'https://via.placeholder.com/300x200?text=Foto+2'
+            ];
+            gallery.innerHTML = photos.map((photo, index) => `
+                <div class="relative group">
+                    <img src="${photo}" class="w-full h-32 object-cover rounded-xl">
+                    <button onclick="requestPhotoDelete(${index})" class="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function requestPhotoDelete(index) {
+            if (confirm('¿Solicitar eliminación de esta foto?')) {
+                db.collection('pendingChanges').add({
+                    providerId: currentProvider.id,
+                    providerName: currentProvider.business,
+                    changeType: 'photo_delete',
+                    changes: { photoIndex: { from: index, to: 'delete' } },
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    showToast('🗑️ Solicitud de eliminación enviada');
+                    loadProviderData();
+                });
+            }
+        }
+
+        function renderPendingChanges() {
+            const badge = document.getElementById('pending-badge');
+            if (badge) { 
+                badge.textContent = pendingChanges.length; 
+                badge.classList.toggle('hidden', pendingChanges.length === 0); 
+            }
+            
+            const typeLabels = {
+                'profile_update': 'Actualización de Perfil',
+                'social_update': 'Redes Sociales',
+                'photo_upload': 'Nueva Foto',
+                'photo_delete': 'Eliminar Foto'
+            };
+            
+            document.getElementById('pending-changes-list').innerHTML = pendingChanges.length > 0 ? pendingChanges.map(change => {
+                const date = change.createdAt?.toDate ? change.createdAt.toDate().toLocaleDateString('es-MX') : 'Reciente';
+                return `
+                    <div class="bg-yellow-50 p-6 rounded-xl border-l-4 border-goparty-yellow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="font-bold text-gray-800">${typeLabels[change.changeType] || 'Cambio'}</p>
+                                <p class="text-xs text-gray-500">Enviado: ${date}</p>
+                            </div>
+                            <span class="status-badge status-pending">Pendiente</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg">
+                            <p class="text-sm text-gray-700">Tu solicitud está siendo revisada por el equipo de GoParty. Recibirás una notificación cuando sea aprobada.</p>
+                        </div>
+                    </div>
+                `;
+            }).join('') : '<p class="text-gray-500 text-center py-8">No tienes cambios pendientes</p>';
+        }
+
+        // ==================== MEMBRESÍA ====================
+        function loadMembershipData() {
+            const plan = currentProvider.plan || 'Basic';
+            document.getElementById('current-plan-name').textContent = plan;
+            const descriptions = { 
+                'Basic': 'Directorio general', 
+                'Pro': 'Mayor visibilidad + Sello verificado', 
+                'Gold': 'Máxima exposición + Soporte prioritario' 
+            };
+            document.getElementById('current-plan-desc').textContent = descriptions[plan] || 'Directorio general';
+        }
+
+        function upgradePlan(newPlan) {
+            if (confirm(`¿Actualizar a ${newPlan}? Serás redirigido a WhatsApp.`)) {
+                const message = encodeURIComponent(`Hola, soy ${currentProvider.business} y me interesa actualizar a ${newPlan}.`);
+                window.open(`https://wa.me/5212281234567?text=${message}`, '_blank');
+            }
+        }
+
+        // ==================== MENSAJES ADMIN ====================
+        function loadAdminMessages() {
+            const badge = document.getElementById('messages-badge');
+            const unreadCount = allMessages.filter(m => !m.read).length;
+            if (badge) { 
+                badge.textContent = unreadCount; 
+                badge.classList.toggle('hidden', unreadCount === 0); 
+            }
+            
+            document.getElementById('admin-messages-list').innerHTML = allMessages.length > 0 ? allMessages.map(msg => `
+                <div class="bg-gray-50 p-6 rounded-xl border-l-4 ${msg.read ? 'border-gray-400' : 'border-goparty-pink'}">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="font-bold text-gray-800">${msg.subject || 'Mensaje del Admin'}</p>
+                            <p class="text-xs text-gray-500">${msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleDateString('es-MX') : 'Reciente'}</p>
+                        </div>
+                        ${!msg.read ? '<span class="text-xs bg-goparty-pink text-white px-3 py-1 rounded-full">Nuevo</span>' : ''}
+                    </div>
+                    <p class="text-gray-700 bg-white p-4 rounded-lg">${msg.message || 'Sin contenido'}</p>
+                </div>
+            `).join('') : '<p class="text-gray-500 text-center py-8">No hay mensajes</p>';
+        }
+
+        // ==================== UTILS ====================
+        function closeModal(type) { 
+            document.getElementById(`${type}-modal`).classList.remove('active'); 
+        }
+        function showToast(msg, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-8 left-1/2 transform -translate-x-1/2 ${type === 'error' ? 'bg-red-600' : 'bg-goparty-dark'} text-white px-6 py-3 rounded-full shadow-2xl transition-all duration-300 z-50`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        window.onclick = function(event) { 
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active'); 
+            }
+        }
+    </script>
+</body>
+</html>

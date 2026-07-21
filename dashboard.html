@@ -42,7 +42,6 @@
         .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
         .status-pending { background: #FEF3C7; color: #92400E; }
         .status-approved { background: #D1FAE5; color: #065F46; }
-        .status-rejected { background: #FEE2E2; color: #991B1B; }
         .photo-upload { position: relative; overflow: hidden; display: inline-block; }
         .photo-upload input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
         .pending-banner { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-left: 4px solid #F59E0B; }
@@ -504,102 +503,105 @@
                     let mensaje = 'Credenciales incorrectas';
                     if (error.code === 'auth/user-not-found') mensaje = 'Usuario no encontrado';
                     if (error.code === 'auth/wrong-password') mensaje = 'Contraseña incorrecta';
+                    if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
                     showToast(mensaje, 'error');
                 });
         }
 
         function handleRegister(e) {
-    e.preventDefault();
-    
-    const business = document.getElementById('reg-business').value.trim();
-    const name = document.getElementById('reg-name').value.trim();
-    const email = document.getElementById('reg-email').value.trim();
-    const whatsapp = document.getElementById('reg-whatsapp').value.trim();
-    const city = document.getElementById('reg-city').value.trim();
-    const password = document.getElementById('reg-password').value;
-    
-    console.log('Iniciando registro...', { business, name, email, whatsapp, city });
-    
-    // Validaciones
-    if (!business || !name || !email || !whatsapp || !city || !password) {
-        showToast('❌ Todos los campos son obligatorios', 'error');
-        return;
-    }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showToast('❌ Ingresa un email válido', 'error');
-        return;
-    }
-    
-    if (password.length < 6) {
-        showToast('❌ La contraseña debe tener al menos 6 caracteres', 'error');
-        return;
-    }
-    
-    showToast('⏳ Creando cuenta...', 'success');
-    
-    // CREAR USUARIO CON FIREBASE AUTH
-    auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            console.log('✅ Usuario creado en Auth:', userCredential.user.uid);
+            e.preventDefault();
             
-            const user = userCredential.user;
+            const business = document.getElementById('reg-business').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const whatsapp = document.getElementById('reg-whatsapp').value.trim();
+            const city = document.getElementById('reg-city').value.trim();
+            const password = document.getElementById('reg-password').value;
             
-            // CREAR DOCUMENTO EN FIRESTORE
-            const providerData = {
-                business: business,
-                name: name,
-                email: email,
-                whatsapp: whatsapp,
-                city: city,
-                state: 'Veracruz',
-                plan: 'Basic',
-                verified: false,
-                rating: 0,
-                reviews: 0,
-                views: 0,
-                categories: [],
-                description: '',
-                social: {},
-                photos: [],
-                userId: user.uid,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
+            console.log('Iniciando registro...', { business, name, email, whatsapp, city });
             
-            return db.collection('providers').add(providerData);
-        })
-        .then(() => {
-            console.log('✅ Documento creado en Firestore');
-            showToast('✅ Cuenta creada exitosamente. Inicia sesión ahora.', 'success');
-            
-            setTimeout(() => {
-                showTab('login');
-                document.getElementById('login-email').value = email;
-                document.getElementById('login-password').value = '';
-            }, 2500);
-        })
-        .catch((error) => {
-            console.error('❌ ERROR EN REGISTRO:', error);
-            
-            let mensaje = 'Error al crear cuenta';
-            
-            if (error.code === 'auth/email-already-in-use') {
-                mensaje = '❌ Este email ya está registrado. Intenta iniciar sesión.';
-            } else if (error.code === 'auth/weak-password') {
-                mensaje = '❌ Contraseña muy débil (mínimo 6 caracteres)';
-            } else if (error.code === 'auth/invalid-email') {
-                mensaje = ' Email inválido';
-            } else if (error.code === 'auth/operation-not-allowed') {
-                mensaje = '❌ El registro con email no está habilitado. Contacta al administrador.';
-            } else if (error.code === 'permission-denied') {
-                mensaje = ' Error de permisos. Verifica las reglas de Firestore.';
+            // Validaciones
+            if (!business || !name || !email || !whatsapp || !city || !password) {
+                showToast('❌ Todos los campos son obligatorios', 'error');
+                return;
             }
             
-            showToast(mensaje, 'error');
-        });
-}        async function createProviderAccount(user, additionalData = {}) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('❌ Ingresa un email válido', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('❌ La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+            
+            showToast('⏳ Creando cuenta...', 'success');
+            
+            // CREAR USUARIO CON FIREBASE AUTH
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    console.log('✅ Usuario creado en Auth:', userCredential.user.uid);
+                    
+                    const user = userCredential.user;
+                    
+                    // CREAR DOCUMENTO EN FIRESTORE
+                    const providerData = {
+                        business: business,
+                        name: name,
+                        email: email,
+                        whatsapp: whatsapp,
+                        city: city,
+                        state: 'Veracruz',
+                        plan: 'Basic',
+                        verified: false,
+                        rating: 0,
+                        reviews: 0,
+                        views: 0,
+                        categories: [],
+                        description: '',
+                        social: {},
+                        photos: [],
+                        userId: user.uid,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    
+                    return db.collection('providers').add(providerData);
+                })
+                .then(() => {
+                    console.log('✅ Documento creado en Firestore');
+                    showToast('✅ Cuenta creada exitosamente. Inicia sesión ahora.', 'success');
+                    
+                    setTimeout(() => {
+                        showTab('login');
+                        document.getElementById('login-email').value = email;
+                        document.getElementById('login-password').value = '';
+                    }, 2500);
+                })
+                .catch((error) => {
+                    console.error('❌ ERROR EN REGISTRO:', error);
+                    
+                    let mensaje = 'Error al crear cuenta';
+                    
+                    if (error.code === 'auth/email-already-in-use') {
+                        mensaje = '❌ Este email ya está registrado. Intenta iniciar sesión.';
+                    } else if (error.code === 'auth/weak-password') {
+                        mensaje = '❌ Contraseña muy débil (mínimo 6 caracteres)';
+                    } else if (error.code === 'auth/invalid-email') {
+                        mensaje = '❌ Email inválido';
+                    } else if (error.code === 'auth/operation-not-allowed') {
+                        mensaje = '❌ El registro con email no está habilitado. Contacta al administrador.';
+                    } else if (error.code === 'permission-denied') {
+                        mensaje = '❌ Error de permisos. Verifica las reglas de Firestore.';
+                    }
+                    
+                    showToast(mensaje, 'error');
+                });
+        }
+
+        async function createProviderAccount(user, additionalData = {}) {
             const providerData = {
                 business: additionalData.business || user.displayName || 'Nuevo Proveedor',
                 name: additionalData.name || user.displayName || 'Proveedor',
@@ -919,7 +921,7 @@
                     status: 'pending',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    showToast('📸 Foto enviada para aprobación');
+                    showToast(' Foto enviada para aprobación');
                     loadProviderData();
                 }).catch(() => showToast('Error al subir', 'error'));
             }
@@ -951,7 +953,7 @@
                     status: 'pending',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    showToast('️ Solicitud de eliminación enviada');
+                    showToast('🗑️ Solicitud de eliminación enviada');
                     loadProviderData();
                 });
             }
@@ -1046,13 +1048,8 @@
         window.onclick = function(event) { 
             if (event.target.classList.contains('modal')) {
                 event.target.classList.remove('active'); 
-        // Verificar configuración de Firebase
-console.log('=== FIREBASE CONFIG ===');
-console.log('Auth:', auth);
-console.log('Firestore:', db);
-console.log('=====================');
             }
-                }
+        }
     </script>
 </body>
 </html>

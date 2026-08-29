@@ -13,14 +13,15 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f7fa;
             min-height: 100vh;
         }
 
+        /* Navbar mejorada */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -35,212 +36,253 @@
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
-            background: linear-gradient(135deg, #FFD700, #FF6B9D, #4A90E2);
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #6BCB77 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
+            align-items: center;
         }
 
         .nav-links a {
             text-decoration: none;
             color: #333;
             font-weight: 500;
-            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
         }
 
         .nav-links a:hover {
-            color: #FF6B9D;
+            background: #f0f0f0;
         }
 
+        .nav-explorar {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6BCB77 !important;
+        }
+
+        .btn-proveedor {
+            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+            color: white !important;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .btn-proveedor:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+        }
+
+        .admin-link {
+            color: #999 !important;
+            font-size: 0.9rem;
+        }
+
+        /* Hero Section */
         .hero {
-            text-align: center;
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4D96FF 100%);
             padding: 4rem 2rem;
+            text-align: center;
             color: white;
         }
 
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .hero p {
             font-size: 1.3rem;
             margin-bottom: 2rem;
+            opacity: 0.95;
         }
 
-        .filters {
-            background: white;
+        /* Buscador */
+        .search-container {
             max-width: 800px;
-            margin: 0 auto 3rem;
-            padding: 2rem;
+            margin: 0 auto;
+            background: white;
+            padding: 1.5rem;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .filter-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .filter-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .filter-group select,
-        .filter-group input {
-            width: 100%;
+        .search-select {
+            flex: 1;
+            min-width: 200px;
             padding: 0.8rem;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1rem;
-        }
-
-        .category-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .category-btn {
-            padding: 0.8rem 1.5rem;
-            border: 2px solid #e0e0e0;
             background: white;
-            border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
         }
 
-        .category-btn:hover,
-        .category-btn.selected {
-            background: linear-gradient(135deg, #FFD700, #FF6B9D);
+        .search-select:focus {
+            outline: none;
+            border-color: #FF6B9D;
+        }
+
+        .btn-buscar {
+            background: linear-gradient(135deg, #FF6B9D, #4D96FF);
             color: white;
-            border-color: transparent;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .btn-buscar:hover {
             transform: translateY(-2px);
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #FFD700, #FF6B9D);
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
-        }
-
+        /* Sección de Proveedores */
         .section {
             max-width: 1200px;
             margin: 0 auto;
             padding: 3rem 2rem;
-            background: white;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
-            border-radius: 15px;
         }
 
         .section h2 {
             color: #333;
-            margin-bottom: 2rem;
-            text-align: center;
             font-size: 2rem;
+        }
+
+        .proveedores-count {
+            color: #666;
+            font-size: 1.1rem;
         }
 
         .proveedores-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .proveedor-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #FF6B9D 0%, #4D96FF 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             transition: transform 0.3s;
+            cursor: pointer;
         }
 
         .proveedor-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .proveedor-card.border-gold {
-            border-color: #FFD700;
-            border-width: 3px;
+        .proveedor-card.gold {
+            border: 3px solid #FFD700;
         }
 
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-gold {
+            background: #FFD700;
+            color: #000;
+        }
+
+        .badge-pro {
+            background: #4D96FF;
+            color: white;
+        }
+
+        .camera-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        /* Registro */
         .registration-section {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: white;
             padding: 4rem 2rem;
+            margin-top: 3rem;
         }
 
         .registration-container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .registration-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
         }
 
         .steps-indicator {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 2rem;
             margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .steps-indicator::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #e0e0e0;
-            z-index: 0;
         }
 
         .step {
-            width: 40px;
-            height: 40px;
-            background: #e0e0e0;
-            border-radius: 50%;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-            position: relative;
-            z-index: 1;
-            transition: background 0.3s;
+            gap: 0.5rem;
+            color: #999;
         }
 
         .step.active {
-            background: linear-gradient(135deg, #FFD700, #FF6B9D);
+            color: #FF6B9D;
+            font-weight: 600;
         }
 
-        .step.completed {
-            background: #4CAF50;
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+            color: white;
         }
 
         .form-step {
@@ -285,6 +327,59 @@
             border-color: #FF6B9D;
         }
 
+        .category-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-item {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .category-item:hover,
+        .category-item.selected {
+            border-color: #FF6B9D;
+            background: #FFF0F5;
+        }
+
+        .planes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .plan-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .plan-card:hover,
+        .plan-card.selected {
+            border-color: #FF6B9D;
+            background: #FFF0F5;
+            transform: translateY(-3px);
+        }
+
+        .plan-card.gold-plan {
+            border-color: #FFD700;
+        }
+
+        .plan-card.gold-plan.selected {
+            background: #FFFBF0;
+        }
+
         .form-actions {
             display: flex;
             justify-content: space-between;
@@ -292,48 +387,28 @@
         }
 
         .btn-secondary {
-            background: #e0e0e0;
+            background: #f0f0f0;
             color: #333;
             border: none;
             padding: 0.8rem 2rem;
-            border-radius: 25px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.3s;
         }
 
-        .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-
-        .upload-area {
-            border: 2px dashed #4A90E2;
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .upload-area:hover {
-            background: #f0f7ff;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         footer {
-            background: rgba(0,0,0,0.8);
+            background: #333;
             color: white;
             text-align: center;
             padding: 2rem;
@@ -345,12 +420,17 @@
                 font-size: 2rem;
             }
             
-            .nav-links {
-                display: none;
+            .search-container {
+                flex-direction: column;
             }
             
-            .proveedores-grid {
-                grid-template-columns: 1fr;
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-links a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -362,9 +442,9 @@
         <div class="nav-container">
             <div class="logo">GOPARTY</div>
             <div class="nav-links">
-                <a href="#inicio">Explorar</a>
-                <a href="#registro">Soy Proveedor</a>
-                <a href="admin.html">Admin</a>
+                <a href="#inicio" class="nav-explorar">Explorar</a>
+                <a href="https://gopartymarket.gopartyxal.workers.dev/dashboard" class="btn-proveedor">Soy Proveedor</a>
+                <a href="admin.html" class="admin-link" title="Acceso Administrativo">🔒</a>
             </div>
         </div>
     </nav>
@@ -373,57 +453,39 @@
     <section class="hero" id="inicio">
         <h1>Haz que tu fiesta sea inolvidable</h1>
         <p>Encuentra a los mejores proveedores verificados en Xalapa</p>
-    </section>
-
-    <!-- Filtros de Búsqueda -->
-    <div class="filters">
-        <div class="filter-group">
-            <label> Buscar proveedores</label>
-            <input type="text" id="searchInput" placeholder="Nombre del proveedor o servicio...">
-        </div>
         
-        <div class="filter-group">
-            <label>📍 Ciudad</label>
-            <select id="filterCiudad">
-                <option value="">Todas las ciudades</option>
-                <option value="Xalapa">Xalapa</option>
-                <option value="Veracruz">Veracruz</option>
-                <option value="Córdoba">Córdoba</option>
-                <option value="Orizaba">Orizaba</option>
-                <option value="Coatepec">Coatepec</option>
+        <!-- Buscador -->
+        <div class="search-container">
+            <select class="search-select" id="filterCategoria">
+                <option value="">Todas las categorías</option>
+                <option value="Salones">🏰 Salones</option>
+                <option value="Alimentos">️ Alimentos</option>
+                <option value="Fotografía">📸 Fotografía</option>
+                <option value="Música/DJ">🎵 Música/DJ</option>
+                <option value="Decoración">🎈 Decoración</option>
+                <option value="Animación"> Animación</option>
+                <option value="Mobiliario">🪑 Mobiliario</option>
             </select>
-        </div>
-
-        <div class="filter-group">
-            <label>🏷️ Categoría</label>
-            <div class="category-buttons">
-                <button class="category-btn" data-categoria="Salones">🏰 Salones</button>
-                <button class="category-btn" data-categoria="Alimentos">🍽️ Alimentos</button>
-                <button class="category-btn" data-categoria="Fotografía">📸 Fotografía</button>
-                <button class="category-btn" data-categoria="Música/DJ">🎵 Música/DJ</button>
-                <button class="category-btn" data-categoria="Decoración">🎈 Decoración</button>
-                <button class="category-btn" data-categoria="Animación">🎪 Animación</button>
-            </div>
-        </div>
-
-        <div class="filter-group">
-            <label> Plan</label>
-            <select id="filterPlan">
+            
+            <select class="search-select" id="filterPlan">
                 <option value="">Cualquier plan</option>
                 <option value="gold">👑 Solo Gold (Destacados)</option>
                 <option value="pro">⭐ Pro</option>
                 <option value="basic">Básico</option>
             </select>
+            
+            <button class="btn-buscar" onclick="filtrarProveedores()">
+                🔍 Buscar
+            </button>
         </div>
-
-        <button class="btn-primary" onclick="filtrarProveedores()" style="width: 100%;">
-             Buscar
-        </button>
-    </div>
+    </section>
 
     <!-- Proveedores Destacados -->
     <section class="section">
-        <h2> Proveedores Destacados</h2>
+        <div class="section-header">
+            <h2>Proveedores Destacados</h2>
+            <span class="proveedores-count" id="proveedoresCount">0 proveedores</span>
+        </div>
         <div id="contenedorProveedores" class="proveedores-grid">
             <p style="text-align: center; color: #666; grid-column: 1/-1;">
                 Cargando proveedores...
@@ -434,17 +496,29 @@
     <!-- Sección de Registro -->
     <section class="registration-section" id="registro">
         <div class="registration-container">
-            <h2 style="text-align: center; margin-bottom: 1rem; color: #333;">Únete a GoParty</h2>
+            <h2>Únete a GoParty</h2>
             <p style="text-align: center; margin-bottom: 2rem; color: #666;">
                 Completa tu perfil y elige tu plan de crecimiento
             </p>
 
             <!-- Indicador de Pasos -->
             <div class="steps-indicator">
-                <div class="step active" data-step="1">1</div>
-                <div class="step" data-step="2">2</div>
-                <div class="step" data-step="3">3</div>
-                <div class="step" data-step="4">4</div>
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <span>Datos</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <span>Servicios</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Plan</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <span>Docs</span>
+                </div>
             </div>
 
             <form id="registroProveedor">
@@ -496,15 +570,31 @@
                 <div class="form-step" data-step="2">
                     <h3 style="margin-bottom: 1.5rem; color: #333;">2. ¿Qué servicios ofreces?</h3>
                     
-                    <div class="category-buttons" style="margin-bottom: 2rem;">
-                        <button type="button" class="category-btn" data-categoria="Salones">🏰 Salones</button>
-                        <button type="button" class="category-btn" data-categoria="Alimentos">🍽️ Alimentos</button>
-                        <button type="button" class="category-btn" data-categoria="Fotografía">📸 Fotografía</button>
-                        <button type="button" class="category-btn" data-categoria="Música/DJ">🎵 Música/DJ</button>
-                        <button type="button" class="category-btn" data-categoria="Decoración">🎈 Decoración</button>
-                        <button type="button" class="category-btn" data-categoria="Animación">🎪 Animación</button>
-                        <button type="button" class="category-btn" data-categoria="Mobiliario">🪑 Mobiliario</button>
-                        <button type="button" class="category-btn" data-categoria="Otros"> Otros</button>
+                    <div class="category-list">
+                        <div class="category-item" data-categoria="Salones">
+                             Salones
+                        </div>
+                        <div class="category-item" data-categoria="Alimentos">
+                            🍽️ Alimentos
+                        </div>
+                        <div class="category-item" data-categoria="Fotografía">
+                            📸 Fotografía
+                        </div>
+                        <div class="category-item" data-categoria="Música/DJ">
+                            🎵 Música/DJ
+                        </div>
+                        <div class="category-item" data-categoria="Decoración">
+                            🎈 Decoración
+                        </div>
+                        <div class="category-item" data-categoria="Animación">
+                            🎪 Animación
+                        </div>
+                        <div class="category-item" data-categoria="Mobiliario">
+                            🪑 Mobiliario
+                        </div>
+                        <div class="category-item" data-categoria="Otros">
+                            Otros
+                        </div>
                     </div>
                     <input type="hidden" id="selectCategoria" required>
 
@@ -526,27 +616,24 @@
                         Puedes cambiar o cancelar tu plan en cualquier momento desde tu dashboard.
                     </p>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                        <div style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;" 
-                             onclick="selectPlan('basic')" id="plan-basic">
+                    <div class="planes-grid">
+                        <div class="plan-card" onclick="selectPlan('basic')" id="plan-basic">
                             <h4 style="color: #333;">Plan Básico</h4>
-                            <p style="color: #666; font-size: 0.9rem;">Aparece en el directorio general.</p>
+                            <p style="color: #666; font-size: 0.9rem; margin: 1rem 0;">Aparece en el directorio general.</p>
                             <p style="font-size: 1.5rem; font-weight: bold; color: #4CAF50;">Gratis</p>
                             <span style="background: #4CAF50; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem;">POPULAR</span>
                         </div>
 
-                        <div style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;" 
-                             onclick="selectPlan('pro')" id="plan-pro">
+                        <div class="plan-card" onclick="selectPlan('pro')" id="plan-pro">
                             <h4 style="color: #333;">Plan Pro</h4>
-                            <p style="color: #666; font-size: 0.9rem;">Sello verificado + Aparecer en búsquedas filtradas.</p>
+                            <p style="color: #666; font-size: 0.9rem; margin: 1rem 0;">Sello verificado + Aparecer en búsquedas filtradas.</p>
                             <p style="font-size: 1.5rem; font-weight: bold; color: #FF6B9D;">$299/mes</p>
-                            <span style="background: #FF6B9D; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem;">👑 PREMIUM</span>
+                            <span style="background: #FF6B9D; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem;">PREMIUM</span>
                         </div>
 
-                        <div style="border: 3px solid #FFD700; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; background: #FFFBF0;" 
-                             onclick="selectPlan('gold')" id="plan-gold">
+                        <div class="plan-card gold-plan" onclick="selectPlan('gold')" id="plan-gold">
                             <h4 style="color: #333;">Plan Gold</h4>
-                            <p style="color: #666; font-size: 0.9rem;">Top de búsquedas + Borde dorado + Soporte prioritario.</p>
+                            <p style="color: #666; font-size: 0.9rem; margin: 1rem 0;">Top de búsquedas + Borde dorado + Soporte prioritario.</p>
                             <p style="font-size: 1.5rem; font-weight: bold; color: #FFD700;">$599/mes</p>
                         </div>
                     </div>
@@ -567,7 +654,7 @@
 
                     <div class="form-group">
                         <label>Identificación Oficial (INE/IFE)</label>
-                        <div class="upload-area" onclick="document.getElementById('file-ine').click()">
+                        <div style="border: 2px dashed #4D96FF; border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('file-ine').click()">
                             <p>📄 Haz clic para simular la carga</p>
                             <input type="file" id="file-ine" style="display: none;" accept="image/*,.pdf">
                         </div>
@@ -576,15 +663,15 @@
                     <div class="form-group">
                         <label>Constancia de Situación Fiscal</label>
                         <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Opcional, pero recomendado para Plan Gold</p>
-                        <div class="upload-area" onclick="document.getElementById('file-csf').click()">
+                        <div style="border: 2px dashed #4D96FF; border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('file-csf').click()">
                             <p>📄 Haz clic para simular la carga</p>
                             <input type="file" id="file-csf" style="display: none;" accept=".pdf">
                         </div>
                     </div>
 
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="terminos" required>
-                        <label for="terminos">Acepto los Términos y Condiciones. Entiendo que mi perfil será revisado por el equipo de GoParty antes de activarse.</label>
+                    <div style="margin: 1.5rem 0;">
+                        <input type="checkbox" id="terminos" required style="margin-right: 0.5rem;">
+                        <label for="terminos" style="display: inline; font-weight: normal;">Acepto los Términos y Condiciones. Entiendo que mi perfil será revisado por el equipo de GoParty antes de activarse.</label>
                     </div>
 
                     <div class="form-actions">
@@ -601,18 +688,15 @@
     <!-- Footer -->
     <footer>
         <p>© 2026 GoParty - Conectando party people con magia profesional</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
-            <a href="admin.html" style="color: #FFD700; text-decoration: none;">Panel de Administración</a>
-        </p>
     </footer>
 
     <!-- FIREBASE Y JAVASCRIPT -->
     <script type="module">
         // Importar Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // Configuración de Firebase (de tus screenshots)
+        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDJAYIomhENVR53lor4zfb0Zsh7ywzI9_c",
             authDomain: "goparty-marketplace.firebaseapp.com",
@@ -638,15 +722,13 @@
         // NAVEGACIÓN ENTRE PASOS DEL FORMULARIO
         // ==========================================
         window.nextStep = function(step) {
-            // Validar paso actual antes de avanzar
             if (!validateStep(step)) return;
 
             document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
             document.querySelector(`.form-step[data-step="${step + 1}"]`).classList.add('active');
             
-            // Actualizar indicador de pasos
-            document.querySelector(`.step[data-step="${step}"]`).classList.add('completed');
-            document.querySelector(`.step[data-step="${step + 1}"]`).classList.add('active');
+            document.querySelectorAll('.step')[step-1].classList.remove('active');
+            document.querySelectorAll('.step')[step].classList.add('active');
             
             currentStep = step + 1;
             window.scrollTo({ top: document.getElementById('registro').offsetTop - 100, behavior: 'smooth' });
@@ -656,8 +738,8 @@
             document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
             document.querySelector(`.form-step[data-step="${step - 1}"]`).classList.add('active');
             
-            document.querySelector(`.step[data-step="${step}"]`).classList.remove('active');
-            document.querySelector(`.step[data-step="${step - 1}"]`).classList.remove('completed');
+            document.querySelectorAll('.step')[step].classList.remove('active');
+            document.querySelectorAll('.step')[step-1].classList.add('active');
             
             currentStep = step - 1;
         };
@@ -677,9 +759,9 @@
         }
 
         // Selección de categoría
-        document.querySelectorAll('.form-step[data-step="2"] .category-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.form-step[data-step="2"] .category-btn').forEach(b => b.classList.remove('selected'));
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('selected'));
                 this.classList.add('selected');
                 formData.categoria = this.getAttribute('data-categoria');
                 document.getElementById('selectCategoria').value = formData.categoria;
@@ -691,14 +773,11 @@
             formData.plan = plan;
             document.getElementById('selectPlan').value = plan;
             
-            // Resaltar visualmente
             ['basic', 'pro', 'gold'].forEach(p => {
-                document.getElementById(`plan-${p}`).style.borderColor = '#e0e0e0';
-                document.getElementById(`plan-${p}`).style.background = p === 'gold' ? '#FFFBF0' : 'white';
+                document.getElementById(`plan-${p}`).classList.remove('selected');
             });
             
-            document.getElementById(`plan-${plan}`).style.borderColor = plan === 'gold' ? '#FFD700' : '#FF6B9D';
-            document.getElementById(`plan-${plan}`).style.background = plan === 'gold' ? '#FFFBF0' : '#FFF0F5';
+            document.getElementById(`plan-${plan}`).classList.add('selected');
         };
 
         // ==========================================
@@ -726,16 +805,14 @@
             try {
                 await addDoc(collection(db, "proveedores"), proveedorData);
                 
-                alert('✅ ¡Registro exitoso! Tu perfil será revisado en 24-48 horas. Te contactaremos pronto.');
+                alert('✅ ¡Registro exitoso! Tu perfil será revisado en 24-48 horas.');
                 
-                // Resetear formulario
                 document.getElementById('registroProveedor').reset();
-                
-                // Volver al paso 1
                 document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
                 document.querySelector('.form-step[data-step="1"]').classList.add('active');
+                
                 document.querySelectorAll('.step').forEach((step, index) => {
-                    step.classList.remove('active', 'completed');
+                    step.classList.remove('active');
                     if (index === 0) step.classList.add('active');
                 });
                 
@@ -753,16 +830,15 @@
         // ==========================================
         async function cargarProveedores(filtros = {}) {
             const contenedor = document.getElementById('contenedorProveedores');
-            contenedor.innerHTML = '<p style="text-align: center; color: #666;">Cargando proveedores...</p>';
+            const countElement = document.getElementById('proveedoresCount');
+            contenedor.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">Cargando proveedores...</p>';
 
             try {
                 let q = collection(db, "proveedores");
                 const constraints = [];
 
-                // Solo mostrar verificados (o todos si es admin)
                 constraints.push(where("estadoVerificacion", "==", "Verificado"));
 
-                // Aplicar filtros
                 if (filtros.ciudad) {
                     constraints.push(where("ciudad", "==", filtros.ciudad));
                 }
@@ -783,68 +859,36 @@
                     contenedor.innerHTML = `
                         <div style="text-align: center; padding: 40px; color: #666; grid-column: 1/-1;">
                             <h3>🎉 ¡Sé el primer proveedor en GoParty!</h3>
-                            <p>Aún no hay proveedores verificados que coincidan con tu búsqueda.</p>
-                            <p><strong>¿Tienes un negocio de eventos? Regístrate gratis.</strong></p>
+                            <p>Aún no hay proveedores verificados.</p>
                         </div>
                     `;
+                    countElement.textContent = '0 proveedores';
                     return;
                 }
 
                 contenedor.innerHTML = '';
+                countElement.textContent = `${querySnapshot.size} proveedor${querySnapshot.size !== 1 ? 'es' : ''}`;
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    const proveedorId = doc.id;
                     
                     let badge = '';
-                    let borderColor = '#e0e0e0';
+                    let cardClass = '';
                     
                     if (data.plan === 'gold') {
-                        badge = '<span style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold;">👑 GOLD</span>';
-                        borderColor = '#FFD700';
+                        badge = '<span class="badge badge-gold"> Gold</span>';
+                        cardClass = 'gold';
                     } else if (data.plan === 'pro') {
-                        badge = '<span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">⭐ Pro</span>';
-                        borderColor = '#4CAF50';
+                        badge = '<span class="badge badge-pro">⭐ Pro</span>';
                     }
 
                     const tarjeta = `
-                        <div class="proveedor-card ${data.plan === 'gold' ? 'border-gold' : ''}" style="
-                            border: 2px solid ${borderColor};
-                            border-radius: 12px;
-                            padding: 20px;
-                            background: white;
-                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                            transition: transform 0.3s;
-                        " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                <h3 style="margin: 0; color: #333; font-size: 1.3rem;">${data.nombreNegocio}</h3>
-                                ${badge}
-                            </div>
-                            
-                            <p style="margin: 8px 0; color: #666;">
-                                📍 ${data.ciudad || 'Xalapa'} | 🏷️ ${data.categoria || 'General'}
-                            </p>
-                            
-                            ${data.descripcion ? `<p style="margin: 10px 0; color: #555; font-style: italic; font-size: 0.9rem;">"${data.descripcion.substring(0, 100)}${data.descripcion.length > 100 ? '...' : ''}"</p>` : ''}
-                            
-                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
-                                <a href="https://wa.me/52${data.whatsapp}?text=Hola%20${encodeURIComponent(data.nombreNegocio)}%2C%20vi%20su%20perfil%20en%20GoParty%20y%20me%20interesa%20una%20cotización" 
-                                   target="_blank" 
-                                   style="
-                                     background-color: #25D366; 
-                                     color: white; 
-                                     padding: 12px 20px; 
-                                     text-decoration: none; 
-                                     border-radius: 8px; 
-                                     display: inline-block;
-                                     font-weight: bold;
-                                     transition: transform 0.2s;
-                                   "
-                                   onmouseover="this.style.transform='scale(1.05)'"
-                                   onmouseout="this.style.transform='scale(1)'">
-                                   💬 Contactar por WhatsApp
-                                </a>
-                            </div>
+                        <div class="proveedor-card ${cardClass}">
+                            ${badge}
+                            <div class="camera-icon">📷</div>
+                            <h3 style="margin: 0; font-size: 1.3rem;">${data.nombreNegocio}</h3>
+                            <p style="margin: 0.5rem 0; opacity: 0.9;">📍 ${data.ciudad || 'Xalapa'}</p>
+                            <p style="margin: 0.5rem 0; opacity: 0.9;">🏷️ ${data.categoria || 'General'}</p>
                         </div>
                     `;
                     
@@ -853,7 +897,7 @@
 
             } catch (error) {
                 console.error("Error al cargar proveedores: ", error);
-                contenedor.innerHTML = "<p style='color: red; text-align: center; grid-column: 1/-1;'>Error al cargar el directorio.</p>";
+                contenedor.innerHTML = "<p style='color: red; text-align: center; grid-column: 1/-1;'>Error al cargar.</p>";
             }
         }
 
@@ -862,41 +906,17 @@
         // ==========================================
         window.filtrarProveedores = function() {
             const filtros = {
-                ciudad: document.getElementById('filterCiudad').value,
-                categoria: formData.categoriaFiltro || '',
+                categoria: document.getElementById('filterCategoria').value,
                 plan: document.getElementById('filterPlan').value
             };
             cargarProveedores(filtros);
         };
 
-        // Filtrar por categoría al hacer clic
-        document.querySelectorAll('.filters .category-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filters .category-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                formData.categoriaFiltro = this.getAttribute('data-categoria');
-                filtrarProveedores();
-            });
-        });
-
-        // Búsqueda en tiempo real
-        document.getElementById('searchInput')?.addEventListener('input', (e) => {
-            // Implementar búsqueda por nombre
-            const searchTerm = e.target.value.toLowerCase();
-            // Filtrar cards visibles
-            document.querySelectorAll('.proveedor-card').forEach(card => {
-                const text = card.textContent.toLowerCase();
-                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
-            });
-        });
-
         // ==========================================
-        // CARGAR PROVEEDORES AL INICIAR
+        // CARGAR AL INICIAR
         // ==========================================
         document.addEventListener('DOMContentLoaded', () => {
             cargarProveedores();
-            
-            // Inicializar selección de plan
             selectPlan('basic');
         });
 

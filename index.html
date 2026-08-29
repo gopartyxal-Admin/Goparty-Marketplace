@@ -4,297 +4,903 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoParty - Directorio de Proveedores Verificados</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        goparty: { yellow: '#FFD93D', pink: '#FF6B9D', blue: '#4ECDC4', dark: '#2C3E50', gold: '#D4AF37' }
-                    },
-                    fontFamily: { sans: ['Manrope', 'sans-serif'] }
-                }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FFD700, #FF6B9D, #4A90E2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FF6B9D;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .filters {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .category-btn:hover,
+        .category-btn.selected {
+            background: linear-gradient(135deg, #FFD700, #FF6B9D);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #FF6B9D);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .proveedores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .proveedor-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .proveedor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .proveedor-card.border-gold {
+            border-color: #FFD700;
+            border-width: 3px;
+        }
+
+        .registration-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 4rem 2rem;
+        }
+
+        .registration-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .steps-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .steps-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            z-index: 1;
+            transition: background 0.3s;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #FFD700, #FF6B9D);
+        }
+
+        .step.completed {
+            background: #4CAF50;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #FF6B9D;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .upload-area {
+            border: 2px dashed #4A90E2;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .upload-area:hover {
+            background: #f0f7ff;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        footer {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .proveedores-grid {
+                grid-template-columns: 1fr;
             }
         }
-    </script>
-    <style>
-        body { font-family: 'Manrope', sans-serif; }
-        .gradient-hero { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4ECDC4 100%); }
-        .gradient-btn { background: linear-gradient(135deg, #FF6B9D 0%, #4ECDC4 100%); }
-        .category-checkbox:checked + div { border-color: #FF6B9D; background-color: #FFF0F5; }
-        .category-checkbox:checked + div .check-icon { opacity: 1; transform: scale(1); }
-        .plan-radio:checked + div { border-color: #FF6B9D; background-color: #FFF0F5; transform: scale(1.02); }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .hidden-view { display: none; }
-        .gold-border { border: 2px solid #D4AF37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
 
-    <!-- NAVIGATION -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-2 cursor-pointer" onclick="showView('home')">
-                    <div class="text-2xl font-extrabold"><span class="text-goparty-yellow">GO</span><span class="text-goparty-pink">PARTY</span></div>
-                </div>
-                <div class="hidden md:flex items-center space-x-6">
-                    <button onclick="showView('home')" class="text-gray-700 hover:text-goparty-pink font-medium">Explorar</button>
-                    <button onclick="showView('register')" class="gradient-btn text-white px-5 py-2 rounded-full font-semibold hover:shadow-lg transition">Soy Proveedor</button>
-                    <button onclick="showView('admin')" class="text-gray-700 hover:text-goparty-pink font-medium"><i class="fas fa-lock mr-1"></i> Admin</button>
-                </div>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">GOPARTY</div>
+            <div class="nav-links">
+                <a href="#inicio">Explorar</a>
+                <a href="#registro">Soy Proveedor</a>
+                <a href="admin.html">Admin</a>
             </div>
         </div>
     </nav>
 
-    <!-- VIEW: HOME / DIRECTORY -->
-    <div id="view-home" class="view-section fade-in">
-        <section class="gradient-hero py-16 px-4">
-            <div class="container mx-auto text-center">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Haz que tu fiesta sea inolvidable</h1>
-                <p class="text-xl text-white mb-8 max-w-2xl mx-auto">Encuentra a los mejores proveedores verificados en Xalapa</p>
-                <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-4">
-                    <div class="grid md:grid-cols-3 gap-3">
-                        <select id="filter-category" onchange="filterProviders()" class="px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                            <option value="">Todas las categorías</option>
-                            <option value="Salones">🏰 Salones</option><option value="Alimentos">️ Alimentos</option>
-                            <option value="Fotografía">📸 Fotografía</option><option value="Música">🎵 Música/DJ</option>
-                            <option value="Decoración">🎈 Decoración</option><option value="Animación">🎪 Animación</option>
-                        </select>
-                        <select id="filter-plan" onchange="filterProviders()" class="px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                            <option value="">Cualquier plan</option>
-                            <option value="Gold">👑 Solo Gold (Destacados)</option>
-                            <option value="Pro">⭐ Pro</option>
-                        </select>
-                        <button onclick="filterProviders()" class="gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition"><i class="fas fa-search mr-2"></i>Buscar</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <h1>Haz que tu fiesta sea inolvidable</h1>
+        <p>Encuentra a los mejores proveedores verificados en Xalapa</p>
+    </section>
 
-        <section class="py-12 px-4 container mx-auto">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-800">Proveedores Destacados</h2>
-                <span class="text-gray-500" id="provider-count">0 proveedores</span>
+    <!-- Filtros de Búsqueda -->
+    <div class="filters">
+        <div class="filter-group">
+            <label> Buscar proveedores</label>
+            <input type="text" id="searchInput" placeholder="Nombre del proveedor o servicio...">
+        </div>
+        
+        <div class="filter-group">
+            <label>📍 Ciudad</label>
+            <select id="filterCiudad">
+                <option value="">Todas las ciudades</option>
+                <option value="Xalapa">Xalapa</option>
+                <option value="Veracruz">Veracruz</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Orizaba">Orizaba</option>
+                <option value="Coatepec">Coatepec</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>🏷️ Categoría</label>
+            <div class="category-buttons">
+                <button class="category-btn" data-categoria="Salones">🏰 Salones</button>
+                <button class="category-btn" data-categoria="Alimentos">🍽️ Alimentos</button>
+                <button class="category-btn" data-categoria="Fotografía">📸 Fotografía</button>
+                <button class="category-btn" data-categoria="Música/DJ">🎵 Música/DJ</button>
+                <button class="category-btn" data-categoria="Decoración">🎈 Decoración</button>
+                <button class="category-btn" data-categoria="Animación">🎪 Animación</button>
             </div>
-            <div id="providers-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </section>
+        </div>
+
+        <div class="filter-group">
+            <label> Plan</label>
+            <select id="filterPlan">
+                <option value="">Cualquier plan</option>
+                <option value="gold">👑 Solo Gold (Destacados)</option>
+                <option value="pro">⭐ Pro</option>
+                <option value="basic">Básico</option>
+            </select>
+        </div>
+
+        <button class="btn-primary" onclick="filtrarProveedores()" style="width: 100%;">
+             Buscar
+        </button>
     </div>
 
-    <!-- VIEW: PROVIDER REGISTRATION (4 PASOS) -->
-    <div id="view-register" class="view-section hidden-view fade-in min-h-screen py-12 px-4">
-        <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-goparty-dark mb-2">Únete a GoParty</h2>
-                <p class="text-gray-600">Completa tu perfil y elige tu plan de crecimiento</p>
+    <!-- Proveedores Destacados -->
+    <section class="section">
+        <h2> Proveedores Destacados</h2>
+        <div id="contenedorProveedores" class="proveedores-grid">
+            <p style="text-align: center; color: #666; grid-column: 1/-1;">
+                Cargando proveedores...
+            </p>
+        </div>
+    </section>
+
+    <!-- Sección de Registro -->
+    <section class="registration-section" id="registro">
+        <div class="registration-container">
+            <h2 style="text-align: center; margin-bottom: 1rem; color: #333;">Únete a GoParty</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                Completa tu perfil y elige tu plan de crecimiento
+            </p>
+
+            <!-- Indicador de Pasos -->
+            <div class="steps-indicator">
+                <div class="step active" data-step="1">1</div>
+                <div class="step" data-step="2">2</div>
+                <div class="step" data-step="3">3</div>
+                <div class="step" data-step="4">4</div>
             </div>
 
-            <!-- Progress Bar -->
-            <div class="flex justify-between mb-8 px-4">
-                <div class="flex flex-col items-center"><div id="ind-1" class="w-8 h-8 rounded-full bg-goparty-pink text-white flex items-center justify-center font-bold">1</div><span class="text-xs mt-1 text-goparty-pink">Datos</span></div>
-                <div class="flex flex-col items-center"><div id="ind-2" class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">2</div><span class="text-xs mt-1 text-gray-500">Servicios</span></div>
-                <div class="flex flex-col items-center"><div id="ind-3" class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">3</div><span class="text-xs mt-1 text-gray-500">Plan</span></div>
-                <div class="flex flex-col items-center"><div id="ind-4" class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">4</div><span class="text-xs mt-1 text-gray-500">Docs</span></div>
-            </div>
-
-            <form id="provider-form" onsubmit="registerProvider(event)">
-                <!-- PASO 1 -->
-                <div id="step-1" class="step-content fade-in">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">1. Información Básica</h3>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <input type="text" id="reg-business" required placeholder="Nombre del Negocio *" class="md:col-span-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                        <input type="text" id="reg-name" required placeholder="Tu Nombre *" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                        <input type="email" id="reg-email" required placeholder="Email *" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                        <input type="tel" id="reg-whatsapp" required placeholder="WhatsApp (10 dígitos) *" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                        <select id="reg-city" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                            <option value="">Ciudad *</option><option value="Xalapa">Xalapa</option><option value="Veracruz">Veracruz</option><option value="Córdoba">Córdoba</option>
+            <form id="registroProveedor">
+                <!-- Paso 1: Información Básica -->
+                <div class="form-step active" data-step="1">
+                    <h3 style="margin-bottom: 1.5rem; color: #333;">1. Información Básica</h3>
+                    
+                    <div class="form-group">
+                        <label>Ciudad *</label>
+                        <select id="selectCiudad" required>
+                            <option value="">Selecciona tu ciudad</option>
+                            <option value="Xalapa">Xalapa</option>
+                            <option value="Veracruz">Veracruz</option>
+                            <option value="Córdoba">Córdoba</option>
+                            <option value="Orizaba">Orizaba</option>
+                            <option value="Coatepec">Coatepec</option>
+                            <option value="Otro">Otro</option>
                         </select>
-                        <textarea id="reg-description" rows="3" placeholder="Descripción de tu negocio..." class="md:col-span-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></textarea>
                     </div>
-                    <div class="mt-6 flex justify-end"><button type="button" onclick="nextStep(2)" class="gradient-btn text-white px-8 py-3 rounded-full font-bold">Siguiente <i class="fas fa-arrow-right ml-2"></i></button></div>
+
+                    <div class="form-group">
+                        <label>Nombre del Negocio *</label>
+                        <input type="text" id="nombreNegocio" placeholder="Ej: Salón de Fiestas XYZ" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre de Contacto *</label>
+                        <input type="text" id="nombreContacto" placeholder="Tu nombre completo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>WhatsApp *</label>
+                        <input type="tel" id="whatsapp" placeholder="2281234567 (10 dígitos)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="tu@email.com" required>
+                    </div>
+
+                    <div class="form-actions" style="justify-content: flex-end;">
+                        <button type="button" class="btn-primary" onclick="nextStep(1)">
+                            Siguiente →
+                        </button>
+                    </div>
                 </div>
 
-                <!-- PASO 2 -->
-                <div id="step-2" class="step-content hidden fade-in">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">2. ¿Qué servicios ofreces?</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Salones"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">🏰</span><span class="font-bold text-sm">Salones</span></div></label>
-                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Alimentos"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">🍽️</span><span class="font-bold text-sm">Alimentos</span></div></label>
-                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Fotografía"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">📸</span><span class="font-bold text-sm">Fotografía</span></div></label>
-                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Música"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block"></span><span class="font-bold text-sm">Música/DJ</span></div></label>
-                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Decoración"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block">🎈</span><span class="font-bold text-sm">Decoración</span></div></label>
-                        <label class="cursor-pointer"><input type="checkbox" class="category-checkbox hidden" value="Animación"><div class="border-2 border-gray-200 rounded-xl p-4 text-center hover:border-goparty-pink transition relative"><i class="fas fa-check-circle text-goparty-pink text-xl absolute top-2 right-2 opacity-0 transform scale-50 transition check-icon"></i><span class="text-3xl mb-2 block"></span><span class="font-bold text-sm">Animación</span></div></label>
+                <!-- Paso 2: Servicios -->
+                <div class="form-step" data-step="2">
+                    <h3 style="margin-bottom: 1.5rem; color: #333;">2. ¿Qué servicios ofreces?</h3>
+                    
+                    <div class="category-buttons" style="margin-bottom: 2rem;">
+                        <button type="button" class="category-btn" data-categoria="Salones">🏰 Salones</button>
+                        <button type="button" class="category-btn" data-categoria="Alimentos">🍽️ Alimentos</button>
+                        <button type="button" class="category-btn" data-categoria="Fotografía">📸 Fotografía</button>
+                        <button type="button" class="category-btn" data-categoria="Música/DJ">🎵 Música/DJ</button>
+                        <button type="button" class="category-btn" data-categoria="Decoración">🎈 Decoración</button>
+                        <button type="button" class="category-btn" data-categoria="Animación">🎪 Animación</button>
+                        <button type="button" class="category-btn" data-categoria="Mobiliario">🪑 Mobiliario</button>
+                        <button type="button" class="category-btn" data-categoria="Otros"> Otros</button>
                     </div>
-                    <div class="mt-6 flex justify-between"><button type="button" onclick="nextStep(1)" class="text-gray-600 font-semibold px-6 py-3"><i class="fas fa-arrow-left mr-2"></i>Atrás</button><button type="button" onclick="nextStep(3)" class="gradient-btn text-white px-8 py-3 rounded-full font-bold">Siguiente <i class="fas fa-arrow-right ml-2"></i></button></div>
+                    <input type="hidden" id="selectCategoria" required>
+
+                    <div class="form-group">
+                        <label>Descripción de tus servicios</label>
+                        <textarea id="descripcion" rows="4" placeholder="Cuéntanos más sobre tus servicios..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="prevStep(2)">← Atrás</button>
+                        <button type="button" class="btn-primary" onclick="nextStep(2)">Siguiente →</button>
+                    </div>
                 </div>
 
-                <!-- PASO 3 -->
-                <div id="step-3" class="step-content hidden fade-in">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">3. Elige tu Plan de Crecimiento</h3>
-                    <p class="text-sm text-gray-500 mb-6">Puedes cambiar o cancelar tu plan en cualquier momento desde tu dashboard.</p>
-                    <div class="space-y-4 mb-6">
-                        <label class="cursor-pointer block"><input type="radio" name="plan" value="Basic" class="plan-radio hidden" checked><div class="border-2 border-gray-200 rounded-xl p-5 flex justify-between items-center transition hover:border-gray-400"><div><h4 class="font-bold text-lg text-gray-800">Plan Básico</h4><p class="text-sm text-gray-500">Aparece en el directorio general.</p></div><div class="text-right"><span class="text-2xl font-bold text-gray-800">Gratis</span></div></div></label>
-                        <label class="cursor-pointer block"><input type="radio" name="plan" value="Pro" class="plan-radio hidden"><div class="border-2 border-gray-200 rounded-xl p-5 flex justify-between items-center transition hover:border-gray-400 relative"><div class="absolute -top-3 left-4 bg-goparty-blue text-white text-xs font-bold px-2 py-1 rounded-full">POPULAR</div><div><h4 class="font-bold text-lg text-gray-800">Plan Pro</h4><p class="text-sm text-gray-500">Sello verificado + Aparecer en búsquedas filtradas.</p></div><div class="text-right"><span class="text-2xl font-bold text-goparty-blue">$299</span><span class="text-gray-500 text-sm">/mes</span></div></div></label>
-                        <label class="cursor-pointer block"><input type="radio" name="plan" value="Gold" class="plan-radio hidden"><div class="border-2 border-goparty-gold/50 bg-yellow-50/50 rounded-xl p-5 flex justify-between items-center transition hover:border-goparty-gold relative"><div class="absolute -top-3 left-4 bg-goparty-gold text-white text-xs font-bold px-2 py-1 rounded-full">👑 PREMIUM</div><div><h4 class="font-bold text-lg text-goparty-dark">Plan Gold</h4><p class="text-sm text-gray-600">Top de búsquedas + Borde dorado + Soporte prioritario.</p></div><div class="text-right"><span class="text-2xl font-bold text-goparty-gold">$599</span><span class="text-gray-500 text-sm">/mes</span></div></div></label>
+                <!-- Paso 3: Planes -->
+                <div class="form-step" data-step="3">
+                    <h3 style="margin-bottom: 1.5rem; color: #333;">3. Elige tu Plan de Crecimiento</h3>
+                    <p style="margin-bottom: 2rem; color: #666;">
+                        Puedes cambiar o cancelar tu plan en cualquier momento desde tu dashboard.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;" 
+                             onclick="selectPlan('basic')" id="plan-basic">
+                            <h4 style="color: #333;">Plan Básico</h4>
+                            <p style="color: #666; font-size: 0.9rem;">Aparece en el directorio general.</p>
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #4CAF50;">Gratis</p>
+                            <span style="background: #4CAF50; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem;">POPULAR</span>
+                        </div>
+
+                        <div style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;" 
+                             onclick="selectPlan('pro')" id="plan-pro">
+                            <h4 style="color: #333;">Plan Pro</h4>
+                            <p style="color: #666; font-size: 0.9rem;">Sello verificado + Aparecer en búsquedas filtradas.</p>
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #FF6B9D;">$299/mes</p>
+                            <span style="background: #FF6B9D; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem;">👑 PREMIUM</span>
+                        </div>
+
+                        <div style="border: 3px solid #FFD700; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; background: #FFFBF0;" 
+                             onclick="selectPlan('gold')" id="plan-gold">
+                            <h4 style="color: #333;">Plan Gold</h4>
+                            <p style="color: #666; font-size: 0.9rem;">Top de búsquedas + Borde dorado + Soporte prioritario.</p>
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #FFD700;">$599/mes</p>
+                        </div>
                     </div>
-                    <div class="mt-6 flex justify-between"><button type="button" onclick="nextStep(2)" class="text-gray-600 font-semibold px-6 py-3"><i class="fas fa-arrow-left mr-2"></i>Atrás</button><button type="button" onclick="nextStep(4)" class="gradient-btn text-white px-8 py-3 rounded-full font-bold">Siguiente <i class="fas fa-arrow-right ml-2"></i></button></div>
+                    <input type="hidden" id="selectPlan" value="basic" required>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="prevStep(3)">← Atrás</button>
+                        <button type="button" class="btn-primary" onclick="nextStep(3)">Siguiente →</button>
+                    </div>
                 </div>
 
-                <!-- PASO 4 -->
-                <div id="step-4" class="step-content hidden fade-in">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">4. Verificación y Sello GoParty</h3>
-                    <p class="text-sm text-gray-500 mb-6">Para obtener el <span class="text-goparty-pink font-bold">Sello de Verificación</span>, sube tus documentos. (Simulación para el prototipo).</p>
-                    <div class="space-y-4 mb-6">
-                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-goparty-pink hover:bg-pink-50/30 transition cursor-pointer"><i class="fas fa-id-card text-3xl text-goparty-pink mb-2"></i><p class="font-semibold text-gray-700">Identificación Oficial (INE/IFE)</p><p class="text-xs text-gray-500">Haz clic para simular la carga</p></div>
-                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-goparty-pink hover:bg-pink-50/30 transition cursor-pointer"><i class="fas fa-file-invoice-dollar text-3xl text-goparty-blue mb-2"></i><p class="font-semibold text-gray-700">Constancia de Situación Fiscal</p><p class="text-xs text-gray-500">Opcional, pero recomendado para Plan Gold</p></div>
+                <!-- Paso 4: Verificación -->
+                <div class="form-step" data-step="4">
+                    <h3 style="margin-bottom: 1.5rem; color: #333;">4. Verificación y Sello GoParty</h3>
+                    <p style="margin-bottom: 2rem; color: #666;">
+                        Para obtener el Sello de Verificación, sube tus documentos. (Simulación para el prototipo).
+                    </p>
+
+                    <div class="form-group">
+                        <label>Identificación Oficial (INE/IFE)</label>
+                        <div class="upload-area" onclick="document.getElementById('file-ine').click()">
+                            <p>📄 Haz clic para simular la carga</p>
+                            <input type="file" id="file-ine" style="display: none;" accept="image/*,.pdf">
+                        </div>
                     </div>
-                    <div class="flex items-start gap-3 mb-6"><input type="checkbox" id="terms" required class="mt-1 w-5 h-5 text-goparty-pink rounded focus:ring-goparty-pink border-gray-300"><label for="terms" class="text-sm text-gray-600">Acepto los Términos y Condiciones. Entiendo que mi perfil será revisado por el equipo de GoParty antes de activarse.</label></div>
-                    <div class="mt-6 flex justify-between"><button type="button" onclick="nextStep(3)" class="text-gray-600 font-semibold px-6 py-3"><i class="fas fa-arrow-left mr-2"></i>Atrás</button><button type="submit" class="gradient-btn text-white px-8 py-3 rounded-full font-bold flex items-center"><i class="fas fa-check-circle mr-2"></i>Enviar Registro</button></div>
+
+                    <div class="form-group">
+                        <label>Constancia de Situación Fiscal</label>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Opcional, pero recomendado para Plan Gold</p>
+                        <div class="upload-area" onclick="document.getElementById('file-csf').click()">
+                            <p>📄 Haz clic para simular la carga</p>
+                            <input type="file" id="file-csf" style="display: none;" accept=".pdf">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terminos" required>
+                        <label for="terminos">Acepto los Términos y Condiciones. Entiendo que mi perfil será revisado por el equipo de GoParty antes de activarse.</label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="prevStep(4)">← Atrás</button>
+                        <button type="submit" class="btn-primary" id="btnEnviarRegistro">
+                            ✅ Enviar Registro
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
-    </div>
+    </section>
 
-    <!-- VIEW: ADMIN PANEL -->
-    <div id="view-admin" class="view-section hidden-view fade-in min-h-screen py-12 px-4">
-        <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold text-goparty-dark">Panel de Administración</h2>
-                <button onclick="showView('home')" class="text-gray-600 hover:text-goparty-pink"><i class="fas fa-arrow-left mr-2"></i>Volver</button>
-            </div>
-            <div class="mb-8">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-clock text-yellow-500 mr-2"></i>Pendientes de Verificación</h3>
-                <div id="admin-pending" class="space-y-4"></div>
-            </div>
-            <div class="border-t pt-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i>Proveedores Activos</h3>
-                <div id="admin-verified" class="space-y-4"></div>
-            </div>
-        </div>
-    </div>
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 GoParty - Conectando party people con magia profesional</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <a href="admin.html" style="color: #FFD700; text-decoration: none;">Panel de Administración</a>
+        </p>
+    </footer>
 
-    <!-- VIEW: PROVIDER PROFILE -->
-    <div id="view-profile" class="view-section hidden-view fade-in min-h-screen py-12 px-4">
-        <div class="max-w-4xl mx-auto">
-            <button onclick="showView('home')" class="mb-4 text-gray-600 hover:text-goparty-pink"><i class="fas fa-arrow-left mr-2"></i>Volver</button>
-            <div id="profile-content" class="bg-white rounded-3xl shadow-xl overflow-hidden"></div>
-        </div>
-    </div>
+    <!-- FIREBASE Y JAVASCRIPT -->
+    <script type="module">
+        // Importar Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-goparty-dark text-white px-6 py-3 rounded-full shadow-2xl transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-50"><span id="toast-message">Mensaje</span></div>
+        // Configuración de Firebase (de tus screenshots)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJAYIomhENVR53lor4zfb0Zsh7ywzI9_c",
+            authDomain: "goparty-marketplace.firebaseapp.com",
+            projectId: "goparty-marketplace",
+            storageBucket: "goparty-marketplace.firebasestorage.app",
+            messagingSenderId: "95947882678",
+            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
+        };
 
-    <script>
-        // MOCK DATABASE
-        const DB_KEY = 'goparty_providers_master';
-        function initDB() {
-            if (!localStorage.getItem(DB_KEY)) {
-                const sampleData = [
-                    { id: 1, business: 'Elite Flavors Catering', name: 'Elena Martínez', email: 'elena@elite.com', whatsapp: '5212281234567', city: 'Xalapa', categories: ['Alimentos', 'Decoración'], price: 250, description: 'Catering gourmet con más de 10 años de experiencia.', verified: true, plan: 'Gold', rating: 4.9, reviews: 84, documents: ['INE_Elena.pdf'] },
-                    { id: 2, business: 'DJ SoundMaster Pro', name: 'Carlos Ruiz', email: 'carlos@sound.com', whatsapp: '5212289876543', city: 'Xalapa', categories: ['Música'], price: 2800, description: 'DJ profesional con equipo de última generación.', verified: true, plan: 'Pro', rating: 4.8, reviews: 62, documents: ['INE_Carlos.pdf'] },
-                    { id: 3, business: 'Fotos Mágicas', name: 'Ana López', email: 'ana@fotos.com', whatsapp: '5212281112222', city: 'Veracruz', categories: ['Fotografía'], price: 3500, description: 'Capturamos tus mejores momentos.', verified: false, plan: 'Basic', rating: 0, reviews: 0, documents: ['INE_Ana.pdf'] }
-                ];
-                localStorage.setItem(DB_KEY, JSON.stringify(sampleData));
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variables globales
+        let currentStep = 1;
+        let formData = {
+            ciudad: '',
+            categoria: '',
+            plan: 'basic'
+        };
+
+        // ==========================================
+        // NAVEGACIÓN ENTRE PASOS DEL FORMULARIO
+        // ==========================================
+        window.nextStep = function(step) {
+            // Validar paso actual antes de avanzar
+            if (!validateStep(step)) return;
+
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
+            document.querySelector(`.form-step[data-step="${step + 1}"]`).classList.add('active');
+            
+            // Actualizar indicador de pasos
+            document.querySelector(`.step[data-step="${step}"]`).classList.add('completed');
+            document.querySelector(`.step[data-step="${step + 1}"]`).classList.add('active');
+            
+            currentStep = step + 1;
+            window.scrollTo({ top: document.getElementById('registro').offsetTop - 100, behavior: 'smooth' });
+        };
+
+        window.prevStep = function(step) {
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
+            document.querySelector(`.form-step[data-step="${step - 1}"]`).classList.add('active');
+            
+            document.querySelector(`.step[data-step="${step}"]`).classList.remove('active');
+            document.querySelector(`.step[data-step="${step - 1}"]`).classList.remove('completed');
+            
+            currentStep = step - 1;
+        };
+
+        function validateStep(step) {
+            const currentForm = document.querySelector(`.form-step[data-step="${step}"]`);
+            const requiredFields = currentForm.querySelectorAll('[required]');
+            
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    alert('Por favor completa todos los campos obligatorios');
+                    field.style.borderColor = 'red';
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Selección de categoría
+        document.querySelectorAll('.form-step[data-step="2"] .category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.form-step[data-step="2"] .category-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.categoria = this.getAttribute('data-categoria');
+                document.getElementById('selectCategoria').value = formData.categoria;
+            });
+        });
+
+        // Selección de plan
+        window.selectPlan = function(plan) {
+            formData.plan = plan;
+            document.getElementById('selectPlan').value = plan;
+            
+            // Resaltar visualmente
+            ['basic', 'pro', 'gold'].forEach(p => {
+                document.getElementById(`plan-${p}`).style.borderColor = '#e0e0e0';
+                document.getElementById(`plan-${p}`).style.background = p === 'gold' ? '#FFFBF0' : 'white';
+            });
+            
+            document.getElementById(`plan-${plan}`).style.borderColor = plan === 'gold' ? '#FFD700' : '#FF6B9D';
+            document.getElementById(`plan-${plan}`).style.background = plan === 'gold' ? '#FFFBF0' : '#FFF0F5';
+        };
+
+        // ==========================================
+        // GUARDAR PROVEEDOR EN FIREBASE
+        // ==========================================
+        document.getElementById('registroProveedor').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const proveedorData = {
+                nombreNegocio: document.getElementById('nombreNegocio').value,
+                nombreContacto: document.getElementById('nombreContacto').value,
+                whatsapp: document.getElementById('whatsapp').value.replace(/\D/g, ''),
+                email: document.getElementById('email').value,
+                ciudad: document.getElementById('selectCiudad').value,
+                categoria: formData.categoria || 'General',
+                plan: formData.plan || 'basic',
+                descripcion: document.getElementById('descripcion').value || '',
+                fechaRegistro: new Date().toISOString(),
+                estadoVerificacion: 'Pendiente',
+                vistas: 0,
+                calificacion: 0,
+                reseñas: []
+            };
+
+            try {
+                await addDoc(collection(db, "proveedores"), proveedorData);
+                
+                alert('✅ ¡Registro exitoso! Tu perfil será revisado en 24-48 horas. Te contactaremos pronto.');
+                
+                // Resetear formulario
+                document.getElementById('registroProveedor').reset();
+                
+                // Volver al paso 1
+                document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+                document.querySelector('.form-step[data-step="1"]').classList.add('active');
+                document.querySelectorAll('.step').forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index === 0) step.classList.add('active');
+                });
+                
+                currentStep = 1;
+                formData = { ciudad: '', categoria: '', plan: 'basic' };
+                
+            } catch (error) {
+                console.error("Error al registrar: ", error);
+                alert('❌ Error al guardar. Intenta de nuevo.');
+            }
+        });
+
+        // ==========================================
+        // CARGAR Y MOSTRAR PROVEEDORES
+        // ==========================================
+        async function cargarProveedores(filtros = {}) {
+            const contenedor = document.getElementById('contenedorProveedores');
+            contenedor.innerHTML = '<p style="text-align: center; color: #666;">Cargando proveedores...</p>';
+
+            try {
+                let q = collection(db, "proveedores");
+                const constraints = [];
+
+                // Solo mostrar verificados (o todos si es admin)
+                constraints.push(where("estadoVerificacion", "==", "Verificado"));
+
+                // Aplicar filtros
+                if (filtros.ciudad) {
+                    constraints.push(where("ciudad", "==", filtros.ciudad));
+                }
+                if (filtros.categoria) {
+                    constraints.push(where("categoria", "==", filtros.categoria));
+                }
+                if (filtros.plan) {
+                    constraints.push(where("plan", "==", filtros.plan));
+                }
+
+                if (constraints.length > 0) {
+                    q = query(q, ...constraints);
+                }
+
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    contenedor.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #666; grid-column: 1/-1;">
+                            <h3>🎉 ¡Sé el primer proveedor en GoParty!</h3>
+                            <p>Aún no hay proveedores verificados que coincidan con tu búsqueda.</p>
+                            <p><strong>¿Tienes un negocio de eventos? Regístrate gratis.</strong></p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                contenedor.innerHTML = '';
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const proveedorId = doc.id;
+                    
+                    let badge = '';
+                    let borderColor = '#e0e0e0';
+                    
+                    if (data.plan === 'gold') {
+                        badge = '<span style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold;">👑 GOLD</span>';
+                        borderColor = '#FFD700';
+                    } else if (data.plan === 'pro') {
+                        badge = '<span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">⭐ Pro</span>';
+                        borderColor = '#4CAF50';
+                    }
+
+                    const tarjeta = `
+                        <div class="proveedor-card ${data.plan === 'gold' ? 'border-gold' : ''}" style="
+                            border: 2px solid ${borderColor};
+                            border-radius: 12px;
+                            padding: 20px;
+                            background: white;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                            transition: transform 0.3s;
+                        " onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                <h3 style="margin: 0; color: #333; font-size: 1.3rem;">${data.nombreNegocio}</h3>
+                                ${badge}
+                            </div>
+                            
+                            <p style="margin: 8px 0; color: #666;">
+                                📍 ${data.ciudad || 'Xalapa'} | 🏷️ ${data.categoria || 'General'}
+                            </p>
+                            
+                            ${data.descripcion ? `<p style="margin: 10px 0; color: #555; font-style: italic; font-size: 0.9rem;">"${data.descripcion.substring(0, 100)}${data.descripcion.length > 100 ? '...' : ''}"</p>` : ''}
+                            
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                                <a href="https://wa.me/52${data.whatsapp}?text=Hola%20${encodeURIComponent(data.nombreNegocio)}%2C%20vi%20su%20perfil%20en%20GoParty%20y%20me%20interesa%20una%20cotización" 
+                                   target="_blank" 
+                                   style="
+                                     background-color: #25D366; 
+                                     color: white; 
+                                     padding: 12px 20px; 
+                                     text-decoration: none; 
+                                     border-radius: 8px; 
+                                     display: inline-block;
+                                     font-weight: bold;
+                                     transition: transform 0.2s;
+                                   "
+                                   onmouseover="this.style.transform='scale(1.05)'"
+                                   onmouseout="this.style.transform='scale(1)'">
+                                   💬 Contactar por WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    
+                    contenedor.innerHTML += tarjeta;
+                });
+
+            } catch (error) {
+                console.error("Error al cargar proveedores: ", error);
+                contenedor.innerHTML = "<p style='color: red; text-align: center; grid-column: 1/-1;'>Error al cargar el directorio.</p>";
             }
         }
-        function getProviders() { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); }
-        function saveProvider(provider) {
-            const providers = getProviders(); provider.id = Date.now(); provider.verified = false; provider.rating = 0; provider.reviews = 0; provider.documents = ['INE_Simulada.pdf'];
-            providers.push(provider); localStorage.setItem(DB_KEY, JSON.stringify(providers));
-        }
-        function updateProvider(id, updates) {
-            const providers = getProviders(); const index = providers.findIndex(p => p.id === id);
-            if (index !== -1) { providers[index] = { ...providers[index], ...updates }; localStorage.setItem(DB_KEY, JSON.stringify(providers)); }
-        }
 
-        // NAVIGATION
-        function showView(viewName) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden-view'));
-            document.getElementById(`view-${viewName}`).classList.remove('hidden-view');
-            window.scrollTo(0, 0);
-            if (viewName === 'home') loadProviders(); if (viewName === 'admin') loadAdminPanel();
-        }
+        // ==========================================
+        // FILTROS DE BÚSQUEDA
+        // ==========================================
+        window.filtrarProveedores = function() {
+            const filtros = {
+                ciudad: document.getElementById('filterCiudad').value,
+                categoria: formData.categoriaFiltro || '',
+                plan: document.getElementById('filterPlan').value
+            };
+            cargarProveedores(filtros);
+        };
 
-        // MULTI-STEP FORM
-        let currentStep = 1;
-        function nextStep(step) {
-            if(step === 3) { const cats = document.querySelectorAll('.category-checkbox:checked'); if(cats.length === 0) { showToast('Selecciona al menos una categoría', 'error'); return; } }
-            document.getElementById(`step-${currentStep}`).classList.add('hidden'); document.getElementById(`step-${step}`).classList.remove('hidden');
-            document.getElementById(`ind-${currentStep}`).classList.remove('bg-goparty-pink', 'text-white'); document.getElementById(`ind-${currentStep}`).classList.add('bg-green-500', 'text-white'); document.getElementById(`ind-${currentStep}`).innerHTML = '<i class="fas fa-check"></i>';
-            document.getElementById(`ind-${step}`).classList.remove('bg-gray-200', 'text-gray-500'); document.getElementById(`ind-${step}`).classList.add('bg-goparty-pink', 'text-white');
-            currentStep = step;
-        }
+        // Filtrar por categoría al hacer clic
+        document.querySelectorAll('.filters .category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filters .category-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.categoriaFiltro = this.getAttribute('data-categoria');
+                filtrarProveedores();
+            });
+        });
 
-        // FILTER & LOAD PROVIDERS
-        function filterProviders() { const category = document.getElementById('filter-category').value; const plan = document.getElementById('filter-plan').value; loadProviders(category, plan); }
-        function loadProviders(filterCategory = '', filterPlan = '') {
-            let providers = getProviders().filter(p => p.verified);
-            providers.sort((a, b) => { const order = { 'Gold': 3, 'Pro': 2, 'Basic': 1 }; return order[b.plan] - order[a.plan]; });
-            if (filterCategory) providers = providers.filter(p => p.categories.includes(filterCategory));
-            if (filterPlan) providers = providers.filter(p => p.plan === filterPlan);
-            document.getElementById('provider-count').textContent = `${providers.length} proveedor${providers.length !== 1 ? 'es' : ''}`;
-            const grid = document.getElementById('providers-grid');
-            if (providers.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-12"><i class="fas fa-search text-6xl text-gray-300 mb-4"></i><p class="text-gray-500 text-lg">No se encontraron proveedores</p></div>`; return; }
-            grid.innerHTML = providers.map(p => {
-                const isGold = p.plan === 'Gold'; const badgeColor = p.plan === 'Gold' ? 'bg-goparty-gold' : (p.plan === 'Pro' ? 'bg-goparty-blue' : 'bg-gray-400');
-                const planIcon = p.plan === 'Gold' ? '<i class="fas fa-crown mr-1"></i>' : (p.plan === 'Pro' ? '<i class="fas fa-star mr-1"></i>' : '');
-                return `<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer ${isGold ? 'gold-border' : ''}" onclick="showProfile(${p.id})">
-                    <div class="h-48 bg-gradient-to-br from-goparty-pink to-goparty-blue flex items-center justify-center relative"><i class="fas fa-camera text-6xl text-white/50"></i>
-                        <div class="absolute top-4 right-4 ${badgeColor} text-white px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-lg">${planIcon} ${p.plan}</div>
-                    </div>
-                    <div class="p-6"><h3 class="font-bold text-xl text-gray-800 mb-2">${p.business}</h3><p class="text-gray-600 text-sm mb-3"><i class="fas fa-map-marker-alt text-goparty-pink mr-2"></i>${p.city}</p>
-                        <div class="flex flex-wrap gap-2 mb-4">${p.categories.map(cat => `<span class="px-3 py-1 bg-pink-100 text-goparty-pink rounded-full text-xs font-semibold">${cat}</span>`).join('')}</div>
-                        <div class="flex items-center justify-between pt-4 border-t"><div><span class="text-gray-500 text-sm">Desde</span><p class="text-2xl font-bold text-goparty-pink">$${p.price}<span class="text-sm text-gray-500 font-normal">MXN</span></p></div>
-                        <div class="flex items-center"><i class="fas fa-star text-goparty-yellow mr-1"></i><span class="font-bold text-gray-800">${p.rating}</span><span class="text-gray-500 text-sm ml-1">(${p.reviews})</span></div></div>
-                    </div></div>`;
-            }).join('');
-        }
+        // Búsqueda en tiempo real
+        document.getElementById('searchInput')?.addEventListener('input', (e) => {
+            // Implementar búsqueda por nombre
+            const searchTerm = e.target.value.toLowerCase();
+            // Filtrar cards visibles
+            document.querySelectorAll('.proveedor-card').forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
 
-        // REGISTER PROVIDER
-        function registerProvider(e) {
-            e.preventDefault(); const categories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value); const plan = document.querySelector('input[name="plan"]:checked').value;
-            const provider = { business: document.getElementById('reg-business').value, name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, whatsapp: document.getElementById('reg-whatsapp').value, city: document.getElementById('reg-city').value, categories: categories, price: 0, description: document.getElementById('reg-description').value, plan: plan };
-            saveProvider(provider); showToast('✅ Registro enviado. Revisaremos tus documentos en 24h.');
-            document.getElementById('provider-form').reset(); currentStep = 1;
-            for(let i=1; i<=4; i++) { document.getElementById(`ind-${i}`).classList.remove('bg-green-500', 'bg-goparty-pink', 'text-white'); document.getElementById(`ind-${i}`).classList.add(i===1 ? 'bg-goparty-pink' : 'bg-gray-200', i===1 ? 'text-white' : 'text-gray-500'); document.getElementById(`ind-${i}`).innerHTML = i; }
-            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden')); document.getElementById('step-1').classList.remove('hidden');
-            setTimeout(() => showView('home'), 2000);
-        }
+        // ==========================================
+        // CARGAR PROVEEDORES AL INICIAR
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarProveedores();
+            
+            // Inicializar selección de plan
+            selectPlan('basic');
+        });
 
-        // SHOW PROFILE
-        function showProfile(id) {
-            const p = getProviders().find(pr => pr.id === id); if (!p) return;
-            const whatsappLink = `https://wa.me/${p.whatsapp}?text=${encodeURIComponent(`Hola ${p.business}, vi tu perfil en GoParty.`)}`;
-            const isGold = p.plan === 'Gold';
-            const planBadge = isGold ? '<span class="bg-goparty-gold text-white px-4 py-2 rounded-full font-bold"><i class="fas fa-crown mr-2"></i>Proveedor Gold</span>' : (p.plan === 'Pro' ? '<span class="bg-goparty-blue text-white px-4 py-2 rounded-full font-bold"><i class="fas fa-star mr-2"></i>Proveedor Pro</span>' : '<span class="bg-gray-400 text-white px-4 py-2 rounded-full text-sm">Plan Básico</span>');
-            document.getElementById('profile-content').innerHTML = `
-                <div class="h-64 bg-gradient-to-br from-goparty-pink to-goparty-blue flex items-center justify-center ${isGold ? 'border-b-4 border-goparty-gold' : ''}"><i class="fas fa-camera text-8xl text-white/50"></i></div>
-                <div class="p-8">
-                    <div class="flex justify-between items-start mb-6 flex-wrap gap-4"><div><h1 class="text-3xl font-bold text-gray-800 mb-2">${p.business}</h1><p class="text-gray-600"><i class="fas fa-user mr-2"></i>${p.name}</p></div>${planBadge}</div>
-                    <div class="grid md:grid-cols-3 gap-6 mb-8"><div class="bg-gray-50 p-4 rounded-xl"><i class="fas fa-map-marker-alt text-goparty-pink text-2xl mb-2"></i><p class="font-semibold text-gray-800">${p.city}</p></div><div class="bg-gray-50 p-4 rounded-xl"><i class="fas fa-star text-goparty-yellow text-2xl mb-2"></i><p class="font-semibold text-gray-800">${p.rating} (${p.reviews} reseñas)</p></div><div class="bg-gray-50 p-4 rounded-xl"><i class="fas fa-tags text-goparty-blue text-2xl mb-2"></i><p class="font-semibold text-gray-800">Desde $${p.price} MXN</p></div></div>
-                    <div class="mb-8"><h3 class="text-xl font-bold text-gray-800 mb-3">Categorías</h3><div class="flex flex-wrap gap-2">${p.categories.map(cat => `<span class="px-4 py-2 bg-gradient-to-r from-goparty-pink to-goparty-blue text-white rounded-full font-semibold">${cat}</span>`).join('')}</div></div>
-                    <div class="mb-8"><h3 class="text-xl font-bold text-gray-800 mb-3">Descripción</h3><p class="text-gray-600 leading-relaxed">${p.description || 'Sin descripción'}</p></div>
-                    <div class="flex gap-4 flex-wrap"><a href="${whatsappLink}" target="_blank" class="flex-1 min-w-[200px] bg-green-500 text-white text-center py-4 rounded-xl font-bold hover:bg-green-600 transition shadow-lg"><i class="fab fa-whatsapp mr-2"></i>Cotizar por WhatsApp</a><button onclick="showView('home')" class="flex-1 min-w-[200px] border-2 border-gray-300 text-gray-700 py-4 rounded-xl font-bold hover:border-goparty-pink hover:text-goparty-pink transition"><i class="fas fa-arrow-left mr-2"></i>Volver</button></div>
-                </div>`;
-            showView('profile');
-        }
-
-        // ADMIN PANEL
-        function loadAdminPanel() {
-            const providers = getProviders(); const pending = providers.filter(p => !p.verified); const verified = providers.filter(p => p.verified);
-            document.getElementById('admin-pending').innerHTML = pending.length === 0 ? '<p class="text-gray-500 text-center py-8">No hay pendientes</p>' :
-                pending.map(p => `<div class="border-2 border-yellow-200 bg-yellow-50 p-4 rounded-xl"><div class="flex justify-between items-start flex-wrap gap-4"><div><h4 class="font-bold text-gray-800 text-lg">${p.business} <span class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full ml-2">Plan: ${p.plan}</span></h4><p class="text-sm text-gray-600">${p.email} | ${p.city} | ${p.categories.join(', ')}</p><div class="mt-2 flex gap-2"><span class="text-xs bg-white border px-2 py-1 rounded text-gray-600"><i class="fas fa-file-pdf text-red-500 mr-1"></i>${p.documents ? p.documents[0] : 'Doc.pdf'}</span></div></div><div class="flex gap-2"><button onclick="approveProvider(${p.id}, 'Pro')" class="bg-goparty-blue text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition text-sm"><i class="fas fa-star mr-1"></i>Aprobar Pro</button><button onclick="approveProvider(${p.id}, 'Gold')" class="bg-goparty-gold text-white px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition text-sm"><i class="fas fa-crown mr-1"></i>Aprobar Gold</button><button onclick="deleteProvider(${p.id})" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition text-sm"><i class="fas fa-trash"></i></button></div></div></div>`).join('');
-            document.getElementById('admin-verified').innerHTML = verified.length === 0 ? '<p class="text-gray-500 text-center py-8">No hay verificados</p>' :
-                verified.map(p => `<div class="border-2 border-green-200 bg-green-50 p-4 rounded-xl"><div class="flex justify-between items-start flex-wrap gap-4"><div><h4 class="font-bold text-gray-800 text-lg">${p.business} <span class="text-green-600 text-sm ml-2">✓ Verificado</span> <span class="text-xs bg-goparty-gold/20 text-goparty-gold px-2 py-1 rounded-full ml-2">Plan: ${p.plan}</span></h4><p class="text-sm text-gray-600">${p.categories.join(', ')} | ${p.city}</p></div><button onclick="deleteProvider(${p.id})" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition text-sm"><i class="fas fa-trash"></i></button></div></div>`).join('');
-        }
-        function approveProvider(id, plan) { updateProvider(id, { verified: true, plan: plan }); showToast(`✅ Proveedor aprobado con Plan ${plan}`); loadAdminPanel(); }
-        function deleteProvider(id) { if (!confirm('¿Eliminar este proveedor?')) return; const providers = getProviders().filter(p => p.id !== id); localStorage.setItem(DB_KEY, JSON.stringify(providers)); showToast('🗑️ Proveedor eliminado'); loadAdminPanel(); }
-        function showToast(message) { const toast = document.getElementById('toast'); document.getElementById('toast-message').textContent = message; toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none'); setTimeout(() => toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none'), 3000); }
-
-        initDB(); loadProviders();
     </script>
+
 </body>
 </html>

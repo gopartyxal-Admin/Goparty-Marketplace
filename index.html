@@ -38,21 +38,11 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
         }
 
         .logo-container img {
-            height: 50px;
+            height: 45px;
             width: auto;
-        }
-
-        .logo-text {
-            font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4A90E2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .nav-links {
@@ -65,50 +55,39 @@
             text-decoration: none;
             color: #333;
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
             transition: all 0.3s;
+            font-size: 0.95rem;
         }
 
         .nav-links a:hover {
-            background: #f0f0f0;
+            transform: translateY(-2px);
         }
 
         .nav-explorar {
-            font-size: 1.1rem;
-            font-weight: 600;
             color: #4A90E2 !important;
+            font-weight: 600;
         }
 
         .btn-unete {
             background: linear-gradient(135deg, #FFD93D, #FF6B9D);
             color: white !important;
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
             font-weight: 600;
         }
 
         .btn-unete:hover {
-            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
         }
 
         .btn-proveedor {
             background: linear-gradient(135deg, #4A90E2, #FF6B9D);
             color: white !important;
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
             font-weight: 600;
         }
 
         .btn-proveedor:hover {
-            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
-        }
-
-        .admin-link {
-            color: #ccc !important;
-            font-size: 0.9rem;
         }
 
         /* Hero Section */
@@ -120,14 +99,15 @@
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-weight: 700;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
             opacity: 0.95;
         }
 
@@ -143,7 +123,7 @@
 
         .search-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-bottom: 1rem;
         }
@@ -293,30 +273,88 @@
             margin-top: 4rem;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .search-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-links {
-                gap: 0.5rem;
-            }
-            
-            .nav-links a {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.9rem;
+            .navbar {
+                padding: 0.8rem 1rem;
             }
 
-            .logo-text {
-                font-size: 1.3rem;
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
             }
 
             .logo-container img {
-                height: 40px;
+                height: 35px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .search-container {
+                padding: 1.5rem;
+                margin: 0 1rem;
+            }
+
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .proveedores-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .search-container {
+                padding: 1rem;
+            }
+
+            .btn-buscar {
+                font-size: 1rem;
+                padding: 0.8rem 2rem;
             }
         }
     </style>
@@ -328,13 +366,11 @@
         <div class="nav-container">
             <div class="logo-container">
                 <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
-                <span class="logo-text">GOPARTY</span>
             </div>
             <div class="nav-links">
                 <a href="index.html" class="nav-explorar">Explorar</a>
                 <a href="unete.html" class="btn-unete">Únete a GoParty</a>
                 <a href="dashboard.html" class="btn-proveedor">Soy Proveedor</a>
-                <a href="admin.html" class="admin-link" title="Acceso Administrativo">🔒</a>
             </div>
         </div>
     </nav>
@@ -342,7 +378,7 @@
     <!-- Hero Section -->
     <section class="hero" id="inicio">
         <h1>Haz que tu fiesta sea inolvidable</h1>
-        <p>Encuentra a los mejores proveedores verificados en Xalapa</p>
+        <p>Encuentra a los mejores proveedores verificados en cualquier ciudad</p>
         
         <!-- Buscador Avanzado -->
         <div class="search-container">
@@ -351,12 +387,12 @@
                     <label>🏷️ Categoría</label>
                     <select class="search-select" id="filterCategoria">
                         <option value="">Todas las categorías</option>
-                        <option value="Salones">🏰 Salones</option>
-                        <option value="Alimentos">️ Alimentos</option>
+                        <option value="Salones"> Salones</option>
+                        <option value="Alimentos">🍽️ Alimentos</option>
                         <option value="Fotografía">📸 Fotografía</option>
                         <option value="Música/DJ">🎵 Música/DJ</option>
-                        <option value="Decoración">🎈 Decoración</option>
-                        <option value="Animación"> Animación</option>
+                        <option value="Decoración"> Decoración</option>
+                        <option value="Animación">🎪 Animación</option>
                         <option value="Mobiliario">🪑 Mobiliario</option>
                     </select>
                 </div>
@@ -373,7 +409,7 @@
                 </div>
                 
                 <div class="search-group">
-                    <label>🏙️ Ciudad</label>
+                    <label>️ Ciudad</label>
                     <select class="search-select" id="filterCiudad">
                         <option value="">Todas las ciudades</option>
                         <option value="Xalapa">Xalapa</option>
@@ -464,7 +500,7 @@
                 if (querySnapshot.empty) {
                     contenedor.innerHTML = `
                         <div style="text-align: center; padding: 40px; color: #666; grid-column: 1/-1;">
-                            <h3> ¡Pronto tendremos proveedores!</h3>
+                            <h3>🎉 ¡Pronto tendremos proveedores!</h3>
                             <p>Aún no hay proveedores verificados.</p>
                             <p><a href="unete.html" style="color: #FF6B9D; font-weight: bold;">¿Eres proveedor? Únete aquí</a></p>
                         </div>

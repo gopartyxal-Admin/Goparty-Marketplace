@@ -17,7 +17,7 @@
             min-height: 100vh;
         }
 
-        /* Navbar mejorada */
+        /* Navbar */
         .navbar {
             background: white;
             padding: 1rem 2rem;
@@ -35,10 +35,21 @@
             align-items: center;
         }
 
-        .logo {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-container img {
+            height: 50px;
+            width: auto;
+        }
+
+        .logo-text {
             font-size: 2rem;
             font-weight: bold;
-            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #6BCB77 100%);
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4A90E2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -66,11 +77,24 @@
         .nav-explorar {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #6BCB77 !important;
+            color: #4A90E2 !important;
+        }
+
+        .btn-unete {
+            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
+            color: white !important;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .btn-unete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
         }
 
         .btn-proveedor {
-            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+            background: linear-gradient(135deg, #4A90E2, #FF6B9D);
             color: white !important;
             padding: 0.6rem 1.5rem;
             border-radius: 25px;
@@ -79,17 +103,17 @@
 
         .btn-proveedor:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
         }
 
         .admin-link {
-            color: #999 !important;
+            color: #ccc !important;
             font-size: 0.9rem;
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4D96FF 100%);
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4A90E2 100%);
             padding: 4rem 2rem;
             text-align: center;
             color: white;
@@ -107,22 +131,36 @@
             opacity: 0.95;
         }
 
-        /* Buscador */
+        /* Buscador Avanzado */
         .search-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .search-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .search-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
         }
 
         .search-select {
-            flex: 1;
-            min-width: 200px;
             padding: 0.8rem;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
@@ -137,19 +175,22 @@
         }
 
         .btn-buscar {
-            background: linear-gradient(135deg, #FF6B9D, #4D96FF);
+            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
             color: white;
             border: none;
-            padding: 0.8rem 2rem;
+            padding: 1rem 3rem;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.3s;
+            width: 100%;
+            margin-top: 1rem;
         }
 
         .btn-buscar:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
         }
 
         /* Sección de Proveedores */
@@ -183,7 +224,7 @@
         }
 
         .proveedor-card {
-            background: linear-gradient(135deg, #FF6B9D 0%, #4D96FF 100%);
+            background: linear-gradient(135deg, #FF6B9D 0%, #4A90E2 100%);
             border-radius: 15px;
             padding: 2rem;
             color: white;
@@ -195,6 +236,7 @@
             align-items: center;
             transition: transform 0.3s;
             cursor: pointer;
+            border: 3px solid transparent;
         }
 
         .proveedor-card:hover {
@@ -203,27 +245,37 @@
         }
 
         .proveedor-card.gold {
-            border: 3px solid #FFD700;
+            border-color: #FFD93D;
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%);
         }
 
         .badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            padding: 0.3rem 0.8rem;
+            padding: 0.4rem 1rem;
             border-radius: 20px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .badge-gold {
-            background: #FFD700;
+            background: #FFD93D;
             color: #000;
+            border: 2px solid #FFF;
         }
 
         .badge-pro {
-            background: #4D96FF;
+            background: #4A90E2;
             color: white;
+            border: 2px solid #FFF;
+        }
+
+        .badge-basic {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: 2px solid #FFF;
         }
 
         .camera-icon {
@@ -232,183 +284,9 @@
             margin-bottom: 1rem;
         }
 
-        /* Registro */
-        .registration-section {
-            background: white;
-            padding: 4rem 2rem;
-            margin-top: 3rem;
-        }
-
-        .registration-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .registration-container h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #333;
-        }
-
-        .steps-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #999;
-        }
-
-        .step.active {
-            color: #FF6B9D;
-            font-weight: 600;
-        }
-
-        .step-number {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .step.active .step-number {
-            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
-            color: white;
-        }
-
-        .form-step {
-            display: none;
-        }
-
-        .form-step.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #FF6B9D;
-        }
-
-        .category-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .category-item {
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .category-item:hover,
-        .category-item.selected {
-            border-color: #FF6B9D;
-            background: #FFF0F5;
-        }
-
-        .planes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .plan-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .plan-card:hover,
-        .plan-card.selected {
-            border-color: #FF6B9D;
-            background: #FFF0F5;
-            transform: translateY(-3px);
-        }
-
-        .plan-card.gold-plan {
-            border-color: #FFD700;
-        }
-
-        .plan-card.gold-plan.selected {
-            background: #FFFBF0;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
+        /* Footer */
         footer {
-            background: #333;
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4A90E2 100%);
             color: white;
             text-align: center;
             padding: 2rem;
@@ -420,8 +298,8 @@
                 font-size: 2rem;
             }
             
-            .search-container {
-                flex-direction: column;
+            .search-grid {
+                grid-template-columns: 1fr;
             }
             
             .nav-links {
@@ -432,6 +310,14 @@
                 padding: 0.4rem 0.8rem;
                 font-size: 0.9rem;
             }
+
+            .logo-text {
+                font-size: 1.3rem;
+            }
+
+            .logo-container img {
+                height: 40px;
+            }
         }
     </style>
 </head>
@@ -440,10 +326,14 @@
     <!-- Navegación -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">GOPARTY</div>
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
+                <span class="logo-text">GOPARTY</span>
+            </div>
             <div class="nav-links">
-                <a href="#inicio" class="nav-explorar">Explorar</a>
-                <a href="https://gopartymarket.gopartyxal.workers.dev/dashboard" class="btn-proveedor">Soy Proveedor</a>
+                <a href="index.html" class="nav-explorar">Explorar</a>
+                <a href="unete.html" class="btn-unete">Únete a GoParty</a>
+                <a href="dashboard.html" class="btn-proveedor">Soy Proveedor</a>
                 <a href="admin.html" class="admin-link" title="Acceso Administrativo">🔒</a>
             </div>
         </div>
@@ -454,28 +344,51 @@
         <h1>Haz que tu fiesta sea inolvidable</h1>
         <p>Encuentra a los mejores proveedores verificados en Xalapa</p>
         
-        <!-- Buscador -->
+        <!-- Buscador Avanzado -->
         <div class="search-container">
-            <select class="search-select" id="filterCategoria">
-                <option value="">Todas las categorías</option>
-                <option value="Salones">🏰 Salones</option>
-                <option value="Alimentos">️ Alimentos</option>
-                <option value="Fotografía">📸 Fotografía</option>
-                <option value="Música/DJ">🎵 Música/DJ</option>
-                <option value="Decoración">🎈 Decoración</option>
-                <option value="Animación"> Animación</option>
-                <option value="Mobiliario">🪑 Mobiliario</option>
-            </select>
-            
-            <select class="search-select" id="filterPlan">
-                <option value="">Cualquier plan</option>
-                <option value="gold">👑 Solo Gold (Destacados)</option>
-                <option value="pro">⭐ Pro</option>
-                <option value="basic">Básico</option>
-            </select>
+            <div class="search-grid">
+                <div class="search-group">
+                    <label>🏷️ Categoría</label>
+                    <select class="search-select" id="filterCategoria">
+                        <option value="">Todas las categorías</option>
+                        <option value="Salones">🏰 Salones</option>
+                        <option value="Alimentos">️ Alimentos</option>
+                        <option value="Fotografía">📸 Fotografía</option>
+                        <option value="Música/DJ">🎵 Música/DJ</option>
+                        <option value="Decoración">🎈 Decoración</option>
+                        <option value="Animación"> Animación</option>
+                        <option value="Mobiliario">🪑 Mobiliario</option>
+                    </select>
+                </div>
+                
+                <div class="search-group">
+                    <label>📍 Estado</label>
+                    <select class="search-select" id="filterEstado">
+                        <option value="">Todos los estados</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="Ciudad de México">Ciudad de México</option>
+                        <option value="Oaxaca">Oaxaca</option>
+                    </select>
+                </div>
+                
+                <div class="search-group">
+                    <label>🏙️ Ciudad</label>
+                    <select class="search-select" id="filterCiudad">
+                        <option value="">Todas las ciudades</option>
+                        <option value="Xalapa">Xalapa</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Córdoba">Córdoba</option>
+                        <option value="Orizaba">Orizaba</option>
+                        <option value="Coatepec">Coatepec</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="CDMX">CDMX</option>
+                    </select>
+                </div>
+            </div>
             
             <button class="btn-buscar" onclick="filtrarProveedores()">
-                🔍 Buscar
+                🔍 Buscar Proveedores
             </button>
         </div>
     </section>
@@ -493,198 +406,6 @@
         </div>
     </section>
 
-    <!-- Sección de Registro -->
-    <section class="registration-section" id="registro">
-        <div class="registration-container">
-            <h2>Únete a GoParty</h2>
-            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
-                Completa tu perfil y elige tu plan de crecimiento
-            </p>
-
-            <!-- Indicador de Pasos -->
-            <div class="steps-indicator">
-                <div class="step active">
-                    <div class="step-number">1</div>
-                    <span>Datos</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <span>Servicios</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <span>Plan</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <span>Docs</span>
-                </div>
-            </div>
-
-            <form id="registroProveedor">
-                <!-- Paso 1: Información Básica -->
-                <div class="form-step active" data-step="1">
-                    <h3 style="margin-bottom: 1.5rem; color: #333;">1. Información Básica</h3>
-                    
-                    <div class="form-group">
-                        <label>Ciudad *</label>
-                        <select id="selectCiudad" required>
-                            <option value="">Selecciona tu ciudad</option>
-                            <option value="Xalapa">Xalapa</option>
-                            <option value="Veracruz">Veracruz</option>
-                            <option value="Córdoba">Córdoba</option>
-                            <option value="Orizaba">Orizaba</option>
-                            <option value="Coatepec">Coatepec</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nombre del Negocio *</label>
-                        <input type="text" id="nombreNegocio" placeholder="Ej: Salón de Fiestas XYZ" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nombre de Contacto *</label>
-                        <input type="text" id="nombreContacto" placeholder="Tu nombre completo" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>WhatsApp *</label>
-                        <input type="tel" id="whatsapp" placeholder="2281234567 (10 dígitos)" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" id="email" placeholder="tu@email.com" required>
-                    </div>
-
-                    <div class="form-actions" style="justify-content: flex-end;">
-                        <button type="button" class="btn-primary" onclick="nextStep(1)">
-                            Siguiente →
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Paso 2: Servicios -->
-                <div class="form-step" data-step="2">
-                    <h3 style="margin-bottom: 1.5rem; color: #333;">2. ¿Qué servicios ofreces?</h3>
-                    
-                    <div class="category-list">
-                        <div class="category-item" data-categoria="Salones">
-                             Salones
-                        </div>
-                        <div class="category-item" data-categoria="Alimentos">
-                            🍽️ Alimentos
-                        </div>
-                        <div class="category-item" data-categoria="Fotografía">
-                            📸 Fotografía
-                        </div>
-                        <div class="category-item" data-categoria="Música/DJ">
-                            🎵 Música/DJ
-                        </div>
-                        <div class="category-item" data-categoria="Decoración">
-                            🎈 Decoración
-                        </div>
-                        <div class="category-item" data-categoria="Animación">
-                            🎪 Animación
-                        </div>
-                        <div class="category-item" data-categoria="Mobiliario">
-                            🪑 Mobiliario
-                        </div>
-                        <div class="category-item" data-categoria="Otros">
-                            Otros
-                        </div>
-                    </div>
-                    <input type="hidden" id="selectCategoria" required>
-
-                    <div class="form-group">
-                        <label>Descripción de tus servicios</label>
-                        <textarea id="descripcion" rows="4" placeholder="Cuéntanos más sobre tus servicios..."></textarea>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="prevStep(2)">← Atrás</button>
-                        <button type="button" class="btn-primary" onclick="nextStep(2)">Siguiente →</button>
-                    </div>
-                </div>
-
-                <!-- Paso 3: Planes -->
-                <div class="form-step" data-step="3">
-                    <h3 style="margin-bottom: 1.5rem; color: #333;">3. Elige tu Plan de Crecimiento</h3>
-                    <p style="margin-bottom: 2rem; color: #666;">
-                        Puedes cambiar o cancelar tu plan en cualquier momento desde tu dashboard.
-                    </p>
-
-                    <div class="planes-grid">
-                        <div class="plan-card" onclick="selectPlan('basic')" id="plan-basic">
-                            <h4 style="color: #333;">Plan Básico</h4>
-                            <p style="color: #666; font-size: 0.9rem; margin: 1rem 0;">Aparece en el directorio general.</p>
-                            <p style="font-size: 1.5rem; font-weight: bold; color: #4CAF50;">Gratis</p>
-                            <span style="background: #4CAF50; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem;">POPULAR</span>
-                        </div>
-
-                        <div class="plan-card" onclick="selectPlan('pro')" id="plan-pro">
-                            <h4 style="color: #333;">Plan Pro</h4>
-                            <p style="color: #666; font-size: 0.9rem; margin: 1rem 0;">Sello verificado + Aparecer en búsquedas filtradas.</p>
-                            <p style="font-size: 1.5rem; font-weight: bold; color: #FF6B9D;">$299/mes</p>
-                            <span style="background: #FF6B9D; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem;">PREMIUM</span>
-                        </div>
-
-                        <div class="plan-card gold-plan" onclick="selectPlan('gold')" id="plan-gold">
-                            <h4 style="color: #333;">Plan Gold</h4>
-                            <p style="color: #666; font-size: 0.9rem; margin: 1rem 0;">Top de búsquedas + Borde dorado + Soporte prioritario.</p>
-                            <p style="font-size: 1.5rem; font-weight: bold; color: #FFD700;">$599/mes</p>
-                        </div>
-                    </div>
-                    <input type="hidden" id="selectPlan" value="basic" required>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="prevStep(3)">← Atrás</button>
-                        <button type="button" class="btn-primary" onclick="nextStep(3)">Siguiente →</button>
-                    </div>
-                </div>
-
-                <!-- Paso 4: Verificación -->
-                <div class="form-step" data-step="4">
-                    <h3 style="margin-bottom: 1.5rem; color: #333;">4. Verificación y Sello GoParty</h3>
-                    <p style="margin-bottom: 2rem; color: #666;">
-                        Para obtener el Sello de Verificación, sube tus documentos. (Simulación para el prototipo).
-                    </p>
-
-                    <div class="form-group">
-                        <label>Identificación Oficial (INE/IFE)</label>
-                        <div style="border: 2px dashed #4D96FF; border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('file-ine').click()">
-                            <p>📄 Haz clic para simular la carga</p>
-                            <input type="file" id="file-ine" style="display: none;" accept="image/*,.pdf">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Constancia de Situación Fiscal</label>
-                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Opcional, pero recomendado para Plan Gold</p>
-                        <div style="border: 2px dashed #4D96FF; border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('file-csf').click()">
-                            <p>📄 Haz clic para simular la carga</p>
-                            <input type="file" id="file-csf" style="display: none;" accept=".pdf">
-                        </div>
-                    </div>
-
-                    <div style="margin: 1.5rem 0;">
-                        <input type="checkbox" id="terminos" required style="margin-right: 0.5rem;">
-                        <label for="terminos" style="display: inline; font-weight: normal;">Acepto los Términos y Condiciones. Entiendo que mi perfil será revisado por el equipo de GoParty antes de activarse.</label>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="prevStep(4)">← Atrás</button>
-                        <button type="submit" class="btn-primary" id="btnEnviarRegistro">
-                            ✅ Enviar Registro
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <p>© 2026 GoParty - Conectando party people con magia profesional</p>
@@ -694,7 +415,7 @@
     <script type="module">
         // Importar Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         // Configuración de Firebase
         const firebaseConfig = {
@@ -710,121 +431,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Variables globales
-        let currentStep = 1;
-        let formData = {
-            ciudad: '',
-            categoria: '',
-            plan: 'basic'
-        };
-
-        // ==========================================
-        // NAVEGACIÓN ENTRE PASOS DEL FORMULARIO
-        // ==========================================
-        window.nextStep = function(step) {
-            if (!validateStep(step)) return;
-
-            document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
-            document.querySelector(`.form-step[data-step="${step + 1}"]`).classList.add('active');
-            
-            document.querySelectorAll('.step')[step-1].classList.remove('active');
-            document.querySelectorAll('.step')[step].classList.add('active');
-            
-            currentStep = step + 1;
-            window.scrollTo({ top: document.getElementById('registro').offsetTop - 100, behavior: 'smooth' });
-        };
-
-        window.prevStep = function(step) {
-            document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
-            document.querySelector(`.form-step[data-step="${step - 1}"]`).classList.add('active');
-            
-            document.querySelectorAll('.step')[step].classList.remove('active');
-            document.querySelectorAll('.step')[step-1].classList.add('active');
-            
-            currentStep = step - 1;
-        };
-
-        function validateStep(step) {
-            const currentForm = document.querySelector(`.form-step[data-step="${step}"]`);
-            const requiredFields = currentForm.querySelectorAll('[required]');
-            
-            for (let field of requiredFields) {
-                if (!field.value.trim()) {
-                    alert('Por favor completa todos los campos obligatorios');
-                    field.style.borderColor = 'red';
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        // Selección de categoría
-        document.querySelectorAll('.category-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('selected'));
-                this.classList.add('selected');
-                formData.categoria = this.getAttribute('data-categoria');
-                document.getElementById('selectCategoria').value = formData.categoria;
-            });
-        });
-
-        // Selección de plan
-        window.selectPlan = function(plan) {
-            formData.plan = plan;
-            document.getElementById('selectPlan').value = plan;
-            
-            ['basic', 'pro', 'gold'].forEach(p => {
-                document.getElementById(`plan-${p}`).classList.remove('selected');
-            });
-            
-            document.getElementById(`plan-${plan}`).classList.add('selected');
-        };
-
-        // ==========================================
-        // GUARDAR PROVEEDOR EN FIREBASE
-        // ==========================================
-        document.getElementById('registroProveedor').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const proveedorData = {
-                nombreNegocio: document.getElementById('nombreNegocio').value,
-                nombreContacto: document.getElementById('nombreContacto').value,
-                whatsapp: document.getElementById('whatsapp').value.replace(/\D/g, ''),
-                email: document.getElementById('email').value,
-                ciudad: document.getElementById('selectCiudad').value,
-                categoria: formData.categoria || 'General',
-                plan: formData.plan || 'basic',
-                descripcion: document.getElementById('descripcion').value || '',
-                fechaRegistro: new Date().toISOString(),
-                estadoVerificacion: 'Pendiente',
-                vistas: 0,
-                calificacion: 0,
-                reseñas: []
-            };
-
-            try {
-                await addDoc(collection(db, "proveedores"), proveedorData);
-                
-                alert('✅ ¡Registro exitoso! Tu perfil será revisado en 24-48 horas.');
-                
-                document.getElementById('registroProveedor').reset();
-                document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
-                document.querySelector('.form-step[data-step="1"]').classList.add('active');
-                
-                document.querySelectorAll('.step').forEach((step, index) => {
-                    step.classList.remove('active');
-                    if (index === 0) step.classList.add('active');
-                });
-                
-                currentStep = 1;
-                formData = { ciudad: '', categoria: '', plan: 'basic' };
-                
-            } catch (error) {
-                console.error("Error al registrar: ", error);
-                alert('❌ Error al guardar. Intenta de nuevo.');
-            }
-        });
-
         // ==========================================
         // CARGAR Y MOSTRAR PROVEEDORES
         // ==========================================
@@ -839,14 +445,14 @@
 
                 constraints.push(where("estadoVerificacion", "==", "Verificado"));
 
-                if (filtros.ciudad) {
-                    constraints.push(where("ciudad", "==", filtros.ciudad));
-                }
                 if (filtros.categoria) {
                     constraints.push(where("categoria", "==", filtros.categoria));
                 }
-                if (filtros.plan) {
-                    constraints.push(where("plan", "==", filtros.plan));
+                if (filtros.estado) {
+                    constraints.push(where("estado", "==", filtros.estado));
+                }
+                if (filtros.ciudad) {
+                    constraints.push(where("ciudad", "==", filtros.ciudad));
                 }
 
                 if (constraints.length > 0) {
@@ -858,8 +464,9 @@
                 if (querySnapshot.empty) {
                     contenedor.innerHTML = `
                         <div style="text-align: center; padding: 40px; color: #666; grid-column: 1/-1;">
-                            <h3>🎉 ¡Sé el primer proveedor en GoParty!</h3>
+                            <h3> ¡Pronto tendremos proveedores!</h3>
                             <p>Aún no hay proveedores verificados.</p>
+                            <p><a href="unete.html" style="color: #FF6B9D; font-weight: bold;">¿Eres proveedor? Únete aquí</a></p>
                         </div>
                     `;
                     countElement.textContent = '0 proveedores';
@@ -875,20 +482,23 @@
                     let badge = '';
                     let cardClass = '';
                     
+                    // Determinar insignia según el plan
                     if (data.plan === 'gold') {
-                        badge = '<span class="badge badge-gold"> Gold</span>';
+                        badge = '<span class="badge badge-gold">👑 Gold</span>';
                         cardClass = 'gold';
                     } else if (data.plan === 'pro') {
                         badge = '<span class="badge badge-pro">⭐ Pro</span>';
+                    } else {
+                        badge = '<span class="badge badge-basic">✓ Verificado</span>';
                     }
 
                     const tarjeta = `
                         <div class="proveedor-card ${cardClass}">
                             ${badge}
                             <div class="camera-icon">📷</div>
-                            <h3 style="margin: 0; font-size: 1.3rem;">${data.nombreNegocio}</h3>
-                            <p style="margin: 0.5rem 0; opacity: 0.9;">📍 ${data.ciudad || 'Xalapa'}</p>
-                            <p style="margin: 0.5rem 0; opacity: 0.9;">🏷️ ${data.categoria || 'General'}</p>
+                            <h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3>
+                            <p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p>
+                            <p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">🏷️ ${data.categoria || 'General'}</p>
                         </div>
                     `;
                     
@@ -907,7 +517,8 @@
         window.filtrarProveedores = function() {
             const filtros = {
                 categoria: document.getElementById('filterCategoria').value,
-                plan: document.getElementById('filterPlan').value
+                estado: document.getElementById('filterEstado').value,
+                ciudad: document.getElementById('filterCiudad').value
             };
             cargarProveedores(filtros);
         };
@@ -917,7 +528,6 @@
         // ==========================================
         document.addEventListener('DOMContentLoaded', () => {
             cargarProveedores();
-            selectPlan('basic');
         });
 
     </script>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Cotización - GoParty</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 55px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover { transform: translateY(-2px); }
+
+        .nav-explorar { color: #4A90E2 !important; font-weight: 600; }
+
+        .btn-cotizar {
+            background: linear-gradient(135deg, #6BCB77, #4A90E2);
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .btn-unete {
+            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .btn-proveedor {
+            background: linear-gradient(135deg, #4A90E2, #FF6B9D);
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: #333;
+            border-radius: 3px;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 200;
+            padding: 2rem 1.5rem;
+        }
+
+        .sidebar.active { right: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .sidebar-header img { height: 50px; }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #333;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .close-btn:hover { background: #f0f0f0; }
+
+        .sidebar-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+            text-align: center;
+        }
+
+        .sidebar-links a:hover { background: #f5f7fa; }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 150;
+        }
+
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* Hero Cotización */
+        .hero-cotizacion {
+            background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-cotizacion h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-cotizacion p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Formulario */
+        .form-container {
+            max-width: 900px;
+            margin: -2rem auto 3rem;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .form-section:last-of-type { border-bottom: none; }
+
+        .form-section h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-group label .required {
+            color: #FF6B9D;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4A90E2;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Checkboxes de servicios */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item:hover {
+            border-color: #6BCB77;
+            background: #f0f9f1;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Subida de Fotos */
+        .upload-area {
+            border: 2px dashed #4A90E2;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8fbff;
+        }
+
+        .upload-area:hover {
+            background: #eef4ff;
+            border-color: #6BCB77;
+        }
+
+        .upload-area .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-area p {
+            color: #666;
+            margin: 0.3rem 0;
+        }
+
+        .upload-area .upload-hint {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        /* Preview de fotos */
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 107, 157, 0.9);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .preview-item .remove-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Botón enviar */
+        .btn-enviar {
+            background: linear-gradient(135deg, #6BCB77, #4A90E2);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-enviar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 203, 119, 0.4);
+        }
+
+        .btn-enviar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Info box */
+        .info-box {
+            background: #FFF9E6;
+            border-left: 4px solid #FFD93D;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4A90E2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar { padding: 0.8rem 1rem; }
+            .logo-container img { height: 45px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+
+            .hero-cotizacion { padding: 2rem 1rem; }
+            .hero-cotizacion h1 { font-size: 1.8rem; }
+            .hero-cotizacion p { font-size: 1rem; }
+
+            .form-container {
+                margin: -1rem 1rem 2rem;
+                padding: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-section h3 { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-explorar">Explorar</a>
+                <a href="cotizacion.html" class="btn-cotizar">Solicitar Cotización</a>
+                <a href="unete.html" class="btn-unete">Únete a GoParty</a>
+                <a href="dashboard.html" class="btn-proveedor">Soy Proveedor</a>
+            </div>
+
+            <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar móvil -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
+            <button class="close-btn" id="closeBtn">&times;</button>
+        </div>
+        <div class="sidebar-links">
+            <a href="index.html">🔍 Explorar</a>
+            <a href="cotizacion.html" class="btn-cotizar">📝 Solicitar Cotización</a>
+            <a href="unete.html" class="btn-unete">🎉 Únete a GoParty</a>
+            <a href="dashboard.html" class="btn-proveedor">👤 Soy Proveedor</a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Hero -->
+    <section class="hero-cotizacion">
+        <h1>📝 Solicita tu Cotización Personalizada</h1>
+        <p>Cuéntanos los detalles de tu evento y te conectaremos con los mejores proveedores verificados que se ajusten a tu presupuesto</p>
+    </section>
+
+    <!-- Formulario -->
+    <div class="form-container">
+        <form id="formCotizacion">
+
+            <!-- Sección 1: Datos del Evento -->
+            <div class="form-section">
+                <h3>🎉 1. Datos del Evento</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo de Evento <span class="required">*</span></label>
+                        <select id="tipoEvento" required>
+                            <option value="">Selecciona...</option>
+                            <option value="Cumpleaños Infantil">Cumpleaños Infantil</option>
+                            <option value="Cumpleaños Adulto">Cumpleaños Adulto</option>
+                            <option value="Boda">Boda</option>
+                            <option value="XV Años">XV Años</option>
+                            <option value="Evento Corporativo">Evento Corporativo</option>
+                            <option value="Baby Shower">Baby Shower</option>
+                            <option value="Graduación">Graduación</option>
+                            <option value="Aniversario">Aniversario</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Temática (opcional)</label>
+                        <input type="text" id="tematica" placeholder="Ej: Mario Bros, Princesas, Superhéroes...">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha del Evento <span class="required">*</span></label>
+                        <input type="date" id="fechaEvento" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Número de Invitados <span class="required">*</span></label>
+                        <input type="number" id="numInvitados" placeholder="50" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Presupuesto Estimado (MXN) <span class="required">*</span></label>
+                        <input type="number" id="presupuesto" placeholder="3000" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ciudad del Evento <span class="required">*</span></label>
+                        <select id="ciudadEvento" required>
+                            <option value="">Selecciona...</option>
+                            <option value="Xalapa">Xalapa</option>
+                            <option value="Veracruz">Veracruz</option>
+                            <option value="Córdoba">Córdoba</option>
+                            <option value="Orizaba">Orizaba</option>
+                            <option value="Coatepec">Coatepec</option>
+                            <option value="Puebla">Puebla</option>
+                            <option value="CDMX">CDMX</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 2: Servicios -->
+            <div class="form-section">
+                <h3> 2. Servicios que Necesitas</h3>
+
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-salon" value="Salón">
+                        <label for="serv-salon">🏰 Salón</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-alimentos" value="Alimentos">
+                        <label for="serv-alimentos">🍽️ Alimentos</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-decoracion" value="Decoración">
+                        <label for="serv-decoracion">🎈 Decoración</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-animacion" value="Animación">
+                        <label for="serv-animacion">🎪 Animación</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-fotografia" value="Fotografía">
+                        <label for="serv-fotografia">📸 Fotografía</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-musica" value="Música/DJ">
+                        <label for="serv-musica">🎵 Música/DJ</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-mobiliario" value="Mobiliario">
+                        <label for="serv-mobiliario">🪑 Mobiliario</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serv-otro" value="Otro">
+                        <label for="serv-otro">✨ Otro</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 3: Descripción y Fotos -->
+            <div class="form-section">
+                <h3>📸 3. Describe tu Evento y Agrega Referencias</h3>
+
+                <div class="info-box">
+                    💡 <strong>Tip:</strong> Mientras más detalles nos des, mejor podremos conectar tu solicitud con los proveedores ideales. Adjunta fotos de inspiración si tienes alguna referencia visual.
+                </div>
+
+                <div class="form-group">
+                    <label>Describe tu Evento <span class="required">*</span></label>
+                    <textarea id="descripcionEvento" rows="6" placeholder="Ej: Estoy organizando la fiesta infantil de 5 años de mi hijo con temática de Mario Bros. Busco show con personajes relacionados, decoración temática con hongos y tuberías verdes, y tacos para 50 personas. El evento será en un salón que ya tengo reservado..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Fotos de Referencia / Inspiración (opcional)</label>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileFotos').click()">
+                        <div class="upload-icon">📷</div>
+                        <p><strong>Haz clic para subir fotos</strong></p>
+                        <p class="upload-hint">JPG, PNG (máx. 5 fotos, ideal para referencias visuales)</p>
+                        <input type="file" id="fileFotos" multiple accept="image/*">
+                    </div>
+                    <div class="preview-container" id="previewContainer"></div>
+                </div>
+            </div>
+
+            <!-- Sección 4: Datos de Contacto -->
+            <div class="form-section">
+                <h3> 4. Tus Datos de Contacto</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tu Nombre <span class="required">*</span></label>
+                        <input type="text" id="nombreCliente" placeholder="Nombre completo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email <span class="required">*</span></label>
+                        <input type="email" id="emailCliente" placeholder="tu@email.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono / WhatsApp <span class="required">*</span></label>
+                    <input type="tel" id="telefonoCliente" placeholder="2281234567" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btnEnviar">
+                📨 Enviar Solicitud de Cotización
+            </button>
+
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 GoParty - Conectando party people con magia profesional</p>
+    </footer>
+
+    <!-- JavaScript Menú -->
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const closeBtn = document.getElementById('closeBtn');
+        const overlay = document.getElementById('overlay');
+
+        hamburgerBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        document.querySelectorAll('.sidebar-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+    </script>
+
+    <!-- Firebase + Lógica del Formulario -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJAYIomhENVR53lor4zfb0Zsh7ywzI9_c",
+            authDomain: "goparty-marketplace.firebaseapp.com",
+            projectId: "goparty-marketplace",
+            storageBucket: "goparty-marketplace.firebasestorage.app",
+            messagingSenderId: "95947882678",
+            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ==========================================
+        // MANEJO DE FOTOS (Preview + Base64)
+        // ==========================================
+        const MAX_FOTOS = 5;
+        let fotosArray = [];
+
+        const fileInput = document.getElementById('fileFotos');
+        const previewContainer = document.getElementById('previewContainer');
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            const espaciosDisponibles = MAX_FOTOS - fotosArray.length;
+
+            if (espaciosDisponibles <= 0) {
+                alert(`Solo puedes subir máximo ${MAX_FOTOS} fotos`);
+                return;
+            }
+
+            const archivosProcesar = files.slice(0, espaciosDisponibles);
+
+            archivosProcesar.forEach(file => {
+                // Validar tipo
+                if (!file.type.startsWith('image/')) return;
+                // Validar tamaño (2MB máximo por foto)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert(`La foto "${file.name}" es muy grande (máx 2MB)`);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    fotosArray.push(event.target.result);
+                    renderPreviews();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Reset input para permitir subir la misma foto de nuevo si se borró
+            fileInput.value = '';
+        });
+
+        function renderPreviews() {
+            previewContainer.innerHTML = '';
+            fotosArray.forEach((foto, index) => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                item.innerHTML = `
+                    <img src="${foto}" alt="Referencia ${index + 1}">
+                    <button type="button" class="remove-btn" data-index="${index}">×</button>
+                `;
+                previewContainer.appendChild(item);
+            });
+
+            // Eventos para botones de eliminar
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const idx = parseInt(btn.getAttribute('data-index'));
+                    fotosArray.splice(idx, 1);
+                    renderPreviews();
+                });
+            });
+        }
+
+        // ==========================================
+        // ENVÍO DEL FORMULARIO
+        // ==========================================
+        document.getElementById('formCotizacion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btnEnviar = document.getElementById('btnEnviar');
+            btnEnviar.disabled = true;
+            btnEnviar.textContent = '⏳ Enviando solicitud...';
+
+            // Obtener servicios seleccionados
+            const serviciosSeleccionados = [];
+            document.querySelectorAll('.checkbox-item input[type="checkbox"]:checked').forEach(cb => {
+                serviciosSeleccionados.push(cb.value);
+            });
+
+            if (serviciosSeleccionados.length === 0) {
+                alert('Por favor selecciona al menos un servicio que necesitas');
+                btnEnviar.disabled = false;
+                btnEnviar.textContent = '📨 Enviar Solicitud de Cotización';
+                return;
+            }
+
+            const cotizacionData = {
+                tipoEvento: document.getElementById('tipoEvento').value,
+                tematica: document.getElementById('tematica').value || 'Sin temática específica',
+                fechaEvento: document.getElementById('fechaEvento').value,
+                numInvitados: parseInt(document.getElementById('numInvitados').value),
+                presupuesto: parseInt(document.getElementById('presupuesto').value),
+                ciudadEvento: document.getElementById('ciudadEvento').value,
+                serviciosRequeridos: serviciosSeleccionados,
+                descripcion: document.getElementById('descripcionEvento').value,
+                fotosReferencia: fotosArray, // Array de base64 (máx 5)
+                nombreCliente: document.getElementById('nombreCliente').value,
+                emailCliente: document.getElementById('emailCliente').value,
+                telefonoCliente: document.getElementById('telefonoCliente').value,
+                fechaSolicitud: new Date().toISOString(),
+                estado: 'Pendiente', // Pendiente, En Proceso, Asignada, Completada, Cancelada
+                proveedorAsignado: null,
+                respuestasProveedor: []
+            };
+
+            try {
+                await addDoc(collection(db, "solicitudes"), cotizacionData);
+
+                alert('✅ ¡Solicitud enviada con éxito!\n\nEl equipo de GoParty revisará tu solicitud en las próximas 24-48 horas y te contactará con propuestas de proveedores verificados que se ajusten a tu presupuesto.');
+
+                // Resetear formulario
+                document.getElementById('formCotizacion').reset();
+                fotosArray = [];
+                renderPreviews();
+
+                // Scroll arriba
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error("Error al enviar solicitud: ", error);
+                alert('❌ Error al enviar la solicitud. Por favor intenta de nuevo.');
+            } finally {
+                btnEnviar.disabled = false;
+                btnEnviar.textContent = '📨 Enviar Solicitud de Cotización';
+            }
+        });
+    </script>
+
+</body>
+</html>

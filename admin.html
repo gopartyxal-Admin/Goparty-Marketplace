@@ -52,14 +52,14 @@
         .btn { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.3s; }
         .btn:hover { transform: translateY(-2px); }
         .btn-secondary { background: #f0f0f0; color: #333; }
-        .btn-danger { background: linear-gradient(135deg, #FF6B6B, #FF4444); }
+        .btn-danger { background: linear-gradient(135deg, #FF6B6B, #FF4444); color: white; }
         .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
         
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
         .alert.success { background: #d4edda; color: #155724; display: block; }
         .alert.error { background: #f8d7da; color: #721c24; display: block; }
 
-        /*  Sub-tabs para Contenido del Sitio */
+        /* Sub-tabs para Contenido del Sitio */
         .sub-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .sub-tab { padding: 0.6rem 1.2rem; background: #f0f0f0; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; color: #666; transition: all 0.3s; }
         .sub-tab:hover { background: #e0e0e0; }
@@ -67,7 +67,7 @@
         .sub-content { display: none; }
         .sub-content.active { display: block; }
 
-        /* 🆕 Lista de items */
+        /* Lista de items (categorías, ciudades, FAQ) */
         .item-list { display: flex; flex-direction: column; gap: 0.8rem; }
         .item-row { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #FF6B9D; }
         .item-row .item-info { flex: 1; }
@@ -77,6 +77,64 @@
         .item-row .item-icon { font-size: 1.5rem; }
 
         .empty-state { text-align: center; padding: 2rem; color: #999; }
+
+        /* 🆕 FASE 3: ESTILOS PARA MODERACIÓN DE TESTIMONIOS */
+        .resena-card { 
+            background: #f9f9f9; 
+            border-radius: 10px; 
+            padding: 1.2rem; 
+            margin-bottom: 1rem; 
+            border-left: 4px solid #FFD93D; 
+        }
+        .resena-card.aprobada { border-left-color: #4CAF50; }
+        .resena-card.rechazada { border-left-color: #FF4444; }
+        .resena-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 0.8rem; 
+            flex-wrap: wrap; 
+            gap: 0.5rem; 
+        }
+        .resena-cliente { font-weight: 700; color: #333; font-size: 1.1rem; }
+        .resena-evento { color: #666; font-size: 0.9rem; margin-top: 0.2rem; }
+        .resena-estrellas { color: #FFD93D; font-size: 1.2rem; margin: 0.5rem 0; }
+        .resena-comentario { 
+            font-style: italic; 
+            color: #555; 
+            line-height: 1.6; 
+            margin: 0.8rem 0; 
+            padding: 0.8rem; 
+            background: white; 
+            border-radius: 6px; 
+        }
+        .resena-acciones { 
+            display: flex; 
+            gap: 0.5rem; 
+            margin-top: 1rem; 
+            flex-wrap: wrap; 
+        }
+        .resena-acciones button { 
+            padding: 0.5rem 1rem; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            transition: transform 0.2s;
+        }
+        .resena-acciones button:hover { transform: translateY(-2px); }
+        .btn-aprobar { background: #4CAF50; color: white; }
+        .btn-rechazar { background: #FF4444; color: white; }
+        .btn-aprobar:hover { background: #3d8b40; }
+        .btn-rechazar:hover { background: #d32f2f; }
+        .filtro-resenas { 
+            display: flex; 
+            gap: 0.5rem; 
+            margin-bottom: 1rem; 
+            flex-wrap: wrap; 
+        }
+        .filtro-resenas .btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
         
         @media (max-width: 768px) { .content { padding: 0 1rem; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
@@ -108,10 +166,11 @@
             <div class="tab" data-tab="cambios">🔄 Solicitudes de Cambio <span id="tabCambiosCount">0</span></div>
             <div class="tab" data-tab="proveedores">👥 Proveedores</div>
             <div class="tab" data-tab="clientes">👤 Clientes</div>
-            <div class="tab" data-tab="blog"> Blogs y Recursos</div>
-            <div class="tab" data-tab="finanzas"> Finanzas</div>
+            <div class="tab" data-tab="blog">📚 Blogs y Recursos</div>
+            <div class="tab" data-tab="finanzas">💰 Finanzas</div>
             <div class="tab" data-tab="colaboradores">🤝 Colaboradores</div>
             <div class="tab" data-tab="contenido">📄 Contenido del Sitio</div>
+            <div class="tab" data-tab="perfil">👨‍💼 Perfil Admin</div>
             <div class="tab" data-tab="config">⚙️ Configuración General</div>
         </div>
 
@@ -120,6 +179,7 @@
             <!-- TAB: DASHBOARD -->
             <div class="tab-content active" id="tab-dashboard">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">📊 Dashboard</h2>
+                <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;">🌐 Ver Sitio Principal</a>
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-number" id="statTotalProveedores">0</div><div class="stat-label">Total Proveedores</div></div>
                     <div class="stat-card blue"><div class="stat-number" id="statPendientes">0</div><div class="stat-label">Pendientes</div></div>
@@ -179,23 +239,30 @@
                 <div class="card"><div id="listaProveedores">Cargando...</div></div>
             </div>
 
-            <!-- TAB: CLIENTES -->
+            <!-- TAB: CLIENTES (CON MODERACIÓN DE TESTIMONIOS - FASE 3) -->
             <div class="tab-content" id="tab-clientes">
-                <h2 style="margin-bottom: 1.5rem; color: #333;"> Gestión de Clientes</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">👤 Gestión de Clientes y Testimonios</h2>
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-number" id="totalClientes">0</div><div class="stat-label">Total Clientes Registrados</div></div>
-                    <div class="stat-card gold"><div class="stat-number" id="resenasPendientes">0</div><div class="stat-label">Reseñas Pendientes</div></div>
-                    <div class="stat-card green"><div class="stat-number" id="resenasAprobadas">0</div><div class="stat-label">Reseñas Aprobadas</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalClientes">0</div><div class="stat-label">Total Testimonios</div></div>
+                    <div class="stat-card gold"><div class="stat-number" id="resenasPendientes">0</div><div class="stat-label">Pendientes de Moderación</div></div>
+                    <div class="stat-card green"><div class="stat-number" id="resenasAprobadas">0</div><div class="stat-label">Aprobadas</div></div>
                 </div>
                 <div class="card">
-                    <h3>Reseñas Pendientes de Moderación</h3>
-                    <div id="listaResenas">No hay reseñas pendientes</div>
+                    <h3>⭐ Moderación de Testimonios</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">Aprueba o rechaza los testimonios enviados por los clientes. Solo los aprobados aparecerán en el sitio público.</p>
+                    <div class="filtro-resenas">
+                        <button class="btn btn-secondary" onclick="filtrarResenas('todas')">Todas</button>
+                        <button class="btn btn-secondary" onclick="filtrarResenas('pendiente')">Pendientes</button>
+                        <button class="btn btn-secondary" onclick="filtrarResenas('aprobado')">Aprobadas</button>
+                        <button class="btn btn-secondary" onclick="filtrarResenas('rechazado')">Rechazadas</button>
+                    </div>
+                    <div id="listaResenas">Cargando reseñas...</div>
                 </div>
             </div>
 
             <!-- TAB: BLOG -->
             <div class="tab-content" id="tab-blog">
-                <h2 style="margin-bottom: 1.5rem; color: #333;"> Blogs y Recursos</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">📚 Blogs y Recursos</h2>
                 <p style="color: #666; margin-bottom: 1rem;">Crea publicaciones y adjunta materiales descargables.</p>
                 <button class="btn" onclick="abrirModalPost()">➕ Nuevo Post</button>
                 <div class="card" style="margin-top: 1rem;"><div id="listaBlog">Cargando...</div></div>
@@ -247,7 +314,7 @@
                 <div class="card"><div id="listaColaboradores">No hay colaboradores registrados</div></div>
             </div>
 
-            <!-- 🆕 TAB: CONTENIDO DEL SITIO -->
+            <!-- TAB: CONTENIDO DEL SITIO (FASE 2) -->
             <div class="tab-content" id="tab-contenido">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">📄 Contenido del Sitio</h2>
                 <p style="color: #666; margin-bottom: 1.5rem;">Gestiona las categorías, ciudades y preguntas frecuentes que aparecen en el sitio público. Los cambios se reflejan automáticamente.</p>
@@ -282,7 +349,6 @@
                         </div>
                         <button class="btn" onclick="guardarCategoria()">💾 Guardar Categoría</button>
                     </div>
-
                     <div class="card">
                         <h3>📋 Categorías Existentes</h3>
                         <div id="listaCategorias" class="item-list">Cargando...</div>
@@ -312,7 +378,6 @@
                         </div>
                         <button class="btn" onclick="guardarCiudad()">💾 Guardar Ciudad</button>
                     </div>
-
                     <div class="card">
                         <h3>📋 Ciudades Existentes</h3>
                         <div id="listaCiudades" class="item-list">Cargando...</div>
@@ -338,11 +403,39 @@
                         </div>
                         <button class="btn" onclick="guardarFaq()">💾 Guardar Pregunta</button>
                     </div>
-
                     <div class="card">
                         <h3>📋 Preguntas Frecuentes Existentes</h3>
                         <div id="listaFaqs" class="item-list">Cargando...</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- TAB: PERFIL ADMIN -->
+            <div class="tab-content" id="tab-perfil">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">👨‍💼 Perfil del Administrador Principal</h2>
+                <div class="card">
+                    <div class="form-group">
+                        <label>Fotografía de Perfil</label>
+                        <input type="file" accept="image/jpeg,image/png">
+                        <small style="color: #999;">JPG, PNG (Max 2MB). Se guardará el nombre del archivo.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" placeholder="Administrador GoParty">
+                    </div>
+                    <div class="form-group">
+                        <label>Puesto / Rol</label>
+                        <input type="text" placeholder="Administrador Principal">
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Institucional</label>
+                        <input type="email" placeholder="admin@goparty.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono de Contacto</label>
+                        <input type="tel" placeholder="522281234567">
+                    </div>
+                    <button class="btn">💾 Guardar Cambios de Perfil</button>
                 </div>
             </div>
 
@@ -359,7 +452,7 @@
                         <small style="color: #999;">Se usará en el botón flotante del sitio público</small>
                     </div>
                     <div class="form-group">
-                        <label> Correo de Soporte General *</label>
+                        <label>📧 Correo de Soporte General *</label>
                         <input type="email" id="cfgEmail" placeholder="soporte@goparty.com">
                     </div>
                     <div class="form-group">
@@ -382,6 +475,17 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- MODAL: DETALLE DE COTIZACIÓN -->
+    <div id="modalCotizacion" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 2rem; border-radius: 15px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <h3 style="margin-bottom: 1rem;">Detalle de Cotización</h3>
+            <div id="detalleCotizacion"></div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+                <button class="btn btn-secondary" onclick="cerrarModalCotizacion()">Cerrar</button>
+            </div>
         </div>
     </div>
 
@@ -411,7 +515,17 @@
             <div class="form-group"><label>Correo de Acceso (Usuario) *</label><input type="email" id="colabEmail"></div>
             <div class="form-group"><label>Contraseña Temporal *</label><input type="text" id="colabPassword"></div>
             <div class="form-group"><label>Teléfono *</label><input type="tel" id="colabTelefono"></div>
-            <div class="form-group"><label>Estado/Región Asignada *</label><select id="colabEstado"><option>Veracruz</option><option>Puebla</option><option>Ciudad de México</option><option>Oaxaca</option><option>Matriz Principal</option></select></div>
+            <div class="form-group">
+                <label>Estado/Región Asignada *</label>
+                <select id="colabEstado">
+                    <option value="">Seleccionar...</option>
+                    <option>Veracruz</option>
+                    <option>Puebla</option>
+                    <option>Ciudad de México</option>
+                    <option>Oaxaca</option>
+                    <option>Matriz Principal</option>
+                </select>
+            </div>
             <div class="form-group"><label>Nivel de Acceso *</label><select id="colabNivel"><option>Verificador Regional</option><option>Supervisor de Zona</option><option>Matriz (Global)</option></select></div>
             <div style="display: flex; gap: 1rem; justify-content: flex-end;">
                 <button class="btn btn-secondary" onclick="cerrarModalColaborador()">Cancelar</button>
@@ -423,7 +537,7 @@
     <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, deleteDoc, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, deleteDoc, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJAYIomhENVR53lor4zfb0Zsh7ywzI9_c",
@@ -458,7 +572,7 @@
         }
 
         // ==========================================
-        // TABS PRINCIPALES
+        // TABS
         // ==========================================
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -474,10 +588,11 @@
                     cargarCiudades();
                     cargarFaqs();
                 }
+                if (tab.dataset.tab === 'clientes') cargarResenas(); // 🆕 FASE 3
             });
         });
 
-        //  SUB-TABS de Contenido del Sitio
+        // Sub-tabs de Contenido del Sitio
         document.querySelectorAll('.sub-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
@@ -565,7 +680,7 @@
         };
 
         // ==========================================
-        // 🆕 CRUD CATEGORÍAS
+        // CRUD CATEGORÍAS (FASE 2)
         // ==========================================
         async function cargarCategorias() {
             const contenedor = document.getElementById('listaCategorias');
@@ -574,9 +689,8 @@
                 const items = [];
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-
                 if (items.length === 0) {
-                    contenedor.innerHTML = '<div class="empty-state"> No hay categorías. ¡Agrega la primera!</div>';
+                    contenedor.innerHTML = '<div class="empty-state">📭 No hay categorías. ¡Agrega la primera!</div>';
                     return;
                 }
                 contenedor.innerHTML = items.map(item => `
@@ -600,7 +714,6 @@
             const icono = document.getElementById('catIcono').value.trim();
             const descripcion = document.getElementById('catDescripcion').value.trim();
             const orden = parseInt(document.getElementById('catOrden').value) || 1;
-
             if (!nombre || !icono) {
                 alert.className = 'alert error'; alert.textContent = '❌ Nombre e ícono son obligatorios'; return;
             }
@@ -625,7 +738,7 @@
         };
 
         // ==========================================
-        // 🆕 CRUD CIUDADES
+        // CRUD CIUDADES (FASE 2)
         // ==========================================
         async function cargarCiudades() {
             const contenedor = document.getElementById('listaCiudades');
@@ -634,7 +747,6 @@
                 const items = [];
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-
                 if (items.length === 0) {
                     contenedor.innerHTML = '<div class="empty-state">📭 No hay ciudades. ¡Agrega la primera!</div>';
                     return;
@@ -647,7 +759,7 @@
                             <div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div>
                         </div>
                         <div class="item-actions">
-                            <button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">️ Eliminar</button>
+                            <button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">🗑️ Eliminar</button>
                         </div>
                     </div>
                 `).join('');
@@ -660,7 +772,6 @@
             const estado = document.getElementById('ciuEstado').value.trim();
             const descripcion = document.getElementById('ciuDescripcion').value.trim();
             const orden = parseInt(document.getElementById('ciuOrden').value) || 1;
-
             if (!nombre || !estado) {
                 alert.className = 'alert error'; alert.textContent = '❌ Nombre y estado son obligatorios'; return;
             }
@@ -685,7 +796,7 @@
         };
 
         // ==========================================
-        // 🆕 CRUD FAQ
+        // CRUD FAQ (FASE 2)
         // ==========================================
         async function cargarFaqs() {
             const contenedor = document.getElementById('listaFaqs');
@@ -694,7 +805,6 @@
                 const items = [];
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-
                 if (items.length === 0) {
                     contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas frecuentes. ¡Agrega la primera!</div>';
                     return;
@@ -719,7 +829,6 @@
             const pregunta = document.getElementById('faqPregunta').value.trim();
             const respuesta = document.getElementById('faqRespuesta').value.trim();
             const orden = parseInt(document.getElementById('faqOrden').value) || 1;
-
             if (!pregunta || !respuesta) {
                 alert.className = 'alert error'; alert.textContent = '❌ Pregunta y respuesta son obligatorias'; return;
             }
@@ -743,12 +852,126 @@
         };
 
         // ==========================================
-        // MODALES (Posts y Colaboradores)
+        // 🆕 FASE 3: MODERACIÓN DE TESTIMONIOS
+        // ==========================================
+        let filtroResenaActual = 'pendiente';
+
+        async function cargarResenas() {
+            const contenedor = document.getElementById('listaResenas');
+            if (!contenedor) return;
+
+            try {
+                const snap = await getDocs(collection(db, "testimonios"));
+                let resenas = [];
+                snap.forEach(doc => resenas.push({ id: doc.id, ...doc.data() }));
+
+                // Filtrar
+                if (filtroResenaActual !== 'todas') {
+                    resenas = resenas.filter(r => r.estado === filtroResenaActual);
+                }
+
+                // Ordenar por fecha (más reciente primero)
+                resenas.sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
+
+                // Actualizar contadores
+                const todas = await getDocs(collection(db, "testimonios"));
+                const pendientes = todas.docs.filter(d => d.data().estado === 'pendiente').length;
+                const aprobadas = todas.docs.filter(d => d.data().estado === 'aprobado').length;
+                if (document.getElementById('resenasPendientes')) {
+                    document.getElementById('resenasPendientes').textContent = pendientes;
+                }
+                if (document.getElementById('resenasAprobadas')) {
+                    document.getElementById('resenasAprobadas').textContent = aprobadas;
+                }
+                if (document.getElementById('totalClientes')) {
+                    document.getElementById('totalClientes').textContent = todas.size;
+                }
+
+                if (resenas.length === 0) {
+                    contenedor.innerHTML = `<div class="empty-state">📭 No hay reseñas ${filtroResenaActual === 'todas' ? '' : 'con estado "' + filtroResenaActual + '"'}.</div>`;
+                    return;
+                }
+
+                contenedor.innerHTML = resenas.map(r => {
+                    const estadoClase = r.estado === 'aprobado' ? 'aprobada' : r.estado === 'rechazado' ? 'rechazada' : '';
+                    const estrellas = '⭐'.repeat(r.calificacion || 0);
+                    const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
+                    return `
+                        <div class="resena-card ${estadoClase}">
+                            <div class="resena-header">
+                                <div>
+                                    <div class="resena-cliente">${r.nombreCliente || 'Anónimo'} ${r.inicial ? `<span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-radius: 50%; text-align: center; line-height: 30px; margin-left: 0.5rem;">${r.inicial}</span>` : ''}</div>
+                                    <div class="resena-evento">${r.tipoEvento || ''} - ${r.ciudad || ''} • Proveedor: <strong>${r.nombreProveedor || 'N/A'}</strong></div>
+                                    <div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${fecha}</div>
+                                </div>
+                                <span style="background: ${r.estado === 'aprobado' ? '#4CAF50' : r.estado === 'rechazado' ? '#FF4444' : '#FFD93D'}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${r.estado ? r.estado.charAt(0).toUpperCase() + r.estado.slice(1) : 'pendiente'}</span>
+                            </div>
+                            <div class="resena-estrellas">${estrellas}</div>
+                            <div class="resena-comentario">"${r.comentario || ''}"</div>
+                            ${r.estado === 'pendiente' ? `
+                                <div class="resena-acciones">
+                                    <button class="btn-aprobar" onclick="aprobarResena('${r.id}')">✅ Aprobar</button>
+                                    <button class="btn-rechazar" onclick="rechazarResena('${r.id}')">❌ Rechazar</button>
+                                </div>
+                            ` : `
+                                <div class="resena-acciones">
+                                    ${r.estado === 'aprobado' ? `<button class="btn-rechazar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Volver a Pendiente</button>` : ''}
+                                    ${r.estado === 'rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Revisar de Nuevo</button>` : ''}
+                                    <button class="btn btn-danger btn-small" onclick="eliminarResena('${r.id}')">🗑️ Eliminar</button>
+                                </div>
+                            `}
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar reseñas: ' + error.message + '</div>';
+            }
+        }
+
+        window.filtrarResenas = function(filtro) {
+            filtroResenaActual = filtro;
+            cargarResenas();
+        };
+
+        window.aprobarResena = async function(id) {
+            if (!confirm('¿Aprobar este testimonio? Aparecerá en el sitio público.')) return;
+            try {
+                await updateDoc(doc(db, "testimonios", id), { estado: 'aprobado', fechaModeracion: new Date().toISOString() });
+                cargarResenas();
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        window.rechazarResena = async function(id) {
+            if (!confirm('¿Rechazar este testimonio? No aparecerá en el sitio público.')) return;
+            try {
+                await updateDoc(doc(db, "testimonios", id), { estado: 'rechazado', fechaModeracion: new Date().toISOString() });
+                cargarResenas();
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        window.cambiarEstadoResena = async function(id, nuevoEstado) {
+            try {
+                await updateDoc(doc(db, "testimonios", id), { estado: nuevoEstado });
+                cargarResenas();
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        window.eliminarResena = async function(id) {
+            if (!confirm('¿Eliminar permanentemente este testimonio?')) return;
+            try {
+                await deleteDoc(doc(db, "testimonios", id));
+                cargarResenas();
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // ==========================================
+        // MODALES
         // ==========================================
         window.abrirModalPost = () => document.getElementById('modalPost').style.display = 'flex';
         window.cerrarModalPost = () => document.getElementById('modalPost').style.display = 'none';
         window.abrirModalColaborador = () => document.getElementById('modalColaborador').style.display = 'flex';
         window.cerrarModalColaborador = () => document.getElementById('modalColaborador').style.display = 'none';
+        window.cerrarModalCotizacion = () => document.getElementById('modalCotizacion').style.display = 'none';
 
         window.guardarPost = async function() {
             const titulo = document.getElementById('postTitulo').value;
@@ -787,4 +1010,4 @@
     </script>
 
 </body>
-    </html>
+                    </html>

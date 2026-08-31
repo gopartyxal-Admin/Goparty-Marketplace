@@ -52,10 +52,31 @@
         .btn { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.3s; }
         .btn:hover { transform: translateY(-2px); }
         .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-danger { background: linear-gradient(135deg, #FF6B6B, #FF4444); }
+        .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
         
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
         .alert.success { background: #d4edda; color: #155724; display: block; }
         .alert.error { background: #f8d7da; color: #721c24; display: block; }
+
+        /*  Sub-tabs para Contenido del Sitio */
+        .sub-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .sub-tab { padding: 0.6rem 1.2rem; background: #f0f0f0; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; color: #666; transition: all 0.3s; }
+        .sub-tab:hover { background: #e0e0e0; }
+        .sub-tab.active { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; }
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
+
+        /* 🆕 Lista de items */
+        .item-list { display: flex; flex-direction: column; gap: 0.8rem; }
+        .item-row { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #FF6B9D; }
+        .item-row .item-info { flex: 1; }
+        .item-row .item-title { font-weight: 600; color: #333; }
+        .item-row .item-subtitle { font-size: 0.85rem; color: #999; }
+        .item-row .item-actions { display: flex; gap: 0.5rem; }
+        .item-row .item-icon { font-size: 1.5rem; }
+
+        .empty-state { text-align: center; padding: 2rem; color: #999; }
         
         @media (max-width: 768px) { .content { padding: 0 1rem; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
@@ -89,7 +110,8 @@
             <div class="tab" data-tab="clientes">👤 Clientes</div>
             <div class="tab" data-tab="blog"> Blogs y Recursos</div>
             <div class="tab" data-tab="finanzas"> Finanzas</div>
-            <div class="tab" data-tab="colaboradores"> Colaboradores</div>
+            <div class="tab" data-tab="colaboradores">🤝 Colaboradores</div>
+            <div class="tab" data-tab="contenido">📄 Contenido del Sitio</div>
             <div class="tab" data-tab="config">⚙️ Configuración General</div>
         </div>
 
@@ -173,7 +195,7 @@
 
             <!-- TAB: BLOG -->
             <div class="tab-content" id="tab-blog">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">📚 Blogs y Recursos</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;"> Blogs y Recursos</h2>
                 <p style="color: #666; margin-bottom: 1rem;">Crea publicaciones y adjunta materiales descargables.</p>
                 <button class="btn" onclick="abrirModalPost()">➕ Nuevo Post</button>
                 <div class="card" style="margin-top: 1rem;"><div id="listaBlog">Cargando...</div></div>
@@ -225,53 +247,137 @@
                 <div class="card"><div id="listaColaboradores">No hay colaboradores registrados</div></div>
             </div>
 
+            <!-- 🆕 TAB: CONTENIDO DEL SITIO -->
+            <div class="tab-content" id="tab-contenido">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">📄 Contenido del Sitio</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Gestiona las categorías, ciudades y preguntas frecuentes que aparecen en el sitio público. Los cambios se reflejan automáticamente.</p>
+                
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-sub="categorias">🎯 Categorías</button>
+                    <button class="sub-tab" data-sub="ciudades">🏙️ Ciudades</button>
+                    <button class="sub-tab" data-sub="faq">❓ Preguntas Frecuentes</button>
+                </div>
+
+                <!-- SUB: CATEGORÍAS -->
+                <div class="sub-content active" id="sub-categorias">
+                    <div class="card">
+                        <h3>➕ Agregar Nueva Categoría</h3>
+                        <div class="alert" id="alertCategoria"></div>
+                        <div class="form-group">
+                            <label>Nombre de la Categoría *</label>
+                            <input type="text" id="catNombre" placeholder="Ej: Salones, Alimentos, Fotografía...">
+                        </div>
+                        <div class="form-group">
+                            <label>Ícono (emoji) *</label>
+                            <input type="text" id="catIcono" placeholder="Ej: 🏰, 🍽️, " maxlength="4">
+                        </div>
+                        <div class="form-group">
+                            <label>Descripción corta</label>
+                            <input type="text" id="catDescripcion" placeholder="Ej: Espacios únicos, Sabores increíbles...">
+                        </div>
+                        <div class="form-group">
+                            <label>Orden de aparición (número)</label>
+                            <input type="number" id="catOrden" placeholder="1" min="1" value="1">
+                            <small style="color: #999;">Menor número = aparece primero</small>
+                        </div>
+                        <button class="btn" onclick="guardarCategoria()">💾 Guardar Categoría</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Categorías Existentes</h3>
+                        <div id="listaCategorias" class="item-list">Cargando...</div>
+                    </div>
+                </div>
+
+                <!-- SUB: CIUDADES -->
+                <div class="sub-content" id="sub-ciudades">
+                    <div class="card">
+                        <h3>➕ Agregar Nueva Ciudad</h3>
+                        <div class="alert" id="alertCiudad"></div>
+                        <div class="form-group">
+                            <label>Nombre de la Ciudad *</label>
+                            <input type="text" id="ciuNombre" placeholder="Ej: Xalapa, Veracruz...">
+                        </div>
+                        <div class="form-group">
+                            <label>Estado *</label>
+                            <input type="text" id="ciuEstado" placeholder="Ej: Veracruz, Puebla...">
+                        </div>
+                        <div class="form-group">
+                            <label>Descripción / Eslogan</label>
+                            <input type="text" id="ciuDescripcion" placeholder="Ej: Puerto y playa, Tradición y sabor...">
+                        </div>
+                        <div class="form-group">
+                            <label>Orden de aparición</label>
+                            <input type="number" id="ciuOrden" placeholder="1" min="1" value="1">
+                        </div>
+                        <button class="btn" onclick="guardarCiudad()">💾 Guardar Ciudad</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Ciudades Existentes</h3>
+                        <div id="listaCiudades" class="item-list">Cargando...</div>
+                    </div>
+                </div>
+
+                <!-- SUB: FAQ -->
+                <div class="sub-content" id="sub-faq">
+                    <div class="card">
+                        <h3>➕ Agregar Nueva Pregunta Frecuente</h3>
+                        <div class="alert" id="alertFaq"></div>
+                        <div class="form-group">
+                            <label>Pregunta *</label>
+                            <input type="text" id="faqPregunta" placeholder="Ej: ¿Cómo sé que un proveedor es confiable?">
+                        </div>
+                        <div class="form-group">
+                            <label>Respuesta *</label>
+                            <textarea id="faqRespuesta" rows="4" placeholder="Escribe la respuesta completa..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Orden de aparición</label>
+                            <input type="number" id="faqOrden" placeholder="1" min="1" value="1">
+                        </div>
+                        <button class="btn" onclick="guardarFaq()">💾 Guardar Pregunta</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Preguntas Frecuentes Existentes</h3>
+                        <div id="listaFaqs" class="item-list">Cargando...</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- TAB: CONFIGURACIÓN GENERAL -->
             <div class="tab-content" id="tab-config">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">⚙️ Configuración de la Plataforma</h2>
-                
                 <div class="alert" id="configAlert"></div>
-
                 <div class="card">
                     <h3>📱 Configuración General</h3>
                     <p style="color: #666; margin-bottom: 1rem;">Estos valores se reflejan automáticamente en el sitio público.</p>
-                    
                     <div class="form-group">
                         <label>📱 WhatsApp Corporativo de GoParty *</label>
                         <input type="tel" id="cfgWhatsapp" placeholder="522281234567 (con lada, sin espacios)">
                         <small style="color: #999;">Se usará en el botón flotante del sitio público</small>
                     </div>
-
                     <div class="form-group">
-                        <label>📧 Correo de Soporte General *</label>
+                        <label> Correo de Soporte General *</label>
                         <input type="email" id="cfgEmail" placeholder="soporte@goparty.com">
                     </div>
-
                     <div class="form-group">
                         <label>📝 Mensaje de Bienvenida (Footer)</label>
-                        <textarea id="cfgFooter" rows="3" placeholder="Conectando party people con magia profesional desde 2024.">Conectando party people con magia profesional desde 2024.</textarea>
+                        <textarea id="cfgFooter" rows="3">Conectando party people con magia profesional desde 2024.</textarea>
                     </div>
-
                     <div class="form-group">
                         <label>🔢 Modo de Estadísticas</label>
                         <select id="cfgModoStats" onchange="toggleStatsManual()">
                             <option value="auto">Automático (contar datos reales de Firebase)</option>
                             <option value="manual">Manual (valores personalizados)</option>
                         </select>
-                        <small style="color: #999;">Automático: cuenta proveedores y cotizaciones reales. Manual: tú defines los números.</small>
                     </div>
-
                     <div id="statsManual" style="display: none; background: #FFF9E6; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
                         <h4 style="margin-bottom: 1rem; color: #333;">📊 Valores Manuales</h4>
-                        <div class="form-group">
-                            <label>🎉 Eventos Realizados</label>
-                            <input type="number" id="cfgEventos" placeholder="500" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>⭐ % Satisfacción</label>
-                            <input type="number" id="cfgSatisfaccion" placeholder="98" min="0" max="100">
-                        </div>
+                        <div class="form-group"><label>🎉 Eventos Realizados</label><input type="number" id="cfgEventos" placeholder="500" min="0"></div>
+                        <div class="form-group"><label>⭐ % Satisfacción</label><input type="number" id="cfgSatisfaccion" placeholder="98" min="0" max="100"></div>
                     </div>
-
                     <button class="btn" onclick="guardarConfiguracion()" style="margin-top: 1rem;">💾 Guardar Configuración de Plataforma</button>
                 </div>
             </div>
@@ -317,7 +423,7 @@
     <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, deleteDoc, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJAYIomhENVR53lor4zfb0Zsh7ywzI9_c",
@@ -344,9 +450,7 @@
                 cargarDashboard();
             } else { alert('❌ Credenciales incorrectas'); }
         };
-
         window.logout = function() { localStorage.removeItem('adminLogged'); location.reload(); };
-
         if (localStorage.getItem('adminLogged') === 'true') {
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('adminPanel').classList.add('active');
@@ -354,7 +458,7 @@
         }
 
         // ==========================================
-        // TABS
+        // TABS PRINCIPALES
         // ==========================================
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -365,11 +469,26 @@
                 
                 if (tab.dataset.tab === 'dashboard') cargarDashboard();
                 if (tab.dataset.tab === 'config') cargarConfiguracion();
+                if (tab.dataset.tab === 'contenido') {
+                    cargarCategorias();
+                    cargarCiudades();
+                    cargarFaqs();
+                }
+            });
+        });
+
+        //  SUB-TABS de Contenido del Sitio
+        document.querySelectorAll('.sub-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('sub-' + tab.dataset.sub).classList.add('active');
             });
         });
 
         // ==========================================
-        // DASHBOARD - ESTADÍSTICAS DINÁMICAS
+        // DASHBOARD
         // ==========================================
         async function cargarDashboard() {
             try {
@@ -388,33 +507,29 @@
                 document.getElementById('statGold').textContent = gold;
                 document.getElementById('statPro').textContent = pro;
                 document.getElementById('statBasic').textContent = basic;
-                
                 document.getElementById('distBasic').textContent = basic;
                 document.getElementById('distPro').textContent = pro;
                 document.getElementById('distGold').textContent = gold;
                 
-                // Top estados
                 const estados = {};
                 proveedores.forEach(p => { if (p.estado) estados[p.estado] = (estados[p.estado] || 0) + 1; });
                 const topEstados = Object.entries(estados).sort((a, b) => b[1] - a[1]).slice(0, 5);
                 document.getElementById('topEstados').textContent = topEstados.length ? topEstados.map(e => `${e[0]}: ${e[1]}`).join(' | ') : 'Sin datos';
-                
             } catch (error) { console.error("Error cargando dashboard:", error); }
         }
 
         // ==========================================
-        // 🆕 CONFIGURACIÓN - GUARDAR Y CARGAR
+        // CONFIGURACIÓN
         // ==========================================
         async function cargarConfiguracion() {
             try {
                 const docRef = doc(db, "configuracion", "general");
                 const docSnap = await getDoc(docRef);
-                
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('cfgWhatsapp').value = data.whatsapp || '';
                     document.getElementById('cfgEmail').value = data.email || '';
-                    document.getElementById('cfgFooter').value = data.footer || 'Conectando party people con magia profesional desde 2024.';
+                    document.getElementById('cfgFooter').value = data.footer || '';
                     document.getElementById('cfgModoStats').value = data.modoStats || 'auto';
                     document.getElementById('cfgEventos').value = data.eventosManual || '';
                     document.getElementById('cfgSatisfaccion').value = data.satisfaccionManual || '';
@@ -435,34 +550,200 @@
                     satisfaccionManual: parseInt(document.getElementById('cfgSatisfaccion').value) || 0,
                     actualizado: new Date().toISOString()
                 };
-
                 if (!data.whatsapp || !data.email) {
-                    alert.className = 'alert error';
-                    alert.textContent = '❌ WhatsApp y Email son obligatorios';
-                    return;
+                    alert.className = 'alert error'; alert.textContent = '❌ WhatsApp y Email son obligatorios'; return;
                 }
-
                 await setDoc(doc(db, "configuracion", "general"), data);
-                
-                alert.className = 'alert success';
-                alert.textContent = '✅ Configuración guardada. Los cambios se reflejarán en el sitio público automáticamente.';
-                
+                alert.className = 'alert success'; alert.textContent = '✅ Configuración guardada.';
                 setTimeout(() => { alert.style.display = 'none'; }, 4000);
-                
             } catch (error) {
-                console.error("Error guardando config:", error);
-                alert.className = 'alert error';
-                alert.textContent = '❌ Error al guardar: ' + error.message;
+                alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message;
             }
         };
-
         window.toggleStatsManual = function() {
-            const modo = document.getElementById('cfgModoStats').value;
-            document.getElementById('statsManual').style.display = modo === 'manual' ? 'block' : 'none';
+            document.getElementById('statsManual').style.display = document.getElementById('cfgModoStats').value === 'manual' ? 'block' : 'none';
         };
 
         // ==========================================
-        // MODALES
+        // 🆕 CRUD CATEGORÍAS
+        // ==========================================
+        async function cargarCategorias() {
+            const contenedor = document.getElementById('listaCategorias');
+            try {
+                const snap = await getDocs(collection(db, "categorias"));
+                const items = [];
+                snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
+                items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
+
+                if (items.length === 0) {
+                    contenedor.innerHTML = '<div class="empty-state"> No hay categorías. ¡Agrega la primera!</div>';
+                    return;
+                }
+                contenedor.innerHTML = items.map(item => `
+                    <div class="item-row">
+                        <div class="item-icon">${item.icono || ''}</div>
+                        <div class="item-info">
+                            <div class="item-title">${item.nombre}</div>
+                            <div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-danger btn-small" onclick="eliminarCategoria('${item.id}')">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
+        }
+
+        window.guardarCategoria = async function() {
+            const alert = document.getElementById('alertCategoria');
+            const nombre = document.getElementById('catNombre').value.trim();
+            const icono = document.getElementById('catIcono').value.trim();
+            const descripcion = document.getElementById('catDescripcion').value.trim();
+            const orden = parseInt(document.getElementById('catOrden').value) || 1;
+
+            if (!nombre || !icono) {
+                alert.className = 'alert error'; alert.textContent = '❌ Nombre e ícono son obligatorios'; return;
+            }
+            try {
+                await addDoc(collection(db, "categorias"), { nombre, icono, descripcion, orden, activa: true, creado: new Date().toISOString() });
+                alert.className = 'alert success'; alert.textContent = '✅ Categoría guardada';
+                document.getElementById('catNombre').value = '';
+                document.getElementById('catIcono').value = '';
+                document.getElementById('catDescripcion').value = '';
+                document.getElementById('catOrden').value = '1';
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+                cargarCategorias();
+            } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
+        };
+
+        window.eliminarCategoria = async function(id) {
+            if (!confirm('¿Seguro que deseas eliminar esta categoría?')) return;
+            try {
+                await deleteDoc(doc(db, "categorias", id));
+                cargarCategorias();
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // ==========================================
+        // 🆕 CRUD CIUDADES
+        // ==========================================
+        async function cargarCiudades() {
+            const contenedor = document.getElementById('listaCiudades');
+            try {
+                const snap = await getDocs(collection(db, "ciudades"));
+                const items = [];
+                snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
+                items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
+
+                if (items.length === 0) {
+                    contenedor.innerHTML = '<div class="empty-state">📭 No hay ciudades. ¡Agrega la primera!</div>';
+                    return;
+                }
+                contenedor.innerHTML = items.map(item => `
+                    <div class="item-row">
+                        <div class="item-icon">🏙️</div>
+                        <div class="item-info">
+                            <div class="item-title">${item.nombre}, ${item.estado}</div>
+                            <div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">️ Eliminar</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
+        }
+
+        window.guardarCiudad = async function() {
+            const alert = document.getElementById('alertCiudad');
+            const nombre = document.getElementById('ciuNombre').value.trim();
+            const estado = document.getElementById('ciuEstado').value.trim();
+            const descripcion = document.getElementById('ciuDescripcion').value.trim();
+            const orden = parseInt(document.getElementById('ciuOrden').value) || 1;
+
+            if (!nombre || !estado) {
+                alert.className = 'alert error'; alert.textContent = '❌ Nombre y estado son obligatorios'; return;
+            }
+            try {
+                await addDoc(collection(db, "ciudades"), { nombre, estado, descripcion, orden, activa: true, creado: new Date().toISOString() });
+                alert.className = 'alert success'; alert.textContent = '✅ Ciudad guardada';
+                document.getElementById('ciuNombre').value = '';
+                document.getElementById('ciuEstado').value = '';
+                document.getElementById('ciuDescripcion').value = '';
+                document.getElementById('ciuOrden').value = '1';
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+                cargarCiudades();
+            } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
+        };
+
+        window.eliminarCiudad = async function(id) {
+            if (!confirm('¿Seguro que deseas eliminar esta ciudad?')) return;
+            try {
+                await deleteDoc(doc(db, "ciudades", id));
+                cargarCiudades();
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // ==========================================
+        // 🆕 CRUD FAQ
+        // ==========================================
+        async function cargarFaqs() {
+            const contenedor = document.getElementById('listaFaqs');
+            try {
+                const snap = await getDocs(collection(db, "faq"));
+                const items = [];
+                snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
+                items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
+
+                if (items.length === 0) {
+                    contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas frecuentes. ¡Agrega la primera!</div>';
+                    return;
+                }
+                contenedor.innerHTML = items.map(item => `
+                    <div class="item-row">
+                        <div class="item-icon">❓</div>
+                        <div class="item-info">
+                            <div class="item-title">${item.pregunta}</div>
+                            <div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-danger btn-small" onclick="eliminarFaq('${item.id}')">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
+        }
+
+        window.guardarFaq = async function() {
+            const alert = document.getElementById('alertFaq');
+            const pregunta = document.getElementById('faqPregunta').value.trim();
+            const respuesta = document.getElementById('faqRespuesta').value.trim();
+            const orden = parseInt(document.getElementById('faqOrden').value) || 1;
+
+            if (!pregunta || !respuesta) {
+                alert.className = 'alert error'; alert.textContent = '❌ Pregunta y respuesta son obligatorias'; return;
+            }
+            try {
+                await addDoc(collection(db, "faq"), { pregunta, respuesta, orden, activa: true, creado: new Date().toISOString() });
+                alert.className = 'alert success'; alert.textContent = '✅ Pregunta guardada';
+                document.getElementById('faqPregunta').value = '';
+                document.getElementById('faqRespuesta').value = '';
+                document.getElementById('faqOrden').value = '1';
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+                cargarFaqs();
+            } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
+        };
+
+        window.eliminarFaq = async function(id) {
+            if (!confirm('¿Seguro que deseas eliminar esta pregunta?')) return;
+            try {
+                await deleteDoc(doc(db, "faq", id));
+                cargarFaqs();
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // ==========================================
+        // MODALES (Posts y Colaboradores)
         // ==========================================
         window.abrirModalPost = () => document.getElementById('modalPost').style.display = 'flex';
         window.cerrarModalPost = () => document.getElementById('modalPost').style.display = 'none';
@@ -474,15 +755,13 @@
             if (!titulo) { alert('El título es obligatorio'); return; }
             try {
                 await addDoc(collection(db, "posts"), {
-                    titulo: titulo,
-                    autor: document.getElementById('postAutor').value,
+                    titulo, autor: document.getElementById('postAutor').value,
                     categoria: document.getElementById('postCategoria').value,
                     resumen: document.getElementById('postResumen').value,
                     contenido: document.getElementById('postContenido').value,
                     fechaPublicacion: new Date().toISOString()
                 });
-                alert('✅ Post guardado');
-                cerrarModalPost();
+                alert('✅ Post guardado'); cerrarModalPost();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
@@ -491,16 +770,14 @@
             if (!nombre) { alert('El nombre es obligatorio'); return; }
             try {
                 await addDoc(collection(db, "colaboradores"), {
-                    nombre: nombre,
-                    puesto: document.getElementById('colabPuesto').value,
+                    nombre, puesto: document.getElementById('colabPuesto').value,
                     email: document.getElementById('colabEmail').value,
                     telefono: document.getElementById('colabTelefono').value,
                     estado: document.getElementById('colabEstado').value,
                     nivel: document.getElementById('colabNivel').value,
                     fechaRegistro: new Date().toISOString()
                 });
-                alert('✅ Colaborador guardado');
-                cerrarModalColaborador();
+                alert('✅ Colaborador guardado'); cerrarModalColaborador();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
@@ -510,4 +787,4 @@
     </script>
 
 </body>
-</html>
+    </html>

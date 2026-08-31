@@ -4,1052 +4,989 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoParty - Dashboard del Proveedor</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        goparty: { 
-                            yellow: '#FFD93D', pink: '#FF6B9D', blue: '#4ECDC4', 
-                            dark: '#2C3E50', gold: '#D4AF37', light: '#F8F9FA'
-                        }
-                    },
-                    fontFamily: { sans: ['Manrope', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
     <style>
-        body { font-family: 'Manrope', sans-serif; }
-        .gradient-btn { background: linear-gradient(135deg, #FF6B9D 0%, #4ECDC4 100%); }
-        .gradient-header { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4ECDC4 100%); }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .hidden-section { display: none !important; }
-        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
-        .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: white; border-radius: 16px; padding: 32px; max-width: 700px; width: 90%; max-height: 85vh; overflow-y: auto; }
-        .sidebar-item { transition: all 0.3s; }
-        .sidebar-item:hover, .sidebar-item.active { background: linear-gradient(135deg, #FF6B9D 0%, #4ECDC4 100%); color: white; }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .status-pending { background: #FEF3C7; color: #92400E; }
-        .status-approved { background: #D1FAE5; color: #065F46; }
-        .photo-upload { position: relative; overflow: hidden; display: inline-block; }
-        .photo-upload input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-        .pending-banner { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-left: 4px solid #F59E0B; }
-        .sidebar { transition: all 0.3s ease-in-out; }
-        .sidebar.collapsed { width: 80px; }
-        .sidebar-text { transition: opacity 0.3s; }
-        .sidebar.collapsed .sidebar-text { opacity: 0; pointer-events: none; }
-        .sidebar-overlay { display: none; }
-        .sidebar-overlay.active { display: block; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; min-height: 100vh; }
+
+        /* ============ LOGIN / REGISTRO ============ */
+        .auth-container {
+            max-width: 450px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .auth-logo { text-align: center; margin-bottom: 2rem; }
+        .auth-logo img { height: 60px; }
+        .auth-container h2 { text-align: center; margin-bottom: 0.5rem; color: #333; }
+        .auth-container .subtitle { text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.95rem; }
+        .auth-container input, .auth-container select {
+            width: 100%;
+            padding: 0.9rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .auth-container input:focus { outline: none; border-color: #FF6B9D; }
+        .btn-auth {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+        .btn-auth:hover { transform: translateY(-2px); }
+        .btn-google {
+            width: 100%;
+            padding: 0.9rem;
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-google:hover { background: #f5f5f5; }
+        .auth-divider { text-align: center; color: #999; margin: 1rem 0; font-size: 0.9rem; }
+        .auth-link { text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666; }
+        .auth-link a { color: #FF6B9D; text-decoration: none; font-weight: 600; }
+        .auth-link a:hover { text-decoration: underline; }
+        .forgot-password { text-align: center; margin-top: 0.5rem; }
+        .forgot-password a { color: #4A90E2; text-decoration: none; font-size: 0.9rem; }
+        .forgot-password a:hover { text-decoration: underline; }
+
+        /* ============ PANEL DASHBOARD ============ */
+        .dashboard-panel { display: none; }
+        .dashboard-panel.active { display: block; }
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .topbar-logo { display: flex; align-items: center; gap: 0.5rem; }
+        .topbar-logo img { height: 40px; }
+        .topbar-logo span { font-weight: 700; font-size: 1.2rem; color: #333; }
+        .topbar-user { display: flex; align-items: center; gap: 1rem; }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        .btn-logout {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid #f0f0f0;
+            overflow-x: auto;
+            padding: 0 1rem;
+        }
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        .tab:hover { color: #FF6B9D; }
+        .tab.active { color: #FF6B9D; border-bottom-color: #FF6B9D; }
+
+        .content { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .card h3 { color: #333; margin-bottom: 1rem; font-size: 1.2rem; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-card.blue { background: linear-gradient(135deg, #4A90E2 0%, #6BCB77 100%); }
+        .stat-card.green { background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); }
+        .stat-card.gold { background: linear-gradient(135deg, #FFD93D 0%, #FF8E53 100%); }
+        .stat-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .stat-label { font-size: 0.9rem; opacity: 0.95; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #FF6B9D; }
+
+        .btn {
+            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+
+        .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        .alert.success { background: #d4edda; color: #155724; display: block; }
+        .alert.error { background: #f8d7da; color: #721c24; display: block; }
+
+        /* 🆕 FASE 3: Testimonios */
+        .estrellas-container { display: flex; gap: 0.5rem; font-size: 2rem; cursor: pointer; }
+        .estrella { transition: opacity 0.2s; }
+        .estrella:hover { opacity: 0.7; }
+        .testimonio-item {
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #FFD93D;
+        }
+        .testimonio-item.aprobado { border-left-color: #4CAF50; }
+        .testimonio-item.rechazado { border-left-color: #FF4444; }
+        .testimonio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .testimonio-estado { padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; color: white; }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            background: none;
+            border: none;
+        }
+        .hamburger span { width: 28px; height: 3px; background: #333; border-radius: 3px; }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 200;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0; }
+        .sidebar-header img { height: 40px; }
+        .close-btn { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #333; width: 35px; height: 35px; border-radius: 50%; }
+        .close-btn:hover { background: #f0f0f0; }
+        .sidebar-links { display: flex; flex-direction: column; gap: 0.8rem; }
+        .sidebar-links a {
+            text-decoration: none;
+            color: white !important;
+            font-weight: 600;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        .sidebar-links a:hover { transform: scale(1.03); }
+        .sidebar-links a:nth-child(1) { background: linear-gradient(135deg, #4A90E2, #6BCB77); }
+        .sidebar-links a:nth-child(2) { background: linear-gradient(135deg, #6BCB77, #4A90E2); }
+        .sidebar-links a:nth-child(3) { background: linear-gradient(135deg, #FFD93D, #FF6B9D); }
+        .sidebar-links a:nth-child(4) { background: linear-gradient(135deg, #4A90E2, #FF6B9D); }
+        .sidebar-links a:nth-child(5) { background: linear-gradient(135deg, #FF6B9D, #FFD93D); }
+        .sidebar-links a:nth-child(6) { background: linear-gradient(135deg, #6BCB77, #FFD93D); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 150; }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; height: 100vh; }
-            .sidebar.open { transform: translateX(0); }
-            .sidebar.collapsed { transform: translateX(-100%); }
+            .auth-container { margin: 1rem; padding: 1.5rem; }
+            .topbar { padding: 0.8rem 1rem; }
+            .topbar-user { display: none; }
+            .hamburger { display: flex; }
+            .tabs { display: none; }
+            .content { padding: 0 1rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body>
 
-    <!-- LOGIN/REGISTER SCREEN -->
-    <div id="auth-screen" class="min-h-screen flex items-center justify-center gradient-header">
-        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full fade-in">
-            <div class="text-center mb-8">
-                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo" class="h-20 w-auto mx-auto mb-4" onerror="this.src='https://via.placeholder.com/150x50?text=GoParty'">
-                <h1 class="text-2xl font-bold text-goparty-dark">Dashboard del Proveedor</h1>
-                <p class="text-gray-600 text-sm mt-2">Accede a tu panel de control</p>
-            </div>
-            
-            <!-- Tabs -->
-            <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-xl">
-                <button onclick="showTab('login')" id="tab-login" class="flex-1 py-3 rounded-lg font-semibold transition tab-active">
-                    Iniciar Sesión
-                </button>
-                <button onclick="showTab('register')" id="tab-register" class="flex-1 py-3 rounded-lg font-semibold transition text-gray-600">
-                    Registrarse
-                </button>
-            </div>
-
-            <!-- LOGIN FORM -->
-            <div id="login-form" class="space-y-4">
-                <button onclick="loginWithGoogle()" class="w-full bg-white border-2 border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-3">
-                    <i class="fab fa-google text-xl"></i> Continuar con Google
-                </button>
-                
-                <div class="relative my-4">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div>
-                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-gray-500">O con email</span></div>
-                </div>
-                
-                <form onsubmit="handleLogin(event)">
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                        <input type="email" id="login-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="tu@empresa.com">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Contraseña</label>
-                        <input type="password" id="login-password" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="••••••••">
-                    </div>
-                    <button type="submit" class="w-full gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
-                    </button>
-                </form>
-            </div>
-
-            <!-- REGISTER FORM -->
-            <div id="register-form" class="space-y-4 hidden-section">
-                <button onclick="registerWithGoogle()" class="w-full bg-white border-2 border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-3">
-                    <i class="fab fa-google text-xl"></i> Registrarme con Google
-                </button>
-                
-                <div class="relative my-4">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div>
-                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-gray-500">O con email</span></div>
-                </div>
-                
-                <form onsubmit="handleRegister(event)">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="col-span-2 mb-3">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre del Negocio *</label>
-                            <input type="text" id="reg-business" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="Mi Empresa">
-                        </div>
-                        <div class="mb-3">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de Contacto *</label>
-                            <input type="text" id="reg-name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="Tu nombre">
-                        </div>
-                        <div class="mb-3">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp *</label>
-                            <input type="tel" id="reg-whatsapp" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="2281234567">
-                        </div>
-                        <div class="col-span-2 mb-3">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
-                            <input type="email" id="reg-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="tu@empresa.com">
-                        </div>
-                        <div class="mb-3">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Ciudad *</label>
-                            <input type="text" id="reg-city" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="Ciudad">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Contraseña (mín. 6) *</label>
-                            <input type="password" id="reg-password" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none" placeholder="••••••••">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition">
-                        <i class="fas fa-user-plus mr-2"></i>Crear Cuenta de Proveedor
-                    </button>
-                </form>
-            </div>
-
-            <p class="text-center text-xs text-gray-500 mt-6">
-                Al registrarte, aceptas los términos y condiciones de GoParty
-            </p>
+    <!-- ============ LOGIN / REGISTRO ============ -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-logo">
+            <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
         </div>
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h2>Dashboard del Proveedor</h2>
+            <p class="subtitle">Accede a tu panel de control</p>
+            
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Contraseña">
+            
+            <button class="btn-auth" onclick="login()">Iniciar Sesión</button>
+            
+            <button class="btn-google" onclick="loginWithGoogle()">
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Continuar con Google
+            </button>
+            
+            <div class="auth-divider">O con email</div>
+            
+            <div class="auth-link">
+                ¿No tienes cuenta? <a href="#" onclick="showRegister()">Registrarse</a>
+            </div>
+            <div class="forgot-password">
+                <a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" style="display: none;">
+            <h2>Crear Cuenta de Proveedor</h2>
+            <p class="subtitle">Registra tu negocio en GoParty</p>
+            
+            <input type="text" id="regNombre" placeholder="Nombre del Negocio *">
+            <input type="text" id="regContacto" placeholder="Nombre de Contacto *">
+            <input type="tel" id="regWhatsapp" placeholder="WhatsApp *">
+            <input type="email" id="regEmail" placeholder="Email *">
+            <input type="text" id="regCiudad" placeholder="Ciudad *">
+            <input type="password" id="regPassword" placeholder="Contraseña (mín. 6 caracteres) *">
+            
+            <button class="btn-auth" onclick="register()">Crear Cuenta</button>
+            
+            <button class="btn-google" onclick="loginWithGoogle()">
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Registrarme con Google
+            </button>
+            
+            <div class="auth-divider">O con email</div>
+            
+            <div class="auth-link">
+                ¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar Sesión</a>
+            </div>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgotForm" style="display: none;">
+            <h2>Recuperar Contraseña</h2>
+            <p class="subtitle">Ingresa tu email para recibir un enlace de recuperación</p>
+            
+            <input type="email" id="forgotEmail" placeholder="Email">
+            
+            <button class="btn-auth" onclick="sendPasswordReset()">Enviar Enlace de Recuperación</button>
+            
+            <div class="auth-link">
+                <a href="#" onclick="showLogin()">← Volver al Login</a>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #999;">
+            Al registrarte, aceptas los términos y condiciones de GoParty
+        </p>
     </div>
 
-    <!-- PROVIDER DASHBOARD -->
-    <div id="provider-dashboard" class="hidden-section min-h-screen flex">
-        <!-- Sidebar Overlay (Mobile) -->
-        <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" onclick="toggleSidebar()"></div>
-        
-        <!-- Sidebar -->
-        <aside id="sidebar" class="sidebar w-64 bg-white border-r border-gray-200 flex flex-col shadow-lg flex-shrink-0">
-            <div class="p-6 border-b border-gray-200 bg-white">
-                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty" class="h-10 w-auto mb-2" onerror="this.src='https://via.placeholder.com/100x30?text=GoParty'">
-                <p class="text-xs text-gray-500 sidebar-text">Panel del Proveedor</p>
+    <!-- ============ PANEL DASHBOARD ============ -->
+    <div class="dashboard-panel" id="dashboardPanel">
+        <div class="topbar">
+            <div class="topbar-logo">
+                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="Logo">
+                <span>Panel del Proveedor</span>
             </div>
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <button onclick="showSection('overview')" class="sidebar-item active w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="overview">
-                    <i class="fas fa-chart-line w-5"></i>
-                    <span class="sidebar-text">Mi Dashboard</span>
-                </button>
-                <button onclick="showSection('quotes')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="quotes">
-                    <i class="fas fa-file-invoice-dollar w-5"></i>
-                    <span class="sidebar-text">Cotizaciones</span>
-                    <span id="quotes-badge" class="ml-auto bg-goparty-pink text-white text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
-                </button>
-                <button onclick="showSection('profile')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="profile">
-                    <i class="fas fa-user-edit w-5"></i>
-                    <span class="sidebar-text">Mi Perfil</span>
-                </button>
-                <button onclick="showSection('pending')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="pending">
-                    <i class="fas fa-clock w-5"></i>
-                    <span class="sidebar-text">Cambios Pendientes</span>
-                    <span id="pending-badge" class="ml-auto bg-goparty-yellow text-goparty-dark text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
-                </button>
-                <button onclick="showSection('membership')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="membership">
-                    <i class="fas fa-crown w-5"></i>
-                    <span class="sidebar-text">Membresía</span>
-                </button>
-                <button onclick="showSection('messages')" class="sidebar-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-700 hover:text-white" data-section="messages">
-                    <i class="fas fa-envelope w-5"></i>
-                    <span class="sidebar-text">Mensajes Admin</span>
-                    <span id="messages-badge" class="ml-auto bg-goparty-yellow text-goparty-dark text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
-                </button>
-            </nav>
-            <div class="p-4 border-t border-gray-200">
-                <button onclick="logout()" class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-red-50 text-gray-700 transition">
-                    <i class="fas fa-sign-out-alt w-5"></i>
-                    <span class="sidebar-text">Cerrar Sesión</span>
-                </button>
+            <div class="topbar-user">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <span id="userName">Proveedor</span>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
             </div>
-        </aside>
+            <button class="hamburger" id="hamburgerBtn">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
 
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto bg-gray-50">
-            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center sticky top-0 z-40">
-                <div class="flex items-center gap-4">
-                    <button onclick="toggleSidebar()" class="text-gray-600 hover:text-goparty-pink transition p-2 rounded-lg hover:bg-gray-100">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                    <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty" class="h-8 w-auto" onerror="this.src='https://via.placeholder.com/80x25?text=GoParty'">
-                    <h2 id="section-title" class="text-2xl font-bold text-goparty-dark">Mi Dashboard</h2>
-                </div>
-                <div class="flex items-center gap-4">
-                    <button onclick="window.open('index.html', '_blank')" class="text-gray-600 hover:text-goparty-pink transition hidden md:block">
-                        <i class="fas fa-external-link-alt mr-2"></i>Ver Sitio
-                    </button>
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <p class="text-sm font-bold text-gray-800" id="header-provider-name">Proveedor</p>
-                            <p class="text-xs text-goparty-pink font-semibold" id="header-provider-plan">Plan Basic</p>
-                        </div>
-                        <div class="w-10 h-10 gradient-btn rounded-full flex items-center justify-center text-white font-bold shadow-lg" id="header-avatar">P</div>
-                    </div>
-                </div>
-            </header>
+        <!-- Sidebar Móvil -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="Logo">
+                <button class="close-btn" id="closeBtn">&times;</button>
+            </div>
+            <div class="sidebar-links">
+                <a href="#" onclick="showTab('dashboard')">📊 Mi Dashboard</a>
+                <a href="#" onclick="showTab('cotizaciones')"> Cotizaciones</a>
+                <a href="#" onclick="showTab('perfil')">👤 Mi Perfil</a>
+                <a href="#" onclick="showTab('testimonios')">⭐ Dejar Testimonio</a>
+                <a href="#" onclick="showTab('membresia')"> Membresía</a>
+                <a href="#" onclick="showTab('mensajes')"> Mensajes</a>
+            </div>
+        </div>
+        <div class="overlay" id="overlay"></div>
 
-            <div class="p-8 space-y-6">
+        <!-- Tabs Desktop -->
+        <div class="tabs">
+            <div class="tab active" data-tab="dashboard"> Mi Dashboard</div>
+            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount">0</span></div>
+            <div class="tab" data-tab="perfil">👤 Mi Perfil</div>
+            <div class="tab" data-tab="testimonios">⭐ Dejar Testimonio</div>
+            <div class="tab" data-tab="membresia">💎 Membresía</div>
+            <div class="tab" data-tab="mensajes">💬 Mensajes Admin <span id="tabMensajesCount">0</span></div>
+        </div>
+
+        <div class="content">
+
+            <!-- TAB: DASHBOARD -->
+            <div class="tab-content active" id="tab-dashboard">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">Mi Dashboard</h2>
+                <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;">🌐 Ver Sitio Principal</a>
                 
-                <!-- OVERVIEW -->
-                <div id="section-overview" class="section-content fade-in space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-goparty-pink card-hover">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-sm text-gray-600 mb-1">Vistas al Perfil</p><p class="text-3xl font-bold text-gray-800" id="kpi-views">0</p></div>
-                                <i class="fas fa-eye text-3xl text-goparty-pink"></i>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-goparty-blue card-hover">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-sm text-gray-600 mb-1">Cotizaciones</p><p class="text-3xl font-bold text-gray-800" id="kpi-quotes">0</p></div>
-                                <i class="fas fa-file-invoice text-3xl text-goparty-blue"></i>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-goparty-gold card-hover">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-sm text-gray-600 mb-1">Tasa Respuesta</p><p class="text-3xl font-bold text-gray-800" id="kpi-response-rate">0%</p></div>
-                                <i class="fas fa-percentage text-3xl text-goparty-gold"></i>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500 card-hover">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-sm text-gray-600 mb-1">Calificación</p><p class="text-3xl font-bold text-gray-800" id="kpi-rating">0.0</p></div>
-                                <i class="fas fa-star text-3xl text-goparty-yellow"></i>
-                            </div>
-                        </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="statVistas">0</div>
+                        <div class="stat-label">Vistas al Perfil</div>
                     </div>
-
-                    <div id="pending-banner" class="pending-banner p-6 rounded-2xl hidden">
-                        <div class="flex items-start gap-4">
-                            <i class="fas fa-exclamation-triangle text-3xl text-yellow-600"></i>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-gray-800 text-lg">Tienes cambios pendientes de aprobación</h3>
-                                <p class="text-sm text-gray-700 mt-1">El equipo de GoParty está revisando tus últimas modificaciones.</p>
-                                <button onclick="showSection('pending')" class="mt-3 bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-yellow-700 transition">
-                                    Ver Cambios Pendientes <i class="fas fa-arrow-right ml-1"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="stat-card blue">
+                        <div class="stat-number" id="statCotizaciones">0</div>
+                        <div class="stat-label">Cotizaciones</div>
                     </div>
-
-                    <div class="bg-white p-6 rounded-2xl shadow-sm card-hover">
-                        <h3 class="font-bold text-lg text-gray-800 mb-6">Cotizaciones Recientes</h3>
-                        <div id="recent-quotes-list" class="space-y-3">
-                            <p class="text-gray-500 text-sm text-center py-4">Cargando...</p>
-                        </div>
+                    <div class="stat-card green">
+                        <div class="stat-number" id="statRespuesta">0%</div>
+                        <div class="stat-label">Tasa Respuesta</div>
+                    </div>
+                    <div class="stat-card gold">
+                        <div class="stat-number" id="statCalificacion">0.0</div>
+                        <div class="stat-label">Calificación</div>
                     </div>
                 </div>
 
-                <!-- COTIZACIONES -->
-                <div id="section-quotes" class="section-content hidden-section fade-in">
-                    <div class="flex justify-between items-center mb-6">
-                        <div><h3 class="text-xl font-bold text-gray-800">Buzón de Cotizaciones</h3><p class="text-sm text-gray-600">Solicitudes asignadas por GoParty</p></div>
-                        <select id="filter-quote-status" onchange="renderQuotes()" class="px-4 py-2 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none">
-                            <option value="all">Todas</option><option value="pending">Pendientes</option><option value="responded">Respondidas</option>
+                <div class="card">
+                    <h3>📊 Información del Proveedor</h3>
+                    <p><strong>Nombre:</strong> <span id="infoNombre">Proveedor</span></p>
+                    <p><strong>Plan:</strong> <span id="infoPlan">Basic</span></p>
+                    <p><strong>Estado:</strong> <span id="infoEstado">Activo</span></p>
+                </div>
+
+                <div class="card">
+                    <h3>📝 Cotizaciones Recientes</h3>
+                    <div id="cotizacionesRecientes">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- TAB: COTIZACIONES -->
+            <div class="tab-content" id="tab-cotizaciones">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">📝 Buzón de Cotizaciones</h2>
+                <p style="color: #666; margin-bottom: 1rem;">Solicitudes asignadas por GoParty</p>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('todas')">Todas</button>
+                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Pendiente')">Pendientes</button>
+                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Respondida')">Respondidas</button>
+                </div>
+                <div class="card"><div id="listaCotizaciones">Cargando...</div></div>
+            </div>
+
+            <!-- TAB: PERFIL -->
+            <div class="tab-content" id="tab-perfil">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">👤 Mi Perfil</h2>
+                <div class="card">
+                    <h3>📋 Información General</h3>
+                    <div class="form-group">
+                        <label>Nombre del Negocio</label>
+                        <input type="text" id="perfilNombre" placeholder="Tu negocio">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre de Contacto</label>
+                        <input type="text" id="perfilContacto" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="perfilEmail" placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp</label>
+                        <input type="tel" id="perfilWhatsapp" placeholder="2281234567">
+                    </div>
+                    <div class="form-group">
+                        <label>Ciudad</label>
+                        <input type="text" id="perfilCiudad" placeholder="Tu ciudad">
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción del Negocio</label>
+                        <textarea id="perfilDescripcion" rows="4" placeholder="Describe tus servicios..."></textarea>
+                    </div>
+                    <button class="btn" onclick="guardarPerfil()"> Guardar Cambios</button>
+                </div>
+
+                <div class="card">
+                    <h3>🌐 Redes Sociales</h3>
+                    <div class="form-group"><label>Instagram</label><input type="text" id="perfilInstagram" placeholder="@tu_negocio"></div>
+                    <div class="form-group"><label>Facebook</label><input type="text" id="perfilFacebook" placeholder="facebook.com/tu_negocio"></div>
+                    <div class="form-group"><label>TikTok</label><input type="text" id="perfilTiktok" placeholder="@tu_negocio"></div>
+                    <div class="form-group"><label>Sitio Web</label><input type="url" id="perfilWeb" placeholder="https://tu-sitio.com"></div>
+                    <button class="btn" onclick="guardarRedes()">💾 Guardar Redes</button>
+                </div>
+            </div>
+
+            <!--  TAB: TESTIMONIOS (FASE 3) -->
+            <div class="tab-content" id="tab-testimonios">
+                <h2 style="margin-bottom: 1rem; color: #333;">⭐ Deja tu Testimonio</h2>
+                <p style="color: #666; margin-bottom: 2rem;">Cuéntanos tu experiencia. Tu reseña será revisada por el equipo GoParty antes de publicarse.</p>
+
+                <div class="alert" id="alertTestimonio"></div>
+
+                <div class="card">
+                    <h3>📝 Información del Evento</h3>
+                    <div class="form-group">
+                        <label>Nombre del Proveedor que contrataste *</label>
+                        <input type="text" id="testProveedor" placeholder="Ej: Salón de Fiestas XYZ">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Evento *</label>
+                        <select id="testTipoEvento">
+                            <option value="">Selecciona...</option>
+                            <option value="Cumpleaños Infantil">Cumpleaños Infantil</option>
+                            <option value="Cumpleaños Adulto">Cumpleaños Adulto</option>
+                            <option value="Boda">Boda</option>
+                            <option value="XV Años">XV Años</option>
+                            <option value="Evento Corporativo">Evento Corporativo</option>
+                            <option value="Baby Shower">Baby Shower</option>
+                            <option value="Graduación">Graduación</option>
+                            <option value="Otro">Otro</option>
                         </select>
                     </div>
-                    <div id="quotes-list" class="space-y-4"><p class="text-gray-500 text-center py-8">Cargando...</p></div>
-                </div>
-
-                <!-- MI PERFIL -->
-                <div id="section-profile" class="section-content hidden-section fade-in space-y-6">
-                    <div class="bg-blue-50 border-l-4 border-goparty-blue p-4 rounded-xl">
-                        <div class="flex items-start gap-3">
-                            <i class="fas fa-info-circle text-goparty-blue text-xl mt-1"></i>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Sistema de Verificación de Cambios</h4>
-                                <p class="text-sm text-gray-600">Por seguridad, cualquier modificación será revisada por el equipo de GoParty antes de publicarse.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm p-6 card-hover">
-                        <h3 class="text-xl font-bold text-goparty-dark flex items-center gap-2 mb-6"><i class="fas fa-info-circle text-goparty-pink"></i> Información General</h3>
-                        <form onsubmit="submitProfileUpdate(event)" class="grid md:grid-cols-2 gap-6">
-                            <div class="md:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-2">Nombre del Negocio</label><input type="text" id="profile-business" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de Contacto</label><input type="text" id="profile-name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">Email</label><input type="email" id="profile-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp</label><input type="tel" id="profile-whatsapp" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2">Ciudad</label><input type="text" id="profile-city" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div class="md:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-2">Descripción del Negocio</label><textarea id="profile-description" rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></textarea></div>
-                            <div class="md:col-span-2 pt-4 border-t"><button type="submit" class="gradient-btn text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg transition"><i class="fas fa-paper-plane mr-2"></i>Enviar Cambios para Aprobación</button></div>
-                        </form>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm p-6 card-hover">
-                        <h3 class="text-xl font-bold text-goparty-dark flex items-center gap-2 mb-6"><i class="fas fa-share-alt text-goparty-blue"></i> Redes Sociales</h3>
-                        <form onsubmit="submitSocialUpdate(event)" class="grid md:grid-cols-2 gap-6">
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fab fa-instagram text-pink-500 mr-2"></i>Instagram</label><input type="text" id="social-instagram" placeholder="@tuempresa" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fab fa-facebook text-blue-600 mr-2"></i>Facebook</label><input type="text" id="social-facebook" placeholder="facebook.com/tuempresa" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fab fa-tiktok text-black mr-2"></i>TikTok</label><input type="text" id="social-tiktok" placeholder="@tuempresa" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div><label class="block text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-globe text-goparty-blue mr-2"></i>Sitio Web</label><input type="url" id="social-website" placeholder="https://tuempresa.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-goparty-pink outline-none"></div>
-                            <div class="md:col-span-2 pt-4 border-t"><button type="submit" class="gradient-btn text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg transition"><i class="fas fa-paper-plane mr-2"></i>Enviar Redes para Aprobación</button></div>
-                        </form>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm p-6 card-hover">
-                        <h3 class="text-xl font-bold text-goparty-dark flex items-center gap-2 mb-6"><i class="fas fa-images text-goparty-gold"></i> Galería de Fotos</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="photo-gallery"></div>
-                        <div class="photo-upload w-full">
-                            <button class="w-full border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-goparty-pink hover:bg-pink-50 transition">
-                                <i class="fas fa-cloud-upload-alt text-3xl text-goparty-pink mb-2"></i>
-                                <p class="font-semibold text-gray-700">Subir Nueva Foto</p>
-                                <p class="text-xs text-gray-500">JPG, PNG (Max 5MB) - Requiere aprobación</p>
-                            </button>
-                            <input type="file" accept="image/*" onchange="submitPhotoUpload(event)">
-                        </div>
+                    <div class="form-group">
+                        <label>Ciudad del Evento *</label>
+                        <input type="text" id="testCiudad" placeholder="Ej: Xalapa">
                     </div>
                 </div>
 
-                <!-- CAMBIOS PENDIENTES -->
-                <div id="section-pending" class="section-content hidden-section fade-in">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6"><i class="fas fa-clock text-goparty-yellow mr-2"></i> Mis Cambios Pendientes de Aprobación</h3>
-                        <div id="pending-changes-list" class="space-y-4">
-                            <p class="text-gray-500 text-center py-8">No tienes cambios pendientes</p>
+                <div class="card">
+                    <h3>⭐ Tu Calificación y Comentario</h3>
+                    <div class="form-group">
+                        <label>Calificación *</label>
+                        <div class="estrellas-container" id="estrellasContainer">
+                            <span class="estrella" data-valor="1" onclick="seleccionarEstrellas(1)">⭐</span>
+                            <span class="estrella" data-valor="2" onclick="seleccionarEstrellas(2)">⭐</span>
+                            <span class="estrella" data-valor="3" onclick="seleccionarEstrellas(3)">⭐</span>
+                            <span class="estrella" data-valor="4" onclick="seleccionarEstrellas(4)">⭐</span>
+                            <span class="estrella" data-valor="5" onclick="seleccionarEstrellas(5)">⭐</span>
                         </div>
+                        <input type="hidden" id="testCalificacion" value="5">
+                        <small style="color: #999;">Haz clic en las estrellas para calificar</small>
                     </div>
+                    <div class="form-group">
+                        <label>Tu Nombre (como aparecerá en el testimonio) *</label>
+                        <input type="text" id="testNombre" placeholder="Ej: María González">
+                    </div>
+                    <div class="form-group">
+                        <label>Tu Testimonio *</label>
+                        <textarea id="testComentario" rows="5" placeholder="Cuéntanos tu experiencia: ¿Qué te gustó? ¿El proveedor cumplió? ¿Lo recomendarías?"></textarea>
+                    </div>
+                    <button class="btn" onclick="enviarTestimonio()" style="margin-top: 1rem;">📤 Enviar Testimonio para Revisión</button>
                 </div>
 
-                <!-- MEMBRESÍA -->
-                <div id="section-membership" class="section-content hidden-section fade-in">
-                    <div class="bg-gradient-to-r from-goparty-dark to-gray-800 rounded-2xl shadow-lg p-8 text-white mb-6">
-                        <div class="flex justify-between items-start flex-wrap gap-4">
-                            <div>
-                                <p class="text-sm text-gray-300 mb-2">Tu Plan Actual</p>
-                                <h3 class="text-4xl font-bold mb-2" id="current-plan-name">Basic</h3>
-                                <p class="text-gray-300" id="current-plan-desc">Directorio general</p>
-                            </div>
-                            <div class="text-right"><p class="text-sm text-gray-300 mb-2">Estado</p><span class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold">Activo</span></div>
-                        </div>
-                    </div>
-
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-gray-200">
-                            <div class="text-center mb-6"><h4 class="text-2xl font-bold text-gray-800 mb-2">Basic</h4><p class="text-4xl font-bold text-gray-800">Gratis</p></div>
-                            <ul class="space-y-3 mb-6 text-sm text-gray-600"><li><i class="fas fa-check text-green-500 mr-2"></i>Aparecer en el directorio</li><li><i class="fas fa-check text-green-500 mr-2"></i>Perfil básico</li></ul>
-                            <button class="w-full bg-gray-200 text-gray-600 font-bold py-3 rounded-xl cursor-not-allowed">Plan Actual</button>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-goparty-blue relative">
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-goparty-blue text-white text-xs font-bold px-4 py-1 rounded-full">POPULAR</div>
-                            <div class="text-center mb-6"><h4 class="text-2xl font-bold text-gray-800 mb-2">Pro</h4><p class="text-4xl font-bold text-goparty-blue">$299<span class="text-lg text-gray-500">/mes</span></p></div>
-                            <ul class="space-y-3 mb-6 text-sm text-gray-600"><li><i class="fas fa-check text-green-500 mr-2"></i>Todo lo de Basic</li><li><i class="fas fa-check text-green-500 mr-2"></i>Sello de verificación</li><li><i class="fas fa-check text-green-500 mr-2"></i>Mayor visibilidad</li></ul>
-                            <button onclick="upgradePlan('Pro')" class="w-full gradient-btn text-white font-bold py-3 rounded-xl hover:shadow-lg transition"><i class="fas fa-arrow-up mr-2"></i>Actualizar a Pro</button>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-goparty-gold">
-                            <div class="text-center mb-6"><h4 class="text-2xl font-bold text-gray-800 mb-2">Gold</h4><p class="text-4xl font-bold text-goparty-gold">$599<span class="text-lg text-gray-500">/mes</span></p></div>
-                            <ul class="space-y-3 mb-6 text-sm text-gray-600"><li><i class="fas fa-check text-green-500 mr-2"></i>Todo lo de Pro</li><li><i class="fas fa-check text-green-500 mr-2"></i>Posición destacada</li><li><i class="fas fa-check text-green-500 mr-2"></i>Borde dorado</li></ul>
-                            <button onclick="upgradePlan('Gold')" class="w-full bg-goparty-gold text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition"><i class="fas fa-crown mr-2"></i>Actualizar a Gold</button>
-                        </div>
+                <div class="card">
+                    <h3> Mis Testimonios Enviados</h3>
+                    <div id="misTestimonios">
+                        <p style="color: #999;">Aún no has enviado testimonios.</p>
                     </div>
                 </div>
-
-                <!-- MENSAJES ADMIN -->
-                <div id="section-messages" class="section-content hidden-section fade-in">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6">Mensajes del Equipo GoParty</h3>
-                        <div id="admin-messages-list" class="space-y-4">
-                            <p class="text-gray-500 text-center py-8">No hay mensajes</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </main>
-    </div>
 
-    <!-- MODAL: Quote Details -->
-    <div id="quote-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-goparty-dark">Detalle de Cotización</h2>
-                <button onclick="closeModal('quote')" class="text-gray-500 hover:text-gray-700 text-2xl"><i class="fas fa-times"></i></button>
+            <!-- TAB: MEMBRESÍA -->
+            <div class="tab-content" id="tab-membresia">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">💎 Tu Plan Actual</h2>
+                <div class="card">
+                    <h3>Plan Basic</h3>
+                    <p><strong>Estado:</strong> Activo</p>
+                    <p><strong>Precio:</strong> Gratis</p>
+                    <p>Aparecer en el directorio general</p>
+                </div>
+                <div class="card">
+                    <h3>Plan Pro - $299/mes</h3>
+                    <p>Todo lo de Basic + Sello de verificación + Mayor visibilidad</p>
+                    <button class="btn">Actualizar a Pro</button>
+                </div>
+                <div class="card">
+                    <h3>Plan Gold - $599/mes</h3>
+                    <p>Todo lo de Pro + Posición destacada + Borde dorado</p>
+                    <button class="btn">Actualizar a Gold</button>
+                </div>
             </div>
-            <div id="quote-details-content" class="space-y-4"></div>
+
+            <!-- TAB: MENSAJES -->
+            <div class="tab-content" id="tab-mensajes">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes del Equipo GoParty</h2>
+                <div class="card">
+                    <div id="listaMensajes">
+                        <p style="color: #999;">No hay mensajes</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <script>
-        // FIREBASE CONFIG
+    <!-- FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
         const firebaseConfig = {
-            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
+            apiKey: "AIzaSyDJAYIomhENVR53lor4zfb0Zsh7ywzI9_c",
             authDomain: "goparty-marketplace.firebaseapp.com",
             projectId: "goparty-marketplace",
             storageBucket: "goparty-marketplace.firebasestorage.app",
             messagingSenderId: "95947882678",
             appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
 
-        let currentSection = 'overview';
-        let currentProvider = null;
-        let allQuotes = [], allMessages = [], pendingChanges = [];
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
-        // ==================== SIDEBAR TOGGLE ====================
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
+        // ==========================================
+        // AUTH FUNCTIONS
+        // ==========================================
+        window.showRegister = function() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('forgotForm').style.display = 'none';
+        };
+
+        window.showLogin = function() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('forgotForm').style.display = 'none';
+        };
+
+        window.showForgotPassword = function() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('forgotForm').style.display = 'block';
+        };
+
+        window.login = async function() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
             
-            if (window.innerWidth < 768) {
-                sidebar.classList.toggle('open');
-                overlay.classList.toggle('active');
-            } else {
-                sidebar.classList.toggle('collapsed');
-            }
-        }
-
-        // ==================== AUTH TABS ====================
-        function showTab(tab) {
-            if (tab === 'login') {
-                document.getElementById('login-form').classList.remove('hidden-section');
-                document.getElementById('register-form').classList.add('hidden-section');
-                document.getElementById('tab-login').classList.add('tab-active');
-                document.getElementById('tab-login').classList.remove('text-gray-600');
-                document.getElementById('tab-register').classList.remove('tab-active');
-                document.getElementById('tab-register').classList.add('text-gray-600');
-            } else {
-                document.getElementById('login-form').classList.add('hidden-section');
-                document.getElementById('register-form').classList.remove('hidden-section');
-                document.getElementById('tab-register').classList.add('tab-active');
-                document.getElementById('tab-register').classList.remove('text-gray-600');
-                document.getElementById('tab-login').classList.remove('tab-active');
-                document.getElementById('tab-login').classList.add('text-gray-600');
-            }
-        }
-
-        // ==================== AUTHENTICATION ====================
-        function loginWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then((result) => checkProviderAccount(result.user.email, result.user))
-                .catch((error) => {
-                    console.error('Google login error:', error);
-                    showToast('Error al iniciar sesión con Google: ' + error.message, 'error');
-                });
-        }
-
-        function registerWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    db.collection('providers').where('email', '==', result.user.email).get()
-                        .then((snapshot) => {
-                            if (!snapshot.empty) { 
-                                showToast('Este email ya está registrado', 'error'); 
-                                return; 
-                            }
-                            createProviderAccount(result.user);
-                        });
-                })
-                .catch((error) => {
-                    console.error('Google register error:', error);
-                    showToast('Error al registrar con Google: ' + error.message, 'error');
-                });
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => checkProviderAccount(email))
-                .catch((error) => {
-                    console.error('Login error:', error);
-                    let mensaje = 'Credenciales incorrectas';
-                    if (error.code === 'auth/user-not-found') mensaje = 'Usuario no encontrado';
-                    if (error.code === 'auth/wrong-password') mensaje = 'Contraseña incorrecta';
-                    if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
-                    showToast(mensaje, 'error');
-                });
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            
-            const business = document.getElementById('reg-business').value.trim();
-            const name = document.getElementById('reg-name').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const whatsapp = document.getElementById('reg-whatsapp').value.trim();
-            const city = document.getElementById('reg-city').value.trim();
-            const password = document.getElementById('reg-password').value;
-            
-            console.log('Iniciando registro...', { business, name, email, whatsapp, city });
-            
-            // Validaciones
-            if (!business || !name || !email || !whatsapp || !city || !password) {
-                showToast('❌ Todos los campos son obligatorios', 'error');
+            if (!email || !password) {
+                alert('❌ Por favor completa todos los campos');
                 return;
             }
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showToast('❌ Ingresa un email válido', 'error');
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Guardar sesión
+                localStorage.setItem('proveedorId', user.uid);
+                localStorage.setItem('proveedorEmail', user.email);
+                
+                // Cargar datos del proveedor
+                await cargarDatosProveedor(user.uid);
+                
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('dashboardPanel').classList.add('active');
+                
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        };
+
+        window.register = async function() {
+            const nombre = document.getElementById('regNombre').value;
+            const contacto = document.getElementById('regContacto').value;
+            const whatsapp = document.getElementById('regWhatsapp').value;
+            const email = document.getElementById('regEmail').value;
+            const ciudad = document.getElementById('regCiudad').value;
+            const password = document.getElementById('regPassword').value;
+
+            if (!nombre || !contacto || !whatsapp || !email || !ciudad || !password) {
+                alert('❌ Por favor completa todos los campos obligatorios');
                 return;
             }
-            
+
             if (password.length < 6) {
-                showToast('❌ La contraseña debe tener al menos 6 caracteres', 'error');
-                return;
-            }
-            
-            showToast('⏳ Creando cuenta...', 'success');
-            
-            // CREAR USUARIO CON FIREBASE AUTH
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    console.log('✅ Usuario creado en Auth:', userCredential.user.uid);
-                    
-                    const user = userCredential.user;
-                    
-                    // CREAR DOCUMENTO EN FIRESTORE
-                    const providerData = {
-                        business: business,
-                        name: name,
-                        email: email,
-                        whatsapp: whatsapp,
-                        city: city,
-                        state: 'Veracruz',
-                        plan: 'Basic',
-                        verified: false,
-                        rating: 0,
-                        reviews: 0,
-                        views: 0,
-                        categories: [],
-                        description: '',
-                        social: {},
-                        photos: [],
-                        userId: user.uid,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-                    
-                    return db.collection('providers').add(providerData);
-                })
-                .then(() => {
-                    console.log('✅ Documento creado en Firestore');
-                    showToast('✅ Cuenta creada exitosamente. Inicia sesión ahora.', 'success');
-                    
-                    setTimeout(() => {
-                        showTab('login');
-                        document.getElementById('login-email').value = email;
-                        document.getElementById('login-password').value = '';
-                    }, 2500);
-                })
-                .catch((error) => {
-                    console.error('❌ ERROR EN REGISTRO:', error);
-                    
-                    let mensaje = 'Error al crear cuenta';
-                    
-                    if (error.code === 'auth/email-already-in-use') {
-                        mensaje = '❌ Este email ya está registrado. Intenta iniciar sesión.';
-                    } else if (error.code === 'auth/weak-password') {
-                        mensaje = '❌ Contraseña muy débil (mínimo 6 caracteres)';
-                    } else if (error.code === 'auth/invalid-email') {
-                        mensaje = '❌ Email inválido';
-                    } else if (error.code === 'auth/operation-not-allowed') {
-                        mensaje = '❌ El registro con email no está habilitado. Contacta al administrador.';
-                    } else if (error.code === 'permission-denied') {
-                        mensaje = '❌ Error de permisos. Verifica las reglas de Firestore.';
-                    }
-                    
-                    showToast(mensaje, 'error');
-                });
-        }
-
-        async function createProviderAccount(user, additionalData = {}) {
-            const providerData = {
-                business: additionalData.business || user.displayName || 'Nuevo Proveedor',
-                name: additionalData.name || user.displayName || 'Proveedor',
-                email: user.email,
-                whatsapp: additionalData.whatsapp || '',
-                city: additionalData.city || '',
-                state: 'Veracruz',
-                plan: 'Basic',
-                verified: false,
-                rating: 0,
-                reviews: 0,
-                views: 0,
-                categories: [],
-                description: '',
-                social: {},
-                photos: [],
-                userId: user.uid,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            try {
-                await db.collection('providers').add(providerData);
-                showToast('✅ Cuenta creada exitosamente. Ahora puedes iniciar sesión.', 'success');
-                showTab('login');
-                document.getElementById('login-email').value = user.email;
-            } catch (error) { 
-                showToast('Error al guardar datos: ' + error.message, 'error'); 
-            }
-        }
-
-        async function checkProviderAccount(email, user = null) {
-            try {
-                const providerDoc = await db.collection('providers').where('email', '==', email).get();
-                if (!providerDoc.empty) {
-                    currentProvider = { id: providerDoc.docs[0].id, ...providerDoc.docs[0].data() };
-                    document.getElementById('auth-screen').classList.add('hidden-section');
-                    document.getElementById('provider-dashboard').classList.remove('hidden-section');
-                    loadProviderData();
-                } else {
-                    showToast('No encontramos una cuenta de proveedor con este email', 'error');
-                    if (user) auth.signOut();
-                }
-            } catch (error) { 
-                showToast('Error al verificar cuenta: ' + error.message, 'error'); 
-            }
-        }
-
-        function logout() {
-            auth.signOut().then(() => {
-                document.getElementById('provider-dashboard').classList.add('hidden-section');
-                document.getElementById('auth-screen').classList.remove('hidden-section');
-                currentProvider = null;
-            });
-        }
-
-        // ==================== NAVIGATION ====================
-        function showSection(sectionName) {
-            document.querySelectorAll('.section-content').forEach(el => el.classList.add('hidden-section'));
-            document.getElementById(`section-${sectionName}`).classList.remove('hidden-section');
-            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-            document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
-            
-            const titles = {
-                'overview': 'Mi Dashboard', 
-                'quotes': 'Cotizaciones', 
-                'profile': 'Mi Perfil',
-                'pending': 'Cambios Pendientes',
-                'membership': 'Membresía',
-                'messages': 'Mensajes Admin'
-            };
-            document.getElementById('section-title').textContent = titles[sectionName];
-            currentSection = sectionName;
-            
-            if (sectionName === 'overview') updateDashboardKPIs();
-            if (sectionName === 'quotes') renderQuotes();
-            if (sectionName === 'profile') loadProfileData();
-            if (sectionName === 'pending') renderPendingChanges();
-            if (sectionName === 'membership') loadMembershipData();
-            if (sectionName === 'messages') loadAdminMessages();
-            
-            if (window.innerWidth < 768) {
-                document.getElementById('sidebar').classList.remove('open');
-                document.getElementById('sidebar-overlay').classList.remove('active');
-            }
-        }
-
-        // ==================== LOAD DATA ====================
-        async function loadProviderData() {
-            try {
-                document.getElementById('header-provider-name').textContent = currentProvider.business || 'Proveedor';
-                document.getElementById('header-provider-plan').textContent = `Plan ${currentProvider.plan || 'Basic'}`;
-                document.getElementById('header-avatar').textContent = (currentProvider.business || 'P').charAt(0);
-                
-                const quotesSnapshot = await db.collection('quotes').where('assignedTo', '==', currentProvider.email).get();
-                allQuotes = []; quotesSnapshot.forEach(doc => allQuotes.push({ id: doc.id, ...doc.data() }));
-                
-                const messagesSnapshot = await db.collection('adminMessages').where('providerId', '==', currentProvider.id).get();
-                allMessages = []; messagesSnapshot.forEach(doc => allMessages.push({ id: doc.id, ...doc.data() }));
-
-                const pendingSnapshot = await db.collection('pendingChanges').where('providerId', '==', currentProvider.id).where('status', '==', 'pending').get();
-                pendingChanges = []; pendingSnapshot.forEach(doc => pendingChanges.push({ id: doc.id, ...doc.data() }));
-                
-                updateDashboardKPIs();
-                updatePendingBanner();
-            } catch (error) { 
-                console.error('Error loading data:', error); 
-            }
-        }
-
-        function updateDashboardKPIs() {
-            document.getElementById('kpi-views').textContent = currentProvider.views || Math.floor(Math.random() * 500);
-            document.getElementById('kpi-quotes').textContent = allQuotes.length;
-            document.getElementById('kpi-response-rate').textContent = '85%';
-            document.getElementById('kpi-rating').textContent = currentProvider.rating || '4.8';
-            
-            const recentQuotes = allQuotes.slice(0, 3);
-            document.getElementById('recent-quotes-list').innerHTML = recentQuotes.length > 0 ? recentQuotes.map(q => `
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                    <div><p class="font-semibold text-gray-800">${q.title || 'Solicitud'}</p><p class="text-xs text-gray-500">${q.location} • ${q.date}</p></div>
-                    <span class="status-badge ${q.status === 'pending' ? 'status-pending' : 'status-approved'}">${q.status === 'pending' ? 'Pendiente' : 'Respondida'}</span>
-                </div>
-            `).join('') : '<p class="text-gray-500 text-center py-4">No hay cotizaciones</p>';
-        }
-
-        function updatePendingBanner() {
-            const banner = document.getElementById('pending-banner');
-            const badge = document.getElementById('pending-badge');
-            if (pendingChanges.length > 0) {
-                banner.classList.remove('hidden');
-                badge.textContent = pendingChanges.length;
-                badge.classList.remove('hidden');
-            } else {
-                banner.classList.add('hidden');
-                badge.classList.add('hidden');
-            }
-        }
-
-        // ==================== COTIZACIONES ====================
-        function renderQuotes() {
-            const filter = document.getElementById('filter-quote-status').value;
-            let filtered = allQuotes;
-            if (filter !== 'all') filtered = allQuotes.filter(q => q.status === filter);
-            
-            const badge = document.getElementById('quotes-badge');
-            const pendingCount = allQuotes.filter(q => q.status === 'pending').length;
-            if (badge) { 
-                badge.textContent = pendingCount; 
-                badge.classList.toggle('hidden', pendingCount === 0); 
-            }
-
-            document.getElementById('quotes-list').innerHTML = filtered.length > 0 ? filtered.map(q => `
-                <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 ${q.status === 'pending' ? 'border-goparty-pink' : 'border-green-500'} card-hover">
-                    <div class="flex justify-between items-start flex-wrap gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-3 mb-2">
-                                <h4 class="font-bold text-lg text-gray-800">${q.title || 'Solicitud'}</h4>
-                                <span class="status-badge ${q.status === 'pending' ? 'status-pending' : 'status-approved'}">${q.status === 'pending' ? 'Pendiente' : 'Respondida'}</span>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-1"><i class="fas fa-user mr-2 text-goparty-pink"></i>${q.clientName}</p>
-                            <p class="text-sm text-gray-600 mb-1"><i class="fas fa-map-marker-alt mr-2 text-goparty-pink"></i>${q.location} • <i class="fas fa-calendar mr-2 text-goparty-blue"></i>${q.date}</p>
-                            <p class="text-sm font-bold text-goparty-dark mt-2"><i class="fas fa-dollar-sign mr-2"></i>Presupuesto: $${q.budget || 'No especificado'}</p>
-                            <p class="text-sm text-gray-600 mt-2"><i class="fas fa-tags mr-2 text-goparty-gold"></i>${q.keywords || ''}</p>
-                        </div>
-                        <div class="flex gap-2 flex-wrap">
-                            <button onclick="viewQuoteDetails('${q.id}')" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300 transition"><i class="fas fa-eye mr-1"></i>Ver</button>
-                            ${q.status === 'pending' ? `<button onclick="respondQuote('${q.id}')" class="bg-goparty-blue text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition"><i class="fas fa-reply mr-1"></i>Responder</button>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `).join('') : '<p class="text-gray-500 text-center py-8">No hay cotizaciones</p>';
-        }
-
-        function viewQuoteDetails(id) {
-            const q = allQuotes.find(item => item.id === id);
-            if (!q) return;
-            document.getElementById('quote-details-content').innerHTML = `
-                <div class="space-y-4">
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div><label class="text-xs text-gray-500">Cliente</label><p class="font-semibold">${q.clientName} (${q.clientEmail})</p></div>
-                        <div><label class="text-xs text-gray-500">Presupuesto</label><p class="font-semibold">$${q.budget || 'No especificado'}</p></div>
-                        <div><label class="text-xs text-gray-500">Fecha</label><p class="font-semibold">${q.date}</p></div>
-                        <div><label class="text-xs text-gray-500">Lugar</label><p class="font-semibold">${q.location}</p></div>
-                        <div><label class="text-xs text-gray-500">Personas</label><p class="font-semibold">${q.guests || 'No especificado'}</p></div>
-                    </div>
-                    <div><label class="text-xs text-gray-500">Keywords</label><p class="text-gray-700">${q.keywords}</p></div>
-                    <div><label class="text-xs text-gray-500">Descripción</label><p class="text-gray-700 bg-gray-50 p-4 rounded-xl">${q.description || 'Sin descripción'}</p></div>
-                    ${q.referenceImage ? `<div><label class="text-xs text-gray-500">Imagen de Referencia</label><img src="${q.referenceImage}" class="mt-2 rounded-xl max-h-64 object-cover border"></div>` : ''}
-                </div>
-            `;
-            document.getElementById('quote-modal').classList.add('active');
-        }
-
-        function respondQuote(id) {
-            const q = allQuotes.find(item => item.id === id);
-            if (!q) return;
-            const message = encodeURIComponent(`Hola ${q.clientName}, vi tu solicitud en GoParty para tu evento el ${q.date} en ${q.location}. ¿Podemos agendar una llamada?`);
-            const whatsappLink = `https://wa.me/52${currentProvider.whatsapp}?text=${message}`;
-            if (confirm('¿Responder esta cotización? Se abrirá WhatsApp.')) {
-                window.open(whatsappLink, '_blank');
-                db.collection('quotes').doc(id).update({ status: 'responded', respondedAt: firebase.firestore.FieldValue.serverTimestamp() })
-                    .then(() => { 
-                        showToast('✅ Cotización respondida'); 
-                        loadProviderData(); 
-                        renderQuotes(); 
-                    })
-                    .catch(() => showToast('Error', 'error'));
-            }
-        }
-
-        // ==================== MI PERFIL (CON APROBACIÓN) ====================
-        function loadProfileData() {
-            document.getElementById('profile-business').value = currentProvider.business || '';
-            document.getElementById('profile-name').value = currentProvider.name || '';
-            document.getElementById('profile-email').value = currentProvider.email || '';
-            document.getElementById('profile-whatsapp').value = currentProvider.whatsapp || '';
-            document.getElementById('profile-city').value = currentProvider.city || '';
-            document.getElementById('profile-description').value = currentProvider.description || '';
-            document.getElementById('social-instagram').value = currentProvider.social?.instagram || '';
-            document.getElementById('social-facebook').value = currentProvider.social?.facebook || '';
-            document.getElementById('social-tiktok').value = currentProvider.social?.tiktok || '';
-            document.getElementById('social-website').value = currentProvider.social?.website || '';
-            loadPhotoGallery();
-        }
-
-        async function submitProfileUpdate(e) {
-            e.preventDefault();
-            const newValues = {
-                business: document.getElementById('profile-business').value,
-                name: document.getElementById('profile-name').value,
-                email: document.getElementById('profile-email').value,
-                whatsapp: document.getElementById('profile-whatsapp').value,
-                city: document.getElementById('profile-city').value,
-                description: document.getElementById('profile-description').value
-            };
-
-            const changes = {};
-            Object.keys(newValues).forEach(key => {
-                if (newValues[key] !== currentProvider[key]) {
-                    changes[key] = { from: currentProvider[key], to: newValues[key] };
-                }
-            });
-
-            if (Object.keys(changes).length === 0) {
-                showToast('No hay cambios para enviar', 'error');
+                alert(' La contraseña debe tener al menos 6 caracteres');
                 return;
             }
 
             try {
-                await db.collection('pendingChanges').add({
-                    providerId: currentProvider.id,
-                    providerName: currentProvider.business,
-                    providerEmail: currentProvider.email,
-                    changeType: 'profile_update',
-                    changes: changes,
-                    status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Guardar datos del proveedor en Firestore
+                await setDoc(doc(db, "proveedores", user.uid), {
+                    nombreNegocio: nombre,
+                    nombreContacto: contacto,
+                    whatsapp: whatsapp,
+                    email: email,
+                    ciudad: ciudad,
+                    plan: 'basic',
+                    estadoVerificacion: 'Pendiente',
+                    fechaRegistro: new Date().toISOString(),
+                    uid: user.uid
                 });
-                showToast('✅ Cambios enviados para aprobación');
-                await loadProviderData();
-            } catch (error) { 
-                showToast('Error al enviar cambios', 'error'); 
+
+                alert('✅ Cuenta creada exitosamente. Tu perfil será revisado en 24-48 horas.');
+                
+                localStorage.setItem('proveedorId', user.uid);
+                localStorage.setItem('proveedorEmail', email);
+                
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('dashboardPanel').classList.add('active');
+                
+                cargarDatosProveedor(user.uid);
+                
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
             }
-        }
+        };
 
-        async function submitSocialUpdate(e) {
-            e.preventDefault();
-            const newSocial = {
-                instagram: document.getElementById('social-instagram').value,
-                facebook: document.getElementById('social-facebook').value,
-                tiktok: document.getElementById('social-tiktok').value,
-                website: document.getElementById('social-website').value
-            };
-            const currentSocial = currentProvider.social || {};
-            
-            const changes = {};
-            Object.keys(newSocial).forEach(key => {
-                if (newSocial[key] !== currentSocial[key]) {
-                    changes[`social.${key}`] = { from: currentSocial[key] || '', to: newSocial[key] };
+        window.loginWithGoogle = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+
+                // Verificar si ya existe el proveedor
+                const docRef = doc(db, "proveedores", user.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (!docSnap.exists()) {
+                    // Crear nuevo proveedor con datos de Google
+                    await setDoc(docRef, {
+                        nombreNegocio: user.displayName || 'Mi Negocio',
+                        nombreContacto: user.displayName || '',
+                        whatsapp: '',
+                        email: user.email,
+                        ciudad: '',
+                        plan: 'basic',
+                        estadoVerificacion: 'Pendiente',
+                        fechaRegistro: new Date().toISOString(),
+                        uid: user.uid
+                    });
                 }
-            });
 
-            if (Object.keys(changes).length === 0) {
-                showToast('No hay cambios para enviar', 'error');
+                localStorage.setItem('proveedorId', user.uid);
+                localStorage.setItem('proveedorEmail', user.email);
+                
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('dashboardPanel').classList.add('active');
+                
+                cargarDatosProveedor(user.uid);
+                
+            } catch (error) {
+                alert('❌ Error con Google: ' + error.message);
+            }
+        };
+
+        window.sendPasswordReset = async function() {
+            const email = document.getElementById('forgotEmail').value;
+            
+            if (!email) {
+                alert('❌ Por favor ingresa tu email');
                 return;
             }
 
             try {
-                await db.collection('pendingChanges').add({
-                    providerId: currentProvider.id,
-                    providerName: currentProvider.business,
-                    providerEmail: currentProvider.email,
-                    changeType: 'social_update',
-                    changes: changes,
-                    status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                showToast('✅ Redes sociales enviadas para aprobación');
-                await loadProviderData();
-            } catch (error) { 
-                showToast('Error al enviar', 'error'); 
+                await sendPasswordResetEmail(auth, email);
+                alert('✅ Enlace de recuperación enviado a ' + email);
+                showLogin();
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        };
+
+        window.logout = function() {
+            localStorage.removeItem('proveedorId');
+            localStorage.removeItem('proveedorEmail');
+            location.reload();
+        };
+
+        // ==========================================
+        // CARGAR DATOS DEL PROVEEDOR
+        // ==========================================
+        async function cargarDatosProveedor(uid) {
+            try {
+                const docRef = doc(db, "proveedores", uid);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('userName').textContent = data.nombreNegocio || 'Proveedor';
+                    document.getElementById('userAvatar').textContent = (data.nombreNegocio || 'P').charAt(0).toUpperCase();
+                    document.getElementById('infoNombre').textContent = data.nombreNegocio || 'Proveedor';
+                    document.getElementById('infoPlan').textContent = data.plan ? data.plan.charAt(0).toUpperCase() + data.plan.slice(1) : 'Basic';
+                    
+                    // Cargar en formulario de perfil
+                    document.getElementById('perfilNombre').value = data.nombreNegocio || '';
+                    document.getElementById('perfilContacto').value = data.nombreContacto || '';
+                    document.getElementById('perfilEmail').value = data.email || '';
+                    document.getElementById('perfilWhatsapp').value = data.whatsapp || '';
+                    document.getElementById('perfilCiudad').value = data.ciudad || '';
+                    document.getElementById('perfilDescripcion').value = data.descripcion || '';
+                    
+                    cargarMisTestimonios();
+                }
+            } catch (error) {
+                console.error("Error cargando datos:", error);
             }
         }
 
-        function submitPhotoUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast('La imagen es muy grande (máx 5MB)', 'error');
+        // ==========================================
+        // GUARDAR PERFIL
+        // ==========================================
+        window.guardarPerfil = async function() {
+            const uid = localStorage.getItem('proveedorId');
+            if (!uid) return;
+
+            try {
+                await updateDoc(doc(db, "proveedores", uid), {
+                    nombreNegocio: document.getElementById('perfilNombre').value,
+                    nombreContacto: document.getElementById('perfilContacto').value,
+                    email: document.getElementById('perfilEmail').value,
+                    whatsapp: document.getElementById('perfilWhatsapp').value,
+                    ciudad: document.getElementById('perfilCiudad').value,
+                    descripcion: document.getElementById('perfilDescripcion').value
+                });
+                alert('✅ Perfil actualizado');
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        };
+
+        window.guardarRedes = async function() {
+            const uid = localStorage.getItem('proveedorId');
+            if (!uid) return;
+
+            try {
+                await updateDoc(doc(db, "proveedores", uid), {
+                    instagram: document.getElementById('perfilInstagram').value,
+                    facebook: document.getElementById('perfilFacebook').value,
+                    tiktok: document.getElementById('perfilTiktok').value,
+                    web: document.getElementById('perfilWeb').value
+                });
+                alert('✅ Redes sociales actualizadas');
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        };
+
+        // ==========================================
+        //  FASE 3: TESTIMONIOS
+        // ==========================================
+        window.seleccionarEstrellas = function(valor) {
+            document.getElementById('testCalificacion').value = valor;
+            const estrellas = document.querySelectorAll('.estrella');
+            estrellas.forEach((est, idx) => {
+                est.style.opacity = idx < valor ? '1' : '0.3';
+            });
+        };
+
+        window.enviarTestimonio = async function() {
+            const alert = document.getElementById('alertTestimonio');
+            const proveedor = document.getElementById('testProveedor').value.trim();
+            const tipoEvento = document.getElementById('testTipoEvento').value;
+            const ciudad = document.getElementById('testCiudad').value.trim();
+            const calificacion = parseInt(document.getElementById('testCalificacion').value);
+            const nombre = document.getElementById('testNombre').value.trim();
+            const comentario = document.getElementById('testComentario').value.trim();
+
+            if (!proveedor || !tipoEvento || !ciudad || !nombre || !comentario) {
+                alert.className = 'alert error';
+                alert.textContent = ' Por favor completa todos los campos obligatorios';
+                alert.style.display = 'block';
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "testimonios"), {
+                    nombreCliente: nombre,
+                    inicial: nombre.charAt(0).toUpperCase(),
+                    tipoEvento: tipoEvento,
+                    ciudad: ciudad,
+                    nombreProveedor: proveedor,
+                    calificacion: calificacion,
+                    comentario: comentario,
+                    estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: localStorage.getItem('proveedorId')
+                });
+
+                alert.className = 'alert success';
+                alert.textContent = '✅ ¡Testimonio enviado! Será revisado por el equipo GoParty en 24-48 horas.';
+                alert.style.display = 'block';
+
+                // Limpiar formulario
+                document.getElementById('testProveedor').value = '';
+                document.getElementById('testTipoEvento').value = '';
+                document.getElementById('testCiudad').value = '';
+                document.getElementById('testNombre').value = '';
+                document.getElementById('testComentario').value = '';
+                seleccionarEstrellas(5);
+
+                setTimeout(() => { alert.style.display = 'none'; }, 5000);
+                cargarMisTestimonios();
+
+            } catch (error) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error al enviar: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        async function cargarMisTestimonios() {
+            const contenedor = document.getElementById('misTestimonios');
+            if (!contenedor) return;
+
+            try {
+                const uid = localStorage.getItem('proveedorId');
+                const q = query(collection(db, "testimonios"), where("proveedorId", "==", uid));
+                const snap = await getDocs(q);
+                
+                if (snap.empty) {
+                    contenedor.innerHTML = '<p style="color: #999;">Aún no has enviado testimonios.</p>';
                     return;
                 }
-                db.collection('pendingChanges').add({
-                    providerId: currentProvider.id,
-                    providerName: currentProvider.business,
-                    providerEmail: currentProvider.email,
-                    changeType: 'photo_upload',
-                    changes: { newPhoto: { from: null, to: file.name } },
-                    status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    showToast(' Foto enviada para aprobación');
-                    loadProviderData();
-                }).catch(() => showToast('Error al subir', 'error'));
-            }
-        }
 
-        function loadPhotoGallery() {
-            const gallery = document.getElementById('photo-gallery');
-            const photos = currentProvider.photos || [
-                'https://via.placeholder.com/300x200?text=Foto+1', 
-                'https://via.placeholder.com/300x200?text=Foto+2'
-            ];
-            gallery.innerHTML = photos.map((photo, index) => `
-                <div class="relative group">
-                    <img src="${photo}" class="w-full h-32 object-cover rounded-xl">
-                    <button onclick="requestPhotoDelete(${index})" class="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
+                const testimonios = [];
+                snap.forEach(doc => testimonios.push({ id: doc.id, ...doc.data() }));
+                testimonios.sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
 
-        function requestPhotoDelete(index) {
-            if (confirm('¿Solicitar eliminación de esta foto?')) {
-                db.collection('pendingChanges').add({
-                    providerId: currentProvider.id,
-                    providerName: currentProvider.business,
-                    changeType: 'photo_delete',
-                    changes: { photoIndex: { from: index, to: 'delete' } },
-                    status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    showToast('🗑️ Solicitud de eliminación enviada');
-                    loadProviderData();
-                });
-            }
-        }
-
-        function renderPendingChanges() {
-            const badge = document.getElementById('pending-badge');
-            if (badge) { 
-                badge.textContent = pendingChanges.length; 
-                badge.classList.toggle('hidden', pendingChanges.length === 0); 
-            }
-            
-            const typeLabels = {
-                'profile_update': 'Actualización de Perfil',
-                'social_update': 'Redes Sociales',
-                'photo_upload': 'Nueva Foto',
-                'photo_delete': 'Eliminar Foto'
-            };
-            
-            document.getElementById('pending-changes-list').innerHTML = pendingChanges.length > 0 ? pendingChanges.map(change => {
-                const date = change.createdAt?.toDate ? change.createdAt.toDate().toLocaleDateString('es-MX') : 'Reciente';
-                return `
-                    <div class="bg-yellow-50 p-6 rounded-xl border-l-4 border-goparty-yellow">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <p class="font-bold text-gray-800">${typeLabels[change.changeType] || 'Cambio'}</p>
-                                <p class="text-xs text-gray-500">Enviado: ${date}</p>
+                contenedor.innerHTML = testimonios.map(t => {
+                    const estadoColor = t.estado === 'aprobado' ? '#4CAF50' : t.estado === 'rechazado' ? '#FF4444' : '#FFD93D';
+                    const estadoTexto = t.estado === 'aprobado' ? '✅ Aprobado' : t.estado === 'rechazado' ? '❌ Rechazado' : '⏳ Pendiente';
+                    const estrellas = '⭐'.repeat(t.calificacion);
+                    return `
+                        <div class="testimonio-item ${t.estado}">
+                            <div class="testimonio-header">
+                                <strong>${t.nombreProveedor}</strong>
+                                <span class="testimonio-estado" style="background: ${estadoColor};">${estadoTexto}</span>
                             </div>
-                            <span class="status-badge status-pending">Pendiente</span>
+                            <div style="margin-bottom: 0.5rem;">${estrellas} • ${t.tipoEvento} - ${t.ciudad}</div>
+                            <p style="color: #666; font-style: italic; margin: 0;">"${t.comentario}"</p>
                         </div>
-                        <div class="bg-white p-4 rounded-lg">
-                            <p class="text-sm text-gray-700">Tu solicitud está siendo revisada por el equipo de GoParty. Recibirás una notificación cuando sea aprobada.</p>
-                        </div>
-                    </div>
-                `;
-            }).join('') : '<p class="text-gray-500 text-center py-8">No tienes cambios pendientes</p>';
-        }
-
-        // ==================== MEMBRESÍA ====================
-        function loadMembershipData() {
-            const plan = currentProvider.plan || 'Basic';
-            document.getElementById('current-plan-name').textContent = plan;
-            const descriptions = { 
-                'Basic': 'Directorio general', 
-                'Pro': 'Mayor visibilidad + Sello verificado', 
-                'Gold': 'Máxima exposición + Soporte prioritario' 
-            };
-            document.getElementById('current-plan-desc').textContent = descriptions[plan] || 'Directorio general';
-        }
-
-        function upgradePlan(newPlan) {
-            if (confirm(`¿Actualizar a ${newPlan}? Serás redirigido a WhatsApp.`)) {
-                const message = encodeURIComponent(`Hola, soy ${currentProvider.business} y me interesa actualizar a ${newPlan}.`);
-                window.open(`https://wa.me/5212281234567?text=${message}`, '_blank');
+                    `;
+                }).join('');
+            } catch (error) {
+                contenedor.innerHTML = '<p style="color: red;">Error al cargar testimonios.</p>';
             }
         }
 
-        // ==================== MENSAJES ADMIN ====================
-        function loadAdminMessages() {
-            const badge = document.getElementById('messages-badge');
-            const unreadCount = allMessages.filter(m => !m.read).length;
-            if (badge) { 
-                badge.textContent = unreadCount; 
-                badge.classList.toggle('hidden', unreadCount === 0); 
-            }
+        // ==========================================
+        // TABS
+        // ==========================================
+        window.showTab = function(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
             
-            document.getElementById('admin-messages-list').innerHTML = allMessages.length > 0 ? allMessages.map(msg => `
-                <div class="bg-gray-50 p-6 rounded-xl border-l-4 ${msg.read ? 'border-gray-400' : 'border-goparty-pink'}">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <p class="font-bold text-gray-800">${msg.subject || 'Mensaje del Admin'}</p>
-                            <p class="text-xs text-gray-500">${msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleDateString('es-MX') : 'Reciente'}</p>
-                        </div>
-                        ${!msg.read ? '<span class="text-xs bg-goparty-pink text-white px-3 py-1 rounded-full">Nuevo</span>' : ''}
-                    </div>
-                    <p class="text-gray-700 bg-white p-4 rounded-lg">${msg.message || 'Sin contenido'}</p>
-                </div>
-            `).join('') : '<p class="text-gray-500 text-center py-8">No hay mensajes</p>';
+            // Cerrar sidebar en móvil
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        };
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                showTab(tab.dataset.tab);
+            });
+        });
+
+        // ==========================================
+        // MENÚ HAMBURGUESA
+        // ==========================================
+        document.getElementById('hamburgerBtn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        });
+
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        document.getElementById('overlay').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        // ==========================================
+        // AUTO-LOGIN
+        // ==========================================
+        const proveedorId = localStorage.getItem('proveedorId');
+        if (proveedorId) {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('dashboardPanel').classList.add('active');
+            cargarDatosProveedor(proveedorId);
         }
 
-        // ==================== UTILS ====================
-        function closeModal(type) { 
-            document.getElementById(`${type}-modal`).classList.remove('active'); 
-        }
-        function showToast(msg, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-8 left-1/2 transform -translate-x-1/2 ${type === 'error' ? 'bg-red-600' : 'bg-goparty-dark'} text-white px-6 py-3 rounded-full shadow-2xl transition-all duration-300 z-50`;
-            toast.textContent = msg;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-        window.onclick = function(event) { 
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active'); 
-            }
-        }
+        // Inicializar estrellas
+        seleccionarEstrellas(5);
     </script>
+
 </body>
 </html>

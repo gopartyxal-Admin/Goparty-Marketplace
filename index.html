@@ -40,6 +40,7 @@
         .hero { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4A90E2 100%); padding: 4rem 2rem; text-align: center; color: white; }
         .hero h1 { font-size: 2.8rem; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); font-weight: 700; }
         .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.95; }
+
         .search-container { max-width: 900px; margin: 0 auto; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .search-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
         .search-group { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -49,7 +50,6 @@
         .btn-buscar { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border: none; padding: 1rem 3rem; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 1rem; transition: transform 0.3s; }
         .btn-buscar:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4); }
 
-        /* Secciones */
         .section { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .section h2 { color: #333; font-size: 2rem; }
@@ -195,10 +195,40 @@
         .btn-banner:hover { transform: scale(1.05); }
 
         /* WhatsApp Flotante */
-        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); cursor: pointer; z-index: 99; transition: transform 0.3s; text-decoration: none; }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
+            z-index: 99;
+            transition: transform 0.3s;
+            text-decoration: none;
+        }
         .whatsapp-float:hover { transform: scale(1.1); }
         .whatsapp-float svg { width: 32px; height: 32px; fill: white; }
-        .whatsapp-tooltip { position: absolute; right: 70px; background: white; color: #333; padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; white-space: nowrap; box-shadow: 0 2px 10px rgba(0,0,0,0.15); opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .whatsapp-tooltip {
+            position: absolute;
+            right: 70px;
+            background: white;
+            color: #333;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
         .whatsapp-float:hover .whatsapp-tooltip { opacity: 1; visibility: visible; }
 
         /* Footer */
@@ -262,10 +292,10 @@
             <button class="close-btn" id="closeBtn">&times;</button>
         </div>
         <div class="sidebar-links">
-            <a href="index.html">🔍 Explorar</a>
+            <a href="index.html"> Explorar</a>
             <a href="cotizacion.html">📝 Solicitar Cotización</a>
             <a href="unete.html">🎉 Únete a GoParty</a>
-            <a href="dashboard.html"> Soy Proveedor</a>
+            <a href="dashboard.html">👤 Soy Proveedor</a>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -281,11 +311,11 @@
                     <select class="search-select" id="filterCategoria">
                         <option value="">Todas las categorías</option>
                         <option value="Salones">🏰 Salones</option>
-                        <option value="Alimentos">🍽️ Alimentos</option>
+                        <option value="Alimentos">️ Alimentos</option>
                         <option value="Fotografía">📸 Fotografía</option>
                         <option value="Música/DJ">🎵 Música/DJ</option>
                         <option value="Decoración">🎈 Decoración</option>
-                        <option value="Animación">🎪 Animación</option>
+                        <option value="Animación"> Animación</option>
                         <option value="Mobiliario">🪑 Mobiliario</option>
                     </select>
                 </div>
@@ -313,7 +343,7 @@
                     </select>
                 </div>
             </div>
-            <button class="btn-buscar" onclick="filtrarProveedores()">🔍 Buscar Proveedores</button>
+            <button class="btn-buscar" onclick="filtrarProveedores()"> Buscar Proveedores</button>
         </div>
     </section>
 
@@ -326,22 +356,34 @@
             </div>
             <div class="categorias-grid">
                 <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Salones')">
-                    <div class="categoria-icon">🏰</div><h3>Salones</h3><p>Espacios únicos</p>
+                    <div class="categoria-icon">🏰</div>
+                    <h3>Salones</h3>
+                    <p>Espacios únicos</p>
                 </a>
                 <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Alimentos')">
-                    <div class="categoria-icon">🍽️</div><h3>Alimentos</h3><p>Sabores increíbles</p>
+                    <div class="categoria-icon">🍽️</div>
+                    <h3>Alimentos</h3>
+                    <p>Sabores increíbles</p>
                 </a>
                 <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Fotografía')">
-                    <div class="categoria-icon">📸</div><h3>Fotografía</h3><p>Momentos eternos</p>
+                    <div class="categoria-icon">📸</div>
+                    <h3>Fotografía</h3>
+                    <p>Momentos eternos</p>
                 </a>
                 <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Música/DJ')">
-                    <div class="categoria-icon">🎵</div><h3>Música/DJ</h3><p>El ritmo perfecto</p>
+                    <div class="categoria-icon">🎵</div>
+                    <h3>Música/DJ</h3>
+                    <p>El ritmo perfecto</p>
                 </a>
                 <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Decoración')">
-                    <div class="categoria-icon">🎈</div><h3>Decoración</h3><p>Ambientes mágicos</p>
+                    <div class="categoria-icon">🎈</div>
+                    <h3>Decoración</h3>
+                    <p>Ambientes mágicos</p>
                 </a>
                 <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Animación')">
-                    <div class="categoria-icon"></div><h3>Animación</h3><p>Diversión garantizada</p>
+                    <div class="categoria-icon">🎪</div>
+                    <h3>Animación</h3>
+                    <p>Diversión garantizada</p>
                 </a>
             </div>
         </div>
@@ -366,9 +408,21 @@
         <div class="como-funciona-container">
             <h2>¿Cómo funciona GoParty?</h2>
             <div class="pasos-grid">
-                <div class="paso-card"><div class="paso-numero">1</div><h3>Busca</h3><p>Filtra por categoría, ciudad y tipo de servicio. Solo verificados, solo los mejores.</p></div>
-                <div class="paso-card"><div class="paso-numero">2</div><h3>Compara</h3><p>Revisa perfiles, insignias Gold/Pro y elige al proveedor ideal para tu evento.</p></div>
-                <div class="paso-card"><div class="paso-numero">3</div><h3>Contacta</h3><p>Conecta directo por WhatsApp. Sin intermediarios, sin comisiones ocultas.</p></div>
+                <div class="paso-card">
+                    <div class="paso-numero">1</div>
+                    <h3>Busca</h3>
+                    <p>Filtra por categoría, ciudad y tipo de servicio. Solo verificados, solo los mejores.</p>
+                </div>
+                <div class="paso-card">
+                    <div class="paso-numero">2</div>
+                    <h3>Compara</h3>
+                    <p>Revisa perfiles, insignias Gold/Pro y elige al proveedor ideal para tu evento.</p>
+                </div>
+                <div class="paso-card">
+                    <div class="paso-numero">3</div>
+                    <h3>Contacta</h3>
+                    <p>Conecta directo por WhatsApp. Sin intermediarios, sin comisiones ocultas.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -377,7 +431,7 @@
     <section class="estadisticas-section">
         <div class="estadisticas-container">
             <div class="estadistica-item">
-                <div class="estadistica-icono"></div>
+                <div class="estadistica-icono">🎉</div>
                 <div class="estadistica-numero" id="statEventos">0</div>
                 <div class="estadistica-label">Eventos Realizados</div>
             </div>
@@ -403,16 +457,28 @@
     <section class="ciudades-section">
         <div class="ciudades-container">
             <div class="ciudades-header">
-                <h2>️ Ciudades con Más Proveedores</h2>
+                <h2>🏙️ Ciudades con Más Proveedores</h2>
                 <p>Encuentra proveedores cerca de ti</p>
             </div>
             <div class="ciudades-grid">
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Xalapa')"><div class="ciudad-info"><h3>Xalapa</h3><p>Veracruz</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Veracruz')"><div class="ciudad-info"><h3>Veracruz</h3><p>Puerto y playa</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Puebla')"><div class="ciudad-info"><h3>Puebla</h3><p>Tradición y sabor</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('CDMX')"><div class="ciudad-info"><h3>CDMX</h3><p>La gran ciudad</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Córdoba')"><div class="ciudad-info"><h3>Córdoba</h3><p>Café y cultura</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Orizaba')"><div class="ciudad-info"><h3>Orizaba</h3><p>Ciudad de las aguas</p></div></a>
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Xalapa')">
+                    <div class="ciudad-info"><h3>Xalapa</h3><p>Veracruz</p></div>
+                </a>
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Veracruz')">
+                    <div class="ciudad-info"><h3>Veracruz</h3><p>Puerto y playa</p></div>
+                </a>
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Puebla')">
+                    <div class="ciudad-info"><h3>Puebla</h3><p>Tradición y sabor</p></div>
+                </a>
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('CDMX')">
+                    <div class="ciudad-info"><h3>CDMX</h3><p>La gran ciudad</p></div>
+                </a>
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Córdoba')">
+                    <div class="ciudad-info"><h3>Córdoba</h3><p>Café y cultura</p></div>
+                </a>
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Orizaba')">
+                    <div class="ciudad-info"><h3>Orizaba</h3><p>Ciudad de las aguas</p></div>
+                </a>
             </div>
         </div>
     </section>
@@ -426,15 +492,21 @@
             </div>
             <div class="blog-tabs">
                 <button class="blog-tab active" data-filter="todos">📋 Todos</button>
-                <button class="blog-tab" data-filter="Consejos"> Consejos</button>
-                <button class="blog-tab" data-filter="Tendencias"> Tendencias</button>
+                <button class="blog-tab" data-filter="Consejos">💡 Consejos</button>
+                <button class="blog-tab" data-filter="Tendencias">🔥 Tendencias</button>
                 <button class="blog-tab" data-filter="Recursos Descargables">📥 Formatos Gratis</button>
-                <button class="blog-tab" data-filter="General"> General</button>
+                <button class="blog-tab" data-filter="General">📰 General</button>
             </div>
             <div id="blogGrid" class="blog-grid">
-                <div class="blog-empty"><div class="blog-empty-icon">📝</div><h3>Próximamente</h3><p>Estamos preparando contenido increíble para ayudarte a planear tu evento.</p></div>
+                <div class="blog-empty">
+                    <div class="blog-empty-icon">📝</div>
+                    <h3>Próximamente</h3>
+                    <p>Estamos preparando contenido increíble para ayudarte a planear tu evento.</p>
+                </div>
             </div>
-            <div class="blog-cta"><a href="blog.html" class="btn-ver-mas">Ver todos los artículos →</a></div>
+            <div class="blog-cta">
+                <a href="blog.html" class="btn-ver-mas">Ver todos los artículos →</a>
+            </div>
         </div>
     </section>
 
@@ -449,17 +521,26 @@
                 <div class="testimonio-card">
                     <div class="testimonio-estrellas">⭐⭐⭐⭐⭐</div>
                     <p class="testimonio-texto">Encontré al decorador perfecto para la fiesta de mi hija. Todo salió increíble y el proceso fue súper fácil.</p>
-                    <div class="testimonio-autor"><div class="testimonio-avatar">M</div><div class="testimonio-info"><h4>María González</h4><p>Cumpleaños Infantil - Xalapa</p></div></div>
+                    <div class="testimonio-autor">
+                        <div class="testimonio-avatar">M</div>
+                        <div class="testimonio-info"><h4>María González</h4><p>Cumpleaños Infantil - Xalapa</p></div>
+                    </div>
                 </div>
                 <div class="testimonio-card">
                     <div class="testimonio-estrellas">⭐⭐⭐⭐⭐</div>
                     <p class="testimonio-texto">La mejor plataforma para encontrar proveedores. Los Gold realmente valen la pena, calidad garantizada.</p>
-                    <div class="testimonio-autor"><div class="testimonio-avatar">J</div><div class="testimonio-info"><h4>Juan Pérez</h4><p>Boda - Veracruz</p></div></div>
+                    <div class="testimonio-autor">
+                        <div class="testimonio-avatar">J</div>
+                        <div class="testimonio-info"><h4>Juan Pérez</h4><p>Boda - Veracruz</p></div>
+                    </div>
                 </div>
                 <div class="testimonio-card">
                     <div class="testimonio-estrellas">⭐⭐⭐⭐⭐</div>
                     <p class="testimonio-texto">Me encantó poder comparar varios proveedores y ver sus reseñas. Mi evento corporativo fue un éxito total.</p>
-                    <div class="testimonio-autor"><div class="testimonio-avatar">A</div><div class="testimonio-info"><h4>Ana Ramírez</h4><p>Evento Corporativo - Puebla</p></div></div>
+                    <div class="testimonio-autor">
+                        <div class="testimonio-avatar">A</div>
+                        <div class="testimonio-info"><h4>Ana Ramírez</h4><p>Evento Corporativo - Puebla</p></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -468,20 +549,41 @@
     <!-- FAQ -->
     <section class="faq-section" id="faq">
         <div class="faq-container">
-            <div class="faq-header"><h2>❓ Preguntas Frecuentes</h2><p>Resolvemos tus dudas más comunes</p></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Cómo sé que un proveedor es confiable?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Todos los proveedores en GoParty pasan por un proceso de verificación. Los que tienen insignia Gold o Pro han sido validados por nuestro equipo y cuentan con reseñas de clientes reales.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿GoParty cobra comisión por las reservas?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">No. GoParty no cobra comisiones a los clientes. Los proveedores pagan una membresía mensual por estar en la plataforma, pero tú contactas directamente con ellos sin costos adicionales.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Qué diferencia hay entre los planes Gold, Pro y Basic?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Basic: aparece en el directorio general. Pro: tiene sello verificado y mayor visibilidad. Gold: posición destacada en búsquedas, borde dorado y soporte prioritario.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Cómo solicito una cotización personalizada?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Haz clic en "Solicitar Cotización" en el menú, llena el formulario con los detalles de tu evento (tipo, fecha, presupuesto, servicios) y nuestro equipo te conectará con los proveedores ideales.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿En qué ciudades opera GoParty?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Actualmente operamos en Xalapa, Veracruz, Córdoba, Orizaba, Coatepec, Puebla y CDMX. Estamos expandiéndonos constantemente a más ciudades de México.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Soy proveedor, cómo me registro?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Haz clic en "Únete a GoParty" o "Soy Proveedor" en el menú. Completa el formulario de 4 pasos con tu información, servicios y elige tu plan. Tu perfil será revisado en 24-48 horas.</div></div>
+            <div class="faq-header">
+                <h2>❓ Preguntas Frecuentes</h2>
+                <p>Resolvemos tus dudas más comunes</p>
+            </div>
+            <div class="faq-item">
+                <div class="faq-pregunta"><span>¿Cómo sé que un proveedor es confiable?</span><span class="faq-icono">+</span></div>
+                <div class="faq-respuesta">Todos los proveedores en GoParty pasan por un proceso de verificación. Los que tienen insignia Gold o Pro han sido validados por nuestro equipo y cuentan con reseñas de clientes reales.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-pregunta"><span>¿GoParty cobra comisión por las reservas?</span><span class="faq-icono">+</span></div>
+                <div class="faq-respuesta">No. GoParty no cobra comisiones a los clientes. Los proveedores pagan una membresía mensual por estar en la plataforma, pero tú contactas directamente con ellos sin costos adicionales.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-pregunta"><span>¿Qué diferencia hay entre los planes Gold, Pro y Basic?</span><span class="faq-icono">+</span></div>
+                <div class="faq-respuesta">Basic: aparece en el directorio general. Pro: tiene sello verificado y mayor visibilidad. Gold: posición destacada en búsquedas, borde dorado y soporte prioritario.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-pregunta"><span>¿Cómo solicito una cotización personalizada?</span><span class="faq-icono">+</span></div>
+                <div class="faq-respuesta">Haz clic en "Solicitar Cotización" en el menú, llena el formulario con los detalles de tu evento y nuestro equipo te conectará con los proveedores ideales.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-pregunta"><span>¿En qué ciudades opera GoParty?</span><span class="faq-icono">+</span></div>
+                <div class="faq-respuesta">Actualmente operamos en Xalapa, Veracruz, Córdoba, Orizaba, Coatepec, Puebla y CDMX. Estamos expandiéndonos constantemente a más ciudades de México.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-pregunta"><span>¿Soy proveedor, cómo me registro?</span><span class="faq-icono">+</span></div>
+                <div class="faq-respuesta">Haz clic en "Únete a GoParty" o "Soy Proveedor" en el menú. Completa el formulario de 4 pasos con tu información, servicios y elige tu plan. Tu perfil será revisado en 24-48 horas.</div>
+            </div>
         </div>
     </section>
 
     <!-- Newsletter -->
     <section class="newsletter-section">
         <div class="newsletter-container">
-            <h2> Recibe Tips y Ofertas Exclusivas</h2>
+            <h2>📬 Recibe Tips y Ofertas Exclusivas</h2>
             <p>Suscríbete y recibe ideas para tu evento, descuentos de proveedores y contenido exclusivo.</p>
             <form class="newsletter-form" id="newsletterForm" onsubmit="suscribirNewsletter(event)">
                 <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
@@ -505,22 +607,43 @@
 
     <!-- WhatsApp Flotante -->
     <a href="#" class="whatsapp-float" id="whatsappFloat" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        <svg viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
         <span class="whatsapp-tooltip">¿Necesitas ayuda?</span>
     </a>
 
-    <!-- JavaScript Menú + FAQ -->
+    <!-- JavaScript Menú -->
     <script>
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const sidebar = document.getElementById('sidebar');
         const closeBtn = document.getElementById('closeBtn');
         const overlay = document.getElementById('overlay');
 
-        hamburgerBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; });
-        closeBtn.addEventListener('click', () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = 'auto'; });
-        overlay.addEventListener('click', () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = 'auto'; });
-        document.querySelectorAll('.sidebar-links a').forEach(link => { link.addEventListener('click', () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = 'auto'; }); });
+        hamburgerBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        document.querySelectorAll('.sidebar-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
 
+        // FAQ Acordeón
         document.querySelectorAll('.faq-pregunta').forEach(pregunta => {
             pregunta.addEventListener('click', () => {
                 const item = pregunta.parentElement;
@@ -549,7 +672,7 @@
         const db = getFirestore(app);
 
         // ==========================================
-        // 🆕 CARGAR CONFIGURACIÓN (WhatsApp, Footer, Stats)
+        // CARGAR CONFIGURACIÓN (WhatsApp, Footer, Stats)
         // ==========================================
         async function cargarConfiguracion() {
             try {
@@ -587,7 +710,7 @@
                         document.getElementById('statCiudades').textContent = ciudades.length + '+';
                     }
                 } else {
-                    // Valores por defecto si no hay config
+                    // Configuración por defecto
                     document.getElementById('statProveedores').textContent = '0+';
                     document.getElementById('statCiudades').textContent = '0+';
                 }
@@ -597,7 +720,7 @@
         }
 
         // ==========================================
-        // 🆕 NEWSLETTER - GUARDAR EMAIL EN FIREBASE
+        // NEWSLETTER - GUARDAR EMAIL
         // ==========================================
         window.suscribirNewsletter = async function(e) {
             e.preventDefault();
@@ -657,7 +780,13 @@
                 const querySnapshot = await getDocs(q);
 
                 if (querySnapshot.empty) {
-                    contenedor.innerHTML = `<div style="text-align: center; padding: 40px; color: #666; grid-column: 1/-1;"><h3> ¡Pronto tendremos proveedores!</h3><p>Aún no hay proveedores verificados.</p><p><a href="unete.html" style="color: #FF6B9D; font-weight: bold;">¿Eres proveedor? Únete aquí</a></p></div>`;
+                    contenedor.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #666; grid-column: 1/-1;">
+                            <h3>🎉 ¡Pronto tendremos proveedores!</h3>
+                            <p>Aún no hay proveedores verificados.</p>
+                            <p><a href="unete.html" style="color: #FF6B9D; font-weight: bold;">¿Eres proveedor? Únete aquí</a></p>
+                        </div>
+                    `;
                     countElement.textContent = '0 proveedores';
                     return;
                 }
@@ -679,7 +808,15 @@
                     else if (data.plan === 'pro') { badge = '<span class="badge badge-pro">⭐ Pro</span>'; }
                     else { badge = '<span class="badge badge-basic">✓ Verificado</span>'; }
 
-                    const tarjeta = `<div class="proveedor-card ${cardClass}">${badge}<div class="camera-icon">📷</div><h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">🏷️ ${data.categoria || 'General'}</p></div>`;
+                    const tarjeta = `
+                        <div class="proveedor-card ${cardClass}">
+                            ${badge}
+                            <div class="camera-icon">📷</div>
+                            <h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3>
+                            <p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p>
+                            <p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">️ ${data.categoria || 'General'}</p>
+                        </div>
+                    `;
                     contenedor.innerHTML += tarjeta;
                 });
 
@@ -714,20 +851,38 @@
                 const postsMostrar = posts.slice(0, 6);
 
                 postsMostrar.forEach(post => {
-                    const iconos = { 'Consejos': '💡', 'Tendencias': '🔥', 'Recursos Descargables': '📥', 'General': '' };
+                    const iconos = { 'Consejos': '💡', 'Tendencias': '🔥', 'Recursos Descargables': '📥', 'General': '📰' };
                     const icono = iconos[post.categoria] || '';
                     const fecha = post.fechaPublicacion ? new Date(post.fechaPublicacion).toLocaleDateString('es-MX') : '';
                     const tieneRecurso = post.recursoURL && post.recursoURL.trim() !== '';
-                    const textoAccion = tieneRecurso ? '📥 Descargar' : ' Leer más';
+                    const textoAccion = tieneRecurso ? '📥 Descargar' : '📖 Leer más';
                     const claseAccion = tieneRecurso ? 'blog-card-action download' : 'blog-card-action';
                     const linkAccion = tieneRecurso ? post.recursoURL : '#';
 
-                    const card = `<div class="blog-card"><div class="blog-card-image"><span class="blog-card-category">${post.categoria || 'General'}</span>${icono}</div><div class="blog-card-content"><h3 class="blog-card-title">${post.titulo || 'Sin título'}</h3><p class="blog-card-excerpt">${(post.resumen || post.contenido || '').substring(0, 120)}...</p><div class="blog-card-footer"><span class="blog-card-date">${fecha}</span><a href="${linkAccion}" class="${claseAccion}" ${tieneRecurso ? 'download' : ''} target="_blank">${textoAccion}</a></div></div></div>`;
+                    const card = `
+                        <div class="blog-card">
+                            <div class="blog-card-image">
+                                <span class="blog-card-category">${post.categoria || 'General'}</span>
+                                ${icono}
+                            </div>
+                            <div class="blog-card-content">
+                                <h3 class="blog-card-title">${post.titulo || 'Sin título'}</h3>
+                                <p class="blog-card-excerpt">${(post.resumen || post.contenido || '').substring(0, 120)}...</p>
+                                <div class="blog-card-footer">
+                                    <span class="blog-card-date">${fecha}</span>
+                                    <a href="${linkAccion}" class="${claseAccion}" ${tieneRecurso ? 'download' : ''} target="_blank">${textoAccion}</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                     blogGrid.innerHTML += card;
                 });
-            } catch (error) { console.error("Error al cargar blog: ", error); }
+            } catch (error) {
+                console.error("Error al cargar blog: ", error);
+            }
         }
 
+        // Tabs blog
         document.querySelectorAll('.blog-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.blog-tab').forEach(t => t.classList.remove('active'));
@@ -741,12 +896,24 @@
         // FILTROS
         // ==========================================
         window.filtrarProveedores = function() {
-            const filtros = { categoria: document.getElementById('filterCategoria').value, estado: document.getElementById('filterEstado').value, ciudad: document.getElementById('filterCiudad').value };
+            const filtros = {
+                categoria: document.getElementById('filterCategoria').value,
+                estado: document.getElementById('filterEstado').value,
+                ciudad: document.getElementById('filterCiudad').value
+            };
             cargarProveedores(filtros);
             document.getElementById('proveedores').scrollIntoView({ behavior: 'smooth' });
         };
-        window.filtrarPorCategoria = function(categoria) { document.getElementById('filterCategoria').value = categoria; cargarProveedores({ categoria: categoria }); };
-        window.filtrarPorCiudad = function(ciudad) { document.getElementById('filterCiudad').value = ciudad; cargarProveedores({ ciudad: ciudad }); };
+
+        window.filtrarPorCategoria = function(categoria) {
+            document.getElementById('filterCategoria').value = categoria;
+            cargarProveedores({ categoria: categoria });
+        };
+
+        window.filtrarPorCiudad = function(ciudad) {
+            document.getElementById('filterCiudad').value = ciudad;
+            cargarProveedores({ ciudad: ciudad });
+        };
 
         // ==========================================
         // INICIALIZAR

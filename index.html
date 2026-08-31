@@ -70,6 +70,16 @@
             font-weight: 600;
         }
 
+        .btn-cotizar {
+            background: linear-gradient(135deg, #6BCB77, #4A90E2);
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .btn-cotizar:hover {
+            box-shadow: 0 4px 12px rgba(107, 203, 119, 0.4);
+        }
+
         .btn-unete {
             background: linear-gradient(135deg, #FFD93D, #FF6B9D);
             color: white !important;
@@ -90,7 +100,7 @@
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
         }
 
-        /* Botón Hamburguesa (oculto en desktop) */
+        /* Botón Hamburguesa */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -109,7 +119,7 @@
             transition: all 0.3s;
         }
 
-        /* Menú Lateral (Sidebar) */
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
@@ -183,6 +193,12 @@
 
         .sidebar-links .nav-explorar {
             color: #4A90E2 !important;
+            font-weight: 600;
+        }
+
+        .sidebar-links .btn-cotizar {
+            background: linear-gradient(135deg, #6BCB77, #4A90E2);
+            color: white !important;
             font-weight: 600;
         }
 
@@ -496,6 +512,7 @@
             <!-- Menú Desktop -->
             <div class="nav-links">
                 <a href="index.html" class="nav-explorar">Explorar</a>
+                <a href="cotizacion.html" class="btn-cotizar">Solicitar Cotización</a>
                 <a href="unete.html" class="btn-unete">Únete a GoParty</a>
                 <a href="dashboard.html" class="btn-proveedor">Soy Proveedor</a>
             </div>
@@ -516,7 +533,8 @@
             <button class="close-btn" id="closeBtn" aria-label="Cerrar menú">&times;</button>
         </div>
         <div class="sidebar-links">
-            <a href="index.html" class="nav-explorar">🔍 Explorar</a>
+            <a href="index.html" class="nav-explorar"> Explorar</a>
+            <a href="cotizacion.html" class="btn-cotizar">📝 Solicitar Cotización</a>
             <a href="unete.html" class="btn-unete">🎉 Únete a GoParty</a>
             <a href="dashboard.html" class="btn-proveedor">👤 Soy Proveedor</a>
         </div>
@@ -537,12 +555,12 @@
                     <label>🏷️ Categoría</label>
                     <select class="search-select" id="filterCategoria">
                         <option value="">Todas las categorías</option>
-                        <option value="Salones"> Salones</option>
-                        <option value="Alimentos">🍽️ Alimentos</option>
+                        <option value="Salones">🏰 Salones</option>
+                        <option value="Alimentos">️ Alimentos</option>
                         <option value="Fotografía">📸 Fotografía</option>
-                        <option value="Música/DJ">🎵 Música/DJ</option>
-                        <option value="Decoración"> Decoración</option>
-                        <option value="Animación">🎪 Animación</option>
+                        <option value="Música/DJ"> Música/DJ</option>
+                        <option value="Decoración">🎈 Decoración</option>
+                        <option value="Animación"> Animación</option>
                         <option value="Mobiliario">🪑 Mobiliario</option>
                     </select>
                 </div>
@@ -706,8 +724,9 @@
                     let badge = '';
                     let cardClass = '';
                     
+                    // Determinar insignia según el plan
                     if (data.plan === 'gold') {
-                        badge = '<span class="badge badge-gold">👑 Gold</span>';
+                        badge = '<span class="badge badge-gold"> Gold</span>';
                         cardClass = 'gold';
                     } else if (data.plan === 'pro') {
                         badge = '<span class="badge badge-pro">⭐ Pro</span>';
@@ -718,7 +737,7 @@
                     const tarjeta = `
                         <div class="proveedor-card ${cardClass}">
                             ${badge}
-                            <div class="camera-icon"></div>
+                            <div class="camera-icon">📷</div>
                             <h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3>
                             <p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p>
                             <p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">🏷️ ${data.categoria || 'General'}</p>

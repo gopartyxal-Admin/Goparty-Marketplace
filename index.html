@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoParty - Directorio de Proveedores Verificados</title>
-    <meta name="description" content="Encuentra los mejores proveedores verificados para tu evento. Salones, decoración, alimentos, fotografía y más en cualquier ciudad de México.">
+    <meta name="description" content="Encuentra los mejores proveedores verificados para tu evento.">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; min-height: 100vh; }
@@ -226,22 +226,12 @@
             .estadistica-numero { font-size: 2rem; }
             .newsletter-form { flex-direction: column; }
             .newsletter-form input { min-width: 100%; }
-
-            /* 🎨 NUEVO: Degradados en menú móvil */
-            .sidebar-links a {
-                color: white !important;
-                font-weight: 600;
-                border: none;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            }
+            .sidebar-links a { color: white !important; font-weight: 600; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
             .sidebar-links a:nth-child(1) { background: linear-gradient(135deg, #4A90E2, #6BCB77); }
             .sidebar-links a:nth-child(2) { background: linear-gradient(135deg, #6BCB77, #4A90E2); }
             .sidebar-links a:nth-child(3) { background: linear-gradient(135deg, #FFD93D, #FF6B9D); }
             .sidebar-links a:nth-child(4) { background: linear-gradient(135deg, #4A90E2, #FF6B9D); }
-            .sidebar-links a:hover {
-                transform: scale(1.03);
-                box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-            }
+            .sidebar-links a:hover { transform: scale(1.03); box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
         }
         @media (max-width: 480px) {
             .hero h1 { font-size: 1.5rem; }
@@ -281,7 +271,7 @@
             <a href="index.html">🔍 Explorar</a>
             <a href="cotizacion.html">📝 Solicitar Cotización</a>
             <a href="unete.html">🎉 Únete a GoParty</a>
-            <a href="dashboard.html"> Soy Proveedor</a>
+            <a href="dashboard.html">👤 Soy Proveedor</a>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -293,39 +283,24 @@
         <div class="search-container">
             <div class="search-grid">
                 <div class="search-group">
-                    <label>️ Categoría</label>
+                    <label>🏷️ Categoría</label>
                     <select class="search-select" id="filterCategoria">
                         <option value="">Todas las categorías</option>
-                        <option value="Salones">🏰 Salones</option>
-                        <option value="Alimentos">🍽️ Alimentos</option>
-                        <option value="Fotografía">📸 Fotografía</option>
-                        <option value="Música/DJ">🎵 Música/DJ</option>
-                        <option value="Decoración">🎈 Decoración</option>
-                        <option value="Animación">🎪 Animación</option>
-                        <option value="Mobiliario">🪑 Mobiliario</option>
+                        <!-- 🆕 Se llena dinámicamente desde Firebase -->
                     </select>
                 </div>
                 <div class="search-group">
                     <label>📍 Estado</label>
                     <select class="search-select" id="filterEstado">
                         <option value="">Todos los estados</option>
-                        <option value="Veracruz">Veracruz</option>
-                        <option value="Puebla">Puebla</option>
-                        <option value="Ciudad de México">Ciudad de México</option>
-                        <option value="Oaxaca">Oaxaca</option>
+                        <!-- 🆕 Se llena dinámicamente desde Firebase -->
                     </select>
                 </div>
                 <div class="search-group">
                     <label>🏙️ Ciudad</label>
                     <select class="search-select" id="filterCiudad">
                         <option value="">Todas las ciudades</option>
-                        <option value="Xalapa">Xalapa</option>
-                        <option value="Veracruz">Veracruz</option>
-                        <option value="Córdoba">Córdoba</option>
-                        <option value="Orizaba">Orizaba</option>
-                        <option value="Coatepec">Coatepec</option>
-                        <option value="Puebla">Puebla</option>
-                        <option value="CDMX">CDMX</option>
+                        <!--  Se llena dinámicamente desde Firebase -->
                     </select>
                 </div>
             </div>
@@ -333,32 +308,15 @@
         </div>
     </section>
 
-    <!-- Categorías -->
+    <!-- 🆕 Categorías (dinámicas) -->
     <section class="categorias-section" id="categorias">
         <div class="categorias-container">
             <div class="categorias-header">
                 <h2>🎯 Explora por Categoría</h2>
                 <p>Encuentra exactamente lo que necesitas para tu evento</p>
             </div>
-            <div class="categorias-grid">
-                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Salones')">
-                    <div class="categoria-icon">🏰</div><h3>Salones</h3><p>Espacios únicos</p>
-                </a>
-                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Alimentos')">
-                    <div class="categoria-icon">🍽️</div><h3>Alimentos</h3><p>Sabores increíbles</p>
-                </a>
-                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Fotografía')">
-                    <div class="categoria-icon">📸</div><h3>Fotografía</h3><p>Momentos eternos</p>
-                </a>
-                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Música/DJ')">
-                    <div class="categoria-icon">🎵</div><h3>Música/DJ</h3><p>El ritmo perfecto</p>
-                </a>
-                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Decoración')">
-                    <div class="categoria-icon">🎈</div><h3>Decoración</h3><p>Ambientes mágicos</p>
-                </a>
-                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('Animación')">
-                    <div class="categoria-icon"></div><h3>Animación</h3><p>Diversión garantizada</p>
-                </a>
+            <div class="categorias-grid" id="categoriasGrid">
+                <!--  Se llena dinámicamente desde Firebase -->
             </div>
         </div>
     </section>
@@ -392,43 +350,22 @@
     <!-- Estadísticas -->
     <section class="estadisticas-section">
         <div class="estadisticas-container">
-            <div class="estadistica-item">
-                <div class="estadistica-icono"></div>
-                <div class="estadistica-numero" id="statEventos">0</div>
-                <div class="estadistica-label">Eventos Realizados</div>
-            </div>
-            <div class="estadistica-item">
-                <div class="estadistica-icono">👥</div>
-                <div class="estadistica-numero" id="statProveedores">0</div>
-                <div class="estadistica-label">Proveedores Verificados</div>
-            </div>
-            <div class="estadistica-item">
-                <div class="estadistica-icono">⭐</div>
-                <div class="estadistica-numero" id="statSatisfaccion">0</div>
-                <div class="estadistica-label">% Satisfacción</div>
-            </div>
-            <div class="estadistica-item">
-                <div class="estadistica-icono">🏙️</div>
-                <div class="estadistica-numero" id="statCiudades">0</div>
-                <div class="estadistica-label">Ciudades Activas</div>
-            </div>
+            <div class="estadistica-item"><div class="estadistica-icono">🎉</div><div class="estadistica-numero" id="statEventos">0</div><div class="estadistica-label">Eventos Realizados</div></div>
+            <div class="estadistica-item"><div class="estadistica-icono">👥</div><div class="estadistica-numero" id="statProveedores">0</div><div class="estadistica-label">Proveedores Verificados</div></div>
+            <div class="estadistica-item"><div class="estadistica-icono">⭐</div><div class="estadistica-numero" id="statSatisfaccion">0</div><div class="estadistica-label">% Satisfacción</div></div>
+            <div class="estadistica-item"><div class="estadistica-icono">🏙️</div><div class="estadistica-numero" id="statCiudades">0</div><div class="estadistica-label">Ciudades Activas</div></div>
         </div>
     </section>
 
-    <!-- Ciudades -->
+    <!-- 🆕 Ciudades (dinámicas) -->
     <section class="ciudades-section">
         <div class="ciudades-container">
             <div class="ciudades-header">
-                <h2>️ Ciudades con Más Proveedores</h2>
+                <h2>🏙️ Ciudades con Más Proveedores</h2>
                 <p>Encuentra proveedores cerca de ti</p>
             </div>
-            <div class="ciudades-grid">
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Xalapa')"><div class="ciudad-info"><h3>Xalapa</h3><p>Veracruz</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Veracruz')"><div class="ciudad-info"><h3>Veracruz</h3><p>Puerto y playa</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Puebla')"><div class="ciudad-info"><h3>Puebla</h3><p>Tradición y sabor</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('CDMX')"><div class="ciudad-info"><h3>CDMX</h3><p>La gran ciudad</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Córdoba')"><div class="ciudad-info"><h3>Córdoba</h3><p>Café y cultura</p></div></a>
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('Orizaba')"><div class="ciudad-info"><h3>Orizaba</h3><p>Ciudad de las aguas</p></div></a>
+            <div class="ciudades-grid" id="ciudadesGrid">
+                <!--  Se llena dinámicamente desde Firebase -->
             </div>
         </div>
     </section>
@@ -441,14 +378,14 @@
                 <p>Consejos, tendencias y formatos gratuitos para organizar tu fiesta perfecta</p>
             </div>
             <div class="blog-tabs">
-                <button class="blog-tab active" data-filter="todos">📋 Todos</button>
-                <button class="blog-tab" data-filter="Consejos">💡 Consejos</button>
-                <button class="blog-tab" data-filter="Tendencias">🔥 Tendencias</button>
+                <button class="blog-tab active" data-filter="todos"> Todos</button>
+                <button class="blog-tab" data-filter="Consejos"> Consejos</button>
+                <button class="blog-tab" data-filter="Tendencias"> Tendencias</button>
                 <button class="blog-tab" data-filter="Recursos Descargables">📥 Formatos Gratis</button>
-                <button class="blog-tab" data-filter="General">📰 General</button>
+                <button class="blog-tab" data-filter="General"> General</button>
             </div>
             <div id="blogGrid" class="blog-grid">
-                <div class="blog-empty"><div class="blog-empty-icon">📝</div><h3>Próximamente</h3><p>Estamos preparando contenido increíble para ayudarte a planear tu evento.</p></div>
+                <div class="blog-empty"><div class="blog-empty-icon">📝</div><h3>Próximamente</h3><p>Estamos preparando contenido increíble.</p></div>
             </div>
             <div class="blog-cta"><a href="blog.html" class="btn-ver-mas">Ver todos los artículos →</a></div>
         </div>
@@ -481,16 +418,13 @@
         </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- 🆕 FAQ (dinámica) -->
     <section class="faq-section" id="faq">
         <div class="faq-container">
-            <div class="faq-header"><h2> Preguntas Frecuentes</h2><p>Resolvemos tus dudas más comunes</p></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Cómo sé que un proveedor es confiable?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Todos los proveedores en GoParty pasan por un proceso de verificación. Los que tienen insignia Gold o Pro han sido validados por nuestro equipo y cuentan con reseñas de clientes reales.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿GoParty cobra comisión por las reservas?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">No. GoParty no cobra comisiones a los clientes. Los proveedores pagan una membresía mensual por estar en la plataforma, pero tú contactas directamente con ellos sin costos adicionales.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Qué diferencia hay entre los planes Gold, Pro y Basic?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Basic: aparece en el directorio general. Pro: tiene sello verificado y mayor visibilidad. Gold: posición destacada en búsquedas, borde dorado y soporte prioritario.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Cómo solicito una cotización personalizada?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Haz clic en "Solicitar Cotización" en el menú, llena el formulario con los detalles de tu evento (tipo, fecha, presupuesto, servicios) y nuestro equipo te conectará con los proveedores ideales.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿En qué ciudades opera GoParty?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Actualmente operamos en Xalapa, Veracruz, Córdoba, Orizaba, Coatepec, Puebla y CDMX. Estamos expandiéndonos constantemente a más ciudades de México.</div></div>
-            <div class="faq-item"><div class="faq-pregunta"><span>¿Soy proveedor, cómo me registro?</span><span class="faq-icono">+</span></div><div class="faq-respuesta">Haz clic en "Únete a GoParty" o "Soy Proveedor" en el menú. Completa el formulario de 4 pasos con tu información, servicios y elige tu plan. Tu perfil será revisado en 24-48 horas.</div></div>
+            <div class="faq-header"><h2>❓ Preguntas Frecuentes</h2><p>Resolvemos tus dudas más comunes</p></div>
+            <div id="faqContainer">
+                <!-- 🆕 Se llena dinámicamente desde Firebase -->
+            </div>
         </div>
     </section>
 
@@ -537,13 +471,15 @@
         overlay.addEventListener('click', () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = 'auto'; });
         document.querySelectorAll('.sidebar-links a').forEach(link => { link.addEventListener('click', () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = 'auto'; }); });
 
-        document.querySelectorAll('.faq-pregunta').forEach(pregunta => {
-            pregunta.addEventListener('click', () => {
+        // 🆕 FAQ Acordeón (delegado, ya que los items se cargan dinámicamente)
+        document.addEventListener('click', (e) => {
+            const pregunta = e.target.closest('.faq-pregunta');
+            if (pregunta) {
                 const item = pregunta.parentElement;
                 const isActive = item.classList.contains('active');
                 document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
                 if (!isActive) item.classList.add('active');
-            });
+            }
         });
     </script>
 
@@ -564,17 +500,163 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Cargar Configuración (WhatsApp, Footer, Stats)
+        // ==========================================
+        // 🆕 DATOS POR DEFECTO (fallback si Firebase está vacío)
+        // ==========================================
+        const categoriasDefault = [
+            { nombre: 'Salones', icono: '🏰', descripcion: 'Espacios únicos', orden: 1 },
+            { nombre: 'Alimentos', icono: '️', descripcion: 'Sabores increíbles', orden: 2 },
+            { nombre: 'Fotografía', icono: '📸', descripcion: 'Momentos eternos', orden: 3 },
+            { nombre: 'Música/DJ', icono: '🎵', descripcion: 'El ritmo perfecto', orden: 4 },
+            { nombre: 'Decoración', icono: '🎈', descripcion: 'Ambientes mágicos', orden: 5 },
+            { nombre: 'Animación', icono: '🎪', descripcion: 'Diversión garantizada', orden: 6 }
+        ];
+
+        const ciudadesDefault = [
+            { nombre: 'Xalapa', estado: 'Veracruz', descripcion: 'Capital de Veracruz', orden: 1 },
+            { nombre: 'Veracruz', estado: 'Veracruz', descripcion: 'Puerto y playa', orden: 2 },
+            { nombre: 'Puebla', estado: 'Puebla', descripcion: 'Tradición y sabor', orden: 3 },
+            { nombre: 'CDMX', estado: 'Ciudad de México', descripcion: 'La gran ciudad', orden: 4 },
+            { nombre: 'Córdoba', estado: 'Veracruz', descripcion: 'Café y cultura', orden: 5 },
+            { nombre: 'Orizaba', estado: 'Veracruz', descripcion: 'Ciudad de las aguas', orden: 6 }
+        ];
+
+        const faqDefault = [
+            { pregunta: '¿Cómo sé que un proveedor es confiable?', respuesta: 'Todos los proveedores en GoParty pasan por un proceso de verificación. Los que tienen insignia Gold o Pro han sido validados por nuestro equipo y cuentan con reseñas de clientes reales.', orden: 1 },
+            { pregunta: '¿GoParty cobra comisión por las reservas?', respuesta: 'No. GoParty no cobra comisiones a los clientes. Los proveedores pagan una membresía mensual por estar en la plataforma, pero tú contactas directamente con ellos sin costos adicionales.', orden: 2 },
+            { pregunta: '¿Qué diferencia hay entre los planes Gold, Pro y Basic?', respuesta: 'Basic: aparece en el directorio general. Pro: tiene sello verificado y mayor visibilidad. Gold: posición destacada en búsquedas, borde dorado y soporte prioritario.', orden: 3 },
+            { pregunta: '¿Cómo solicito una cotización personalizada?', respuesta: 'Haz clic en "Solicitar Cotización" en el menú, llena el formulario con los detalles de tu evento (tipo, fecha, presupuesto, servicios) y nuestro equipo te conectará con los proveedores ideales.', orden: 4 },
+            { pregunta: '¿En qué ciudades opera GoParty?', respuesta: 'Actualmente operamos en Xalapa, Veracruz, Córdoba, Orizaba, Coatepec, Puebla y CDMX. Estamos expandiéndonos constantemente a más ciudades de México.', orden: 5 },
+            { pregunta: '¿Soy proveedor, cómo me registro?', respuesta: 'Haz clic en "Únete a GoParty" o "Soy Proveedor" en el menú. Completa el formulario de 4 pasos con tu información, servicios y elige tu plan. Tu perfil será revisado en 24-48 horas.', orden: 6 }
+        ];
+
+        // ==========================================
+        // 🆕 RENDER CATEGORÍAS
+        // ==========================================
+        function renderCategorias(categorias) {
+            const grid = document.getElementById('categoriasGrid');
+            const select = document.getElementById('filterCategoria');
+            
+            // Limpiar select (mantener primera opción)
+            while (select.options.length > 1) select.remove(1);
+            
+            grid.innerHTML = categorias.map(cat => `
+                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('${cat.nombre}')">
+                    <div class="categoria-icon">${cat.icono || '📁'}</div>
+                    <h3>${cat.nombre}</h3>
+                    <p>${cat.descripcion || ''}</p>
+                </a>
+            `).join('');
+
+            categorias.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.nombre;
+                option.textContent = `${cat.icono || ''} ${cat.nombre}`;
+                select.appendChild(option);
+            });
+        }
+
+        // ==========================================
+        //  RENDER CIUDADES
+        // ==========================================
+        function renderCiudades(ciudades) {
+            const grid = document.getElementById('ciudadesGrid');
+            const selectCiudad = document.getElementById('filterCiudad');
+            const selectEstado = document.getElementById('filterEstado');
+            
+            // Limpiar selects
+            while (selectCiudad.options.length > 1) selectCiudad.remove(1);
+            while (selectEstado.options.length > 1) selectEstado.remove(1);
+
+            // Obtener estados únicos
+            const estadosUnicos = [...new Set(ciudades.map(c => c.estado))];
+
+            grid.innerHTML = ciudades.map((ciu, idx) => `
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('${ciu.nombre}')" style="background: linear-gradient(135deg, ${['#FFD93D,#FF6B9D','#FF6B9D,#4A90E2','#6BCB77,#4A90E2','#4A90E2,#FFD93D','#FF6B9D,#FFD93D','#4A90E2,#6BCB77'][idx % 6]} 0%, ${['#FF6B9D','#4A90E2','#4A90E2','#FFD93D','#FFD93D','#6BCB77'][idx % 6]} 100%);">
+                    <div class="ciudad-info"><h3>${ciu.nombre}</h3><p>${ciu.descripcion || ciu.estado}</p></div>
+                </a>
+            `).join('');
+
+            ciudades.forEach(ciu => {
+                const option = document.createElement('option');
+                option.value = ciu.nombre;
+                option.textContent = ciu.nombre;
+                selectCiudad.appendChild(option);
+            });
+
+            estadosUnicos.forEach(est => {
+                const option = document.createElement('option');
+                option.value = est;
+                option.textContent = est;
+                selectEstado.appendChild(option);
+            });
+        }
+
+        // ==========================================
+        // 🆕 RENDER FAQ
+        // ==========================================
+        function renderFaqs(faqs) {
+            const container = document.getElementById('faqContainer');
+            container.innerHTML = faqs.map(faq => `
+                <div class="faq-item">
+                    <div class="faq-pregunta">
+                        <span>${faq.pregunta}</span>
+                        <span class="faq-icono">+</span>
+                    </div>
+                    <div class="faq-respuesta">${faq.respuesta}</div>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
+        // 🆕 CARGAR CONTENIDO DINÁMICO
+        // ==========================================
+        async function cargarContenidoDinamico() {
+            try {
+                // Cargar categorías
+                const catSnap = await getDocs(collection(db, "categorias"));
+                let categorias = [];
+                catSnap.forEach(doc => categorias.push({ id: doc.id, ...doc.data() }));
+                categorias.sort((a, b) => (a.orden || 99) - (b.orden || 99));
+                if (categorias.length === 0) categorias = categoriasDefault;
+                renderCategorias(categorias);
+
+                // Cargar ciudades
+                const ciuSnap = await getDocs(collection(db, "ciudades"));
+                let ciudades = [];
+                ciuSnap.forEach(doc => ciudades.push({ id: doc.id, ...doc.data() }));
+                ciudades.sort((a, b) => (a.orden || 99) - (b.orden || 99));
+                if (ciudades.length === 0) ciudades = ciudadesDefault;
+                renderCiudades(ciudades);
+
+                // Cargar FAQ
+                const faqSnap = await getDocs(collection(db, "faq"));
+                let faqs = [];
+                faqSnap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() }));
+                faqs.sort((a, b) => (a.orden || 99) - (b.orden || 99));
+                if (faqs.length === 0) faqs = faqDefault;
+                renderFaqs(faqs);
+
+            } catch (error) {
+                console.error("Error cargando contenido dinámico:", error);
+                // Fallback a defaults
+                renderCategorias(categoriasDefault);
+                renderCiudades(ciudadesDefault);
+                renderFaqs(faqDefault);
+            }
+        }
+
+        // ==========================================
+        // CONFIGURACIÓN (WhatsApp, Footer, Stats)
+        // ==========================================
         async function cargarConfiguracion() {
             try {
                 const docRef = doc(db, "configuracion", "general");
                 const docSnap = await getDoc(docRef);
-                
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     if (data.whatsapp) {
-                        const whatsappLink = `https://wa.me/${data.whatsapp}?text=Hola%20GoParty%2C%20necesito%20información`;
-                        document.getElementById('whatsappFloat').href = whatsappLink;
+                        document.getElementById('whatsappFloat').href = `https://wa.me/${data.whatsapp}?text=Hola%20GoParty%2C%20necesito%20información`;
                     }
                     if (data.footer) {
                         document.getElementById('footerMsg').textContent = `© 2026 GoParty - ${data.footer}`;
@@ -587,7 +669,6 @@
                         const verificados = proveedoresSnap.docs.filter(d => d.data().estadoVerificacion === 'Verificado').length;
                         const ciudades = [...new Set(proveedoresSnap.docs.map(d => d.data().ciudad).filter(c => c))];
                         const cotizacionesSnap = await getDocs(collection(db, "solicitudes"));
-                        
                         document.getElementById('statEventos').textContent = cotizacionesSnap.size + '+';
                         document.getElementById('statProveedores').textContent = verificados + '+';
                         document.getElementById('statSatisfaccion').textContent = '98%';
@@ -609,24 +690,16 @@
             try {
                 const q = query(collection(db, "suscriptores"), where("email", "==", email));
                 const existing = await getDocs(q);
-                if (!existing.empty) {
-                    msg.textContent = 'ℹ️ Este email ya está suscrito.';
-                    msg.style.color = '#FFD93D';
-                    return;
-                }
-                await addDoc(collection(db, "suscriptores"), { email: email, fecha: new Date().toISOString(), activo: true });
-                msg.textContent = '✅ ¡Gracias por suscribirte! Recibirás nuestros mejores tips.';
+                if (!existing.empty) { msg.textContent = 'ℹ️ Este email ya está suscrito.'; msg.style.color = '#FFD93D'; return; }
+                await addDoc(collection(db, "suscriptores"), { email, fecha: new Date().toISOString(), activo: true });
+                msg.textContent = '✅ ¡Gracias por suscribirte!';
                 msg.style.color = 'white';
                 document.getElementById('newsletterForm').reset();
                 setTimeout(() => { msg.textContent = ''; }, 5000);
-            } catch (error) {
-                console.error("Error suscribiendo:", error);
-                msg.textContent = '❌ Error al suscribir. Intenta de nuevo.';
-                msg.style.color = '#FFD93D';
-            }
+            } catch (error) { msg.textContent = '❌ Error al suscribir.'; msg.style.color = '#FFD93D'; }
         };
 
-        // Cargar Proveedores
+        // Proveedores
         async function cargarProveedores(filtros = {}) {
             const contenedor = document.getElementById('contenedorProveedores');
             const countElement = document.getElementById('proveedoresCount');
@@ -660,20 +733,16 @@
 
                 proveedoresArray.forEach((data) => {
                     let badge = '', cardClass = '';
-                    if (data.plan === 'gold') { badge = '<span class="badge badge-gold">👑 Gold</span>'; cardClass = 'gold'; }
+                    if (data.plan === 'gold') { badge = '<span class="badge badge-gold"> Gold</span>'; cardClass = 'gold'; }
                     else if (data.plan === 'pro') { badge = '<span class="badge badge-pro">⭐ Pro</span>'; }
                     else { badge = '<span class="badge badge-basic">✓ Verificado</span>'; }
-
-                    const tarjeta = `<div class="proveedor-card ${cardClass}">${badge}<div class="camera-icon">📷</div><h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">🏷️ ${data.categoria || 'General'}</p></div>`;
+                    const tarjeta = `<div class="proveedor-card ${cardClass}">${badge}<div class="camera-icon">📷</div><h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;"> ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">🏷️ ${data.categoria || 'General'}</p></div>`;
                     contenedor.innerHTML += tarjeta;
                 });
-            } catch (error) {
-                console.error("Error al cargar proveedores: ", error);
-                contenedor.innerHTML = "<p style='color: red; text-align: center; grid-column: 1/-1;'>Error al cargar.</p>";
-            }
+            } catch (error) { contenedor.innerHTML = "<p style='color: red; text-align: center; grid-column: 1/-1;'>Error al cargar.</p>"; }
         }
 
-        // Cargar Blog
+        // Blog
         let blogFiltroActual = 'todos';
         async function cargarBlog() {
             const blogGrid = document.getElementById('blogGrid');
@@ -691,16 +760,12 @@
                 const posts = [];
                 querySnapshot.forEach((doc) => posts.push({ id: doc.id, ...doc.data() }));
                 posts.sort((a, b) => new Date(b.fechaPublicacion || 0) - new Date(a.fechaPublicacion || 0));
-                const postsMostrar = posts.slice(0, 6);
-                postsMostrar.forEach(post => {
+                posts.slice(0, 6).forEach(post => {
                     const iconos = { 'Consejos': '💡', 'Tendencias': '🔥', 'Recursos Descargables': '📥', 'General': '📰' };
                     const icono = iconos[post.categoria] || '';
                     const fecha = post.fechaPublicacion ? new Date(post.fechaPublicacion).toLocaleDateString('es-MX') : '';
                     const tieneRecurso = post.recursoURL && post.recursoURL.trim() !== '';
-                    const textoAccion = tieneRecurso ? '📥 Descargar' : '📖 Leer más';
-                    const claseAccion = tieneRecurso ? 'blog-card-action download' : 'blog-card-action';
-                    const linkAccion = tieneRecurso ? post.recursoURL : '#';
-                    const card = `<div class="blog-card"><div class="blog-card-image"><span class="blog-card-category">${post.categoria || 'General'}</span>${icono}</div><div class="blog-card-content"><h3 class="blog-card-title">${post.titulo || 'Sin título'}</h3><p class="blog-card-excerpt">${(post.resumen || post.contenido || '').substring(0, 120)}...</p><div class="blog-card-footer"><span class="blog-card-date">${fecha}</span><a href="${linkAccion}" class="${claseAccion}" ${tieneRecurso ? 'download' : ''} target="_blank">${textoAccion}</a></div></div></div>`;
+                    const card = `<div class="blog-card"><div class="blog-card-image"><span class="blog-card-category">${post.categoria || 'General'}</span>${icono}</div><div class="blog-card-content"><h3 class="blog-card-title">${post.titulo || 'Sin título'}</h3><p class="blog-card-excerpt">${(post.resumen || post.contenido || '').substring(0, 120)}...</p><div class="blog-card-footer"><span class="blog-card-date">${fecha}</span><a href="${tieneRecurso ? post.recursoURL : '#'}" class="blog-card-action ${tieneRecurso ? 'download' : ''}" ${tieneRecurso ? 'download' : ''} target="_blank">${tieneRecurso ? '📥 Descargar' : ' Leer más'}</a></div></div></div>`;
                     blogGrid.innerHTML += card;
                 });
             } catch (error) { console.error("Error al cargar blog: ", error); }
@@ -721,16 +786,19 @@
             cargarProveedores(filtros);
             document.getElementById('proveedores').scrollIntoView({ behavior: 'smooth' });
         };
-        window.filtrarPorCategoria = function(categoria) { document.getElementById('filterCategoria').value = categoria; cargarProveedores({ categoria: categoria }); };
-        window.filtrarPorCiudad = function(ciudad) { document.getElementById('filterCiudad').value = ciudad; cargarProveedores({ ciudad: ciudad }); };
+        window.filtrarPorCategoria = function(categoria) { document.getElementById('filterCategoria').value = categoria; cargarProveedores({ categoria }); };
+        window.filtrarPorCiudad = function(ciudad) { document.getElementById('filterCiudad').value = ciudad; cargarProveedores({ ciudad }); };
 
-        // Inicializar
+        // ==========================================
+        // INICIALIZAR
+        // ==========================================
         document.addEventListener('DOMContentLoaded', async () => {
             await cargarConfiguracion();
+            await cargarContenidoDinamico(); // 🆕
             cargarProveedores();
             cargarBlog();
         });
     </script>
 
 </body>
-</html>
+                </html>

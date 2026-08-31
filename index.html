@@ -145,7 +145,7 @@
         .btn-ver-mas { background: white; color: #FF6B9D; border: 2px solid #FF6B9D; padding: 0.8rem 2rem; border-radius: 25px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s; }
         .btn-ver-mas:hover { background: #FF6B9D; color: white; }
 
-        /* Testimonios */
+        /* 🆕 Testimonios */
         .testimonios-section { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%); padding: 4rem 2rem; color: white; }
         .testimonios-container { max-width: 1200px; margin: 0 auto; }
         .testimonios-header { text-align: center; margin-bottom: 3rem; }
@@ -271,7 +271,7 @@
             <a href="index.html">🔍 Explorar</a>
             <a href="cotizacion.html">📝 Solicitar Cotización</a>
             <a href="unete.html">🎉 Únete a GoParty</a>
-            <a href="dashboard.html">👤 Soy Proveedor</a>
+            <a href="dashboard.html"> Soy Proveedor</a>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -283,24 +283,21 @@
         <div class="search-container">
             <div class="search-grid">
                 <div class="search-group">
-                    <label>🏷️ Categoría</label>
+                    <label>️ Categoría</label>
                     <select class="search-select" id="filterCategoria">
                         <option value="">Todas las categorías</option>
-                        <!-- 🆕 Se llena dinámicamente desde Firebase -->
                     </select>
                 </div>
                 <div class="search-group">
-                    <label>📍 Estado</label>
+                    <label> Estado</label>
                     <select class="search-select" id="filterEstado">
                         <option value="">Todos los estados</option>
-                        <!-- 🆕 Se llena dinámicamente desde Firebase -->
                     </select>
                 </div>
                 <div class="search-group">
                     <label>🏙️ Ciudad</label>
                     <select class="search-select" id="filterCiudad">
                         <option value="">Todas las ciudades</option>
-                        <!--  Se llena dinámicamente desde Firebase -->
                     </select>
                 </div>
             </div>
@@ -308,16 +305,14 @@
         </div>
     </section>
 
-    <!-- 🆕 Categorías (dinámicas) -->
+    <!-- Categorías (dinámicas) -->
     <section class="categorias-section" id="categorias">
         <div class="categorias-container">
             <div class="categorias-header">
                 <h2>🎯 Explora por Categoría</h2>
                 <p>Encuentra exactamente lo que necesitas para tu evento</p>
             </div>
-            <div class="categorias-grid" id="categoriasGrid">
-                <!--  Se llena dinámicamente desde Firebase -->
-            </div>
+            <div class="categorias-grid" id="categoriasGrid"></div>
         </div>
     </section>
 
@@ -351,22 +346,20 @@
     <section class="estadisticas-section">
         <div class="estadisticas-container">
             <div class="estadistica-item"><div class="estadistica-icono">🎉</div><div class="estadistica-numero" id="statEventos">0</div><div class="estadistica-label">Eventos Realizados</div></div>
-            <div class="estadistica-item"><div class="estadistica-icono">👥</div><div class="estadistica-numero" id="statProveedores">0</div><div class="estadistica-label">Proveedores Verificados</div></div>
+            <div class="estadistica-item"><div class="estadistica-icono"></div><div class="estadistica-numero" id="statProveedores">0</div><div class="estadistica-label">Proveedores Verificados</div></div>
             <div class="estadistica-item"><div class="estadistica-icono">⭐</div><div class="estadistica-numero" id="statSatisfaccion">0</div><div class="estadistica-label">% Satisfacción</div></div>
             <div class="estadistica-item"><div class="estadistica-icono">🏙️</div><div class="estadistica-numero" id="statCiudades">0</div><div class="estadistica-label">Ciudades Activas</div></div>
         </div>
     </section>
 
-    <!-- 🆕 Ciudades (dinámicas) -->
+    <!-- Ciudades (dinámicas) -->
     <section class="ciudades-section">
         <div class="ciudades-container">
             <div class="ciudades-header">
                 <h2>🏙️ Ciudades con Más Proveedores</h2>
                 <p>Encuentra proveedores cerca de ti</p>
             </div>
-            <div class="ciudades-grid" id="ciudadesGrid">
-                <!--  Se llena dinámicamente desde Firebase -->
-            </div>
+            <div class="ciudades-grid" id="ciudadesGrid"></div>
         </div>
     </section>
 
@@ -378,11 +371,11 @@
                 <p>Consejos, tendencias y formatos gratuitos para organizar tu fiesta perfecta</p>
             </div>
             <div class="blog-tabs">
-                <button class="blog-tab active" data-filter="todos"> Todos</button>
-                <button class="blog-tab" data-filter="Consejos"> Consejos</button>
-                <button class="blog-tab" data-filter="Tendencias"> Tendencias</button>
+                <button class="blog-tab active" data-filter="todos">📋 Todos</button>
+                <button class="blog-tab" data-filter="Consejos">💡 Consejos</button>
+                <button class="blog-tab" data-filter="Tendencias">🔥 Tendencias</button>
                 <button class="blog-tab" data-filter="Recursos Descargables">📥 Formatos Gratis</button>
-                <button class="blog-tab" data-filter="General"> General</button>
+                <button class="blog-tab" data-filter="General">📰 General</button>
             </div>
             <div id="blogGrid" class="blog-grid">
                 <div class="blog-empty"><div class="blog-empty-icon">📝</div><h3>Próximamente</h3><p>Estamos preparando contenido increíble.</p></div>
@@ -391,40 +384,22 @@
         </div>
     </section>
 
-    <!-- Testimonios -->
+    <!-- 🆕 Testimonios (dinámicos - FASE 3) -->
     <section class="testimonios-section">
         <div class="testimonios-container">
             <div class="testimonios-header">
                 <h2>💬 Lo que dicen nuestros clientes</h2>
                 <p>Historias reales de eventos inolvidables</p>
             </div>
-            <div class="testimonios-grid">
-                <div class="testimonio-card">
-                    <div class="testimonio-estrellas">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonio-texto">Encontré al decorador perfecto para la fiesta de mi hija. Todo salió increíble y el proceso fue súper fácil.</p>
-                    <div class="testimonio-autor"><div class="testimonio-avatar">M</div><div class="testimonio-info"><h4>María González</h4><p>Cumpleaños Infantil - Xalapa</p></div></div>
-                </div>
-                <div class="testimonio-card">
-                    <div class="testimonio-estrellas">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonio-texto">La mejor plataforma para encontrar proveedores. Los Gold realmente valen la pena, calidad garantizada.</p>
-                    <div class="testimonio-autor"><div class="testimonio-avatar">J</div><div class="testimonio-info"><h4>Juan Pérez</h4><p>Boda - Veracruz</p></div></div>
-                </div>
-                <div class="testimonio-card">
-                    <div class="testimonio-estrellas">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonio-texto">Me encantó poder comparar varios proveedores y ver sus reseñas. Mi evento corporativo fue un éxito total.</p>
-                    <div class="testimonio-autor"><div class="testimonio-avatar">A</div><div class="testimonio-info"><h4>Ana Ramírez</h4><p>Evento Corporativo - Puebla</p></div></div>
-                </div>
-            </div>
+            <div class="testimonios-grid" id="testimoniosGrid"></div>
         </div>
     </section>
 
-    <!-- 🆕 FAQ (dinámica) -->
+    <!-- FAQ (dinámica) -->
     <section class="faq-section" id="faq">
         <div class="faq-container">
             <div class="faq-header"><h2>❓ Preguntas Frecuentes</h2><p>Resolvemos tus dudas más comunes</p></div>
-            <div id="faqContainer">
-                <!-- 🆕 Se llena dinámicamente desde Firebase -->
-            </div>
+            <div id="faqContainer"></div>
         </div>
     </section>
 
@@ -445,7 +420,7 @@
     <section class="banner-proveedor">
         <h2>¿Tienes un negocio de eventos?</h2>
         <p>Únete a la red de proveedores verificados más grande. Aumenta tu visibilidad, recibe cotizaciones y haz crecer tu negocio.</p>
-        <a href="unete.html" class="btn-banner"> Registrarme como Proveedor</a>
+        <a href="unete.html" class="btn-banner">🚀 Registrarme como Proveedor</a>
     </section>
 
     <!-- Footer -->
@@ -471,7 +446,7 @@
         overlay.addEventListener('click', () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = 'auto'; });
         document.querySelectorAll('.sidebar-links a').forEach(link => { link.addEventListener('click', () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = 'auto'; }); });
 
-        // 🆕 FAQ Acordeón (delegado, ya que los items se cargan dinámicamente)
+        // FAQ Acordeón (delegado, ya que los items se cargan dinámicamente)
         document.addEventListener('click', (e) => {
             const pregunta = e.target.closest('.faq-pregunta');
             if (pregunta) {
@@ -501,7 +476,7 @@
         const db = getFirestore(app);
 
         // ==========================================
-        // 🆕 DATOS POR DEFECTO (fallback si Firebase está vacío)
+        // DATOS POR DEFECTO (fallback si Firebase está vacío)
         // ==========================================
         const categoriasDefault = [
             { nombre: 'Salones', icono: '🏰', descripcion: 'Espacios únicos', orden: 1 },
@@ -530,16 +505,41 @@
             { pregunta: '¿Soy proveedor, cómo me registro?', respuesta: 'Haz clic en "Únete a GoParty" o "Soy Proveedor" en el menú. Completa el formulario de 4 pasos con tu información, servicios y elige tu plan. Tu perfil será revisado en 24-48 horas.', orden: 6 }
         ];
 
+        // 🆕 FASE 3: Testimonios por defecto
+        const testimoniosDefault = [
+            {
+                nombreCliente: 'María González',
+                inicial: 'M',
+                tipoEvento: 'Cumpleaños Infantil',
+                ciudad: 'Xalapa',
+                calificacion: 5,
+                comentario: 'Encontré al decorador perfecto para la fiesta de mi hija. Todo salió increíble y el proceso fue súper fácil.'
+            },
+            {
+                nombreCliente: 'Juan Pérez',
+                inicial: 'J',
+                tipoEvento: 'Boda',
+                ciudad: 'Veracruz',
+                calificacion: 5,
+                comentario: 'La mejor plataforma para encontrar proveedores. Los Gold realmente valen la pena, calidad garantizada.'
+            },
+            {
+                nombreCliente: 'Ana Ramírez',
+                inicial: 'A',
+                tipoEvento: 'Evento Corporativo',
+                ciudad: 'Puebla',
+                calificacion: 5,
+                comentario: 'Me encantó poder comparar varios proveedores y ver sus reseñas. Mi evento corporativo fue un éxito total.'
+            }
+        ];
+
         // ==========================================
-        // 🆕 RENDER CATEGORÍAS
+        // RENDER CATEGORÍAS
         // ==========================================
         function renderCategorias(categorias) {
             const grid = document.getElementById('categoriasGrid');
             const select = document.getElementById('filterCategoria');
-            
-            // Limpiar select (mantener primera opción)
             while (select.options.length > 1) select.remove(1);
-            
             grid.innerHTML = categorias.map(cat => `
                 <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('${cat.nombre}')">
                     <div class="categoria-icon">${cat.icono || '📁'}</div>
@@ -547,7 +547,6 @@
                     <p>${cat.descripcion || ''}</p>
                 </a>
             `).join('');
-
             categorias.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat.nombre;
@@ -557,33 +556,27 @@
         }
 
         // ==========================================
-        //  RENDER CIUDADES
+        // RENDER CIUDADES
         // ==========================================
         function renderCiudades(ciudades) {
             const grid = document.getElementById('ciudadesGrid');
             const selectCiudad = document.getElementById('filterCiudad');
             const selectEstado = document.getElementById('filterEstado');
-            
-            // Limpiar selects
             while (selectCiudad.options.length > 1) selectCiudad.remove(1);
             while (selectEstado.options.length > 1) selectEstado.remove(1);
-
-            // Obtener estados únicos
             const estadosUnicos = [...new Set(ciudades.map(c => c.estado))];
-
+            const gradientes = ['#FFD93D,#FF6B9D','#FF6B9D,#4A90E2','#6BCB77,#4A90E2','#4A90E2,#FFD93D','#FF6B9D,#FFD93D','#4A90E2,#6BCB77'];
             grid.innerHTML = ciudades.map((ciu, idx) => `
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('${ciu.nombre}')" style="background: linear-gradient(135deg, ${['#FFD93D,#FF6B9D','#FF6B9D,#4A90E2','#6BCB77,#4A90E2','#4A90E2,#FFD93D','#FF6B9D,#FFD93D','#4A90E2,#6BCB77'][idx % 6]} 0%, ${['#FF6B9D','#4A90E2','#4A90E2','#FFD93D','#FFD93D','#6BCB77'][idx % 6]} 100%);">
+                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('${ciu.nombre}')" style="background: linear-gradient(135deg, ${gradientes[idx % gradientes.length].split(',')[0]} 0%, ${gradientes[idx % gradientes.length].split(',')[1]} 100%);">
                     <div class="ciudad-info"><h3>${ciu.nombre}</h3><p>${ciu.descripcion || ciu.estado}</p></div>
                 </a>
             `).join('');
-
             ciudades.forEach(ciu => {
                 const option = document.createElement('option');
                 option.value = ciu.nombre;
                 option.textContent = ciu.nombre;
                 selectCiudad.appendChild(option);
             });
-
             estadosUnicos.forEach(est => {
                 const option = document.createElement('option');
                 option.value = est;
@@ -593,27 +586,47 @@
         }
 
         // ==========================================
-        // 🆕 RENDER FAQ
+        // RENDER FAQ
         // ==========================================
         function renderFaqs(faqs) {
             const container = document.getElementById('faqContainer');
             container.innerHTML = faqs.map(faq => `
                 <div class="faq-item">
-                    <div class="faq-pregunta">
-                        <span>${faq.pregunta}</span>
-                        <span class="faq-icono">+</span>
-                    </div>
+                    <div class="faq-pregunta"><span>${faq.pregunta}</span><span class="faq-icono">+</span></div>
                     <div class="faq-respuesta">${faq.respuesta}</div>
                 </div>
             `).join('');
         }
 
         // ==========================================
-        // 🆕 CARGAR CONTENIDO DINÁMICO
+        // 🆕 FASE 3: RENDER TESTIMONIOS
+        // ==========================================
+        function renderTestimonios(testimonios) {
+            const grid = document.getElementById('testimoniosGrid');
+            if (!grid) return;
+            grid.innerHTML = testimonios.map(t => {
+                const estrellas = '⭐'.repeat(t.calificacion || 5);
+                return `
+                    <div class="testimonio-card">
+                        <div class="testimonio-estrellas">${estrellas}</div>
+                        <p class="testimonio-texto">${t.comentario || ''}</p>
+                        <div class="testimonio-autor">
+                            <div class="testimonio-avatar">${t.inicial || t.nombreCliente?.charAt(0) || '?'}</div>
+                            <div class="testimonio-info">
+                                <h4>${t.nombreCliente || 'Cliente'}</h4>
+                                <p>${t.tipoEvento || ''} - ${t.ciudad || ''}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==========================================
+        // CARGAR CONTENIDO DINÁMICO
         // ==========================================
         async function cargarContenidoDinamico() {
             try {
-                // Cargar categorías
                 const catSnap = await getDocs(collection(db, "categorias"));
                 let categorias = [];
                 catSnap.forEach(doc => categorias.push({ id: doc.id, ...doc.data() }));
@@ -621,7 +634,6 @@
                 if (categorias.length === 0) categorias = categoriasDefault;
                 renderCategorias(categorias);
 
-                // Cargar ciudades
                 const ciuSnap = await getDocs(collection(db, "ciudades"));
                 let ciudades = [];
                 ciuSnap.forEach(doc => ciudades.push({ id: doc.id, ...doc.data() }));
@@ -629,7 +641,6 @@
                 if (ciudades.length === 0) ciudades = ciudadesDefault;
                 renderCiudades(ciudades);
 
-                // Cargar FAQ
                 const faqSnap = await getDocs(collection(db, "faq"));
                 let faqs = [];
                 faqSnap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() }));
@@ -637,12 +648,22 @@
                 if (faqs.length === 0) faqs = faqDefault;
                 renderFaqs(faqs);
 
+                // 🆕 FASE 3: Cargar testimonios aprobados
+                const testSnap = await getDocs(collection(db, "testimonios"));
+                let testimonios = [];
+                testSnap.forEach(doc => testimonios.push({ id: doc.id, ...doc.data() }));
+                testimonios = testimonios
+                    .filter(t => t.estado === 'aprobado')
+                    .sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
+                if (testimonios.length === 0) testimonios = testimoniosDefault;
+                renderTestimonios(testimonios.slice(0, 6));
+
             } catch (error) {
                 console.error("Error cargando contenido dinámico:", error);
-                // Fallback a defaults
                 renderCategorias(categoriasDefault);
                 renderCiudades(ciudadesDefault);
                 renderFaqs(faqDefault);
+                renderTestimonios(testimoniosDefault);
             }
         }
 
@@ -733,10 +754,10 @@
 
                 proveedoresArray.forEach((data) => {
                     let badge = '', cardClass = '';
-                    if (data.plan === 'gold') { badge = '<span class="badge badge-gold"> Gold</span>'; cardClass = 'gold'; }
+                    if (data.plan === 'gold') { badge = '<span class="badge badge-gold">👑 Gold</span>'; cardClass = 'gold'; }
                     else if (data.plan === 'pro') { badge = '<span class="badge badge-pro">⭐ Pro</span>'; }
                     else { badge = '<span class="badge badge-basic">✓ Verificado</span>'; }
-                    const tarjeta = `<div class="proveedor-card ${cardClass}">${badge}<div class="camera-icon">📷</div><h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;"> ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">🏷️ ${data.categoria || 'General'}</p></div>`;
+                    const tarjeta = `<div class="proveedor-card ${cardClass}">${badge}<div class="camera-icon">📷</div><h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">️ ${data.categoria || 'General'}</p></div>`;
                     contenedor.innerHTML += tarjeta;
                 });
             } catch (error) { contenedor.innerHTML = "<p style='color: red; text-align: center; grid-column: 1/-1;'>Error al cargar.</p>"; }
@@ -794,11 +815,11 @@
         // ==========================================
         document.addEventListener('DOMContentLoaded', async () => {
             await cargarConfiguracion();
-            await cargarContenidoDinamico(); // 🆕
+            await cargarContenidoDinamico(); // Incluye testimonios (Fase 3)
             cargarProveedores();
             cargarBlog();
         });
     </script>
 
 </body>
-                </html>
+</html>

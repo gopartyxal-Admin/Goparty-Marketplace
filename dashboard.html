@@ -234,74 +234,26 @@
 
                 <div class="auth-divider">O con email</div>
 
-                <div class="auth-link">¿No tienes cuenta? <a href="#" onclick="showRegister()">Registrarse</a></div>
+                <div class="auth-link">
+                    ¿No tienes cuenta? <a href="unete.html">Solicitar incorporación →</a>
+                </div>
                 <div class="forgot-password"><a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a></div>
+                <p style="text-align: center; font-size: 0.8rem; color: #999; margin-top: 0.5rem;">
+                    El registro es por invitación. Solicita tu incorporación desde la página principal.
+                </p>
             </div>
 
-            <!-- REGISTRO -->
+            <!-- REGISTRO (Redirigir a unete.html) -->
             <div id="registerForm" style="display: none;">
-                <h2>Crear Cuenta de Proveedor</h2>
-                <p class="subtitle">Registra tu negocio en GoParty</p>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Estado <span class="required">*</span></label>
-                        <select id="regEstado" onchange="actualizarCiudades()">
-                            <option value="">Selecciona tu estado</option>
-                            <option value="Veracruz">Veracruz</option>
-                            <option value="Puebla">Puebla</option>
-                            <option value="Ciudad de México">Ciudad de México</option>
-                            <option value="Oaxaca">Oaxaca</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ciudad <span class="required">*</span></label>
-                        <select id="regCiudad">
-                            <option value="">Primero selecciona estado</option>
-                        </select>
-                    </div>
+                <h2>Acceso Restringido</h2>
+                <p class="subtitle">El registro de proveedores es solo por aprobación</p>
+                <div style="text-align: center; padding: 2rem; background: #FFF9E6; border-radius: 8px; margin: 1.5rem 0;">
+                    <p style="margin-bottom: 1rem; color: #333;">Para unirte a GoParty, debes solicitar tu incorporación desde nuestra página principal.</p>
+                    <a href="unete.html" class="btn" style="display: inline-block; text-decoration: none;">Ir a unete.html</a>
                 </div>
-
-                <div class="form-group">
-                    <label>Nombre del Negocio <span class="required">*</span></label>
-                    <input type="text" id="regNombre" placeholder="Ej: Salón de Fiestas XYZ">
+                <div class="auth-link">
+                    <a href="#" onclick="showLogin()">← Volver al Login</a>
                 </div>
-                <div class="form-group">
-                    <label>Nombre de Contacto <span class="required">*</span></label>
-                    <input type="text" id="regContacto" placeholder="Tu nombre completo">
-                </div>
-                <div class="form-group">
-                    <label>WhatsApp <span class="required">*</span></label>
-                    <input type="tel" id="regWhatsapp" placeholder="2281234567">
-                </div>
-                <div class="form-group">
-                    <label>Email <span class="required">*</span></label>
-                    <input type="email" id="regEmail" placeholder="tu@email.com">
-                </div>
-                <div class="form-group">
-                    <label>Contraseña <span class="required">*</span></label>
-                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres">
-                </div>
-
-                <!-- TÉRMINOS Y CONDICIONES -->
-                <div class="terminos-box">
-                    <label>
-                        <input type="checkbox" id="regTerminos">
-                        <span>
-                            He leído y acepto los <a href="terminos.html" target="_blank">Términos y Condiciones</a> de GoParty, así como el <a href="terminos.html#privacidad" target="_blank">Aviso de Privacidad</a>. Entiendo que mi perfil será revisado por el equipo de GoParty en un plazo de 24-48 horas antes de ser activado.
-                        </span>
-                    </label>
-                </div>
-
-                <button class="btn-auth" onclick="register()">Crear Cuenta de Proveedor</button>
-                <button class="btn-google" onclick="loginWithGoogle()">
-                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                    Registrarme con Google
-                </button>
-
-                <div class="auth-divider">O con email</div>
-
-                <div class="auth-link">¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar Sesión</a></div>
             </div>
 
             <!-- FORGOT PASSWORD -->
@@ -317,7 +269,7 @@
             </div>
 
             <p style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #999;">
-                Al registrarte, aceptas los <a href="terminos.html" target="_blank" style="color: #4A90E2;">términos y condiciones</a> de GoParty
+                ¿Eres proveedor? <a href="unete.html" style="color: #6BCB77; font-weight: 600;">Solicita tu incorporación aquí</a>
             </p>
         </div>
     </div>
@@ -337,11 +289,11 @@
         </div>
 
         <div class="tabs">
-            <div class="tab active" data-tab="dashboard"> Mi Dashboard</div>
-            <div class="tab" data-tab="cotizaciones"> Cotizaciones</div>
-            <div class="tab" data-tab="perfil"> Mi Perfil</div>
+            <div class="tab active" data-tab="dashboard">📊 Mi Dashboard</div>
+            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones</div>
+            <div class="tab" data-tab="perfil">👤 Mi Perfil</div>
             <div class="tab" data-tab="testimonios">⭐ Testimonios</div>
-            <div class="tab" data-tab="membresia">💎 Membresía</div>
+            <div class="tab" data-tab="membresia"> Membresía</div>
             <div class="tab" data-tab="mensajes">💬 Mensajes</div>
         </div>
 
@@ -349,7 +301,7 @@
             <!-- DASHBOARD -->
             <div class="tab-content active" id="tab-dashboard">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">Mi Dashboard</h2>
-                <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;"> Ver Sitio Principal</a>
+                <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;">🌐 Ver Sitio Principal</a>
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-number" id="statVistas">0</div><div class="stat-label">Vistas al Perfil</div></div>
                     <div class="stat-card blue"><div class="stat-number" id="statCotizaciones">0</div><div class="stat-label">Cotizaciones</div></div>
@@ -463,34 +415,9 @@
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Ciudades por estado
-        const ciudadesPorEstado = {
-            'Veracruz': ['Xalapa', 'Veracruz', 'Córdoba', 'Orizaba', 'Coatepec', 'Boca del Río'],
-            'Puebla': ['Puebla', 'Atlixco', 'Cholula', 'San Andrés', 'Tehuacán'],
-            'Ciudad de México': ['Álvaro Obregón', 'Coyoacán', 'Cuauhtémoc', 'Iztapalapa', 'Miguel Hidalgo'],
-            'Oaxaca': ['Oaxaca de Juárez', 'Salina Cruz', 'Huatulco', 'Puerto Escondido']
-        };
-
-        window.actualizarCiudades = function() {
-            const estado = document.getElementById('regEstado').value;
-            const selectCiudad = document.getElementById('regCiudad');
-            selectCiudad.innerHTML = '<option value="">Selecciona tu ciudad</option>';
-            if (estado && ciudadesPorEstado[estado]) {
-                ciudadesPorEstado[estado].forEach(c => {
-                    const opt = document.createElement('option');
-                    opt.value = c; opt.textContent = c;
-                    selectCiudad.appendChild(opt);
-                });
-            }
-        };
-
         // Mostrar/ocultar formularios
         window.showRegister = function() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('forgotForm').style.display = 'none';
-            document.getElementById('authTitle').textContent = 'Únete a GoParty';
-            document.getElementById('authSubtitle').textContent = 'Registra tu negocio y comienza a crecer';
+            window.location.href = 'unete.html';
         };
         window.showLogin = function() {
             document.getElementById('loginForm').style.display = 'block';
@@ -505,90 +432,129 @@
             document.getElementById('forgotForm').style.display = 'block';
         };
 
-        // LOGIN
+        // LOGIN con validación de estado
         window.login = async function() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            if (!email || !password) { alert('❌ Completa todos los campos'); return; }
+            
+            if (!email || !password) {
+                alert('❌ Por favor completa todos los campos');
+                return;
+            }
+
             try {
                 const cred = await signInWithEmailAndPassword(auth, email, password);
-                localStorage.setItem('proveedorId', cred.user.uid);
+                const uid = cred.user.uid;
+                
+                // Verificar estado de aprobación
+                const docSnap = await getDoc(doc(db, "proveedores", uid));
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const estado = data.estadoVerificacion || data.estadoAprobacion || 'Pendiente';
+                    
+                    if (estado !== 'Aprobado' && estado !== 'Verificado') {
+                        // No está aprobado → cerrar sesión y mostrar mensaje
+                        await auth.signOut();
+                        
+                        let mensaje = '⏳ Tu cuenta está en revisión.\n\n';
+                        if (estado === 'Rechazado') {
+                            mensaje = ' Tu solicitud fue rechazada.\n\n';
+                            if (data.motivoRechazo) {
+                                mensaje += `Motivo: ${data.motivoRechazo}\n\n`;
+                            }
+                            mensaje += 'Si consideras que es un error, contacta a soporte@goparty.com';
+                        } else {
+                            mensaje += 'El equipo de GoParty revisará tu perfil en 24-48 horas.\n\n';
+                            mensaje += 'Recibirás un email cuando tu cuenta sea activada.';
+                        }
+                        
+                        alert(mensaje);
+                        return;
+                    }
+                } else {
+                    // No existe en Firestore
+                    await auth.signOut();
+                    alert('❌ No encontramos tu perfil en el sistema. Solicita tu incorporación desde unete.html');
+                    return;
+                }
+                
+                // Aprobado → continuar login normal
+                localStorage.setItem('proveedorId', uid);
                 localStorage.setItem('proveedorEmail', cred.user.email);
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardPanel').classList.add('active');
-                await cargarDatosProveedor(cred.user.uid);
-            } catch (error) { alert('❌ Error: ' + error.message); }
+                await cargarDatosProveedor(uid);
+                
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
         };
 
-        // REGISTRO
-        window.register = async function() {
-            if (!document.getElementById('regTerminos').checked) {
-                alert('❌ Debes aceptar los Términos y Condiciones para continuar');
-                return;
-            }
-
-            const nombre = document.getElementById('regNombre').value;
-            const contacto = document.getElementById('regContacto').value;
-            const whatsapp = document.getElementById('regWhatsapp').value;
-            const email = document.getElementById('regEmail').value;
-            const ciudad = document.getElementById('regCiudad').value;
-            const estado = document.getElementById('regEstado').value;
-            const password = document.getElementById('regPassword').value;
-
-            if (!nombre || !contacto || !whatsapp || !email || !ciudad || !estado || !password) {
-                alert('❌ Por favor completa todos los campos obligatorios');
-                return;
-            }
-            if (password.length < 6) { alert('❌ La contraseña debe tener al menos 6 caracteres'); return; }
-
-            try {
-                const cred = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "proveedores", cred.user.uid), {
-                    nombreNegocio: nombre,
-                    nombreContacto: contacto,
-                    whatsapp: whatsapp,
-                    email: email,
-                    ciudad: ciudad,
-                    estado: estado,
-                    plan: 'basic',
-                    estadoVerificacion: 'Pendiente',
-                    fechaRegistro: new Date().toISOString(),
-                    uid: cred.user.uid,
-                    terminosAceptados: true,
-                    fechaAceptacionTerminos: new Date().toISOString()
-                });
-
-                alert('✅ ¡Cuenta creada exitosamente!\n\nTu perfil será revisado por el equipo de GoParty en 24-48 horas.');
-                localStorage.setItem('proveedorId', cred.user.uid);
-                localStorage.setItem('proveedorEmail', email);
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('dashboardPanel').classList.add('active');
-                cargarDatosProveedor(cred.user.uid);
-            } catch (error) { alert('❌ Error: ' + error.message); }
-        };
-
-        // GOOGLE
+        // LOGIN con Google con validación
         window.loginWithGoogle = async function() {
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
-                const docRef = doc(db, "proveedores", user.uid);
-                const docSnap = await getDoc(docRef);
-                if (!docSnap.exists()) {
-                    await setDoc(docRef, {
-                        nombreNegocio: user.displayName || 'Mi Negocio',
-                        nombreContacto: user.displayName || '',
-                        whatsapp: '', email: user.email, ciudad: '', estado: '',
-                        plan: 'basic', estadoVerificacion: 'Pendiente',
-                        fechaRegistro: new Date().toISOString(), uid: user.uid
-                    });
+                const email = user.email;
+
+                // PASO 1: Buscar si este email ya está registrado en proveedores
+                const q = query(collection(db, "proveedores"), where("email", "==", email));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    // No existe en la base de datos → No está aprobado
+                    await auth.signOut();
+                    alert(
+                        '🚫 Acceso no autorizado\n\n' +
+                        'No encontramos una cuenta aprobada asociada a este email.\n\n' +
+                        'Para unirte a GoParty, solicita tu incorporación desde:\n' +
+                        '👉 unete.html\n\n' +
+                        'El equipo revisará tu solicitud en 24-48 horas.'
+                    );
+                    return;
                 }
-                localStorage.setItem('proveedorId', user.uid);
-                localStorage.setItem('proveedorEmail', user.email);
+
+                // PASO 2: Existe → Verificar estado de aprobación
+                const proveedorDoc = querySnapshot.docs[0];
+                const proveedorData = proveedorDoc.data();
+                const estado = proveedorData.estadoVerificacion || 'Pendiente';
+
+                if (estado !== 'Aprobado' && estado !== 'Verificado') {
+                    await auth.signOut();
+                    
+                    let mensaje = '';
+                    if (estado === 'Rechazado') {
+                        mensaje = '❌ Solicitud rechazada\n\n';
+                        if (proveedorData.motivoRechazo) {
+                            mensaje += `Motivo: ${proveedorData.motivoRechazo}\n\n`;
+                        }
+                        mensaje += 'Si consideras que es un error, contacta a soporte@goparty.com';
+                    } else {
+                        mensaje = '⏳ Cuenta en revisión\n\n' +
+                            'Tu solicitud fue recibida y está siendo revisada por el equipo de GoParty.\n\n' +
+                            'Recibirás un email cuando tu cuenta sea activada.\n\n' +
+                            'Tiempo estimado: 24-48 horas.';
+                    }
+                    
+                    alert(mensaje);
+                    return;
+                }
+
+                // PASO 3: Aprobado → Acceso concedido
+                const uid = proveedorDoc.id;
+                
+                localStorage.setItem('proveedorId', uid);
+                localStorage.setItem('proveedorEmail', email);
+                
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardPanel').classList.add('active');
-                cargarDatosProveedor(user.uid);
-            } catch (error) { alert('❌ Error con Google: ' + error.message); }
+                
+                cargarDatosProveedor(uid);
+                
+            } catch (error) {
+                alert(' Error con Google: ' + error.message);
+            }
         };
 
         // RECUPERAR CONTRASEÑA

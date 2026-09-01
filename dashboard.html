@@ -8,32 +8,55 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; min-height: 100vh; }
 
-        /* Auth Container */
+        /* ============ AUTH HEADER (estilo "Únete") ============ */
+        .auth-header {
+            background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+        }
+        .auth-header img { height: 70px; margin-bottom: 1rem; }
+        .auth-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .auth-header p { font-size: 1.1rem; opacity: 0.95; }
+
+        /* ============ AUTH CONTAINER ============ */
         .auth-container {
-            max-width: 450px;
-            margin: 3rem auto;
+            max-width: 500px;
+            margin: -2rem auto 3rem;
             background: white;
             padding: 2.5rem;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
         }
-        .auth-logo { text-align: center; margin-bottom: 2rem; }
-        .auth-logo img { height: 60px; }
+
         .auth-container h2 { text-align: center; margin-bottom: 0.5rem; color: #333; }
         .auth-container .subtitle { text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.95rem; }
-        .auth-container input, .auth-container select {
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
+        .form-group label .required { color: #FF6B9D; }
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 0.9rem;
-            margin-bottom: 1rem;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
         }
-        .auth-container input:focus { outline: none; border-color: #FF6B9D; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #6BCB77;
+        }
+
+        .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
         .btn-auth {
             width: 100%;
             padding: 0.9rem;
-            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
+            background: linear-gradient(135deg, #6BCB77, #4A90E2);
             color: white;
             border: none;
             border-radius: 8px;
@@ -44,6 +67,7 @@
             transition: transform 0.3s;
         }
         .btn-auth:hover { transform: translateY(-2px); }
+
         .btn-google {
             width: 100%;
             padding: 0.9rem;
@@ -60,6 +84,7 @@
             gap: 0.5rem;
         }
         .btn-google:hover { background: #f5f5f5; }
+
         .auth-divider { text-align: center; color: #999; margin: 1rem 0; font-size: 0.9rem; }
         .auth-link { text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666; }
         .auth-link a { color: #FF6B9D; text-decoration: none; font-weight: 600; }
@@ -68,7 +93,7 @@
         .forgot-password a { color: #4A90E2; text-decoration: none; font-size: 0.9rem; }
         .forgot-password a:hover { text-decoration: underline; }
 
-        /* Términos y Condiciones */
+        /* Términos */
         .terminos-box {
             background: #FFF9E6;
             border-left: 4px solid #FFD93D;
@@ -94,9 +119,7 @@
         .terminos-box a { color: #4A90E2; font-weight: 600; text-decoration: none; }
         .terminos-box a:hover { text-decoration: underline; }
 
-        .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-
-        /* Dashboard Panel */
+        /* ============ DASHBOARD PANEL ============ */
         .dashboard-panel { display: none; }
         .dashboard-panel.active { display: block; }
         .topbar {
@@ -115,41 +138,21 @@
         .topbar-logo span { font-weight: 700; font-size: 1.2rem; color: #333; }
         .topbar-user { display: flex; align-items: center; gap: 1rem; }
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             background: linear-gradient(135deg, #FFD93D, #FF6B9D);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700;
         }
         .btn-logout {
-            background: #f0f0f0;
-            color: #333;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
+            background: #f0f0f0; color: #333; border: none;
+            padding: 0.6rem 1.2rem; border-radius: 20px;
+            cursor: pointer; font-weight: 600;
         }
 
-        .tabs {
-            display: flex;
-            background: white;
-            border-bottom: 2px solid #f0f0f0;
-            overflow-x: auto;
-            padding: 0 1rem;
-        }
+        .tabs { display: flex; background: white; border-bottom: 2px solid #f0f0f0; overflow-x: auto; padding: 0 1rem; }
         .tab {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-            transition: all 0.3s;
+            padding: 1rem 1.5rem; cursor: pointer; font-weight: 500; color: #666;
+            border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.3s;
         }
         .tab:hover { color: #FF6B9D; }
         .tab.active { color: #FF6B9D; border-bottom-color: #FF6B9D; }
@@ -159,55 +162,20 @@
         .tab-content.active { display: block; }
 
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: white; border-radius: 12px; padding: 1.5rem;
+            margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         .card h3 { color: #333; margin-bottom: 1rem; font-size: 1.2rem; }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%); color: white; padding: 1.5rem; border-radius: 12px; text-align: center; }
         .stat-card.blue { background: linear-gradient(135deg, #4A90E2 0%, #6BCB77 100%); }
         .stat-card.green { background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); }
         .stat-card.gold { background: linear-gradient(135deg, #FFD93D 0%, #FF8E53 100%); }
         .stat-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.3rem; }
         .stat-label { font-size: 0.9rem; opacity: 0.95; }
 
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-        }
-        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #FF6B9D; }
-
-        .btn {
-            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
+        .btn { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.3s; }
         .btn:hover { transform: translateY(-2px); }
         .btn-secondary { background: #f0f0f0; color: #333; }
         .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
@@ -218,7 +186,10 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .auth-container { margin: 1rem; padding: 1.5rem; }
+            .auth-header { padding: 2rem 1rem; }
+            .auth-header h1 { font-size: 1.8rem; }
+            .auth-header img { height: 50px; }
+            .auth-container { margin: -1rem 1rem 2rem; padding: 1.5rem; }
             .form-row { grid-template-columns: 1fr; }
             .topbar { padding: 0.8rem 1rem; }
             .topbar-user { display: none; }
@@ -226,115 +197,129 @@
             .content { padding: 0 1rem; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- ============ LOGIN / REGISTRO ============ -->
-    <div class="auth-container" id="authContainer">
-        <div class="auth-logo">
+    <!-- ============ AUTH: LOGIN / REGISTRO ============ -->
+    <div id="authSection">
+        <!-- Header estilo "Únete" -->
+        <div class="auth-header">
             <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
-        </div>
-        
-        <!-- Login Form -->
-        <div id="loginForm">
-            <h2>Dashboard del Proveedor</h2>
-            <p class="subtitle">Accede a tu panel de control</p>
-            
-            <input type="email" id="loginEmail" placeholder="Email">
-            <input type="password" id="loginPassword" placeholder="Contraseña">
-            
-            <button class="btn-auth" onclick="login()">Iniciar Sesión</button>
-            
-            <button class="btn-google" onclick="loginWithGoogle()">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                Continuar con Google
-            </button>
-            
-            <div class="auth-divider">O con email</div>
-            
-            <div class="auth-link">
-                ¿No tienes cuenta? <a href="#" onclick="showRegister()">Registrarse</a>
-            </div>
-            <div class="forgot-password">
-                <a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a>
-            </div>
+            <h1 id="authTitle">Dashboard del Proveedor</h1>
+            <p id="authSubtitle">Accede a tu panel de control</p>
         </div>
 
-        <!-- Register Form -->
-        <div id="registerForm" style="display: none;">
-            <h2>Crear Cuenta de Proveedor</h2>
-            <p class="subtitle">Registra tu negocio en GoParty</p>
-            
-            <div class="form-row">
+        <div class="auth-container">
+            <!-- LOGIN -->
+            <div id="loginForm">
+                <h2>Iniciar Sesión</h2>
+                <p class="subtitle">Bienvenido de vuelta a GoParty</p>
+
                 <div class="form-group">
-                    <label>Estado *</label>
-                    <select id="regEstado" onchange="actualizarCiudades()">
-                        <option value="">Selecciona tu estado</option>
-                        <option value="Veracruz">Veracruz</option>
-                        <option value="Puebla">Puebla</option>
-                        <option value="Ciudad de México">Ciudad de México</option>
-                        <option value="Oaxaca">Oaxaca</option>
-                    </select>
+                    <label>Email <span class="required">*</span></label>
+                    <input type="email" id="loginEmail" placeholder="tu@email.com">
                 </div>
                 <div class="form-group">
-                    <label>Ciudad *</label>
-                    <select id="regCiudad">
-                        <option value="">Primero selecciona estado</option>
-                    </select>
+                    <label>Contraseña <span class="required">*</span></label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
                 </div>
-            </div>
-            
-            <input type="text" id="regNombre" placeholder="Nombre del Negocio *">
-            <input type="text" id="regContacto" placeholder="Nombre de Contacto *">
-            <input type="tel" id="regWhatsapp" placeholder="WhatsApp *">
-            <input type="email" id="regEmail" placeholder="Email *">
-            <input type="password" id="regPassword" placeholder="Contraseña (mín. 6 caracteres) *">
-            
-            <!-- TÉRMINOS Y CONDICIONES -->
-            <div class="terminos-box">
-                <label>
-                    <input type="checkbox" id="regTerminos">
-                    <span>
-                        He leído y acepto los <a href="terminos.html" target="_blank">Términos y Condiciones</a> de GoParty, así como el <a href="terminos.html#privacidad" target="_blank">Aviso de Privacidad</a>. Entiendo que mi perfil será revisado por el equipo de GoParty en un plazo de 24-48 horas antes de ser activado.
-                    </span>
-                </label>
-            </div>
-            
-            <button class="btn-auth" onclick="register()">Crear Cuenta de Proveedor</button>
-            
-            <button class="btn-google" onclick="loginWithGoogle()">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                Registrarme con Google
-            </button>
-            
-            <div class="auth-divider">O con email</div>
-            
-            <div class="auth-link">
-                ¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar Sesión</a>
-            </div>
-        </div>
 
-        <!-- Forgot Password Form -->
-        <div id="forgotForm" style="display: none;">
-            <h2>Recuperar Contraseña</h2>
-            <p class="subtitle">Ingresa tu email para recibir un enlace de recuperación</p>
-            
-            <input type="email" id="forgotEmail" placeholder="Email">
-            
-            <button class="btn-auth" onclick="sendPasswordReset()">Enviar Enlace de Recuperación</button>
-            
-            <div class="auth-link">
-                <a href="#" onclick="showLogin()">← Volver al Login</a>
-            </div>
-        </div>
+                <button class="btn-auth" onclick="login()">Iniciar Sesión</button>
+                <button class="btn-google" onclick="loginWithGoogle()">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Continuar con Google
+                </button>
 
-        <p style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #999;">
-            Al registrarte, aceptas los <a href="terminos.html" target="_blank" style="color: #4A90E2;">términos y condiciones</a> de GoParty
-        </p>
+                <div class="auth-divider">O con email</div>
+
+                <div class="auth-link">¿No tienes cuenta? <a href="#" onclick="showRegister()">Registrarse</a></div>
+                <div class="forgot-password"><a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a></div>
+            </div>
+
+            <!-- REGISTRO -->
+            <div id="registerForm" style="display: none;">
+                <h2>Crear Cuenta de Proveedor</h2>
+                <p class="subtitle">Registra tu negocio en GoParty</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Estado <span class="required">*</span></label>
+                        <select id="regEstado" onchange="actualizarCiudades()">
+                            <option value="">Selecciona tu estado</option>
+                            <option value="Veracruz">Veracruz</option>
+                            <option value="Puebla">Puebla</option>
+                            <option value="Ciudad de México">Ciudad de México</option>
+                            <option value="Oaxaca">Oaxaca</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ciudad <span class="required">*</span></label>
+                        <select id="regCiudad">
+                            <option value="">Primero selecciona estado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre del Negocio <span class="required">*</span></label>
+                    <input type="text" id="regNombre" placeholder="Ej: Salón de Fiestas XYZ">
+                </div>
+                <div class="form-group">
+                    <label>Nombre de Contacto <span class="required">*</span></label>
+                    <input type="text" id="regContacto" placeholder="Tu nombre completo">
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp <span class="required">*</span></label>
+                    <input type="tel" id="regWhatsapp" placeholder="2281234567">
+                </div>
+                <div class="form-group">
+                    <label>Email <span class="required">*</span></label>
+                    <input type="email" id="regEmail" placeholder="tu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña <span class="required">*</span></label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres">
+                </div>
+
+                <!-- TÉRMINOS Y CONDICIONES -->
+                <div class="terminos-box">
+                    <label>
+                        <input type="checkbox" id="regTerminos">
+                        <span>
+                            He leído y acepto los <a href="terminos.html" target="_blank">Términos y Condiciones</a> de GoParty, así como el <a href="terminos.html#privacidad" target="_blank">Aviso de Privacidad</a>. Entiendo que mi perfil será revisado por el equipo de GoParty en un plazo de 24-48 horas antes de ser activado.
+                        </span>
+                    </label>
+                </div>
+
+                <button class="btn-auth" onclick="register()">Crear Cuenta de Proveedor</button>
+                <button class="btn-google" onclick="loginWithGoogle()">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Registrarme con Google
+                </button>
+
+                <div class="auth-divider">O con email</div>
+
+                <div class="auth-link">¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar Sesión</a></div>
+            </div>
+
+            <!-- FORGOT PASSWORD -->
+            <div id="forgotForm" style="display: none;">
+                <h2>Recuperar Contraseña</h2>
+                <p class="subtitle">Ingresa tu email para recibir un enlace de recuperación</p>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="forgotEmail" placeholder="tu@email.com">
+                </div>
+                <button class="btn-auth" onclick="sendPasswordReset()">Enviar Enlace de Recuperación</button>
+                <div class="auth-link"><a href="#" onclick="showLogin()">← Volver al Login</a></div>
+            </div>
+
+            <p style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #999;">
+                Al registrarte, aceptas los <a href="terminos.html" target="_blank" style="color: #4A90E2;">términos y condiciones</a> de GoParty
+            </p>
+        </div>
     </div>
 
     <!-- ============ PANEL DASHBOARD ============ -->
@@ -352,160 +337,113 @@
         </div>
 
         <div class="tabs">
-            <div class="tab active" data-tab="dashboard">📊 Mi Dashboard</div>
-            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount">0</span></div>
-            <div class="tab" data-tab="perfil">👤 Mi Perfil</div>
-            <div class="tab" data-tab="cambios">🔄 Cambios Pendientes <span id="tabCambiosCount">0</span></div>
+            <div class="tab active" data-tab="dashboard"> Mi Dashboard</div>
+            <div class="tab" data-tab="cotizaciones"> Cotizaciones</div>
+            <div class="tab" data-tab="perfil"> Mi Perfil</div>
+            <div class="tab" data-tab="testimonios">⭐ Testimonios</div>
             <div class="tab" data-tab="membresia">💎 Membresía</div>
-            <div class="tab" data-tab="mensajes">💬 Mensajes Admin <span id="tabMensajesCount">0</span></div>
+            <div class="tab" data-tab="mensajes">💬 Mensajes</div>
         </div>
 
         <div class="content">
-
-            <!-- TAB: DASHBOARD -->
+            <!-- DASHBOARD -->
             <div class="tab-content active" id="tab-dashboard">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">Mi Dashboard</h2>
                 <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;"> Ver Sitio Principal</a>
-                
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="statVistas">0</div>
-                        <div class="stat-label">Vistas al Perfil</div>
-                    </div>
-                    <div class="stat-card blue">
-                        <div class="stat-number" id="statCotizaciones">0</div>
-                        <div class="stat-label">Cotizaciones</div>
-                    </div>
-                    <div class="stat-card green">
-                        <div class="stat-number" id="statRespuesta">0%</div>
-                        <div class="stat-label">Tasa Respuesta</div>
-                    </div>
-                    <div class="stat-card gold">
-                        <div class="stat-number" id="statCalificacion">0.0</div>
-                        <div class="stat-label">Calificación</div>
-                    </div>
+                    <div class="stat-card"><div class="stat-number" id="statVistas">0</div><div class="stat-label">Vistas al Perfil</div></div>
+                    <div class="stat-card blue"><div class="stat-number" id="statCotizaciones">0</div><div class="stat-label">Cotizaciones</div></div>
+                    <div class="stat-card green"><div class="stat-number" id="statRespuesta">0%</div><div class="stat-label">Tasa Respuesta</div></div>
+                    <div class="stat-card gold"><div class="stat-number" id="statCalificacion">0.0</div><div class="stat-label">Calificación</div></div>
                 </div>
-
                 <div class="card">
                     <h3>📊 Información del Proveedor</h3>
                     <p><strong>Nombre:</strong> <span id="infoNombre">Proveedor</span></p>
                     <p><strong>Plan:</strong> <span id="infoPlan">Basic</span></p>
                     <p><strong>Estado:</strong> <span id="infoEstado">Activo</span></p>
                 </div>
-
-                <div class="card">
-                    <h3> Cotizaciones Recientes</h3>
-                    <div id="cotizacionesRecientes">Cargando...</div>
-                </div>
             </div>
 
-            <!-- TAB: COTIZACIONES -->
+            <!-- COTIZACIONES -->
             <div class="tab-content" id="tab-cotizaciones">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">📝 Buzón de Cotizaciones</h2>
-                <p style="color: #666; margin-bottom: 1rem;">Solicitudes asignadas por GoParty</p>
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('todas')">Todas</button>
-                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Pendiente')">Pendientes</button>
-                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Respondida')">Respondidas</button>
-                </div>
                 <div class="card"><div id="listaCotizaciones">Cargando...</div></div>
             </div>
 
-            <!-- TAB: PERFIL -->
+            <!-- PERFIL -->
             <div class="tab-content" id="tab-perfil">
-                <h2 style="margin-bottom: 1.5rem; color: #333;"> Mi Perfil</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">👤 Mi Perfil</h2>
                 <div class="card">
-                    <h3> Información General</h3>
-                    <div class="form-group">
-                        <label>Nombre del Negocio</label>
-                        <input type="text" id="perfilNombre" placeholder="Tu negocio">
-                    </div>
-                    <div class="form-group">
-                        <label>Nombre de Contacto</label>
-                        <input type="text" id="perfilContacto" placeholder="Tu nombre">
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="perfilEmail" placeholder="tu@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label>WhatsApp</label>
-                        <input type="tel" id="perfilWhatsapp" placeholder="2281234567">
+                    <h3>📋 Información General</h3>
+                    <div class="form-row">
+                        <div class="form-group"><label>Nombre del Negocio</label><input type="text" id="perfilNombre"></div>
+                        <div class="form-group"><label>Nombre de Contacto</label><input type="text" id="perfilContacto"></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Estado</label>
-                            <input type="text" id="perfilEstado" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Ciudad</label>
-                            <input type="text" id="perfilCiudad" placeholder="Tu ciudad">
-                        </div>
+                        <div class="form-group"><label>Email</label><input type="email" id="perfilEmail"></div>
+                        <div class="form-group"><label>WhatsApp</label><input type="tel" id="perfilWhatsapp"></div>
                     </div>
-                    <div class="form-group">
-                        <label>Descripción del Negocio</label>
-                        <textarea id="perfilDescripcion" rows="4" placeholder="Describe tus servicios..."></textarea>
+                    <div class="form-row">
+                        <div class="form-group"><label>Estado</label><input type="text" id="perfilEstado" readonly></div>
+                        <div class="form-group"><label>Ciudad</label><input type="text" id="perfilCiudad"></div>
                     </div>
+                    <div class="form-group"><label>Descripción del Negocio</label><textarea id="perfilDescripcion" rows="4"></textarea></div>
                     <button class="btn" onclick="guardarPerfil()">💾 Guardar Cambios</button>
                 </div>
-
-                <div class="card">
-                    <h3>🌐 Redes Sociales</h3>
-                    <div class="form-group"><label>Instagram</label><input type="text" id="perfilInstagram" placeholder="@tu_negocio"></div>
-                    <div class="form-group"><label>Facebook</label><input type="text" id="perfilFacebook" placeholder="facebook.com/tu_negocio"></div>
-                    <div class="form-group"><label>TikTok</label><input type="text" id="perfilTiktok" placeholder="@tu_negocio"></div>
-                    <div class="form-group"><label>Sitio Web</label><input type="url" id="perfilWeb" placeholder="https://tu-sitio.com"></div>
-                    <button class="btn" onclick="guardarRedes()">💾 Guardar Redes</button>
-                </div>
             </div>
 
-            <!-- TAB: CAMBIOS PENDIENTES -->
-            <div class="tab-content" id="tab-cambios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">🔄 Cambios Pendientes de Aprobación</h2>
+            <!-- TESTIMONIOS -->
+            <div class="tab-content" id="tab-testimonios">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios</h2>
                 <div class="card">
-                    <h3>Sistema de Verificación de Cambios</h3>
-                    <p style="color: #666; margin-bottom: 1rem;">Por seguridad, cualquier modificación será revisada por el equipo de GoParty antes de publicarse.</p>
-                    <div id="cambiosPendientesLista">
-                        <p style="color: #999;">No tienes cambios pendientes</p>
+                    <h3>Dejar Testimonio</h3>
+                    <div class="form-group"><label>Proveedor</label><input type="text" id="testProveedor"></div>
+                    <div class="form-group"><label>Tipo de Evento</label>
+                        <select id="testTipoEvento">
+                            <option value="">Selecciona...</option>
+                            <option>Cumpleaños Infantil</option><option>Cumpleaños Adulto</option>
+                            <option>Boda</option><option>XV Años</option>
+                            <option>Evento Corporativo</option><option>Baby Shower</option>
+                            <option>Graduación</option><option>Otro</option>
+                        </select>
                     </div>
+                    <div class="form-group"><label>Ciudad</label><input type="text" id="testCiudad"></div>
+                    <div class="form-group"><label>Calificación</label>
+                        <div id="estrellasContainer" style="font-size: 2rem; cursor: pointer;">
+                            <span onclick="seleccionarEstrellas(1)">⭐</span><span onclick="seleccionarEstrellas(2)">⭐</span>
+                            <span onclick="seleccionarEstrellas(3)">⭐</span><span onclick="seleccionarEstrellas(4)">⭐</span>
+                            <span onclick="seleccionarEstrellas(5)">⭐</span>
+                        </div>
+                        <input type="hidden" id="testCalificacion" value="5">
+                    </div>
+                    <div class="form-group"><label>Tu Nombre</label><input type="text" id="testNombre"></div>
+                    <div class="form-group"><label>Comentario</label><textarea id="testComentario" rows="4"></textarea></div>
+                    <button class="btn" onclick="enviarTestimonio()">📤 Enviar Testimonio</button>
+                </div>
+                <div class="card">
+                    <h3>Mis Testimonios</h3>
+                    <div id="misTestimonios"><p style="color: #999;">Aún no has enviado testimonios.</p></div>
                 </div>
             </div>
 
-            <!-- TAB: MEMBRESÍA -->
+            <!-- MEMBRESÍA -->
             <div class="tab-content" id="tab-membresia">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">💎 Tu Plan Actual</h2>
                 <div class="card">
                     <h3>Plan Basic</h3>
                     <p><strong>Estado:</strong> Activo</p>
                     <p><strong>Precio:</strong> Gratis</p>
-                    <p>Aparecer en el directorio general</p>
-                </div>
-                <div class="card">
-                    <h3>Plan Pro - $299/mes</h3>
-                    <p>Todo lo de Basic + Sello de verificación + Mayor visibilidad</p>
-                    <button class="btn">Actualizar a Pro</button>
-                </div>
-                <div class="card">
-                    <h3>Plan Gold - $599/mes</h3>
-                    <p>Todo lo de Pro + Posición destacada + Borde dorado</p>
-                    <button class="btn">Actualizar a Gold</button>
                 </div>
             </div>
 
-            <!-- TAB: MENSAJES -->
+            <!-- MENSAJES -->
             <div class="tab-content" id="tab-mensajes">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes del Equipo GoParty</h2>
-                <div class="card">
-                    <div id="listaMensajes">
-                        <p style="color: #999;">No hay mensajes</p>
-                    </div>
-                </div>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes</h2>
+                <div class="card"><div id="listaMensajes"><p style="color: #999;">No hay mensajes</p></div></div>
             </div>
-
         </div>
     </div>
 
-    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -533,7 +471,6 @@
             'Oaxaca': ['Oaxaca de Juárez', 'Salina Cruz', 'Huatulco', 'Puerto Escondido']
         };
 
-        // Actualizar ciudades según estado
         window.actualizarCiudades = function() {
             const estado = document.getElementById('regEstado').value;
             const selectCiudad = document.getElementById('regCiudad');
@@ -547,55 +484,44 @@
             }
         };
 
-        // ==========================================
-        // AUTH FUNCTIONS
-        // ==========================================
+        // Mostrar/ocultar formularios
         window.showRegister = function() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('registerForm').style.display = 'block';
             document.getElementById('forgotForm').style.display = 'none';
+            document.getElementById('authTitle').textContent = 'Únete a GoParty';
+            document.getElementById('authSubtitle').textContent = 'Registra tu negocio y comienza a crecer';
         };
-
         window.showLogin = function() {
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('forgotForm').style.display = 'none';
+            document.getElementById('authTitle').textContent = 'Dashboard del Proveedor';
+            document.getElementById('authSubtitle').textContent = 'Accede a tu panel de control';
         };
-
         window.showForgotPassword = function() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('forgotForm').style.display = 'block';
         };
 
+        // LOGIN
         window.login = async function() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                alert('❌ Por favor completa todos los campos');
-                return;
-            }
-
+            if (!email || !password) { alert('❌ Completa todos los campos'); return; }
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                
-                localStorage.setItem('proveedorId', user.uid);
-                localStorage.setItem('proveedorEmail', user.email);
-                
-                await cargarDatosProveedor(user.uid);
-                
-                document.getElementById('authContainer').style.display = 'none';
+                const cred = await signInWithEmailAndPassword(auth, email, password);
+                localStorage.setItem('proveedorId', cred.user.uid);
+                localStorage.setItem('proveedorEmail', cred.user.email);
+                document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardPanel').classList.add('active');
-                
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+                await cargarDatosProveedor(cred.user.uid);
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
+        // REGISTRO
         window.register = async function() {
-            // Validar términos
             if (!document.getElementById('regTerminos').checked) {
                 alert('❌ Debes aceptar los Términos y Condiciones para continuar');
                 return;
@@ -613,17 +539,11 @@
                 alert('❌ Por favor completa todos los campos obligatorios');
                 return;
             }
-
-            if (password.length < 6) {
-                alert('❌ La contraseña debe tener al menos 6 caracteres');
-                return;
-            }
+            if (password.length < 6) { alert('❌ La contraseña debe tener al menos 6 caracteres'); return; }
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                await setDoc(doc(db, "proveedores", user.uid), {
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "proveedores", cred.user.uid), {
                     nombreNegocio: nombre,
                     nombreContacto: contacto,
                     whatsapp: whatsapp,
@@ -633,100 +553,72 @@
                     plan: 'basic',
                     estadoVerificacion: 'Pendiente',
                     fechaRegistro: new Date().toISOString(),
-                    uid: user.uid,
+                    uid: cred.user.uid,
                     terminosAceptados: true,
                     fechaAceptacionTerminos: new Date().toISOString()
                 });
 
-                alert('✅ Cuenta creada exitosamente.\n\nTu perfil será revisado por el equipo de GoParty en 24-48 horas.');
-                
-                localStorage.setItem('proveedorId', user.uid);
+                alert('✅ ¡Cuenta creada exitosamente!\n\nTu perfil será revisado por el equipo de GoParty en 24-48 horas.');
+                localStorage.setItem('proveedorId', cred.user.uid);
                 localStorage.setItem('proveedorEmail', email);
-                
-                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardPanel').classList.add('active');
-                
-                cargarDatosProveedor(user.uid);
-                
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+                cargarDatosProveedor(cred.user.uid);
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
+        // GOOGLE
         window.loginWithGoogle = async function() {
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
-
                 const docRef = doc(db, "proveedores", user.uid);
                 const docSnap = await getDoc(docRef);
-
                 if (!docSnap.exists()) {
                     await setDoc(docRef, {
                         nombreNegocio: user.displayName || 'Mi Negocio',
                         nombreContacto: user.displayName || '',
-                        whatsapp: '',
-                        email: user.email,
-                        ciudad: '',
-                        estado: '',
-                        plan: 'basic',
-                        estadoVerificacion: 'Pendiente',
-                        fechaRegistro: new Date().toISOString(),
-                        uid: user.uid
+                        whatsapp: '', email: user.email, ciudad: '', estado: '',
+                        plan: 'basic', estadoVerificacion: 'Pendiente',
+                        fechaRegistro: new Date().toISOString(), uid: user.uid
                     });
                 }
-
                 localStorage.setItem('proveedorId', user.uid);
                 localStorage.setItem('proveedorEmail', user.email);
-                
-                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardPanel').classList.add('active');
-                
                 cargarDatosProveedor(user.uid);
-                
-            } catch (error) {
-                alert(' Error con Google: ' + error.message);
-            }
+            } catch (error) { alert('❌ Error con Google: ' + error.message); }
         };
 
+        // RECUPERAR CONTRASEÑA
         window.sendPasswordReset = async function() {
             const email = document.getElementById('forgotEmail').value;
-            
-            if (!email) {
-                alert('❌ Por favor ingresa tu email');
-                return;
-            }
-
+            if (!email) { alert('❌ Ingresa tu email'); return; }
             try {
                 await sendPasswordResetEmail(auth, email);
                 alert('✅ Enlace de recuperación enviado a ' + email);
                 showLogin();
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
+        // LOGOUT
         window.logout = function() {
             localStorage.removeItem('proveedorId');
             localStorage.removeItem('proveedorEmail');
             location.reload();
         };
 
-        // ==========================================
-        // CARGAR DATOS DEL PROVEEDOR
-        // ==========================================
+        // CARGAR DATOS
         async function cargarDatosProveedor(uid) {
             try {
-                const docRef = doc(db, "proveedores", uid);
-                const docSnap = await getDoc(docRef);
-                
+                const docSnap = await getDoc(doc(db, "proveedores", uid));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('userName').textContent = data.nombreNegocio || 'Proveedor';
                     document.getElementById('userAvatar').textContent = (data.nombreNegocio || 'P').charAt(0).toUpperCase();
                     document.getElementById('infoNombre').textContent = data.nombreNegocio || 'Proveedor';
                     document.getElementById('infoPlan').textContent = data.plan ? data.plan.charAt(0).toUpperCase() + data.plan.slice(1) : 'Basic';
-                    
                     document.getElementById('perfilNombre').value = data.nombreNegocio || '';
                     document.getElementById('perfilContacto').value = data.nombreContacto || '';
                     document.getElementById('perfilEmail').value = data.email || '';
@@ -735,18 +627,13 @@
                     document.getElementById('perfilCiudad').value = data.ciudad || '';
                     document.getElementById('perfilDescripcion').value = data.descripcion || '';
                 }
-            } catch (error) {
-                console.error("Error cargando datos:", error);
-            }
+            } catch (error) { console.error("Error:", error); }
         }
 
-        // ==========================================
         // GUARDAR PERFIL
-        // ==========================================
         window.guardarPerfil = async function() {
             const uid = localStorage.getItem('proveedorId');
             if (!uid) return;
-
             try {
                 await updateDoc(doc(db, "proveedores", uid), {
                     nombreNegocio: document.getElementById('perfilNombre').value,
@@ -758,31 +645,47 @@
                     descripcion: document.getElementById('perfilDescripcion').value
                 });
                 alert('✅ Perfil actualizado');
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        window.guardarRedes = async function() {
-            const uid = localStorage.getItem('proveedorId');
-            if (!uid) return;
+        // TESTIMONIOS
+        window.seleccionarEstrellas = function(valor) {
+            document.getElementById('testCalificacion').value = valor;
+            const estrellas = document.querySelectorAll('#estrellasContainer span');
+            estrellas.forEach((est, idx) => { est.style.opacity = idx < valor ? '1' : '0.3'; });
+        };
 
+        window.enviarTestimonio = async function() {
+            const proveedor = document.getElementById('testProveedor').value.trim();
+            const tipoEvento = document.getElementById('testTipoEvento').value;
+            const ciudad = document.getElementById('testCiudad').value.trim();
+            const calificacion = parseInt(document.getElementById('testCalificacion').value);
+            const nombre = document.getElementById('testNombre').value.trim();
+            const comentario = document.getElementById('testComentario').value.trim();
+
+            if (!proveedor || !tipoEvento || !ciudad || !nombre || !comentario) {
+                alert('❌ Completa todos los campos');
+                return;
+            }
             try {
-                await updateDoc(doc(db, "proveedores", uid), {
-                    instagram: document.getElementById('perfilInstagram').value,
-                    facebook: document.getElementById('perfilFacebook').value,
-                    tiktok: document.getElementById('perfilTiktok').value,
-                    web: document.getElementById('perfilWeb').value
+                await addDoc(collection(db, "testimonios"), {
+                    nombreCliente: nombre, inicial: nombre.charAt(0).toUpperCase(),
+                    tipoEvento, ciudad, nombreProveedor: proveedor,
+                    calificacion, comentario, estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: localStorage.getItem('proveedorId')
                 });
-                alert('✅ Redes sociales actualizadas');
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+                alert('✅ Testimonio enviado. Será revisado en 24-48 horas.');
+                document.getElementById('testProveedor').value = '';
+                document.getElementById('testTipoEvento').value = '';
+                document.getElementById('testCiudad').value = '';
+                document.getElementById('testNombre').value = '';
+                document.getElementById('testComentario').value = '';
+                seleccionarEstrellas(5);
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        // ==========================================
         // TABS
-        // ==========================================
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -792,16 +695,16 @@
             });
         });
 
-        // ==========================================
         // AUTO-LOGIN
-        // ==========================================
         const proveedorId = localStorage.getItem('proveedorId');
         if (proveedorId) {
-            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('authSection').style.display = 'none';
             document.getElementById('dashboardPanel').classList.add('active');
             cargarDatosProveedor(proveedorId);
         }
-    </script>
 
+        // Inicializar estrellas
+        seleccionarEstrellas(5);
+    </script>
 </body>
 </html>

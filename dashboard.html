@@ -8,32 +8,88 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; min-height: 100vh; }
 
-        /* ============ LOGIN / REGISTRO ============ */
+        /* ============ AUTH (Login/Registro) - Estilo "Únete" ============ */
+        .auth-header {
+            background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+        }
+        .auth-header img { height: 60px; margin-bottom: 1rem; }
+        .auth-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .auth-header p { font-size: 1.1rem; opacity: 0.95; }
+
         .auth-container {
-            max-width: 450px;
-            margin: 3rem auto;
+            max-width: 700px;
+            margin: -2rem auto 3rem;
             background: white;
             padding: 2.5rem;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
         }
-        .auth-logo { text-align: center; margin-bottom: 2rem; }
-        .auth-logo img { height: 60px; }
+
+        /* Steps Indicator */
+        .steps-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #999;
+            font-size: 0.95rem;
+        }
+        .step.active { color: #6BCB77; font-weight: 600; }
+        .step.completed { color: #4A90E2; }
+        .step-number {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .step.active .step-number { background: linear-gradient(135deg, #6BCB77, #4A90E2); color: white; }
+        .step.completed .step-number { background: #4A90E2; color: white; }
+
         .auth-container h2 { text-align: center; margin-bottom: 0.5rem; color: #333; }
         .auth-container .subtitle { text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.95rem; }
-        .auth-container input, .auth-container select {
+
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
+        .form-group label .required { color: #FF6B9D; }
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 0.9rem;
-            margin-bottom: 1rem;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
         }
-        .auth-container input:focus { outline: none; border-color: #FF6B9D; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #6BCB77;
+        }
+        .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
         .btn-auth {
             width: 100%;
             padding: 0.9rem;
-            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
+            background: linear-gradient(135deg, #6BCB77, #4A90E2);
             color: white;
             border: none;
             border-radius: 8px;
@@ -60,6 +116,17 @@
             gap: 0.5rem;
         }
         .btn-google:hover { background: #f5f5f5; }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-secondary:hover { background: #e0e0e0; }
+
         .auth-divider { text-align: center; color: #999; margin: 1rem 0; font-size: 0.9rem; }
         .auth-link { text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666; }
         .auth-link a { color: #FF6B9D; text-decoration: none; font-weight: 600; }
@@ -67,6 +134,39 @@
         .forgot-password { text-align: center; margin-top: 0.5rem; }
         .forgot-password a { color: #4A90E2; text-decoration: none; font-size: 0.9rem; }
         .forgot-password a:hover { text-decoration: underline; }
+
+        /* Términos */
+        .terminos-box {
+            background: #FFF9E6;
+            border-left: 4px solid #FFD93D;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        .terminos-box label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: normal;
+        }
+        .terminos-box input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-top: 2px;
+        }
+        .terminos-box a { color: #4A90E2; font-weight: 600; text-decoration: none; }
+        .terminos-box a:hover { text-decoration: underline; }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
 
         /* ============ PANEL DASHBOARD ============ */
         .dashboard-panel { display: none; }
@@ -87,166 +187,62 @@
         .topbar-logo span { font-weight: 700; font-size: 1.2rem; color: #333; }
         .topbar-user { display: flex; align-items: center; gap: 1rem; }
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, #6BCB77, #4A90E2);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700;
         }
         .btn-logout {
-            background: #f0f0f0;
-            color: #333;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
+            background: #f0f0f0; color: #333; border: none;
+            padding: 0.6rem 1.2rem; border-radius: 20px;
+            cursor: pointer; font-weight: 600;
         }
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            background: white;
-            border-bottom: 2px solid #f0f0f0;
-            overflow-x: auto;
-            padding: 0 1rem;
-        }
+        .tabs { display: flex; background: white; border-bottom: 2px solid #f0f0f0; overflow-x: auto; padding: 0 1rem; }
         .tab {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-            transition: all 0.3s;
+            padding: 1rem 1.5rem; cursor: pointer; font-weight: 500; color: #666;
+            border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.3s;
         }
-        .tab:hover { color: #FF6B9D; }
-        .tab.active { color: #FF6B9D; border-bottom-color: #FF6B9D; }
+        .tab:hover { color: #6BCB77; }
+        .tab.active { color: #6BCB77; border-bottom-color: #6BCB77; }
 
         .content { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: white; border-radius: 12px; padding: 1.5rem;
+            margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         .card h3 { color: #333; margin-bottom: 1rem; font-size: 1.2rem; }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .stat-card.blue { background: linear-gradient(135deg, #4A90E2 0%, #6BCB77 100%); }
-        .stat-card.green { background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); color: white; padding: 1.5rem; border-radius: 12px; text-align: center; }
+        .stat-card.blue { background: linear-gradient(135deg, #4A90E2 0%, #9B59B6 100%); }
+        .stat-card.green { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%); }
         .stat-card.gold { background: linear-gradient(135deg, #FFD93D 0%, #FF8E53 100%); }
         .stat-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.3rem; }
         .stat-label { font-size: 0.9rem; opacity: 0.95; }
 
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-        }
-        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #FF6B9D; }
-
-        .btn {
-            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
+        .btn { background: linear-gradient(135deg, #6BCB77, #4A90E2); color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.3s; }
         .btn:hover { transform: translateY(-2px); }
-        .btn-secondary { background: #f0f0f0; color: #333; }
         .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
 
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
         .alert.success { background: #d4edda; color: #155724; display: block; }
         .alert.error { background: #f8d7da; color: #721c24; display: block; }
 
-        /* 🆕 FASE 3: Testimonios */
-        .estrellas-container { display: flex; gap: 0.5rem; font-size: 2rem; cursor: pointer; }
-        .estrella { transition: opacity 0.2s; }
-        .estrella:hover { opacity: 0.7; }
-        .testimonio-item {
-            background: #f9f9f9;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.8rem;
-            border-left: 4px solid #FFD93D;
-        }
-        .testimonio-item.aprobado { border-left-color: #4CAF50; }
-        .testimonio-item.rechazado { border-left-color: #FF4444; }
-        .testimonio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .testimonio-estado { padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; color: white; }
-
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 10px;
-            background: none;
-            border: none;
-        }
+        /* Hamburger */
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; background: none; border: none; }
         .hamburger span { width: 28px; height: 3px; background: #333; border-radius: 3px; }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            transition: right 0.3s ease;
-            z-index: 200;
-            padding: 2rem 1.5rem;
-            overflow-y: auto;
-        }
+        .sidebar { position: fixed; top: 0; right: -320px; width: 300px; height: 100vh; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: right 0.3s ease; z-index: 200; padding: 2rem 1.5rem; overflow-y: auto; }
         .sidebar.active { right: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0; }
         .sidebar-header img { height: 40px; }
         .close-btn { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #333; width: 35px; height: 35px; border-radius: 50%; }
         .close-btn:hover { background: #f0f0f0; }
         .sidebar-links { display: flex; flex-direction: column; gap: 0.8rem; }
-        .sidebar-links a {
-            text-decoration: none;
-            color: white !important;
-            font-weight: 600;
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: transform 0.2s;
-        }
+        .sidebar-links a { text-decoration: none; color: white !important; font-weight: 600; padding: 1rem; border-radius: 12px; font-size: 1rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s; }
         .sidebar-links a:hover { transform: scale(1.03); }
         .sidebar-links a:nth-child(1) { background: linear-gradient(135deg, #4A90E2, #6BCB77); }
         .sidebar-links a:nth-child(2) { background: linear-gradient(135deg, #6BCB77, #4A90E2); }
@@ -259,7 +255,12 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .auth-container { margin: 1rem; padding: 1.5rem; }
+            .auth-header { padding: 2rem 1rem; }
+            .auth-header h1 { font-size: 1.8rem; }
+            .auth-container { margin: -1rem 1rem 2rem; padding: 1.5rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .steps-indicator { gap: 0.8rem; }
+            .step span { display: none; }
             .topbar { padding: 0.8rem 1rem; }
             .topbar-user { display: none; }
             .hamburger { display: flex; }
@@ -267,87 +268,250 @@
             .content { padding: 0 1rem; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- ============ LOGIN / REGISTRO ============ -->
-    <div class="auth-container" id="authContainer">
-        <div class="auth-logo">
+    <!-- ============ AUTH: LOGIN / REGISTRO ============ -->
+    <div id="authSection">
+        <!-- Header estilo "Únete" -->
+        <div class="auth-header">
             <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
-        </div>
-        
-        <!-- Login Form -->
-        <div id="loginForm">
-            <h2>Dashboard del Proveedor</h2>
-            <p class="subtitle">Accede a tu panel de control</p>
-            
-            <input type="email" id="loginEmail" placeholder="Email">
-            <input type="password" id="loginPassword" placeholder="Contraseña">
-            
-            <button class="btn-auth" onclick="login()">Iniciar Sesión</button>
-            
-            <button class="btn-google" onclick="loginWithGoogle()">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                Continuar con Google
-            </button>
-            
-            <div class="auth-divider">O con email</div>
-            
-            <div class="auth-link">
-                ¿No tienes cuenta? <a href="#" onclick="showRegister()">Registrarse</a>
-            </div>
-            <div class="forgot-password">
-                <a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a>
-            </div>
+            <h1 id="authTitle">Dashboard del Proveedor</h1>
+            <p id="authSubtitle">Accede a tu panel de control</p>
         </div>
 
-        <!-- Register Form -->
-        <div id="registerForm" style="display: none;">
-            <h2>Crear Cuenta de Proveedor</h2>
-            <p class="subtitle">Registra tu negocio en GoParty</p>
-            
-            <input type="text" id="regNombre" placeholder="Nombre del Negocio *">
-            <input type="text" id="regContacto" placeholder="Nombre de Contacto *">
-            <input type="tel" id="regWhatsapp" placeholder="WhatsApp *">
-            <input type="email" id="regEmail" placeholder="Email *">
-            <input type="text" id="regCiudad" placeholder="Ciudad *">
-            <input type="password" id="regPassword" placeholder="Contraseña (mín. 6 caracteres) *">
-            
-            <button class="btn-auth" onclick="register()">Crear Cuenta</button>
-            
-            <button class="btn-google" onclick="loginWithGoogle()">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                Registrarme con Google
-            </button>
-            
-            <div class="auth-divider">O con email</div>
-            
-            <div class="auth-link">
-                ¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar Sesión</a>
-            </div>
-        </div>
+        <div class="auth-container">
+            <!-- LOGIN -->
+            <div id="loginForm">
+                <h2>Iniciar Sesión</h2>
+                <p class="subtitle">Bienvenido de vuelta a GoParty</p>
 
-        <!-- Forgot Password Form -->
-        <div id="forgotForm" style="display: none;">
-            <h2>Recuperar Contraseña</h2>
-            <p class="subtitle">Ingresa tu email para recibir un enlace de recuperación</p>
-            
-            <input type="email" id="forgotEmail" placeholder="Email">
-            
-            <button class="btn-auth" onclick="sendPasswordReset()">Enviar Enlace de Recuperación</button>
-            
-            <div class="auth-link">
-                <a href="#" onclick="showLogin()">← Volver al Login</a>
-            </div>
-        </div>
+                <div class="form-group">
+                    <label>Email <span class="required">*</span></label>
+                    <input type="email" id="loginEmail" placeholder="tu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña <span class="required">*</span></label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
 
-        <p style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #999;">
-            Al registrarte, aceptas los términos y condiciones de GoParty
-        </p>
+                <button class="btn-auth" onclick="login()">Iniciar Sesión</button>
+                <button class="btn-google" onclick="loginWithGoogle()">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Continuar con Google
+                </button>
+
+                <div class="auth-divider">O con email</div>
+
+                <div class="auth-link">¿No tienes cuenta? <a href="#" onclick="showRegister()">Registrarse</a></div>
+                <div class="forgot-password"><a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a></div>
+            </div>
+
+            <!-- REGISTRO (4 pasos) -->
+            <div id="registerForm" style="display: none;">
+                <div class="steps-indicator">
+                    <div class="step active" data-step="1"><div class="step-number">1</div><span>Datos</span></div>
+                    <div class="step" data-step="2"><div class="step-number">2</div><span>Servicios</span></div>
+                    <div class="step" data-step="3"><div class="step-number">3</div><span>Plan</span></div>
+                    <div class="step" data-step="4"><div class="step-number">4</div><span>Docs</span></div>
+                </div>
+
+                <!-- PASO 1: DATOS BÁSICOS -->
+                <div class="form-step active" data-step="1">
+                    <h2>Información Básica</h2>
+                    <p class="subtitle">Cuéntanos sobre tu negocio</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Estado <span class="required">*</span></label>
+                            <select id="regEstado" onchange="actualizarCiudades()">
+                                <option value="">Selecciona tu estado</option>
+                                <option value="Veracruz">Veracruz</option>
+                                <option value="Puebla">Puebla</option>
+                                <option value="Ciudad de México">Ciudad de México</option>
+                                <option value="Oaxaca">Oaxaca</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ciudad <span class="required">*</span></label>
+                            <select id="regCiudad">
+                                <option value="">Primero selecciona estado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre del Negocio <span class="required">*</span></label>
+                        <input type="text" id="regNombre" placeholder="Ej: Salón de Fiestas XYZ">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre de Contacto <span class="required">*</span></label>
+                        <input type="text" id="regContacto" placeholder="Tu nombre completo">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>WhatsApp <span class="required">*</span></label>
+                            <input type="tel" id="regWhatsapp" placeholder="2281234567">
+                        </div>
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" id="regEmail" placeholder="tu@email.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña <span class="required">*</span></label>
+                        <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres">
+                    </div>
+
+                    <div class="form-actions" style="justify-content: flex-end;">
+                        <button class="btn-auth" onclick="nextStep(1)" style="width: auto; padding: 0.9rem 2rem;">Siguiente →</button>
+                    </div>
+                </div>
+
+                <!-- PASO 2: SERVICIOS -->
+                <div class="form-step" data-step="2">
+                    <h2>¿Qué servicios ofreces?</h2>
+                    <p class="subtitle">Selecciona al menos una categoría</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s;">
+                            <input type="checkbox" value="Salones" style="display: none;">
+                            <div style="font-size: 2rem;">🏰</div>
+                            <div style="font-weight: 600;">Salones</div>
+                        </label>
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="checkbox" value="Alimentos" style="display: none;">
+                            <div style="font-size: 2rem;">🍽️</div>
+                            <div style="font-weight: 600;">Alimentos</div>
+                        </label>
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="checkbox" value="Fotografía" style="display: none;">
+                            <div style="font-size: 2rem;">📸</div>
+                            <div style="font-weight: 600;">Fotografía</div>
+                        </label>
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="checkbox" value="Música/DJ" style="display: none;">
+                            <div style="font-size: 2rem;"></div>
+                            <div style="font-weight: 600;">Música/DJ</div>
+                        </label>
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="checkbox" value="Decoración" style="display: none;">
+                            <div style="font-size: 2rem;">🎈</div>
+                            <div style="font-weight: 600;">Decoración</div>
+                        </label>
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="checkbox" value="Animación" style="display: none;">
+                            <div style="font-size: 2rem;">🎪</div>
+                            <div style="font-weight: 600;">Animación</div>
+                        </label>
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="checkbox" value="Mobiliario" style="display: none;">
+                            <div style="font-size: 2rem;">🪑</div>
+                            <div style="font-weight: 600;">Mobiliario</div>
+                        </label>
+                        <label class="categoria-item" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="checkbox" value="Otros" style="display: none;">
+                            <div style="font-size: 2rem;">✨</div>
+                            <div style="font-weight: 600;">Otros</div>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción breve de tus servicios</label>
+                        <textarea id="regDescripcion" rows="3" placeholder="Cuéntanos qué haces..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-secondary" onclick="prevStep(2)">← Atrás</button>
+                        <button class="btn-auth" onclick="nextStep(2)" style="width: auto; padding: 0.9rem 2rem;">Siguiente →</button>
+                    </div>
+                </div>
+
+                <!-- PASO 3: PLAN -->
+                <div class="form-step" data-step="3">
+                    <h2>Elige tu Plan</h2>
+                    <p class="subtitle">Puedes cambiarlo después desde tu dashboard</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <label class="plan-item" style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s;">
+                            <input type="radio" name="plan" value="basic" checked style="display: none;">
+                            <h4 style="margin-bottom: 0.5rem;">Plan Basic</h4>
+                            <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.8rem;">Directorio general</p>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #6BCB77;">Gratis</div>
+                        </label>
+                        <label class="plan-item" style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer;">
+                            <input type="radio" name="plan" value="pro" style="display: none;">
+                            <h4 style="margin-bottom: 0.5rem;">Plan Pro</h4>
+                            <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.8rem;">Sello verificado</p>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #4A90E2;">$299/mes</div>
+                        </label>
+                        <label class="plan-item" style="border: 2px solid #FFD93D; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; background: #FFFBF0;">
+                            <input type="radio" name="plan" value="gold" style="display: none;">
+                            <h4 style="margin-bottom: 0.5rem;">👑 Plan Gold</h4>
+                            <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.8rem;">Top búsquedas</p>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #FFD93D;">$599/mes</div>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-secondary" onclick="prevStep(3)">← Atrás</button>
+                        <button class="btn-auth" onclick="nextStep(3)" style="width: auto; padding: 0.9rem 2rem;">Siguiente →</button>
+                    </div>
+                </div>
+
+                <!-- PASO 4: DOCS + TÉRMINOS -->
+                <div class="form-step" data-step="4">
+                    <h2>Documentos y Términos</h2>
+                    <p class="subtitle">Último paso para unirte a GoParty</p>
+
+                    <div class="form-group">
+                        <label>Identificación Oficial (INE/IFE)</label>
+                        <input type="file" id="regINE" accept="image/*,.pdf">
+                        <small style="color: #999;">JPG, PNG o PDF (máx 5MB)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Constancia de Situación Fiscal (opcional)</label>
+                        <input type="file" id="regCSF" accept=".pdf">
+                        <small style="color: #999;">Recomendado para Plan Gold</small>
+                    </div>
+
+                    <!-- TÉRMINOS Y CONDICIONES -->
+                    <div class="terminos-box">
+                        <label>
+                            <input type="checkbox" id="regTerminos">
+                            <span>
+                                He leído y acepto los <a href="terminos.html" target="_blank">Términos y Condiciones</a> de GoParty, así como el <a href="terminos.html#privacidad" target="_blank">Aviso de Privacidad</a>. Entiendo que mi perfil será revisado por el equipo de GoParty en un plazo de 24-48 horas antes de ser activado.
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-secondary" onclick="prevStep(4)">← Atrás</button>
+                        <button class="btn-auth" onclick="register()" style="width: auto; padding: 0.9rem 2rem;">✅ Crear Cuenta</button>
+                    </div>
+                </div>
+
+                <div class="auth-link" style="margin-top: 2rem;">¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar Sesión</a></div>
+            </div>
+
+            <!-- FORGOT PASSWORD -->
+            <div id="forgotForm" style="display: none;">
+                <h2>Recuperar Contraseña</h2>
+                <p class="subtitle">Ingresa tu email para recibir un enlace de recuperación</p>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="forgotEmail" placeholder="tu@email.com">
+                </div>
+                <button class="btn-auth" onclick="sendPasswordReset()">Enviar Enlace de Recuperación</button>
+                <div class="auth-link"><a href="#" onclick="showLogin()">← Volver al Login</a></div>
+            </div>
+
+            <p style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #999;">
+                Al registrarte, aceptas los <a href="terminos.html" target="_blank" style="color: #4A90E2;">términos y condiciones</a> de GoParty
+            </p>
+        </div>
     </div>
 
     <!-- ============ PANEL DASHBOARD ============ -->
@@ -362,12 +526,9 @@
                 <span id="userName">Proveedor</span>
                 <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
             </div>
-            <button class="hamburger" id="hamburgerBtn">
-                <span></span><span></span><span></span>
-            </button>
+            <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
         </div>
 
-        <!-- Sidebar Móvil -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="Logo">
@@ -375,219 +536,123 @@
             </div>
             <div class="sidebar-links">
                 <a href="#" onclick="showTab('dashboard')">📊 Mi Dashboard</a>
-                <a href="#" onclick="showTab('cotizaciones')"> Cotizaciones</a>
+                <a href="#" onclick="showTab('cotizaciones')">📝 Cotizaciones</a>
                 <a href="#" onclick="showTab('perfil')">👤 Mi Perfil</a>
-                <a href="#" onclick="showTab('testimonios')">⭐ Dejar Testimonio</a>
-                <a href="#" onclick="showTab('membresia')"> Membresía</a>
-                <a href="#" onclick="showTab('mensajes')"> Mensajes</a>
+                <a href="#" onclick="showTab('testimonios')">⭐ Testimonios</a>
+                <a href="#" onclick="showTab('membresia')">💎 Membresía</a>
+                <a href="#" onclick="showTab('mensajes')">💬 Mensajes</a>
             </div>
         </div>
         <div class="overlay" id="overlay"></div>
 
-        <!-- Tabs Desktop -->
         <div class="tabs">
-            <div class="tab active" data-tab="dashboard"> Mi Dashboard</div>
-            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount">0</span></div>
+            <div class="tab active" data-tab="dashboard">📊 Mi Dashboard</div>
+            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones</div>
             <div class="tab" data-tab="perfil">👤 Mi Perfil</div>
-            <div class="tab" data-tab="testimonios">⭐ Dejar Testimonio</div>
-            <div class="tab" data-tab="membresia">💎 Membresía</div>
-            <div class="tab" data-tab="mensajes">💬 Mensajes Admin <span id="tabMensajesCount">0</span></div>
+            <div class="tab" data-tab="testimonios">⭐ Testimonios</div>
+            <div class="tab" data-tab="membresia"> Membresía</div>
+            <div class="tab" data-tab="mensajes">💬 Mensajes</div>
         </div>
 
         <div class="content">
-
-            <!-- TAB: DASHBOARD -->
+            <!-- DASHBOARD -->
             <div class="tab-content active" id="tab-dashboard">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">Mi Dashboard</h2>
                 <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;">🌐 Ver Sitio Principal</a>
-                
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="statVistas">0</div>
-                        <div class="stat-label">Vistas al Perfil</div>
-                    </div>
-                    <div class="stat-card blue">
-                        <div class="stat-number" id="statCotizaciones">0</div>
-                        <div class="stat-label">Cotizaciones</div>
-                    </div>
-                    <div class="stat-card green">
-                        <div class="stat-number" id="statRespuesta">0%</div>
-                        <div class="stat-label">Tasa Respuesta</div>
-                    </div>
-                    <div class="stat-card gold">
-                        <div class="stat-number" id="statCalificacion">0.0</div>
-                        <div class="stat-label">Calificación</div>
-                    </div>
+                    <div class="stat-card"><div class="stat-number" id="statVistas">0</div><div class="stat-label">Vistas al Perfil</div></div>
+                    <div class="stat-card blue"><div class="stat-number" id="statCotizaciones">0</div><div class="stat-label">Cotizaciones</div></div>
+                    <div class="stat-card green"><div class="stat-number" id="statRespuesta">0%</div><div class="stat-label">Tasa Respuesta</div></div>
+                    <div class="stat-card gold"><div class="stat-number" id="statCalificacion">0.0</div><div class="stat-label">Calificación</div></div>
                 </div>
-
                 <div class="card">
                     <h3>📊 Información del Proveedor</h3>
                     <p><strong>Nombre:</strong> <span id="infoNombre">Proveedor</span></p>
                     <p><strong>Plan:</strong> <span id="infoPlan">Basic</span></p>
                     <p><strong>Estado:</strong> <span id="infoEstado">Activo</span></p>
                 </div>
-
-                <div class="card">
-                    <h3>📝 Cotizaciones Recientes</h3>
-                    <div id="cotizacionesRecientes">Cargando...</div>
-                </div>
             </div>
 
-            <!-- TAB: COTIZACIONES -->
+            <!-- COTIZACIONES -->
             <div class="tab-content" id="tab-cotizaciones">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">📝 Buzón de Cotizaciones</h2>
-                <p style="color: #666; margin-bottom: 1rem;">Solicitudes asignadas por GoParty</p>
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('todas')">Todas</button>
-                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Pendiente')">Pendientes</button>
-                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Respondida')">Respondidas</button>
-                </div>
                 <div class="card"><div id="listaCotizaciones">Cargando...</div></div>
             </div>
 
-            <!-- TAB: PERFIL -->
+            <!-- PERFIL -->
             <div class="tab-content" id="tab-perfil">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">👤 Mi Perfil</h2>
                 <div class="card">
                     <h3>📋 Información General</h3>
-                    <div class="form-group">
-                        <label>Nombre del Negocio</label>
-                        <input type="text" id="perfilNombre" placeholder="Tu negocio">
+                    <div class="form-row">
+                        <div class="form-group"><label>Nombre del Negocio</label><input type="text" id="perfilNombre"></div>
+                        <div class="form-group"><label>Nombre de Contacto</label><input type="text" id="perfilContacto"></div>
                     </div>
-                    <div class="form-group">
-                        <label>Nombre de Contacto</label>
-                        <input type="text" id="perfilContacto" placeholder="Tu nombre">
+                    <div class="form-row">
+                        <div class="form-group"><label>Email</label><input type="email" id="perfilEmail"></div>
+                        <div class="form-group"><label>WhatsApp</label><input type="tel" id="perfilWhatsapp"></div>
                     </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="perfilEmail" placeholder="tu@email.com">
+                    <div class="form-row">
+                        <div class="form-group"><label>Estado</label><input type="text" id="perfilEstado" readonly></div>
+                        <div class="form-group"><label>Ciudad</label><input type="text" id="perfilCiudad"></div>
                     </div>
-                    <div class="form-group">
-                        <label>WhatsApp</label>
-                        <input type="tel" id="perfilWhatsapp" placeholder="2281234567">
-                    </div>
-                    <div class="form-group">
-                        <label>Ciudad</label>
-                        <input type="text" id="perfilCiudad" placeholder="Tu ciudad">
-                    </div>
-                    <div class="form-group">
-                        <label>Descripción del Negocio</label>
-                        <textarea id="perfilDescripcion" rows="4" placeholder="Describe tus servicios..."></textarea>
-                    </div>
-                    <button class="btn" onclick="guardarPerfil()"> Guardar Cambios</button>
-                </div>
-
-                <div class="card">
-                    <h3>🌐 Redes Sociales</h3>
-                    <div class="form-group"><label>Instagram</label><input type="text" id="perfilInstagram" placeholder="@tu_negocio"></div>
-                    <div class="form-group"><label>Facebook</label><input type="text" id="perfilFacebook" placeholder="facebook.com/tu_negocio"></div>
-                    <div class="form-group"><label>TikTok</label><input type="text" id="perfilTiktok" placeholder="@tu_negocio"></div>
-                    <div class="form-group"><label>Sitio Web</label><input type="url" id="perfilWeb" placeholder="https://tu-sitio.com"></div>
-                    <button class="btn" onclick="guardarRedes()">💾 Guardar Redes</button>
+                    <div class="form-group"><label>Descripción del Negocio</label><textarea id="perfilDescripcion" rows="4"></textarea></div>
+                    <button class="btn" onclick="guardarPerfil()">💾 Guardar Cambios</button>
                 </div>
             </div>
 
-            <!--  TAB: TESTIMONIOS (FASE 3) -->
+            <!-- TESTIMONIOS -->
             <div class="tab-content" id="tab-testimonios">
-                <h2 style="margin-bottom: 1rem; color: #333;">⭐ Deja tu Testimonio</h2>
-                <p style="color: #666; margin-bottom: 2rem;">Cuéntanos tu experiencia. Tu reseña será revisada por el equipo GoParty antes de publicarse.</p>
-
-                <div class="alert" id="alertTestimonio"></div>
-
+                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios</h2>
                 <div class="card">
-                    <h3>📝 Información del Evento</h3>
-                    <div class="form-group">
-                        <label>Nombre del Proveedor que contrataste *</label>
-                        <input type="text" id="testProveedor" placeholder="Ej: Salón de Fiestas XYZ">
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de Evento *</label>
+                    <h3>Dejar Testimonio</h3>
+                    <div class="form-group"><label>Proveedor</label><input type="text" id="testProveedor"></div>
+                    <div class="form-group"><label>Tipo de Evento</label>
                         <select id="testTipoEvento">
                             <option value="">Selecciona...</option>
-                            <option value="Cumpleaños Infantil">Cumpleaños Infantil</option>
-                            <option value="Cumpleaños Adulto">Cumpleaños Adulto</option>
-                            <option value="Boda">Boda</option>
-                            <option value="XV Años">XV Años</option>
-                            <option value="Evento Corporativo">Evento Corporativo</option>
-                            <option value="Baby Shower">Baby Shower</option>
-                            <option value="Graduación">Graduación</option>
-                            <option value="Otro">Otro</option>
+                            <option>Cumpleaños Infantil</option><option>Cumpleaños Adulto</option>
+                            <option>Boda</option><option>XV Años</option>
+                            <option>Evento Corporativo</option><option>Baby Shower</option>
+                            <option>Graduación</option><option>Otro</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Ciudad del Evento *</label>
-                        <input type="text" id="testCiudad" placeholder="Ej: Xalapa">
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>⭐ Tu Calificación y Comentario</h3>
-                    <div class="form-group">
-                        <label>Calificación *</label>
-                        <div class="estrellas-container" id="estrellasContainer">
-                            <span class="estrella" data-valor="1" onclick="seleccionarEstrellas(1)">⭐</span>
-                            <span class="estrella" data-valor="2" onclick="seleccionarEstrellas(2)">⭐</span>
-                            <span class="estrella" data-valor="3" onclick="seleccionarEstrellas(3)">⭐</span>
-                            <span class="estrella" data-valor="4" onclick="seleccionarEstrellas(4)">⭐</span>
-                            <span class="estrella" data-valor="5" onclick="seleccionarEstrellas(5)">⭐</span>
+                    <div class="form-group"><label>Ciudad</label><input type="text" id="testCiudad"></div>
+                    <div class="form-group"><label>Calificación</label>
+                        <div id="estrellasContainer" style="font-size: 2rem; cursor: pointer;">
+                            <span onclick="seleccionarEstrellas(1)">⭐</span><span onclick="seleccionarEstrellas(2)">⭐</span>
+                            <span onclick="seleccionarEstrellas(3)">⭐</span><span onclick="seleccionarEstrellas(4)">⭐</span>
+                            <span onclick="seleccionarEstrellas(5)">⭐</span>
                         </div>
                         <input type="hidden" id="testCalificacion" value="5">
-                        <small style="color: #999;">Haz clic en las estrellas para calificar</small>
                     </div>
-                    <div class="form-group">
-                        <label>Tu Nombre (como aparecerá en el testimonio) *</label>
-                        <input type="text" id="testNombre" placeholder="Ej: María González">
-                    </div>
-                    <div class="form-group">
-                        <label>Tu Testimonio *</label>
-                        <textarea id="testComentario" rows="5" placeholder="Cuéntanos tu experiencia: ¿Qué te gustó? ¿El proveedor cumplió? ¿Lo recomendarías?"></textarea>
-                    </div>
-                    <button class="btn" onclick="enviarTestimonio()" style="margin-top: 1rem;">📤 Enviar Testimonio para Revisión</button>
+                    <div class="form-group"><label>Tu Nombre</label><input type="text" id="testNombre"></div>
+                    <div class="form-group"><label>Comentario</label><textarea id="testComentario" rows="4"></textarea></div>
+                    <button class="btn" onclick="enviarTestimonio()"> Enviar Testimonio</button>
                 </div>
-
                 <div class="card">
-                    <h3> Mis Testimonios Enviados</h3>
-                    <div id="misTestimonios">
-                        <p style="color: #999;">Aún no has enviado testimonios.</p>
-                    </div>
+                    <h3>Mis Testimonios</h3>
+                    <div id="misTestimonios"><p style="color: #999;">Aún no has enviado testimonios.</p></div>
                 </div>
             </div>
 
-            <!-- TAB: MEMBRESÍA -->
+            <!-- MEMBRESÍA -->
             <div class="tab-content" id="tab-membresia">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">💎 Tu Plan Actual</h2>
                 <div class="card">
                     <h3>Plan Basic</h3>
                     <p><strong>Estado:</strong> Activo</p>
                     <p><strong>Precio:</strong> Gratis</p>
-                    <p>Aparecer en el directorio general</p>
-                </div>
-                <div class="card">
-                    <h3>Plan Pro - $299/mes</h3>
-                    <p>Todo lo de Basic + Sello de verificación + Mayor visibilidad</p>
-                    <button class="btn">Actualizar a Pro</button>
-                </div>
-                <div class="card">
-                    <h3>Plan Gold - $599/mes</h3>
-                    <p>Todo lo de Pro + Posición destacada + Borde dorado</p>
-                    <button class="btn">Actualizar a Gold</button>
                 </div>
             </div>
 
-            <!-- TAB: MENSAJES -->
+            <!-- MENSAJES -->
             <div class="tab-content" id="tab-mensajes">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes del Equipo GoParty</h2>
-                <div class="card">
-                    <div id="listaMensajes">
-                        <p style="color: #999;">No hay mensajes</p>
-                    </div>
-                </div>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes</h2>
+                <div class="card"><div id="listaMensajes"><p style="color: #999;">No hay mensajes</p></div></div>
             </div>
-
         </div>
     </div>
 
-    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -607,202 +672,217 @@
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // ==========================================
-        // AUTH FUNCTIONS
-        // ==========================================
+        // Ciudades por estado
+        const ciudadesPorEstado = {
+            'Veracruz': ['Xalapa', 'Veracruz', 'Córdoba', 'Orizaba', 'Coatepec', 'Boca del Río', 'Poza Rica'],
+            'Puebla': ['Puebla', 'Atlixco', 'Cholula', 'San Andrés', 'Tehuacán'],
+            'Ciudad de México': ['Álvaro Obregón', 'Azcapotzalco', 'Benito Juárez', 'Coyoacán', 'Cuajimalpa', 'Cuauhtémoc', 'Gustavo A. Madero', 'Iztacalco', 'Iztapalapa', 'Miguel Hidalgo', 'Tlalpan', 'Venustiano Carranza', 'Xochimilco'],
+            'Oaxaca': ['Oaxaca de Juárez', 'Salina Cruz', 'Huatulco', 'Puerto Escondido', 'Tuxtepec']
+        };
+
+        // Actualizar ciudades según estado
+        window.actualizarCiudades = function() {
+            const estado = document.getElementById('regEstado').value;
+            const selectCiudad = document.getElementById('regCiudad');
+            selectCiudad.innerHTML = '<option value="">Selecciona tu ciudad</option>';
+            if (estado && ciudadesPorEstado[estado]) {
+                ciudadesPorEstado[estado].forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c; opt.textContent = c;
+                    selectCiudad.appendChild(opt);
+                });
+            }
+        };
+
+        // Navegación entre pasos
+        let currentStep = 1;
+        window.nextStep = function(step) {
+            // Validaciones básicas
+            if (step === 1) {
+                if (!document.getElementById('regEstado').value || !document.getElementById('regCiudad').value || !document.getElementById('regNombre').value || !document.getElementById('regEmail').value || !document.getElementById('regPassword').value) {
+                    alert(' Por favor completa todos los campos obligatorios');
+                    return;
+                }
+            }
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
+            document.querySelector(`.form-step[data-step="${step+1}"]`).classList.add('active');
+            document.querySelectorAll('.step')[step-1].classList.remove('active');
+            document.querySelectorAll('.step')[step-1].classList.add('completed');
+            document.querySelectorAll('.step')[step].classList.add('active');
+            currentStep = step + 1;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        window.prevStep = function(step) {
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
+            document.querySelector(`.form-step[data-step="${step-1}"]`).classList.add('active');
+            document.querySelectorAll('.step')[step].classList.remove('active');
+            document.querySelectorAll('.step')[step-1].classList.remove('completed');
+            document.querySelectorAll('.step')[step-1].classList.add('active');
+            currentStep = step - 1;
+        };
+
+        // Mostrar/ocultar formularios
         window.showRegister = function() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('registerForm').style.display = 'block';
             document.getElementById('forgotForm').style.display = 'none';
+            document.getElementById('authTitle').textContent = 'Únete a GoParty';
+            document.getElementById('authSubtitle').textContent = 'Completa tu perfil y elige tu plan de crecimiento';
         };
-
         window.showLogin = function() {
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('forgotForm').style.display = 'none';
+            document.getElementById('authTitle').textContent = 'Dashboard del Proveedor';
+            document.getElementById('authSubtitle').textContent = 'Accede a tu panel de control';
         };
-
         window.showForgotPassword = function() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('forgotForm').style.display = 'block';
         };
 
+        // LOGIN
         window.login = async function() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                alert('❌ Por favor completa todos los campos');
+            if (!email || !password) { alert('❌ Completa todos los campos'); return; }
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, password);
+                localStorage.setItem('proveedorId', cred.user.uid);
+                localStorage.setItem('proveedorEmail', cred.user.email);
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('dashboardPanel').classList.add('active');
+                await cargarDatosProveedor(cred.user.uid);
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // REGISTRO
+        window.register = async function() {
+            // Validar términos
+            if (!document.getElementById('regTerminos').checked) {
+                alert('❌ Debes aceptar los Términos y Condiciones para continuar');
                 return;
             }
 
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                
-                // Guardar sesión
-                localStorage.setItem('proveedorId', user.uid);
-                localStorage.setItem('proveedorEmail', user.email);
-                
-                // Cargar datos del proveedor
-                await cargarDatosProveedor(user.uid);
-                
-                document.getElementById('authContainer').style.display = 'none';
-                document.getElementById('dashboardPanel').classList.add('active');
-                
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
-        };
-
-        window.register = async function() {
             const nombre = document.getElementById('regNombre').value;
             const contacto = document.getElementById('regContacto').value;
             const whatsapp = document.getElementById('regWhatsapp').value;
             const email = document.getElementById('regEmail').value;
             const ciudad = document.getElementById('regCiudad').value;
+            const estado = document.getElementById('regEstado').value;
             const password = document.getElementById('regPassword').value;
+            const descripcion = document.getElementById('regDescripcion').value;
 
-            if (!nombre || !contacto || !whatsapp || !email || !ciudad || !password) {
+            // Obtener servicios seleccionados
+            const servicios = [];
+            document.querySelectorAll('.categoria-item input[type="checkbox"]:checked').forEach(cb => servicios.push(cb.value));
+
+            // Obtener plan seleccionado
+            const plan = document.querySelector('input[name="plan"]:checked').value;
+
+            if (!nombre || !contacto || !whatsapp || !email || !ciudad || !estado || !password) {
                 alert('❌ Por favor completa todos los campos obligatorios');
                 return;
             }
-
-            if (password.length < 6) {
-                alert(' La contraseña debe tener al menos 6 caracteres');
-                return;
-            }
+            if (password.length < 6) { alert('❌ La contraseña debe tener al menos 6 caracteres'); return; }
+            if (servicios.length === 0) { alert('❌ Selecciona al menos un servicio'); return; }
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Guardar datos del proveedor en Firestore
-                await setDoc(doc(db, "proveedores", user.uid), {
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "proveedores", cred.user.uid), {
                     nombreNegocio: nombre,
                     nombreContacto: contacto,
                     whatsapp: whatsapp,
                     email: email,
                     ciudad: ciudad,
-                    plan: 'basic',
+                    estado: estado,
+                    descripcion: descripcion,
+                    servicios: servicios,
+                    plan: plan,
                     estadoVerificacion: 'Pendiente',
                     fechaRegistro: new Date().toISOString(),
-                    uid: user.uid
+                    uid: cred.user.uid,
+                    terminosAceptados: true,
+                    fechaAceptacionTerminos: new Date().toISOString()
                 });
 
-                alert('✅ Cuenta creada exitosamente. Tu perfil será revisado en 24-48 horas.');
-                
-                localStorage.setItem('proveedorId', user.uid);
+                alert('✅ ¡Cuenta creada exitosamente!\n\nTu perfil será revisado por el equipo de GoParty en 24-48 horas.\n\nRevisa tu email para confirmar tu cuenta.');
+                localStorage.setItem('proveedorId', cred.user.uid);
                 localStorage.setItem('proveedorEmail', email);
-                
-                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardPanel').classList.add('active');
-                
-                cargarDatosProveedor(user.uid);
-                
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+                cargarDatosProveedor(cred.user.uid);
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
+        // GOOGLE
         window.loginWithGoogle = async function() {
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
-
-                // Verificar si ya existe el proveedor
                 const docRef = doc(db, "proveedores", user.uid);
                 const docSnap = await getDoc(docRef);
-
                 if (!docSnap.exists()) {
-                    // Crear nuevo proveedor con datos de Google
                     await setDoc(docRef, {
                         nombreNegocio: user.displayName || 'Mi Negocio',
                         nombreContacto: user.displayName || '',
-                        whatsapp: '',
-                        email: user.email,
-                        ciudad: '',
-                        plan: 'basic',
-                        estadoVerificacion: 'Pendiente',
-                        fechaRegistro: new Date().toISOString(),
-                        uid: user.uid
+                        whatsapp: '', email: user.email, ciudad: '', estado: '',
+                        plan: 'basic', estadoVerificacion: 'Pendiente',
+                        fechaRegistro: new Date().toISOString(), uid: user.uid
                     });
                 }
-
                 localStorage.setItem('proveedorId', user.uid);
                 localStorage.setItem('proveedorEmail', user.email);
-                
-                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardPanel').classList.add('active');
-                
                 cargarDatosProveedor(user.uid);
-                
-            } catch (error) {
-                alert('❌ Error con Google: ' + error.message);
-            }
+            } catch (error) { alert('❌ Error con Google: ' + error.message); }
         };
 
+        // RECUPERAR CONTRASEÑA
         window.sendPasswordReset = async function() {
             const email = document.getElementById('forgotEmail').value;
-            
-            if (!email) {
-                alert('❌ Por favor ingresa tu email');
-                return;
-            }
-
+            if (!email) { alert('❌ Ingresa tu email'); return; }
             try {
                 await sendPasswordResetEmail(auth, email);
                 alert('✅ Enlace de recuperación enviado a ' + email);
                 showLogin();
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
+        // LOGOUT
         window.logout = function() {
             localStorage.removeItem('proveedorId');
             localStorage.removeItem('proveedorEmail');
             location.reload();
         };
 
-        // ==========================================
-        // CARGAR DATOS DEL PROVEEDOR
-        // ==========================================
+        // CARGAR DATOS
         async function cargarDatosProveedor(uid) {
             try {
-                const docRef = doc(db, "proveedores", uid);
-                const docSnap = await getDoc(docRef);
-                
+                const docSnap = await getDoc(doc(db, "proveedores", uid));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('userName').textContent = data.nombreNegocio || 'Proveedor';
                     document.getElementById('userAvatar').textContent = (data.nombreNegocio || 'P').charAt(0).toUpperCase();
                     document.getElementById('infoNombre').textContent = data.nombreNegocio || 'Proveedor';
                     document.getElementById('infoPlan').textContent = data.plan ? data.plan.charAt(0).toUpperCase() + data.plan.slice(1) : 'Basic';
-                    
-                    // Cargar en formulario de perfil
                     document.getElementById('perfilNombre').value = data.nombreNegocio || '';
                     document.getElementById('perfilContacto').value = data.nombreContacto || '';
                     document.getElementById('perfilEmail').value = data.email || '';
                     document.getElementById('perfilWhatsapp').value = data.whatsapp || '';
+                    document.getElementById('perfilEstado').value = data.estado || '';
                     document.getElementById('perfilCiudad').value = data.ciudad || '';
                     document.getElementById('perfilDescripcion').value = data.descripcion || '';
-                    
-                    cargarMisTestimonios();
                 }
-            } catch (error) {
-                console.error("Error cargando datos:", error);
-            }
+            } catch (error) { console.error("Error:", error); }
         }
 
-        // ==========================================
         // GUARDAR PERFIL
-        // ==========================================
         window.guardarPerfil = async function() {
             const uid = localStorage.getItem('proveedorId');
             if (!uid) return;
-
             try {
                 await updateDoc(doc(db, "proveedores", uid), {
                     nombreNegocio: document.getElementById('perfilNombre').value,
@@ -810,44 +890,21 @@
                     email: document.getElementById('perfilEmail').value,
                     whatsapp: document.getElementById('perfilWhatsapp').value,
                     ciudad: document.getElementById('perfilCiudad').value,
+                    estado: document.getElementById('perfilEstado').value,
                     descripcion: document.getElementById('perfilDescripcion').value
                 });
                 alert('✅ Perfil actualizado');
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        window.guardarRedes = async function() {
-            const uid = localStorage.getItem('proveedorId');
-            if (!uid) return;
-
-            try {
-                await updateDoc(doc(db, "proveedores", uid), {
-                    instagram: document.getElementById('perfilInstagram').value,
-                    facebook: document.getElementById('perfilFacebook').value,
-                    tiktok: document.getElementById('perfilTiktok').value,
-                    web: document.getElementById('perfilWeb').value
-                });
-                alert('✅ Redes sociales actualizadas');
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
-        };
-
-        // ==========================================
-        //  FASE 3: TESTIMONIOS
-        // ==========================================
+        // TESTIMONIOS
         window.seleccionarEstrellas = function(valor) {
             document.getElementById('testCalificacion').value = valor;
-            const estrellas = document.querySelectorAll('.estrella');
-            estrellas.forEach((est, idx) => {
-                est.style.opacity = idx < valor ? '1' : '0.3';
-            });
+            const estrellas = document.querySelectorAll('#estrellasContainer span');
+            estrellas.forEach((est, idx) => { est.style.opacity = idx < valor ? '1' : '0.3'; });
         };
 
         window.enviarTestimonio = async function() {
-            const alert = document.getElementById('alertTestimonio');
             const proveedor = document.getElementById('testProveedor').value.trim();
             const tipoEvento = document.getElementById('testTipoEvento').value;
             const ciudad = document.getElementById('testCiudad').value.trim();
@@ -856,130 +913,58 @@
             const comentario = document.getElementById('testComentario').value.trim();
 
             if (!proveedor || !tipoEvento || !ciudad || !nombre || !comentario) {
-                alert.className = 'alert error';
-                alert.textContent = ' Por favor completa todos los campos obligatorios';
-                alert.style.display = 'block';
+                alert('❌ Completa todos los campos');
                 return;
             }
-
             try {
                 await addDoc(collection(db, "testimonios"), {
-                    nombreCliente: nombre,
-                    inicial: nombre.charAt(0).toUpperCase(),
-                    tipoEvento: tipoEvento,
-                    ciudad: ciudad,
-                    nombreProveedor: proveedor,
-                    calificacion: calificacion,
-                    comentario: comentario,
-                    estado: 'pendiente',
+                    nombreCliente: nombre, inicial: nombre.charAt(0).toUpperCase(),
+                    tipoEvento, ciudad, nombreProveedor: proveedor,
+                    calificacion, comentario, estado: 'pendiente',
                     fecha: new Date().toISOString(),
                     proveedorId: localStorage.getItem('proveedorId')
                 });
-
-                alert.className = 'alert success';
-                alert.textContent = '✅ ¡Testimonio enviado! Será revisado por el equipo GoParty en 24-48 horas.';
-                alert.style.display = 'block';
-
-                // Limpiar formulario
+                alert('✅ Testimonio enviado. Será revisado en 24-48 horas.');
                 document.getElementById('testProveedor').value = '';
                 document.getElementById('testTipoEvento').value = '';
                 document.getElementById('testCiudad').value = '';
                 document.getElementById('testNombre').value = '';
                 document.getElementById('testComentario').value = '';
                 seleccionarEstrellas(5);
-
-                setTimeout(() => { alert.style.display = 'none'; }, 5000);
-                cargarMisTestimonios();
-
-            } catch (error) {
-                alert.className = 'alert error';
-                alert.textContent = '❌ Error al enviar: ' + error.message;
-                alert.style.display = 'block';
-            }
+            } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        async function cargarMisTestimonios() {
-            const contenedor = document.getElementById('misTestimonios');
-            if (!contenedor) return;
-
-            try {
-                const uid = localStorage.getItem('proveedorId');
-                const q = query(collection(db, "testimonios"), where("proveedorId", "==", uid));
-                const snap = await getDocs(q);
-                
-                if (snap.empty) {
-                    contenedor.innerHTML = '<p style="color: #999;">Aún no has enviado testimonios.</p>';
-                    return;
-                }
-
-                const testimonios = [];
-                snap.forEach(doc => testimonios.push({ id: doc.id, ...doc.data() }));
-                testimonios.sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
-
-                contenedor.innerHTML = testimonios.map(t => {
-                    const estadoColor = t.estado === 'aprobado' ? '#4CAF50' : t.estado === 'rechazado' ? '#FF4444' : '#FFD93D';
-                    const estadoTexto = t.estado === 'aprobado' ? '✅ Aprobado' : t.estado === 'rechazado' ? '❌ Rechazado' : '⏳ Pendiente';
-                    const estrellas = '⭐'.repeat(t.calificacion);
-                    return `
-                        <div class="testimonio-item ${t.estado}">
-                            <div class="testimonio-header">
-                                <strong>${t.nombreProveedor}</strong>
-                                <span class="testimonio-estado" style="background: ${estadoColor};">${estadoTexto}</span>
-                            </div>
-                            <div style="margin-bottom: 0.5rem;">${estrellas} • ${t.tipoEvento} - ${t.ciudad}</div>
-                            <p style="color: #666; font-style: italic; margin: 0;">"${t.comentario}"</p>
-                        </div>
-                    `;
-                }).join('');
-            } catch (error) {
-                contenedor.innerHTML = '<p style="color: red;">Error al cargar testimonios.</p>';
-            }
-        }
-
-        // ==========================================
         // TABS
-        // ==========================================
         window.showTab = function(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-            document.getElementById('tab-' + tabName).classList.add('active');
-            
-            // Cerrar sidebar en móvil
+            document.querySelector(`.tab[data-tab="${tabName}"]`)?.classList.add('active');
+            document.getElementById('tab-' + tabName)?.classList.add('active');
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
         };
-
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                showTab(tab.dataset.tab);
-            });
+            tab.addEventListener('click', () => showTab(tab.dataset.tab));
         });
 
-        // ==========================================
-        // MENÚ HAMBURGUESA
-        // ==========================================
+        // HAMBURGER
         document.getElementById('hamburgerBtn').addEventListener('click', () => {
             document.getElementById('sidebar').classList.add('active');
             document.getElementById('overlay').classList.add('active');
         });
-
         document.getElementById('closeBtn').addEventListener('click', () => {
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
         });
-
         document.getElementById('overlay').addEventListener('click', () => {
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
         });
 
-        // ==========================================
         // AUTO-LOGIN
-        // ==========================================
         const proveedorId = localStorage.getItem('proveedorId');
         if (proveedorId) {
-            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('authSection').style.display = 'none';
             document.getElementById('dashboardPanel').classList.add('active');
             cargarDatosProveedor(proveedorId);
         }
@@ -987,6 +972,5 @@
         // Inicializar estrellas
         seleccionarEstrellas(5);
     </script>
-
 </body>
 </html>

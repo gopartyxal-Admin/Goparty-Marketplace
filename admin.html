@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -8,14 +8,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; }
         
-        /* Login */
         .login-container { max-width: 400px; margin: 5rem auto; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .login-container h2 { text-align: center; margin-bottom: 1.5rem; color: #333; }
         .login-container input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; }
         .login-container button { width: 100%; padding: 0.8rem; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
         .login-hint { text-align: center; margin-top: 1rem; font-size: 0.85rem; color: #999; }
         
-        /* Panel */
         .admin-panel { display: none; }
         .admin-panel.active { display: block; }
         .topbar { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
@@ -27,6 +25,7 @@
         .tab { padding: 1rem 1.5rem; cursor: pointer; font-weight: 500; color: #666; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.3s; }
         .tab:hover { color: #FF6B9D; }
         .tab.active { color: #FF6B9D; border-bottom-color: #FF6B9D; }
+        .tab .badge { background: #FF6B9D; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 5px; }
         
         .content { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
         .tab-content { display: none; }
@@ -54,12 +53,15 @@
         .btn-secondary { background: #f0f0f0; color: #333; }
         .btn-danger { background: linear-gradient(135deg, #FF6B6B, #FF4444); color: white; }
         .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+        .btn-aprobar { background: #4CAF50; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-aprobar:hover { background: #3d8b40; }
+        .btn-rechazar { background: #FF4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-rechazar:hover { background: #d32f2f; }
         
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
         .alert.success { background: #d4edda; color: #155724; display: block; }
         .alert.error { background: #f8d7da; color: #721c24; display: block; }
 
-        /* Sub-tabs para Contenido del Sitio */
         .sub-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .sub-tab { padding: 0.6rem 1.2rem; background: #f0f0f0; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; color: #666; transition: all 0.3s; }
         .sub-tab:hover { background: #e0e0e0; }
@@ -67,7 +69,6 @@
         .sub-content { display: none; }
         .sub-content.active { display: block; }
 
-        /* Lista de items (categorías, ciudades, FAQ) */
         .item-list { display: flex; flex-direction: column; gap: 0.8rem; }
         .item-row { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #FF6B9D; }
         .item-row .item-info { flex: 1; }
@@ -78,63 +79,19 @@
 
         .empty-state { text-align: center; padding: 2rem; color: #999; }
 
-        /* 🆕 FASE 3: ESTILOS PARA MODERACIÓN DE TESTIMONIOS */
-        .resena-card { 
-            background: #f9f9f9; 
-            border-radius: 10px; 
-            padding: 1.2rem; 
-            margin-bottom: 1rem; 
-            border-left: 4px solid #FFD93D; 
-        }
-        .resena-card.aprobada { border-left-color: #4CAF50; }
-        .resena-card.rechazada { border-left-color: #FF4444; }
-        .resena-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-start; 
-            margin-bottom: 0.8rem; 
-            flex-wrap: wrap; 
-            gap: 0.5rem; 
-        }
-        .resena-cliente { font-weight: 700; color: #333; font-size: 1.1rem; }
-        .resena-evento { color: #666; font-size: 0.9rem; margin-top: 0.2rem; }
-        .resena-estrellas { color: #FFD93D; font-size: 1.2rem; margin: 0.5rem 0; }
-        .resena-comentario { 
-            font-style: italic; 
-            color: #555; 
-            line-height: 1.6; 
-            margin: 0.8rem 0; 
-            padding: 0.8rem; 
-            background: white; 
-            border-radius: 6px; 
-        }
-        .resena-acciones { 
-            display: flex; 
-            gap: 0.5rem; 
-            margin-top: 1rem; 
-            flex-wrap: wrap; 
-        }
-        .resena-acciones button { 
-            padding: 0.5rem 1rem; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            font-size: 0.9rem; 
-            transition: transform 0.2s;
-        }
-        .resena-acciones button:hover { transform: translateY(-2px); }
-        .btn-aprobar { background: #4CAF50; color: white; }
-        .btn-rechazar { background: #FF4444; color: white; }
-        .btn-aprobar:hover { background: #3d8b40; }
-        .btn-rechazar:hover { background: #d32f2f; }
-        .filtro-resenas { 
-            display: flex; 
-            gap: 0.5rem; 
-            margin-bottom: 1rem; 
-            flex-wrap: wrap; 
-        }
-        .filtro-resenas .btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+        /*  Estilos para solicitudes */
+        .solicitud-card { background: #f9f9f9; border-radius: 10px; padding: 1.2rem; margin-bottom: 1rem; border-left: 4px solid #FFD93D; }
+        .solicitud-card.aprobada { border-left-color: #4CAF50; }
+        .solicitud-card.rechazada { border-left-color: #FF4444; }
+        .solicitud-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem; }
+        .solicitud-cliente { font-weight: 700; color: #333; font-size: 1.1rem; }
+        .solicitud-evento { color: #666; font-size: 0.9rem; margin-top: 0.2rem; }
+        .solicitud-descripcion { font-style: italic; color: #555; line-height: 1.6; margin: 0.8rem 0; padding: 0.8rem; background: white; border-radius: 6px; }
+        .solicitud-acciones { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+        .solicitud-acciones button { padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: transform 0.2s; }
+        .solicitud-acciones button:hover { transform: translateY(-2px); }
+        .filtro-solicitudes { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .filtro-solicitudes .btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
         
         @media (max-width: 768px) { .content { padding: 0 1rem; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
@@ -162,16 +119,17 @@
 
         <div class="tabs">
             <div class="tab active" data-tab="dashboard">📊 Dashboard</div>
-            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount">0</span></div>
-            <div class="tab" data-tab="cambios">🔄 Solicitudes de Cambio <span id="tabCambiosCount">0</span></div>
+            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
+            <div class="tab" data-tab="cambios">🔄 Solicitudes de Cambio <span id="tabCambiosCount" class="badge">0</span></div>
             <div class="tab" data-tab="proveedores">👥 Proveedores</div>
             <div class="tab" data-tab="clientes">👤 Clientes</div>
-            <div class="tab" data-tab="blog">📚 Blogs y Recursos</div>
+            <div class="tab" data-tab="blog"> Blogs y Recursos</div>
             <div class="tab" data-tab="finanzas">💰 Finanzas</div>
             <div class="tab" data-tab="colaboradores">🤝 Colaboradores</div>
+            <div class="tab" data-tab="solicitudes">📩 Solicitudes <span id="tabSolicitudesCount" class="badge">0</span></div>
             <div class="tab" data-tab="contenido">📄 Contenido del Sitio</div>
-            <div class="tab" data-tab="perfil">👨‍💼 Perfil Admin</div>
-            <div class="tab" data-tab="config">⚙️ Configuración General</div>
+            <div class="tab" data-tab="perfil">‍💼 Perfil Admin</div>
+            <div class="tab" data-tab="config">️ Configuración General</div>
         </div>
 
         <div class="content">
@@ -239,7 +197,7 @@
                 <div class="card"><div id="listaProveedores">Cargando...</div></div>
             </div>
 
-            <!-- TAB: CLIENTES (CON MODERACIÓN DE TESTIMONIOS - FASE 3) -->
+            <!-- TAB: CLIENTES -->
             <div class="tab-content" id="tab-clientes">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">👤 Gestión de Clientes y Testimonios</h2>
                 <div class="stats-grid">
@@ -250,7 +208,7 @@
                 <div class="card">
                     <h3>⭐ Moderación de Testimonios</h3>
                     <p style="color: #666; margin-bottom: 1rem;">Aprueba o rechaza los testimonios enviados por los clientes. Solo los aprobados aparecerán en el sitio público.</p>
-                    <div class="filtro-resenas">
+                    <div class="filtro-resenas" style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
                         <button class="btn btn-secondary" onclick="filtrarResenas('todas')">Todas</button>
                         <button class="btn btn-secondary" onclick="filtrarResenas('pendiente')">Pendientes</button>
                         <button class="btn btn-secondary" onclick="filtrarResenas('aprobado')">Aprobadas</button>
@@ -314,99 +272,77 @@
                 <div class="card"><div id="listaColaboradores">No hay colaboradores registrados</div></div>
             </div>
 
-            <!-- TAB: CONTENIDO DEL SITIO (FASE 2) -->
+            <!-- 🆕 TAB: SOLICITUDES DE REGISTRO -->
+            <div class="tab-content" id="tab-solicitudes">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">📩 Solicitudes de Incorporación</h2>
+                <p style="color: #666; margin-bottom: 1rem;">Revisa y aprueba las solicitudes de nuevos proveedores enviadas desde unete.html. Solo los aprobados podrán iniciar sesión en el dashboard.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-number" id="solPendientes">0</div><div class="stat-label">Pendientes</div></div>
+                    <div class="stat-card green"><div class="stat-number" id="solAprobadas">0</div><div class="stat-label">Aprobadas</div></div>
+                    <div class="stat-card blue"><div class="stat-number" id="solRechazadas">0</div><div class="stat-label">Rechazadas</div></div>
+                    <div class="stat-card gold"><div class="stat-number" id="solTotal">0</div><div class="stat-label">Total Solicitudes</div></div>
+                </div>
+
+                <div class="filtro-solicitudes">
+                    <button class="btn btn-secondary" onclick="filtrarSolicitudes('Pendiente')">⏳ Pendientes</button>
+                    <button class="btn btn-secondary" onclick="filtrarSolicitudes('todas')">📋 Todas</button>
+                    <button class="btn btn-secondary" onclick="filtrarSolicitudes('Aprobado')">✅ Aprobadas</button>
+                    <button class="btn btn-secondary" onclick="filtrarSolicitudes('Rechazado')">❌ Rechazadas</button>
+                </div>
+
+                <div class="card">
+                    <div id="listaSolicitudes">Cargando solicitudes...</div>
+                </div>
+            </div>
+
+            <!-- TAB: CONTENIDO DEL SITIO -->
             <div class="tab-content" id="tab-contenido">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">📄 Contenido del Sitio</h2>
-                <p style="color: #666; margin-bottom: 1.5rem;">Gestiona las categorías, ciudades y preguntas frecuentes que aparecen en el sitio público. Los cambios se reflejan automáticamente.</p>
+                <p style="color: #666; margin-bottom: 1.5rem;">Gestiona las categorías, ciudades y preguntas frecuentes que aparecen en el sitio público.</p>
                 
                 <div class="sub-tabs">
                     <button class="sub-tab active" data-sub="categorias">🎯 Categorías</button>
                     <button class="sub-tab" data-sub="ciudades">🏙️ Ciudades</button>
-                    <button class="sub-tab" data-sub="faq">❓ Preguntas Frecuentes</button>
+                    <button class="sub-tab" data-sub="faq"> Preguntas Frecuentes</button>
                 </div>
 
-                <!-- SUB: CATEGORÍAS -->
                 <div class="sub-content active" id="sub-categorias">
                     <div class="card">
                         <h3>➕ Agregar Nueva Categoría</h3>
                         <div class="alert" id="alertCategoria"></div>
-                        <div class="form-group">
-                            <label>Nombre de la Categoría *</label>
-                            <input type="text" id="catNombre" placeholder="Ej: Salones, Alimentos, Fotografía...">
-                        </div>
-                        <div class="form-group">
-                            <label>Ícono (emoji) *</label>
-                            <input type="text" id="catIcono" placeholder="Ej: 🏰, 🍽️, " maxlength="4">
-                        </div>
-                        <div class="form-group">
-                            <label>Descripción corta</label>
-                            <input type="text" id="catDescripcion" placeholder="Ej: Espacios únicos, Sabores increíbles...">
-                        </div>
-                        <div class="form-group">
-                            <label>Orden de aparición (número)</label>
-                            <input type="number" id="catOrden" placeholder="1" min="1" value="1">
-                            <small style="color: #999;">Menor número = aparece primero</small>
-                        </div>
+                        <div class="form-group"><label>Nombre de la Categoría *</label><input type="text" id="catNombre" placeholder="Ej: Salones, Alimentos..."></div>
+                        <div class="form-group"><label>Ícono (emoji) *</label><input type="text" id="catIcono" placeholder="Ej: 🏰, 🍽️" maxlength="4"></div>
+                        <div class="form-group"><label>Descripción corta</label><input type="text" id="catDescripcion" placeholder="Ej: Espacios únicos"></div>
+                        <div class="form-group"><label>Orden de aparición</label><input type="number" id="catOrden" placeholder="1" min="1" value="1"><small style="color: #999;">Menor número = aparece primero</small></div>
                         <button class="btn" onclick="guardarCategoria()">💾 Guardar Categoría</button>
                     </div>
-                    <div class="card">
-                        <h3>📋 Categorías Existentes</h3>
-                        <div id="listaCategorias" class="item-list">Cargando...</div>
-                    </div>
+                    <div class="card"><h3>📋 Categorías Existentes</h3><div id="listaCategorias" class="item-list">Cargando...</div></div>
                 </div>
 
-                <!-- SUB: CIUDADES -->
                 <div class="sub-content" id="sub-ciudades">
                     <div class="card">
                         <h3>➕ Agregar Nueva Ciudad</h3>
                         <div class="alert" id="alertCiudad"></div>
-                        <div class="form-group">
-                            <label>Nombre de la Ciudad *</label>
-                            <input type="text" id="ciuNombre" placeholder="Ej: Xalapa, Veracruz...">
-                        </div>
-                        <div class="form-group">
-                            <label>Estado *</label>
-                            <input type="text" id="ciuEstado" placeholder="Ej: Veracruz, Puebla...">
-                        </div>
-                        <div class="form-group">
-                            <label>Descripción / Eslogan</label>
-                            <input type="text" id="ciuDescripcion" placeholder="Ej: Puerto y playa, Tradición y sabor...">
-                        </div>
-                        <div class="form-group">
-                            <label>Orden de aparición</label>
-                            <input type="number" id="ciuOrden" placeholder="1" min="1" value="1">
-                        </div>
+                        <div class="form-group"><label>Nombre de la Ciudad *</label><input type="text" id="ciuNombre" placeholder="Ej: Xalapa"></div>
+                        <div class="form-group"><label>Estado *</label><input type="text" id="ciuEstado" placeholder="Ej: Veracruz"></div>
+                        <div class="form-group"><label>Descripción / Eslogan</label><input type="text" id="ciuDescripcion" placeholder="Ej: Puerto y playa"></div>
+                        <div class="form-group"><label>Orden de aparición</label><input type="number" id="ciuOrden" placeholder="1" min="1" value="1"></div>
                         <button class="btn" onclick="guardarCiudad()">💾 Guardar Ciudad</button>
                     </div>
-                    <div class="card">
-                        <h3>📋 Ciudades Existentes</h3>
-                        <div id="listaCiudades" class="item-list">Cargando...</div>
-                    </div>
+                    <div class="card"><h3>📋 Ciudades Existentes</h3><div id="listaCiudades" class="item-list">Cargando...</div></div>
                 </div>
 
-                <!-- SUB: FAQ -->
                 <div class="sub-content" id="sub-faq">
                     <div class="card">
                         <h3>➕ Agregar Nueva Pregunta Frecuente</h3>
                         <div class="alert" id="alertFaq"></div>
-                        <div class="form-group">
-                            <label>Pregunta *</label>
-                            <input type="text" id="faqPregunta" placeholder="Ej: ¿Cómo sé que un proveedor es confiable?">
-                        </div>
-                        <div class="form-group">
-                            <label>Respuesta *</label>
-                            <textarea id="faqRespuesta" rows="4" placeholder="Escribe la respuesta completa..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Orden de aparición</label>
-                            <input type="number" id="faqOrden" placeholder="1" min="1" value="1">
-                        </div>
+                        <div class="form-group"><label>Pregunta *</label><input type="text" id="faqPregunta" placeholder="Ej: ¿Cómo sé que un proveedor es confiable?"></div>
+                        <div class="form-group"><label>Respuesta *</label><textarea id="faqRespuesta" rows="4" placeholder="Escribe la respuesta completa..."></textarea></div>
+                        <div class="form-group"><label>Orden de aparición</label><input type="number" id="faqOrden" placeholder="1" min="1" value="1"></div>
                         <button class="btn" onclick="guardarFaq()">💾 Guardar Pregunta</button>
                     </div>
-                    <div class="card">
-                        <h3>📋 Preguntas Frecuentes Existentes</h3>
-                        <div id="listaFaqs" class="item-list">Cargando...</div>
-                    </div>
+                    <div class="card"><h3>📋 Preguntas Frecuentes Existentes</h3><div id="listaFaqs" class="item-list">Cargando...</div></div>
                 </div>
             </div>
 
@@ -414,27 +350,11 @@
             <div class="tab-content" id="tab-perfil">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">👨‍💼 Perfil del Administrador Principal</h2>
                 <div class="card">
-                    <div class="form-group">
-                        <label>Fotografía de Perfil</label>
-                        <input type="file" accept="image/jpeg,image/png">
-                        <small style="color: #999;">JPG, PNG (Max 2MB). Se guardará el nombre del archivo.</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Nombre Completo</label>
-                        <input type="text" placeholder="Administrador GoParty">
-                    </div>
-                    <div class="form-group">
-                        <label>Puesto / Rol</label>
-                        <input type="text" placeholder="Administrador Principal">
-                    </div>
-                    <div class="form-group">
-                        <label>Correo Institucional</label>
-                        <input type="email" placeholder="admin@goparty.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Teléfono de Contacto</label>
-                        <input type="tel" placeholder="522281234567">
-                    </div>
+                    <div class="form-group"><label>Fotografía de Perfil</label><input type="file" accept="image/jpeg,image/png"><small style="color: #999;">JPG, PNG (Max 2MB)</small></div>
+                    <div class="form-group"><label>Nombre Completo</label><input type="text" placeholder="Administrador GoParty"></div>
+                    <div class="form-group"><label>Puesto / Rol</label><input type="text" placeholder="Administrador Principal"></div>
+                    <div class="form-group"><label>Correo Institucional</label><input type="email" placeholder="admin@goparty.com"></div>
+                    <div class="form-group"><label>Teléfono de Contacto</label><input type="tel" placeholder="522281234567"></div>
                     <button class="btn">💾 Guardar Cambios de Perfil</button>
                 </div>
             </div>
@@ -446,32 +366,16 @@
                 <div class="card">
                     <h3>📱 Configuración General</h3>
                     <p style="color: #666; margin-bottom: 1rem;">Estos valores se reflejan automáticamente en el sitio público.</p>
-                    <div class="form-group">
-                        <label>📱 WhatsApp Corporativo de GoParty *</label>
-                        <input type="tel" id="cfgWhatsapp" placeholder="522281234567 (con lada, sin espacios)">
-                        <small style="color: #999;">Se usará en el botón flotante del sitio público</small>
-                    </div>
-                    <div class="form-group">
-                        <label>📧 Correo de Soporte General *</label>
-                        <input type="email" id="cfgEmail" placeholder="soporte@goparty.com">
-                    </div>
-                    <div class="form-group">
-                        <label>📝 Mensaje de Bienvenida (Footer)</label>
-                        <textarea id="cfgFooter" rows="3">Conectando party people con magia profesional desde 2024.</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>🔢 Modo de Estadísticas</label>
-                        <select id="cfgModoStats" onchange="toggleStatsManual()">
-                            <option value="auto">Automático (contar datos reales de Firebase)</option>
-                            <option value="manual">Manual (valores personalizados)</option>
-                        </select>
-                    </div>
+                    <div class="form-group"><label>📱 WhatsApp Corporativo de GoParty *</label><input type="tel" id="cfgWhatsapp" placeholder="522281234567"><small style="color: #999;">Se usará en el botón flotante</small></div>
+                    <div class="form-group"><label>📧 Correo de Soporte General *</label><input type="email" id="cfgEmail" placeholder="soporte@goparty.com"></div>
+                    <div class="form-group"><label>📝 Mensaje de Bienvenida (Footer)</label><textarea id="cfgFooter" rows="3">Conectando party people con magia profesional desde 2024.</textarea></div>
+                    <div class="form-group"><label>🔢 Modo de Estadísticas</label><select id="cfgModoStats" onchange="toggleStatsManual()"><option value="auto">Automático</option><option value="manual">Manual</option></select></div>
                     <div id="statsManual" style="display: none; background: #FFF9E6; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
                         <h4 style="margin-bottom: 1rem; color: #333;">📊 Valores Manuales</h4>
                         <div class="form-group"><label>🎉 Eventos Realizados</label><input type="number" id="cfgEventos" placeholder="500" min="0"></div>
                         <div class="form-group"><label>⭐ % Satisfacción</label><input type="number" id="cfgSatisfaccion" placeholder="98" min="0" max="100"></div>
                     </div>
-                    <button class="btn" onclick="guardarConfiguracion()" style="margin-top: 1rem;">💾 Guardar Configuración de Plataforma</button>
+                    <button class="btn" onclick="guardarConfiguracion()" style="margin-top: 1rem;">💾 Guardar Configuración</button>
                 </div>
             </div>
 
@@ -498,7 +402,7 @@
             <div class="form-group"><label>Categoría *</label><select id="postCategoria"><option>Consejos</option><option>Tendencias</option><option>Recursos Descargables</option><option>General</option></select></div>
             <div class="form-group"><label>Resumen (Extracto) *</label><textarea id="postResumen" rows="3"></textarea></div>
             <div class="form-group"><label>Post Completo *</label><textarea id="postContenido" rows="6"></textarea></div>
-            <div class="form-group"><label>Recurso Descargable (Opcional: PDF, Word, etc.)</label><input type="file" id="postRecurso" accept=".pdf,.doc,.docx"></div>
+            <div class="form-group"><label>Recurso Descargable (Opcional)</label><input type="file" id="postRecurso" accept=".pdf,.doc,.docx"></div>
             <div style="display: flex; gap: 1rem; justify-content: flex-end;">
                 <button class="btn btn-secondary" onclick="cerrarModalPost()">Cancelar</button>
                 <button class="btn" onclick="guardarPost()">Guardar Publicación</button>
@@ -515,17 +419,7 @@
             <div class="form-group"><label>Correo de Acceso (Usuario) *</label><input type="email" id="colabEmail"></div>
             <div class="form-group"><label>Contraseña Temporal *</label><input type="text" id="colabPassword"></div>
             <div class="form-group"><label>Teléfono *</label><input type="tel" id="colabTelefono"></div>
-            <div class="form-group">
-                <label>Estado/Región Asignada *</label>
-                <select id="colabEstado">
-                    <option value="">Seleccionar...</option>
-                    <option>Veracruz</option>
-                    <option>Puebla</option>
-                    <option>Ciudad de México</option>
-                    <option>Oaxaca</option>
-                    <option>Matriz Principal</option>
-                </select>
-            </div>
+            <div class="form-group"><label>Estado/Región Asignada *</label><select id="colabEstado"><option value="">Seleccionar...</option><option>Veracruz</option><option>Puebla</option><option>Ciudad de México</option><option>Oaxaca</option><option>Matriz Principal</option></select></div>
             <div class="form-group"><label>Nivel de Acceso *</label><select id="colabNivel"><option>Verificador Regional</option><option>Supervisor de Zona</option><option>Matriz (Global)</option></select></div>
             <div style="display: flex; gap: 1rem; justify-content: flex-end;">
                 <button class="btn btn-secondary" onclick="cerrarModalColaborador()">Cancelar</button>
@@ -583,16 +477,12 @@
                 
                 if (tab.dataset.tab === 'dashboard') cargarDashboard();
                 if (tab.dataset.tab === 'config') cargarConfiguracion();
-                if (tab.dataset.tab === 'contenido') {
-                    cargarCategorias();
-                    cargarCiudades();
-                    cargarFaqs();
-                }
-                if (tab.dataset.tab === 'clientes') cargarResenas(); // 🆕 FASE 3
+                if (tab.dataset.tab === 'contenido') { cargarCategorias(); cargarCiudades(); cargarFaqs(); }
+                if (tab.dataset.tab === 'clientes') cargarResenas();
+                if (tab.dataset.tab === 'solicitudes') cargarSolicitudes(); // 
             });
         });
 
-        // Sub-tabs de Contenido del Sitio
         document.querySelectorAll('.sub-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
@@ -665,22 +555,16 @@
                     satisfaccionManual: parseInt(document.getElementById('cfgSatisfaccion').value) || 0,
                     actualizado: new Date().toISOString()
                 };
-                if (!data.whatsapp || !data.email) {
-                    alert.className = 'alert error'; alert.textContent = '❌ WhatsApp y Email son obligatorios'; return;
-                }
+                if (!data.whatsapp || !data.email) { alert.className = 'alert error'; alert.textContent = '❌ WhatsApp y Email son obligatorios'; return; }
                 await setDoc(doc(db, "configuracion", "general"), data);
                 alert.className = 'alert success'; alert.textContent = '✅ Configuración guardada.';
                 setTimeout(() => { alert.style.display = 'none'; }, 4000);
-            } catch (error) {
-                alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message;
-            }
+            } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
         };
-        window.toggleStatsManual = function() {
-            document.getElementById('statsManual').style.display = document.getElementById('cfgModoStats').value === 'manual' ? 'block' : 'none';
-        };
+        window.toggleStatsManual = function() { document.getElementById('statsManual').style.display = document.getElementById('cfgModoStats').value === 'manual' ? 'block' : 'none'; };
 
         // ==========================================
-        // CRUD CATEGORÍAS (FASE 2)
+        // CRUD CATEGORÍAS
         // ==========================================
         async function cargarCategorias() {
             const contenedor = document.getElementById('listaCategorias');
@@ -689,22 +573,8 @@
                 const items = [];
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-                if (items.length === 0) {
-                    contenedor.innerHTML = '<div class="empty-state">📭 No hay categorías. ¡Agrega la primera!</div>';
-                    return;
-                }
-                contenedor.innerHTML = items.map(item => `
-                    <div class="item-row">
-                        <div class="item-icon">${item.icono || ''}</div>
-                        <div class="item-info">
-                            <div class="item-title">${item.nombre}</div>
-                            <div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn btn-danger btn-small" onclick="eliminarCategoria('${item.id}')">🗑️ Eliminar</button>
-                        </div>
-                    </div>
-                `).join('');
+                if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay categorías.</div>'; return; }
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">${item.icono || ''}</div><div class="item-info"><div class="item-title">${item.nombre}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarCategoria('${item.id}')">️ Eliminar</button></div></div>`).join('');
             } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
         }
 
@@ -714,31 +584,23 @@
             const icono = document.getElementById('catIcono').value.trim();
             const descripcion = document.getElementById('catDescripcion').value.trim();
             const orden = parseInt(document.getElementById('catOrden').value) || 1;
-            if (!nombre || !icono) {
-                alert.className = 'alert error'; alert.textContent = '❌ Nombre e ícono son obligatorios'; return;
-            }
+            if (!nombre || !icono) { alert.className = 'alert error'; alert.textContent = '❌ Nombre e ícono son obligatorios'; return; }
             try {
                 await addDoc(collection(db, "categorias"), { nombre, icono, descripcion, orden, activa: true, creado: new Date().toISOString() });
                 alert.className = 'alert success'; alert.textContent = '✅ Categoría guardada';
-                document.getElementById('catNombre').value = '';
-                document.getElementById('catIcono').value = '';
-                document.getElementById('catDescripcion').value = '';
-                document.getElementById('catOrden').value = '1';
+                document.getElementById('catNombre').value = ''; document.getElementById('catIcono').value = ''; document.getElementById('catDescripcion').value = ''; document.getElementById('catOrden').value = '1';
                 setTimeout(() => { alert.style.display = 'none'; }, 3000);
                 cargarCategorias();
             } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
         };
 
         window.eliminarCategoria = async function(id) {
-            if (!confirm('¿Seguro que deseas eliminar esta categoría?')) return;
-            try {
-                await deleteDoc(doc(db, "categorias", id));
-                cargarCategorias();
-            } catch (error) { alert('❌ Error: ' + error.message); }
+            if (!confirm('¿Eliminar esta categoría?')) return;
+            try { await deleteDoc(doc(db, "categorias", id)); cargarCategorias(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         // ==========================================
-        // CRUD CIUDADES (FASE 2)
+        // CRUD CIUDADES
         // ==========================================
         async function cargarCiudades() {
             const contenedor = document.getElementById('listaCiudades');
@@ -747,23 +609,9 @@
                 const items = [];
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-                if (items.length === 0) {
-                    contenedor.innerHTML = '<div class="empty-state">📭 No hay ciudades. ¡Agrega la primera!</div>';
-                    return;
-                }
-                contenedor.innerHTML = items.map(item => `
-                    <div class="item-row">
-                        <div class="item-icon">🏙️</div>
-                        <div class="item-info">
-                            <div class="item-title">${item.nombre}, ${item.estado}</div>
-                            <div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">🗑️ Eliminar</button>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
+                if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay ciudades.</div>'; return; }
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">🏙️</div><div class="item-info"><div class="item-title">${item.nombre}, ${item.estado}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">️ Eliminar</button></div></div>`).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state"> Error al cargar</div>'; }
         }
 
         window.guardarCiudad = async function() {
@@ -772,31 +620,23 @@
             const estado = document.getElementById('ciuEstado').value.trim();
             const descripcion = document.getElementById('ciuDescripcion').value.trim();
             const orden = parseInt(document.getElementById('ciuOrden').value) || 1;
-            if (!nombre || !estado) {
-                alert.className = 'alert error'; alert.textContent = '❌ Nombre y estado son obligatorios'; return;
-            }
+            if (!nombre || !estado) { alert.className = 'alert error'; alert.textContent = '❌ Nombre y estado son obligatorios'; return; }
             try {
                 await addDoc(collection(db, "ciudades"), { nombre, estado, descripcion, orden, activa: true, creado: new Date().toISOString() });
                 alert.className = 'alert success'; alert.textContent = '✅ Ciudad guardada';
-                document.getElementById('ciuNombre').value = '';
-                document.getElementById('ciuEstado').value = '';
-                document.getElementById('ciuDescripcion').value = '';
-                document.getElementById('ciuOrden').value = '1';
+                document.getElementById('ciuNombre').value = ''; document.getElementById('ciuEstado').value = ''; document.getElementById('ciuDescripcion').value = ''; document.getElementById('ciuOrden').value = '1';
                 setTimeout(() => { alert.style.display = 'none'; }, 3000);
                 cargarCiudades();
             } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
         };
 
         window.eliminarCiudad = async function(id) {
-            if (!confirm('¿Seguro que deseas eliminar esta ciudad?')) return;
-            try {
-                await deleteDoc(doc(db, "ciudades", id));
-                cargarCiudades();
-            } catch (error) { alert('❌ Error: ' + error.message); }
+            if (!confirm('¿Eliminar esta ciudad?')) return;
+            try { await deleteDoc(doc(db, "ciudades", id)); cargarCiudades(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         // ==========================================
-        // CRUD FAQ (FASE 2)
+        // CRUD FAQ
         // ==========================================
         async function cargarFaqs() {
             const contenedor = document.getElementById('listaFaqs');
@@ -805,22 +645,8 @@
                 const items = [];
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-                if (items.length === 0) {
-                    contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas frecuentes. ¡Agrega la primera!</div>';
-                    return;
-                }
-                contenedor.innerHTML = items.map(item => `
-                    <div class="item-row">
-                        <div class="item-icon">❓</div>
-                        <div class="item-info">
-                            <div class="item-title">${item.pregunta}</div>
-                            <div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn btn-danger btn-small" onclick="eliminarFaq('${item.id}')">🗑️ Eliminar</button>
-                        </div>
-                    </div>
-                `).join('');
+                if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas frecuentes.</div>'; return; }
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">❓</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaq('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
             } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
         }
 
@@ -829,138 +655,179 @@
             const pregunta = document.getElementById('faqPregunta').value.trim();
             const respuesta = document.getElementById('faqRespuesta').value.trim();
             const orden = parseInt(document.getElementById('faqOrden').value) || 1;
-            if (!pregunta || !respuesta) {
-                alert.className = 'alert error'; alert.textContent = '❌ Pregunta y respuesta son obligatorias'; return;
-            }
+            if (!pregunta || !respuesta) { alert.className = 'alert error'; alert.textContent = '❌ Pregunta y respuesta son obligatorias'; return; }
             try {
                 await addDoc(collection(db, "faq"), { pregunta, respuesta, orden, activa: true, creado: new Date().toISOString() });
                 alert.className = 'alert success'; alert.textContent = '✅ Pregunta guardada';
-                document.getElementById('faqPregunta').value = '';
-                document.getElementById('faqRespuesta').value = '';
-                document.getElementById('faqOrden').value = '1';
+                document.getElementById('faqPregunta').value = ''; document.getElementById('faqRespuesta').value = ''; document.getElementById('faqOrden').value = '1';
                 setTimeout(() => { alert.style.display = 'none'; }, 3000);
                 cargarFaqs();
             } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
         };
 
         window.eliminarFaq = async function(id) {
-            if (!confirm('¿Seguro que deseas eliminar esta pregunta?')) return;
-            try {
-                await deleteDoc(doc(db, "faq", id));
-                cargarFaqs();
-            } catch (error) { alert('❌ Error: ' + error.message); }
+            if (!confirm('¿Eliminar esta pregunta?')) return;
+            try { await deleteDoc(doc(db, "faq", id)); cargarFaqs(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         // ==========================================
-        // 🆕 FASE 3: MODERACIÓN DE TESTIMONIOS
+        // MODERACIÓN DE TESTIMONIOS
         // ==========================================
         let filtroResenaActual = 'pendiente';
 
         async function cargarResenas() {
             const contenedor = document.getElementById('listaResenas');
             if (!contenedor) return;
-
             try {
                 const snap = await getDocs(collection(db, "testimonios"));
                 let resenas = [];
                 snap.forEach(doc => resenas.push({ id: doc.id, ...doc.data() }));
-
-                // Filtrar
-                if (filtroResenaActual !== 'todas') {
-                    resenas = resenas.filter(r => r.estado === filtroResenaActual);
-                }
-
-                // Ordenar por fecha (más reciente primero)
+                if (filtroResenaActual !== 'todas') resenas = resenas.filter(r => r.estado === filtroResenaActual);
                 resenas.sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
 
-                // Actualizar contadores
                 const todas = await getDocs(collection(db, "testimonios"));
-                const pendientes = todas.docs.filter(d => d.data().estado === 'pendiente').length;
-                const aprobadas = todas.docs.filter(d => d.data().estado === 'aprobado').length;
-                if (document.getElementById('resenasPendientes')) {
-                    document.getElementById('resenasPendientes').textContent = pendientes;
-                }
-                if (document.getElementById('resenasAprobadas')) {
-                    document.getElementById('resenasAprobadas').textContent = aprobadas;
-                }
-                if (document.getElementById('totalClientes')) {
-                    document.getElementById('totalClientes').textContent = todas.size;
-                }
+                document.getElementById('resenasPendientes').textContent = todas.docs.filter(d => d.data().estado === 'pendiente').length;
+                document.getElementById('resenasAprobadas').textContent = todas.docs.filter(d => d.data().estado === 'aprobado').length;
+                document.getElementById('totalClientes').textContent = todas.size;
 
-                if (resenas.length === 0) {
-                    contenedor.innerHTML = `<div class="empty-state">📭 No hay reseñas ${filtroResenaActual === 'todas' ? '' : 'con estado "' + filtroResenaActual + '"'}.</div>`;
-                    return;
-                }
+                if (resenas.length === 0) { contenedor.innerHTML = `<div class="empty-state">📭 No hay reseñas ${filtroResenaActual === 'todas' ? '' : 'con estado "' + filtroResenaActual + '"'}.</div>`; return; }
 
                 contenedor.innerHTML = resenas.map(r => {
                     const estadoClase = r.estado === 'aprobado' ? 'aprobada' : r.estado === 'rechazado' ? 'rechazada' : '';
                     const estrellas = '⭐'.repeat(r.calificacion || 0);
                     const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
+                    return `<div class="solicitud-card ${estadoClase}"><div class="solicitud-header"><div><div class="solicitud-cliente">${r.nombreCliente || 'Anónimo'} ${r.inicial ? `<span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-radius: 50%; text-align: center; line-height: 30px; margin-left: 0.5rem;">${r.inicial}</span>` : ''}</div><div class="solicitud-evento">${r.tipoEvento || ''} - ${r.ciudad || ''} • Proveedor: <strong>${r.nombreProveedor || 'N/A'}</strong></div><div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${fecha}</div></div><span style="background: ${r.estado === 'aprobado' ? '#4CAF50' : r.estado === 'rechazado' ? '#FF4444' : '#FFD93D'}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${r.estado ? r.estado.charAt(0).toUpperCase() + r.estado.slice(1) : 'pendiente'}</span></div><div class="solicitud-estrellas">${estrellas}</div><div class="solicitud-descripcion">"${r.comentario || ''}"</div>${r.estado === 'pendiente' ? `<div class="solicitud-acciones"><button class="btn-aprobar" onclick="aprobarResena('${r.id}')">✅ Aprobar</button><button class="btn-rechazar" onclick="rechazarResena('${r.id}')">❌ Rechazar</button></div>` : `<div class="solicitud-acciones">${r.estado === 'aprobado' ? `<button class="btn-rechazar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Volver a Pendiente</button>` : ''}${r.estado === 'rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Revisar de Nuevo</button>` : ''}<button class="btn btn-danger btn-small" onclick="eliminarResena('${r.id}')">🗑️ Eliminar</button></div>`}</div>`;
+                }).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar reseñas: ' + error.message + '</div>'; }
+        }
+
+        window.filtrarResenas = function(filtro) { filtroResenaActual = filtro; cargarResenas(); };
+        window.aprobarResena = async function(id) { if (!confirm('¿Aprobar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'aprobado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert(' Error: ' + error.message); } };
+        window.rechazarResena = async function(id) { if (!confirm('¿Rechazar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'rechazado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
+        window.cambiarEstadoResena = async function(id, nuevoEstado) { try { await updateDoc(doc(db, "testimonios", id), { estado: nuevoEstado }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
+        window.eliminarResena = async function(id) { if (!confirm('¿Eliminar permanentemente?')) return; try { await deleteDoc(doc(db, "testimonios", id)); cargarResenas(); } catch (error) { alert(' Error: ' + error.message); } };
+
+        // ==========================================
+        // 🆕 SOLICITUDES DE REGISTRO DE PROVEEDORES
+        // ==========================================
+        let filtroSolicitudActual = 'Pendiente';
+
+        async function cargarSolicitudes() {
+            const contenedor = document.getElementById('listaSolicitudes');
+            if (!contenedor) return;
+
+            try {
+                const snap = await getDocs(collection(db, "proveedores"));
+                let solicitudes = [];
+                snap.forEach(doc => solicitudes.push({ id: doc.id, ...doc.data() }));
+
+                // Filtrar por estado
+                if (filtroSolicitudActual !== 'todas') {
+                    solicitudes = solicitudes.filter(s => (s.estadoVerificacion || 'Pendiente') === filtroSolicitudActual);
+                }
+
+                // Ordenar por fecha de solicitud (más reciente primero)
+                solicitudes.sort((a, b) => new Date(b.fechaSolicitud || b.fechaRegistro || 0) - new Date(a.fechaSolicitud || a.fechaRegistro || 0));
+
+                // Actualizar contadores
+                const todas = await getDocs(collection(db, "proveedores"));
+                const pendientes = todas.docs.filter(d => (d.data().estadoVerificacion || 'Pendiente') === 'Pendiente').length;
+                const aprobadas = todas.docs.filter(d => d.data().estadoVerificacion === 'Aprobado' || d.data().estadoVerificacion === 'Verificado').length;
+                const rechazadas = todas.docs.filter(d => d.data().estadoVerificacion === 'Rechazado').length;
+                
+                document.getElementById('solPendientes').textContent = pendientes;
+                document.getElementById('solAprobadas').textContent = aprobadas;
+                document.getElementById('solRechazadas').textContent = rechazadas;
+                document.getElementById('solTotal').textContent = todas.size;
+                document.getElementById('tabSolicitudesCount').textContent = pendientes;
+
+                if (solicitudes.length === 0) {
+                    contenedor.innerHTML = `<div class="empty-state">📭 No hay solicitudes ${filtroSolicitudActual === 'todas' ? '' : 'con estado "' + filtroSolicitudActual + '"'}.</div>`;
+                    return;
+                }
+
+                contenedor.innerHTML = solicitudes.map(s => {
+                    const estado = s.estadoVerificacion || 'Pendiente';
+                    const estadoColor = estado === 'Aprobado' || estado === 'Verificado' ? '#4CAF50' : estado === 'Rechazado' ? '#FF4444' : '#FFD93D';
+                    const fecha = s.fechaSolicitud ? new Date(s.fechaSolicitud).toLocaleDateString('es-MX') : new Date(s.fechaRegistro || 0).toLocaleDateString('es-MX');
+                    const servicios = s.servicios && s.servicios.length > 0 ? s.servicios.join(', ') : (s.categoria || 'No especificado');
+                    
                     return `
-                        <div class="resena-card ${estadoClase}">
-                            <div class="resena-header">
+                        <div class="solicitud-card" style="border-left-color: ${estadoColor};">
+                            <div class="solicitud-header">
                                 <div>
-                                    <div class="resena-cliente">${r.nombreCliente || 'Anónimo'} ${r.inicial ? `<span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-radius: 50%; text-align: center; line-height: 30px; margin-left: 0.5rem;">${r.inicial}</span>` : ''}</div>
-                                    <div class="resena-evento">${r.tipoEvento || ''} - ${r.ciudad || ''} • Proveedor: <strong>${r.nombreProveedor || 'N/A'}</strong></div>
-                                    <div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${fecha}</div>
+                                    <div class="solicitud-cliente">🏪 ${s.nombreNegocio || 'Sin nombre'}</div>
+                                    <div class="solicitud-evento">👤 ${s.nombreContacto || 'Sin contacto'} •  ${s.email || 'Sin email'}</div>
+                                    <div class="solicitud-evento">📱 ${s.whatsapp || 'Sin teléfono'} • 📍 ${s.ciudad || ''}, ${s.estado || ''}</div>
+                                    <div class="solicitud-evento">🎯 Servicios: ${servicios} • 💎 Plan: ${(s.plan || 'basic').toUpperCase()}</div>
+                                    <div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 Solicitud: ${fecha}</div>
                                 </div>
-                                <span style="background: ${r.estado === 'aprobado' ? '#4CAF50' : r.estado === 'rechazado' ? '#FF4444' : '#FFD93D'}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${r.estado ? r.estado.charAt(0).toUpperCase() + r.estado.slice(1) : 'pendiente'}</span>
+                                <span style="background: ${estadoColor}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${estado}</span>
                             </div>
-                            <div class="resena-estrellas">${estrellas}</div>
-                            <div class="resena-comentario">"${r.comentario || ''}"</div>
-                            ${r.estado === 'pendiente' ? `
-                                <div class="resena-acciones">
-                                    <button class="btn-aprobar" onclick="aprobarResena('${r.id}')">✅ Aprobar</button>
-                                    <button class="btn-rechazar" onclick="rechazarResena('${r.id}')">❌ Rechazar</button>
+                            ${s.descripcion ? `<div class="solicitud-descripcion">"${s.descripcion}"</div>` : ''}
+                            ${s.motivoRechazo ? `<div style="background: #FFE5E5; padding: 0.8rem; border-radius: 6px; margin: 0.8rem 0; font-size: 0.9rem;"><strong>Motivo de rechazo:</strong> ${s.motivoRechazo}</div>` : ''}
+                            ${estado === 'Pendiente' ? `
+                                <div class="solicitud-acciones">
+                                    <button class="btn-aprobar" onclick="aprobarSolicitud('${s.id}', '${s.email}')">✅ Aprobar y Activar Cuenta</button>
+                                    <button class="btn-rechazar" onclick="rechazarSolicitud('${s.id}')">❌ Rechazar</button>
                                 </div>
                             ` : `
-                                <div class="resena-acciones">
-                                    ${r.estado === 'aprobado' ? `<button class="btn-rechazar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Volver a Pendiente</button>` : ''}
-                                    ${r.estado === 'rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Revisar de Nuevo</button>` : ''}
-                                    <button class="btn btn-danger btn-small" onclick="eliminarResena('${r.id}')">🗑️ Eliminar</button>
+                                <div class="solicitud-acciones">
+                                    ${(estado === 'Aprobado' || estado === 'Verificado') ? `<button class="btn-rechazar" onclick="cambiarEstadoSolicitud('${s.id}', 'Pendiente')">️ Volver a Pendiente</button>` : ''}
+                                    ${estado === 'Rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoSolicitud('${s.id}', 'Pendiente')">↩️ Revisar de Nuevo</button>` : ''}
+                                    <button class="btn btn-danger btn-small" onclick="eliminarSolicitud('${s.id}')">🗑️ Eliminar</button>
                                 </div>
                             `}
                         </div>
                     `;
                 }).join('');
             } catch (error) {
-                contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar reseñas: ' + error.message + '</div>';
+                contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar: ' + error.message + '</div>';
             }
         }
 
-        window.filtrarResenas = function(filtro) {
-            filtroResenaActual = filtro;
-            cargarResenas();
+        window.filtrarSolicitudes = function(filtro) {
+            filtroSolicitudActual = filtro;
+            cargarSolicitudes();
         };
 
-        window.aprobarResena = async function(id) {
-            if (!confirm('¿Aprobar este testimonio? Aparecerá en el sitio público.')) return;
+        window.aprobarSolicitud = async function(id, email) {
+            if (!confirm('¿Aprobar esta solicitud?\n\nEl proveedor podrá iniciar sesión en el dashboard con este email:\n' + email)) return;
             try {
-                await updateDoc(doc(db, "testimonios", id), { estado: 'aprobado', fechaModeracion: new Date().toISOString() });
-                cargarResenas();
+                await updateDoc(doc(db, "proveedores", id), { 
+                    estadoVerificacion: 'Aprobado',
+                    fechaAprobacion: new Date().toISOString()
+                });
+                alert('✅ Solicitud aprobada.\n\nEl proveedor ya puede iniciar sesión en el dashboard.');
+                cargarSolicitudes();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        window.rechazarResena = async function(id) {
-            if (!confirm('¿Rechazar este testimonio? No aparecerá en el sitio público.')) return;
+        window.rechazarSolicitud = async function(id) {
+            const motivo = prompt('Motivo del rechazo (opcional):\n\nEj: Documentación incompleta, información falsa, etc.');
             try {
-                await updateDoc(doc(db, "testimonios", id), { estado: 'rechazado', fechaModeracion: new Date().toISOString() });
-                cargarResenas();
+                await updateDoc(doc(db, "proveedores", id), { 
+                    estadoVerificacion: 'Rechazado',
+                    motivoRechazo: motivo || 'No especificado',
+                    fechaRechazo: new Date().toISOString()
+                });
+                alert('❌ Solicitud rechazada.');
+                cargarSolicitudes();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        window.cambiarEstadoResena = async function(id, nuevoEstado) {
+        window.cambiarEstadoSolicitud = async function(id, nuevoEstado) {
             try {
-                await updateDoc(doc(db, "testimonios", id), { estado: nuevoEstado });
-                cargarResenas();
+                await updateDoc(doc(db, "proveedores", id), { estadoVerificacion: nuevoEstado });
+                cargarSolicitudes();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        window.eliminarResena = async function(id) {
-            if (!confirm('¿Eliminar permanentemente este testimonio?')) return;
+        window.eliminarSolicitud = async function(id) {
+            if (!confirm('¿Eliminar permanentemente esta solicitud?\n\nEsta acción no se puede deshacer.')) return;
             try {
-                await deleteDoc(doc(db, "testimonios", id));
-                cargarResenas();
+                await deleteDoc(doc(db, "proveedores", id));
+                cargarSolicitudes();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
@@ -1004,10 +871,9 @@
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        // Hacer funciones globales
         window.guardarConfiguracion = window.guardarConfiguracion;
         window.toggleStatsManual = window.toggleStatsManual;
     </script>
 
 </body>
-                    </html>
+</html>

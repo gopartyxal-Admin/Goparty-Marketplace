@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -27,14 +27,14 @@
         .tab.active { color: #FF6B9D; border-bottom-color: #FF6B9D; }
         .tab .badge { background: #FF6B9D; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 5px; }
         
-        .content { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .content { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
         .card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .card h3 { color: #333; margin-bottom: 1rem; font-size: 1.2rem; }
         
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         .stat-card { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%); color: white; padding: 1.5rem; border-radius: 12px; text-align: center; }
         .stat-card.blue { background: linear-gradient(135deg, #4A90E2 0%, #6BCB77 100%); }
         .stat-card.green { background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); }
@@ -57,6 +57,10 @@
         .btn-aprobar:hover { background: #3d8b40; }
         .btn-rechazar { background: #FF4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .btn-rechazar:hover { background: #d32f2f; }
+        .btn-info { background: #4A90E2; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-info:hover { background: #357ABD; }
+        .btn-message { background: #9B59B6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-message:hover { background: #8E44AD; }
         
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
         .alert.success { background: #d4edda; color: #155724; display: block; }
@@ -79,21 +83,193 @@
 
         .empty-state { text-align: center; padding: 2rem; color: #999; }
 
-        /*  Estilos para solicitudes */
-        .solicitud-card { background: #f9f9f9; border-radius: 10px; padding: 1.2rem; margin-bottom: 1rem; border-left: 4px solid #FFD93D; }
+        /* Estilos mejorados para solicitudes */
+        .solicitud-card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 1.5rem; 
+            margin-bottom: 1.5rem; 
+            border-left: 5px solid #FFD93D;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
         .solicitud-card.aprobada { border-left-color: #4CAF50; }
         .solicitud-card.rechazada { border-left-color: #FF4444; }
-        .solicitud-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem; }
-        .solicitud-cliente { font-weight: 700; color: #333; font-size: 1.1rem; }
-        .solicitud-evento { color: #666; font-size: 0.9rem; margin-top: 0.2rem; }
-        .solicitud-descripcion { font-style: italic; color: #555; line-height: 1.6; margin: 0.8rem 0; padding: 0.8rem; background: white; border-radius: 6px; }
-        .solicitud-acciones { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
-        .solicitud-acciones button { padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: transform 0.2s; }
-        .solicitud-acciones button:hover { transform: translateY(-2px); }
-        .filtro-solicitudes { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .filtro-solicitudes .btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+        .solicitud-card.pendiente { border-left-color: #FFD93D; }
         
-        @media (max-width: 768px) { .content { padding: 0 1rem; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        .solicitud-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .solicitud-info-principal { flex: 1; }
+        .solicitud-cliente { font-weight: 700; color: #333; font-size: 1.3rem; margin-bottom: 0.3rem; }
+        .solicitud-evento { color: #666; font-size: 0.9rem; margin-top: 0.3rem; }
+        .solicitud-descripcion { 
+            font-style: italic; 
+            color: #555; 
+            line-height: 1.6; 
+            margin: 1rem 0; 
+            padding: 1rem; 
+            background: #f9f9f9; 
+            border-radius: 8px;
+        }
+        
+        .solicitud-detalles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .detalle-item {
+            background: #f9f9f9;
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+        
+        .detalle-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.85rem;
+        }
+        
+        .detalle-item span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .solicitud-acciones { 
+            display: flex; 
+            gap: 0.8rem; 
+            margin-top: 1.5rem; 
+            flex-wrap: wrap;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .solicitud-acciones button { 
+            padding: 0.7rem 1.2rem; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            transition: all 0.2s;
+        }
+        
+        .solicitud-acciones button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .filtro-solicitudes { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .filtro-solicitudes .btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+        
+        .estado-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .estado-pendiente { background: #FFD93D; color: #333; }
+        .estado-aprobado { background: #4CAF50; color: white; }
+        .estado-rechazado { background: #FF4444; color: white; }
+        
+        .timeline {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            border-left: 2px solid #e0e0e0;
+        }
+        
+        .timeline-item {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.7rem;
+            top: 0.3rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FF6B9D;
+        }
+        
+        .timeline-fecha {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .timeline-texto {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 {
+            color: #333;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+        
+        @media (max-width: 768px) { 
+            .content { padding: 0 1rem; } 
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .solicitud-detalles { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -122,14 +298,14 @@
             <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
             <div class="tab" data-tab="cambios">🔄 Solicitudes de Cambio <span id="tabCambiosCount" class="badge">0</span></div>
             <div class="tab" data-tab="proveedores">👥 Proveedores</div>
-            <div class="tab" data-tab="clientes">👤 Clientes</div>
-            <div class="tab" data-tab="blog"> Blogs y Recursos</div>
+            <div class="tab" data-tab="clientes"> Clientes</div>
+            <div class="tab" data-tab="blog">📚 Blogs y Recursos</div>
             <div class="tab" data-tab="finanzas">💰 Finanzas</div>
             <div class="tab" data-tab="colaboradores">🤝 Colaboradores</div>
             <div class="tab" data-tab="solicitudes">📩 Solicitudes <span id="tabSolicitudesCount" class="badge">0</span></div>
             <div class="tab" data-tab="contenido">📄 Contenido del Sitio</div>
-            <div class="tab" data-tab="perfil">‍💼 Perfil Admin</div>
-            <div class="tab" data-tab="config">️ Configuración General</div>
+            <div class="tab" data-tab="perfil">👨‍ Perfil Admin</div>
+            <div class="tab" data-tab="config">⚙️ Configuración General</div>
         </div>
 
         <div class="content">
@@ -272,9 +448,9 @@
                 <div class="card"><div id="listaColaboradores">No hay colaboradores registrados</div></div>
             </div>
 
-            <!-- 🆕 TAB: SOLICITUDES DE REGISTRO -->
+            <!-- 🆕 TAB: SOLICITUDES DE REGISTRO (AMPLIADA) -->
             <div class="tab-content" id="tab-solicitudes">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">📩 Solicitudes de Incorporación</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;"> Solicitudes de Incorporación</h2>
                 <p style="color: #666; margin-bottom: 1rem;">Revisa y aprueba las solicitudes de nuevos proveedores enviadas desde unete.html. Solo los aprobados podrán iniciar sesión en el dashboard.</p>
                 
                 <div class="stats-grid">
@@ -304,7 +480,7 @@
                 <div class="sub-tabs">
                     <button class="sub-tab active" data-sub="categorias">🎯 Categorías</button>
                     <button class="sub-tab" data-sub="ciudades">🏙️ Ciudades</button>
-                    <button class="sub-tab" data-sub="faq"> Preguntas Frecuentes</button>
+                    <button class="sub-tab" data-sub="faq">❓ Preguntas Frecuentes</button>
                 </div>
 
                 <div class="sub-content active" id="sub-categorias">
@@ -312,7 +488,7 @@
                         <h3>➕ Agregar Nueva Categoría</h3>
                         <div class="alert" id="alertCategoria"></div>
                         <div class="form-group"><label>Nombre de la Categoría *</label><input type="text" id="catNombre" placeholder="Ej: Salones, Alimentos..."></div>
-                        <div class="form-group"><label>Ícono (emoji) *</label><input type="text" id="catIcono" placeholder="Ej: 🏰, 🍽️" maxlength="4"></div>
+                        <div class="form-group"><label>Ícono (emoji) *</label><input type="text" id="catIcono" placeholder="Ej: , 🍽️" maxlength="4"></div>
                         <div class="form-group"><label>Descripción corta</label><input type="text" id="catDescripcion" placeholder="Ej: Espacios únicos"></div>
                         <div class="form-group"><label>Orden de aparición</label><input type="number" id="catOrden" placeholder="1" min="1" value="1"><small style="color: #999;">Menor número = aparece primero</small></div>
                         <button class="btn" onclick="guardarCategoria()">💾 Guardar Categoría</button>
@@ -367,7 +543,7 @@
                     <h3>📱 Configuración General</h3>
                     <p style="color: #666; margin-bottom: 1rem;">Estos valores se reflejan automáticamente en el sitio público.</p>
                     <div class="form-group"><label>📱 WhatsApp Corporativo de GoParty *</label><input type="tel" id="cfgWhatsapp" placeholder="522281234567"><small style="color: #999;">Se usará en el botón flotante</small></div>
-                    <div class="form-group"><label>📧 Correo de Soporte General *</label><input type="email" id="cfgEmail" placeholder="soporte@goparty.com"></div>
+                    <div class="form-group"><label> Correo de Soporte General *</label><input type="email" id="cfgEmail" placeholder="soporte@goparty.com"></div>
                     <div class="form-group"><label>📝 Mensaje de Bienvenida (Footer)</label><textarea id="cfgFooter" rows="3">Conectando party people con magia profesional desde 2024.</textarea></div>
                     <div class="form-group"><label>🔢 Modo de Estadísticas</label><select id="cfgModoStats" onchange="toggleStatsManual()"><option value="auto">Automático</option><option value="manual">Manual</option></select></div>
                     <div id="statsManual" style="display: none; background: #FFF9E6; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
@@ -382,13 +558,59 @@
         </div>
     </div>
 
-    <!-- MODAL: DETALLE DE COTIZACIÓN -->
-    <div id="modalCotizacion" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-        <div style="background: white; padding: 2rem; border-radius: 15px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
-            <h3 style="margin-bottom: 1rem;">Detalle de Cotización</h3>
-            <div id="detalleCotizacion"></div>
-            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
-                <button class="btn btn-secondary" onclick="cerrarModalCotizacion()">Cerrar</button>
+    <!-- MODAL: SOLICITAR MÁS INFORMACIÓN -->
+    <div class="modal" id="modalInfoAdicional">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3> Solicitar Información Adicional</h3>
+                <button class="modal-close" onclick="cerrarModalInfo()">✕</button>
+            </div>
+            <div class="form-group">
+                <label>Proveedor</label>
+                <input type="text" id="infoProveedorNombre" readonly>
+            </div>
+            <div class="form-group">
+                <label>Información que necesitas *</label>
+                <textarea id="infoSolicitud" rows="4" placeholder="Ej: Necesito que envíes fotos de tu trabajo, referencias de clientes, constancia fiscal actualizada..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Fecha límite para responder</label>
+                <input type="date" id="infoFechaLimite">
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+                <button class="btn btn-secondary" onclick="cerrarModalInfo()">Cancelar</button>
+                <button class="btn" onclick="enviarSolicitudInfo()"> Enviar Solicitud</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ENVIAR MENSAJE -->
+    <div class="modal" id="modalMensaje">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💬 Enviar Mensaje al Proveedor</h3>
+                <button class="modal-close" onclick="cerrarModalMensaje()">✕</button>
+            </div>
+            <div class="form-group">
+                <label>Para</label>
+                <input type="text" id="mensajeProveedorNombre" readonly>
+                <input type="email" id="mensajeProveedorEmail" readonly style="margin-top: 0.5rem;">
+            </div>
+            <div class="form-group">
+                <label>Asunto *</label>
+                <input type="text" id="mensajeAsunto" placeholder="Ej: Documentación pendiente">
+            </div>
+            <div class="form-group">
+                <label>Mensaje *</label>
+                <textarea id="mensajeContenido" rows="6" placeholder="Escribe tu mensaje aquí..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Enviar copia a</label>
+                <input type="email" id="mensajeCopia" placeholder="tu@email.com (opcional)">
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+                <button class="btn btn-secondary" onclick="cerrarModalMensaje()">Cancelar</button>
+                <button class="btn" onclick="enviarMensaje()">📤 Enviar Mensaje</button>
             </div>
         </div>
     </div>
@@ -479,7 +701,7 @@
                 if (tab.dataset.tab === 'config') cargarConfiguracion();
                 if (tab.dataset.tab === 'contenido') { cargarCategorias(); cargarCiudades(); cargarFaqs(); }
                 if (tab.dataset.tab === 'clientes') cargarResenas();
-                if (tab.dataset.tab === 'solicitudes') cargarSolicitudes(); // 
+                if (tab.dataset.tab === 'solicitudes') cargarSolicitudes();
             });
         });
 
@@ -575,7 +797,7 @@
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
                 if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay categorías.</div>'; return; }
                 contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">${item.icono || ''}</div><div class="item-info"><div class="item-title">${item.nombre}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarCategoria('${item.id}')">️ Eliminar</button></div></div>`).join('');
-            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state"> Error al cargar</div>'; }
         }
 
         window.guardarCategoria = async function() {
@@ -610,8 +832,8 @@
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
                 if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay ciudades.</div>'; return; }
-                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">🏙️</div><div class="item-info"><div class="item-title">${item.nombre}, ${item.estado}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">️ Eliminar</button></div></div>`).join('');
-            } catch (error) { contenedor.innerHTML = '<div class="empty-state"> Error al cargar</div>'; }
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">🏙️</div><div class="item-info"><div class="item-title">${item.nombre}, ${item.estado}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
         }
 
         window.guardarCiudad = async function() {
@@ -646,8 +868,8 @@
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
                 if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas frecuentes.</div>'; return; }
-                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">❓</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaq('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
-            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">❓</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaq('${item.id}')">️ Eliminar</button></div></div>`).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state"> Error al cargar</div>'; }
         }
 
         window.guardarFaq = async function() {
@@ -690,25 +912,25 @@
                 document.getElementById('resenasAprobadas').textContent = todas.docs.filter(d => d.data().estado === 'aprobado').length;
                 document.getElementById('totalClientes').textContent = todas.size;
 
-                if (resenas.length === 0) { contenedor.innerHTML = `<div class="empty-state">📭 No hay reseñas ${filtroResenaActual === 'todas' ? '' : 'con estado "' + filtroResenaActual + '"'}.</div>`; return; }
+                if (resenas.length === 0) { contenedor.innerHTML = `<div class="empty-state"> No hay reseñas ${filtroResenaActual === 'todas' ? '' : 'con estado "' + filtroResenaActual + '"'}.</div>`; return; }
 
                 contenedor.innerHTML = resenas.map(r => {
                     const estadoClase = r.estado === 'aprobado' ? 'aprobada' : r.estado === 'rechazado' ? 'rechazada' : '';
                     const estrellas = '⭐'.repeat(r.calificacion || 0);
                     const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
-                    return `<div class="solicitud-card ${estadoClase}"><div class="solicitud-header"><div><div class="solicitud-cliente">${r.nombreCliente || 'Anónimo'} ${r.inicial ? `<span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-radius: 50%; text-align: center; line-height: 30px; margin-left: 0.5rem;">${r.inicial}</span>` : ''}</div><div class="solicitud-evento">${r.tipoEvento || ''} - ${r.ciudad || ''} • Proveedor: <strong>${r.nombreProveedor || 'N/A'}</strong></div><div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${fecha}</div></div><span style="background: ${r.estado === 'aprobado' ? '#4CAF50' : r.estado === 'rechazado' ? '#FF4444' : '#FFD93D'}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${r.estado ? r.estado.charAt(0).toUpperCase() + r.estado.slice(1) : 'pendiente'}</span></div><div class="solicitud-estrellas">${estrellas}</div><div class="solicitud-descripcion">"${r.comentario || ''}"</div>${r.estado === 'pendiente' ? `<div class="solicitud-acciones"><button class="btn-aprobar" onclick="aprobarResena('${r.id}')">✅ Aprobar</button><button class="btn-rechazar" onclick="rechazarResena('${r.id}')">❌ Rechazar</button></div>` : `<div class="solicitud-acciones">${r.estado === 'aprobado' ? `<button class="btn-rechazar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Volver a Pendiente</button>` : ''}${r.estado === 'rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Revisar de Nuevo</button>` : ''}<button class="btn btn-danger btn-small" onclick="eliminarResena('${r.id}')">🗑️ Eliminar</button></div>`}</div>`;
+                    return `<div class="solicitud-card ${estadoClase}"><div class="solicitud-header"><div><div class="solicitud-cliente">${r.nombreCliente || 'Anónimo'} ${r.inicial ? `<span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-radius: 50%; text-align: center; line-height: 30px; margin-left: 0.5rem;">${r.inicial}</span>` : ''}</div><div class="solicitud-evento">${r.tipoEvento || ''} - ${r.ciudad || ''} • Proveedor: <strong>${r.nombreProveedor || 'N/A'}</strong></div><div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${fecha}</div></div><span style="background: ${r.estado === 'aprobado' ? '#4CAF50' : r.estado === 'rechazado' ? '#FF4444' : '#FFD93D'}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${r.estado ? r.estado.charAt(0).toUpperCase() + r.estado.slice(1) : 'pendiente'}</span></div><div class="solicitud-estrellas">${estrellas}</div><div class="solicitud-descripcion">"${r.comentario || ''}"</div>${r.estado === 'pendiente' ? `<div class="solicitud-acciones"><button class="btn-aprobar" onclick="aprobarResena('${r.id}')">✅ Aprobar</button><button class="btn-rechazar" onclick="rechazarResena('${r.id}')">❌ Rechazar</button></div>` : `<div class="solicitud-acciones">${r.estado === 'aprobado' ? `<button class="btn-rechazar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">️ Volver a Pendiente</button>` : ''}${r.estado === 'rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">️ Revisar de Nuevo</button>` : ''}<button class="btn btn-danger btn-small" onclick="eliminarResena('${r.id}')">🗑️ Eliminar</button></div>`}</div>`;
                 }).join('');
             } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar reseñas: ' + error.message + '</div>'; }
         }
 
         window.filtrarResenas = function(filtro) { filtroResenaActual = filtro; cargarResenas(); };
-        window.aprobarResena = async function(id) { if (!confirm('¿Aprobar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'aprobado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert(' Error: ' + error.message); } };
+        window.aprobarResena = async function(id) { if (!confirm('¿Aprobar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'aprobado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
         window.rechazarResena = async function(id) { if (!confirm('¿Rechazar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'rechazado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
         window.cambiarEstadoResena = async function(id, nuevoEstado) { try { await updateDoc(doc(db, "testimonios", id), { estado: nuevoEstado }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
-        window.eliminarResena = async function(id) { if (!confirm('¿Eliminar permanentemente?')) return; try { await deleteDoc(doc(db, "testimonios", id)); cargarResenas(); } catch (error) { alert(' Error: ' + error.message); } };
+        window.eliminarResena = async function(id) { if (!confirm('¿Eliminar permanentemente?')) return; try { await deleteDoc(doc(db, "testimonios", id)); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
 
         // ==========================================
-        // 🆕 SOLICITUDES DE REGISTRO DE PROVEEDORES
+        // 🆕 SOLICITUDES DE REGISTRO (AMPLIADA)
         // ==========================================
         let filtroSolicitudActual = 'Pendiente';
 
@@ -748,36 +970,90 @@
 
                 contenedor.innerHTML = solicitudes.map(s => {
                     const estado = s.estadoVerificacion || 'Pendiente';
-                    const estadoColor = estado === 'Aprobado' || estado === 'Verificado' ? '#4CAF50' : estado === 'Rechazado' ? '#FF4444' : '#FFD93D';
+                    const estadoClase = estado === 'Aprobado' || estado === 'Verificado' ? 'aprobada' : estado === 'Rechazado' ? 'rechazada' : 'pendiente';
+                    const estadoBadge = estado === 'Aprobado' || estado === 'Verificado' ? 'estado-aprobado' : estado === 'Rechazado' ? 'estado-rechazado' : 'estado-pendiente';
                     const fecha = s.fechaSolicitud ? new Date(s.fechaSolicitud).toLocaleDateString('es-MX') : new Date(s.fechaRegistro || 0).toLocaleDateString('es-MX');
                     const servicios = s.servicios && s.servicios.length > 0 ? s.servicios.join(', ') : (s.categoria || 'No especificado');
                     
                     return `
-                        <div class="solicitud-card" style="border-left-color: ${estadoColor};">
+                        <div class="solicitud-card ${estadoClase}">
                             <div class="solicitud-header">
-                                <div>
+                                <div class="solicitud-info-principal">
                                     <div class="solicitud-cliente">🏪 ${s.nombreNegocio || 'Sin nombre'}</div>
-                                    <div class="solicitud-evento">👤 ${s.nombreContacto || 'Sin contacto'} •  ${s.email || 'Sin email'}</div>
-                                    <div class="solicitud-evento">📱 ${s.whatsapp || 'Sin teléfono'} • 📍 ${s.ciudad || ''}, ${s.estado || ''}</div>
-                                    <div class="solicitud-evento">🎯 Servicios: ${servicios} • 💎 Plan: ${(s.plan || 'basic').toUpperCase()}</div>
-                                    <div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 Solicitud: ${fecha}</div>
+                                    <div class="solicitud-evento">👤 ${s.nombreContacto || 'Sin contacto'}</div>
+                                    <div class="solicitud-evento">📧 ${s.email || 'Sin email'}</div>
+                                    <div class="solicitud-evento">📱 ${s.whatsapp || 'Sin teléfono'}</div>
+                                    <div class="solicitud-evento"> ${s.ciudad || ''}, ${s.estado || ''}</div>
+                                    <div class="solicitud-evento">🎯 Servicios: ${servicios}</div>
+                                    <div class="solicitud-evento">💎 Plan: ${(s.plan || 'basic').toUpperCase()}</div>
+                                    <div class="solicitud-evento">📅 Solicitud: ${fecha}</div>
                                 </div>
-                                <span style="background: ${estadoColor}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${estado}</span>
+                                <span class="estado-badge ${estadoBadge}">${estado}</span>
                             </div>
+                            
                             ${s.descripcion ? `<div class="solicitud-descripcion">"${s.descripcion}"</div>` : ''}
-                            ${s.motivoRechazo ? `<div style="background: #FFE5E5; padding: 0.8rem; border-radius: 6px; margin: 0.8rem 0; font-size: 0.9rem;"><strong>Motivo de rechazo:</strong> ${s.motivoRechazo}</div>` : ''}
-                            ${estado === 'Pendiente' ? `
-                                <div class="solicitud-acciones">
+                            
+                            <div class="solicitud-detalles">
+                                <div class="detalle-item">
+                                    <strong>📊 Tipo de Negocio</strong>
+                                    <span>${s.tipoNegocio || 'No especificado'}</span>
+                                </div>
+                                <div class="detalle-item">
+                                    <strong> Años de Experiencia</strong>
+                                    <span>${s.aniosExperiencia || 'No especificado'}</span>
+                                </div>
+                                <div class="detalle-item">
+                                    <strong>👥 Capacidad de Atención</strong>
+                                    <span>${s.capacidadAtencion || 'No especificado'}</span>
+                                </div>
+                                <div class="detalle-item">
+                                    <strong> Rango de Precios</strong>
+                                    <span>${s.rangoPrecios || 'No especificado'}</span>
+                                </div>
+                                <div class="detalle-item">
+                                    <strong>🌐 Sitio Web</strong>
+                                    <span>${s.sitioWeb || 'No registrado'}</span>
+                                </div>
+                                <div class="detalle-item">
+                                    <strong>📱 Redes Sociales</strong>
+                                    <span>${s.redesSociales || 'No registrado'}</span>
+                                </div>
+                            </div>
+                            
+                            ${s.motivoRechazo ? `<div style="background: #FFE5E5; padding: 1rem; border-radius: 8px; margin: 1rem 0;"><strong>Motivo de rechazo:</strong> ${s.motivoRechazo}</div>` : ''}
+                            
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-fecha">${fecha}</div>
+                                    <div class="timeline-texto">📝 Solicitud enviada</div>
+                                </div>
+                                ${s.fechaAprobacion ? `
+                                <div class="timeline-item">
+                                    <div class="timeline-fecha">${new Date(s.fechaAprobacion).toLocaleDateString('es-MX')}</div>
+                                    <div class="timeline-texto">✅ Solicitud aprobada</div>
+                                </div>
+                                ` : ''}
+                                ${s.fechaRechazo ? `
+                                <div class="timeline-item">
+                                    <div class="timeline-fecha">${new Date(s.fechaRechazo).toLocaleDateString('es-MX')}</div>
+                                    <div class="timeline-texto">❌ Solicitud rechazada</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="solicitud-acciones">
+                                ${estado === 'Pendiente' ? `
                                     <button class="btn-aprobar" onclick="aprobarSolicitud('${s.id}', '${s.email}')">✅ Aprobar y Activar Cuenta</button>
                                     <button class="btn-rechazar" onclick="rechazarSolicitud('${s.id}')">❌ Rechazar</button>
-                                </div>
-                            ` : `
-                                <div class="solicitud-acciones">
-                                    ${(estado === 'Aprobado' || estado === 'Verificado') ? `<button class="btn-rechazar" onclick="cambiarEstadoSolicitud('${s.id}', 'Pendiente')">️ Volver a Pendiente</button>` : ''}
+                                    <button class="btn-info" onclick="abrirModalInfo('${s.id}', '${s.nombreNegocio}', '${s.email}')"> Solicitar Más Información</button>
+                                    <button class="btn-message" onclick="abrirModalMensaje('${s.nombreNegocio}', '${s.email}')">💬 Enviar Mensaje</button>
+                                ` : `
+                                    ${(estado === 'Aprobado' || estado === 'Verificado') ? `<button class="btn-rechazar" onclick="cambiarEstadoSolicitud('${s.id}', 'Pendiente')">↩️ Volver a Pendiente</button>` : ''}
                                     ${estado === 'Rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoSolicitud('${s.id}', 'Pendiente')">↩️ Revisar de Nuevo</button>` : ''}
+                                    <button class="btn btn-secondary btn-small" onclick="verDetalleSolicitud('${s.id}')">️ Ver Detalle</button>
                                     <button class="btn btn-danger btn-small" onclick="eliminarSolicitud('${s.id}')">🗑️ Eliminar</button>
-                                </div>
-                            `}
+                                `}
+                            </div>
                         </div>
                     `;
                 }).join('');
@@ -831,6 +1107,93 @@
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
+        window.verDetalleSolicitud = function(id) {
+            alert('Ver detalle completo de solicitud: ' + id);
+        };
+
+        // ==========================================
+        // MODALES DE COMUNICACIÓN
+        // ==========================================
+        let solicitudIdActual = '';
+
+        window.abrirModalInfo = function(id, nombre, email) {
+            solicitudIdActual = id;
+            document.getElementById('infoProveedorNombre').value = nombre;
+            document.getElementById('modalInfoAdicional').classList.add('active');
+        };
+
+        window.cerrarModalInfo = function() {
+            document.getElementById('modalInfoAdicional').classList.remove('active');
+            document.getElementById('infoSolicitud').value = '';
+            document.getElementById('infoFechaLimite').value = '';
+        };
+
+        window.enviarSolicitudInfo = async function() {
+            const info = document.getElementById('infoSolicitud').value.trim();
+            const fechaLimite = document.getElementById('infoFechaLimite').value;
+            
+            if (!info) {
+                alert('❌ Por favor describe la información que necesitas');
+                return;
+            }
+            
+            try {
+                await updateDoc(doc(db, "proveedores", solicitudIdActual), {
+                    solicitudInfoAdicional: info,
+                    fechaSolicitudInfo: new Date().toISOString(),
+                    fechaLimiteInfo: fechaLimite || null,
+                    estadoInfoAdicional: 'Pendiente'
+                });
+                
+                alert('✅ Solicitud de información enviada al proveedor.\n\nSe le notificará que debe proporcionar la información solicitada.');
+                cerrarModalInfo();
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        };
+
+        window.abrirModalMensaje = function(nombre, email) {
+            document.getElementById('mensajeProveedorNombre').value = nombre;
+            document.getElementById('mensajeProveedorEmail').value = email;
+            document.getElementById('modalMensaje').classList.add('active');
+        };
+
+        window.cerrarModalMensaje = function() {
+            document.getElementById('modalMensaje').classList.remove('active');
+            document.getElementById('mensajeAsunto').value = '';
+            document.getElementById('mensajeContenido').value = '';
+            document.getElementById('mensajeCopia').value = '';
+        };
+
+        window.enviarMensaje = async function() {
+            const asunto = document.getElementById('mensajeAsunto').value.trim();
+            const contenido = document.getElementById('mensajeContenido').value.trim();
+            const copia = document.getElementById('mensajeCopia').value.trim();
+            const email = document.getElementById('mensajeProveedorEmail').value;
+            
+            if (!asunto || !contenido) {
+                alert('❌ Por favor completa el asunto y el mensaje');
+                return;
+            }
+            
+            try {
+                await addDoc(collection(db, "mensajes"), {
+                    para: email,
+                    asunto: asunto,
+                    contenido: contenido,
+                    copia: copia || null,
+                    fechaEnvio: new Date().toISOString(),
+                    leido: false,
+                    tipo: 'administrativo'
+                });
+                
+                alert('✅ Mensaje enviado exitosamente.\n\nEl proveedor recibirá una notificación en su dashboard.');
+                cerrarModalMensaje();
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        };
+
         // ==========================================
         // MODALES
         // ==========================================
@@ -838,7 +1201,6 @@
         window.cerrarModalPost = () => document.getElementById('modalPost').style.display = 'none';
         window.abrirModalColaborador = () => document.getElementById('modalColaborador').style.display = 'flex';
         window.cerrarModalColaborador = () => document.getElementById('modalColaborador').style.display = 'none';
-        window.cerrarModalCotizacion = () => document.getElementById('modalCotizacion').style.display = 'none';
 
         window.guardarPost = async function() {
             const titulo = document.getElementById('postTitulo').value;

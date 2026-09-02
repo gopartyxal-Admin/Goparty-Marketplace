@@ -20,12 +20,15 @@
         .topbar-logo { display: flex; align-items: center; gap: 0.5rem; }
         .topbar-logo img { height: 40px; }
         .topbar-logo span { font-weight: 700; font-size: 1.2rem; color: #333; }
+        .topbar-user-info { display: flex; align-items: center; gap: 1rem; }
+        .user-badge { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
         
         .tabs { display: flex; background: white; border-bottom: 2px solid #f0f0f0; overflow-x: auto; padding: 0 1rem; }
         .tab { padding: 1rem 1.5rem; cursor: pointer; font-weight: 500; color: #666; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.3s; }
         .tab:hover { color: #FF6B9D; }
         .tab.active { color: #FF6B9D; border-bottom-color: #FF6B9D; }
         .tab .badge { background: #FF6B9D; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 5px; }
+        .tab.hidden { display: none !important; }
         
         .content { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
         .tab-content { display: none; }
@@ -53,10 +56,6 @@
         .btn-secondary { background: #f0f0f0; color: #333; }
         .btn-danger { background: linear-gradient(135deg, #FF6B6B, #FF4444); color: white; }
         .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
-        .btn-aprobar { background: #4CAF50; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-rechazar { background: #FF4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-info { background: #4A90E2; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-message { background: #9B59B6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
         
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
         .alert.success { background: #d4edda; color: #155724; display: block; }
@@ -79,35 +78,8 @@
 
         .empty-state { text-align: center; padding: 2rem; color: #999; }
 
-        .solicitud-card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 5px solid #FFD93D; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        .solicitud-card.aprobada { border-left-color: #4CAF50; }
-        .solicitud-card.rechazada { border-left-color: #FF4444; }
-        .solicitud-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
-        .solicitud-info-principal { flex: 1; }
-        .solicitud-cliente { font-weight: 700; color: #333; font-size: 1.3rem; margin-bottom: 0.3rem; }
-        .solicitud-evento { color: #666; font-size: 0.9rem; margin-top: 0.3rem; }
-        .solicitud-descripcion { font-style: italic; color: #555; line-height: 1.6; margin: 1rem 0; padding: 1rem; background: #f9f9f9; border-radius: 8px; }
-        .solicitud-detalles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0; }
-        .detalle-item { background: #f9f9f9; padding: 0.8rem; border-radius: 8px; }
-        .detalle-item strong { color: #333; display: block; margin-bottom: 0.3rem; font-size: 0.85rem; }
-        .detalle-item span { color: #666; font-size: 0.9rem; }
-        .solicitud-acciones { display: flex; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid #e0e0e0; }
-        .solicitud-acciones button { padding: 0.7rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
-        .solicitud-acciones button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .filtro-solicitudes { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .estado-badge { display: inline-block; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .estado-pendiente { background: #FFD93D; color: #333; }
-        .estado-aprobado { background: #4CAF50; color: white; }
-        .estado-rechazado { background: #FF4444; color: white; }
-        .timeline { margin: 1rem 0; padding-left: 1.5rem; border-left: 2px solid #e0e0e0; }
-        .timeline-item { margin-bottom: 1rem; position: relative; }
-        .timeline-item::before { content: ''; position: absolute; left: -1.7rem; top: 0.3rem; width: 12px; height: 12px; border-radius: 50%; background: #FF6B9D; }
-        .timeline-fecha { font-size: 0.8rem; color: #999; }
-        .timeline-texto { color: #666; font-size: 0.9rem; }
-
         .permisos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0; }
-        .permiso-item { background: #f9f9f9; padding: 1rem; border-radius: 8px; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.3s; }
-        .permiso-item:hover { border-color: #FF6B9D; background: #fff5f7; }
+        .permiso-item { background: #f9f9f9; padding: 1rem; border-radius: 8px; border: 2px solid #e0e0e0; }
         .permiso-item input[type="checkbox"] { margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer; }
         .permiso-item label { cursor: pointer; font-weight: 500; color: #333; }
         
@@ -120,9 +92,9 @@
         .rol-verificador { background: #4A90E2; color: white; }
         .rol-supervisor { background: #6BCB77; color: white; }
         
-        .usuario-dashboard { background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%); padding: 1rem; border-radius: 8px; }
-        .metrica-usuario { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: white; border-radius: 6px; margin-bottom: 0.3rem; font-size: 0.85rem; }
-        .metrica-label { font-weight: 500; color: #666; }
+        .usuario-dashboard { background: #f5f7fa; padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; }
+        .metrica-usuario { display: flex; justify-content: space-between; padding: 0.3rem 0; }
+        .metrica-label { color: #666; }
         .metrica-valor { font-weight: 700; color: #333; }
         
         .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
@@ -142,11 +114,11 @@
 
     <!-- LOGIN -->
     <div class="login-container" id="loginContainer">
-        <h2>🔒 Acceso Restringido</h2>
-        <input type="email" id="loginEmail" placeholder="Email">
+        <h2>🔒 Acceso al Panel</h2>
+        <input type="text" id="loginEmail" placeholder="Usuario o Email">
         <input type="password" id="loginPassword" placeholder="Contraseña">
         <button onclick="login()">Ingresar</button>
-        <p class="login-hint">Credenciales: admin@goparty.com / goparty2026</p>
+        <p class="login-hint">Admin: admin@goparty.com / goparty2026</p>
     </div>
 
     <!-- PANEL ADMIN -->
@@ -154,16 +126,19 @@
         <div class="topbar">
             <div class="topbar-logo">
                 <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="Logo">
-                <span>Panel Administrativo</span>
+                <span id="topbarTitle">Panel Administrativo</span>
             </div>
-            <button class="btn btn-secondary" onclick="logout()">Cerrar Sesión</button>
+            <div class="topbar-user-info">
+                <span class="user-badge" id="userBadge">Admin</span>
+                <button class="btn btn-secondary" onclick="logout()">Cerrar Sesión</button>
+            </div>
         </div>
 
-        <div class="tabs">
+        <div class="tabs" id="tabsContainer">
             <div class="tab active" data-tab="dashboard">📊 Dashboard</div>
             <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
             <div class="tab" data-tab="cambios">🔄 Solicitudes de Cambio <span id="tabCambiosCount" class="badge">0</span></div>
-            <div class="tab" data-tab="proveedores">👥 Proveedores</div>
+            <div class="tab" data-tab="proveedores"> Proveedores</div>
             <div class="tab" data-tab="clientes">👤 Clientes</div>
             <div class="tab" data-tab="blog">📚 Blogs y Recursos</div>
             <div class="tab" data-tab="finanzas">💰 Finanzas</div>
@@ -171,7 +146,7 @@
             <div class="tab" data-tab="solicitudes">📩 Solicitudes <span id="tabSolicitudesCount" class="badge">0</span></div>
             <div class="tab" data-tab="contenido">📄 Contenido del Sitio</div>
             <div class="tab" data-tab="usuarios">👥 Gestión de Usuarios</div>
-            <div class="tab" data-tab="perfil">👨‍💼 Perfil Admin</div>
+            <div class="tab" data-tab="perfil">‍💼 Perfil Admin</div>
             <div class="tab" data-tab="config">⚙️ Configuración General</div>
         </div>
 
@@ -180,7 +155,7 @@
             <!-- TAB: DASHBOARD -->
             <div class="tab-content active" id="tab-dashboard">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">📊 Dashboard</h2>
-                <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;">🌐 Ver Sitio Principal</a>
+                <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;"> Ver Sitio Principal</a>
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-number" id="statTotalProveedores">0</div><div class="stat-label">Total Proveedores</div></div>
                     <div class="stat-card blue"><div class="stat-number" id="statPendientes">0</div><div class="stat-label">Pendientes</div></div>
@@ -193,7 +168,7 @@
                     <p>Basic: <span id="distBasic">0</span> | Pro: <span id="distPro">0</span> | Gold: <span id="distGold">0</span></p>
                 </div>
                 <div class="card">
-                    <h3>️ Top 5 Estados</h3>
+                    <h3>🗺️ Top 5 Estados</h3>
                     <p id="topEstados">Cargando...</p>
                 </div>
             </div>
@@ -213,7 +188,7 @@
 
             <!-- TAB: SOLICITUDES DE CAMBIO -->
             <div class="tab-content" id="tab-cambios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;"> Solicitudes de Cambio de Proveedores</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">🔄 Solicitudes de Cambio de Proveedores</h2>
                 <p style="color: #666; margin-bottom: 1rem;">Revisa y aprueba las modificaciones solicitadas por los proveedores</p>
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-number" id="cambiosPendientes">0</div><div class="stat-label">Pendientes de Revisar</div></div>
@@ -306,7 +281,7 @@
             <!-- TAB: COLABORADORES -->
             <div class="tab-content" id="tab-colaboradores">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">🤝 Gestión de Colaboradores Regionales</h2>
-                <button class="btn" onclick="abrirModalColaborador()">➕ Nuevo Colaborador</button>
+                <button class="btn" onclick="abrirModalColaborador()"> Nuevo Colaborador</button>
                 <div class="stats-grid" style="margin-top: 1rem;">
                     <div class="stat-card"><div class="stat-number" id="totalColaboradores">0</div><div class="stat-label">Total Colaboradores</div></div>
                     <div class="stat-card blue"><div class="stat-number" id="verificacionesMes">0</div><div class="stat-label">Verificaciones este mes</div></div>
@@ -327,7 +302,7 @@
                     <div class="stat-card gold"><div class="stat-number" id="solTotal">0</div><div class="stat-label">Total Solicitudes</div></div>
                 </div>
 
-                <div class="filtro-solicitudes">
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
                     <button class="btn btn-secondary" onclick="filtrarSolicitudes('Pendiente')">⏳ Pendientes</button>
                     <button class="btn btn-secondary" onclick="filtrarSolicitudes('todas')">📋 Todas</button>
                     <button class="btn btn-secondary" onclick="filtrarSolicitudes('Aprobado')">✅ Aprobadas</button>
@@ -357,7 +332,7 @@
                         <h3>➕ Agregar Nueva Categoría</h3>
                         <div class="alert" id="alertCategoria"></div>
                         <div class="form-group"><label>Nombre de la Categoría *</label><input type="text" id="catNombre" placeholder="Ej: Salones, Alimentos..."></div>
-                        <div class="form-group"><label>Ícono (emoji) *</label><input type="text" id="catIcono" placeholder="Ej: , 🍽️" maxlength="4"></div>
+                        <div class="form-group"><label>Ícono (emoji) *</label><input type="text" id="catIcono" placeholder="Ej: 🏰, 🍽️" maxlength="4"></div>
                         <div class="form-group"><label>Descripción corta</label><input type="text" id="catDescripcion" placeholder="Ej: Espacios únicos"></div>
                         <div class="form-group"><label>Orden de aparición</label><input type="number" id="catOrden" placeholder="1" min="1" value="1"><small style="color: #999;">Menor número = aparece primero</small></div>
                         <button class="btn" onclick="guardarCategoria()">💾 Guardar Categoría</button>
@@ -388,7 +363,7 @@
                         <div class="form-group"><label>Orden de aparición</label><input type="number" id="faqGeneralOrden" placeholder="1" min="1" value="1"></div>
                         <button class="btn" onclick="guardarFaqGeneral()">💾 Guardar Pregunta</button>
                     </div>
-                    <div class="card"><h3> Preguntas Frecuentes Generales</h3><div id="listaFaqGeneral" class="item-list">Cargando...</div></div>
+                    <div class="card"><h3>📋 Preguntas Frecuentes Generales</h3><div id="listaFaqGeneral" class="item-list">Cargando...</div></div>
                 </div>
 
                 <div class="sub-content" id="sub-faq-proveedores">
@@ -401,7 +376,7 @@
                         <div class="form-group"><label>Orden de aparición</label><input type="number" id="faqProvOrden" placeholder="1" min="1" value="1"></div>
                         <button class="btn" onclick="guardarFaqProveedores()">💾 Guardar Pregunta</button>
                     </div>
-                    <div class="card"><h3>📋 Preguntas para Proveedores</h3><div id="listaFaqProveedores" class="item-list">Cargando...</div></div>
+                    <div class="card"><h3> Preguntas para Proveedores</h3><div id="listaFaqProveedores" class="item-list">Cargando...</div></div>
                 </div>
 
                 <div class="sub-content" id="sub-faq-clientes">
@@ -418,9 +393,9 @@
                 </div>
             </div>
 
-            <!-- 🆕 TAB: GESTIÓN DE USUARIOS CON PERMISOS -->
+            <!-- TAB: GESTIÓN DE USUARIOS -->
             <div class="tab-content" id="tab-usuarios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;"> Gestión de Usuarios y Roles</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">👥 Gestión de Usuarios y Roles</h2>
                 <p style="color: #666; margin-bottom: 1rem;">Administra el acceso del personal al panel administrativo con permisos granulares por sección y región.</p>
                 
                 <div class="stats-grid">
@@ -484,7 +459,7 @@
                         <div class="permisos-grid">
                             <div class="permiso-item">
                                 <input type="checkbox" id="perm_dashboard" value="dashboard" checked>
-                                <label for="perm_dashboard">📊 Dashboard</label>
+                                <label for="perm_dashboard"> Dashboard</label>
                             </div>
                             <div class="permiso-item">
                                 <input type="checkbox" id="perm_cotizaciones" value="cotizaciones" checked>
@@ -574,7 +549,7 @@
                 <h2 style="margin-bottom: 1.5rem; color: #333;">⚙️ Configuración de la Plataforma</h2>
                 <div class="alert" id="configAlert"></div>
                 <div class="card">
-                    <h3> Configuración General</h3>
+                    <h3>📱 Configuración General</h3>
                     <p style="color: #666; margin-bottom: 1rem;">Estos valores se reflejan automáticamente en el sitio público.</p>
                     <div class="form-group"><label>📱 WhatsApp Corporativo de GoParty *</label><input type="tel" id="cfgWhatsapp" placeholder="522281234567"><small style="color: #999;">Se usará en el botón flotante</small></div>
                     <div class="form-group"><label>📧 Correo de Soporte General *</label><input type="email" id="cfgEmail" placeholder="soporte@goparty.com"></div>
@@ -596,7 +571,7 @@
     <div class="modal" id="modalInfoAdicional">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>📋 Solicitar Información Adicional</h3>
+                <h3> Solicitar Información Adicional</h3>
                 <button class="modal-close" onclick="cerrarModalInfo()">✕</button>
             </div>
             <div class="form-group">
@@ -702,23 +677,142 @@
         const db = getFirestore(app);
 
         // ==========================================
-        // LOGIN
+        // 🆕 LOGIN DINÁMICO CON PERMISOS
         // ==========================================
-        window.login = function() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            if (email === 'admin@goparty.com' && password === 'goparty2026') {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminPanel').classList.add('active');
-                localStorage.setItem('adminLogged', 'true');
-                cargarDashboard();
-            } else { alert('❌ Credenciales incorrectas'); }
+        let usuarioActual = null;
+
+        window.login = async function() {
+            const username = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!username || !password) {
+                alert('❌ Completa usuario y contraseña');
+                return;
+            }
+
+            try {
+                // Buscar en colección "usuarios" por username O email
+                const qUsername = query(collection(db, "usuarios"), where("username", "==", username), where("password", "==", password), where("activo", "==", true));
+                const qEmail = query(collection(db, "usuarios"), where("email", "==", username), where("password", "==", password), where("activo", "==", true));
+                
+                const [snapUsername, snapEmail] = await Promise.all([getDocs(qUsername), getDocs(qEmail)]);
+                
+                let userData = null;
+                let userId = null;
+
+                if (!snapUsername.empty) {
+                    userData = snapUsername.docs[0].data();
+                    userId = snapUsername.docs[0].id;
+                } else if (!snapEmail.empty) {
+                    userData = snapEmail.docs[0].data();
+                    userId = snapEmail.docs[0].id;
+                }
+
+                if (userData) {
+                    // Actualizar último login
+                    await updateDoc(doc(db, "usuarios", userId), {
+                        ultimoLogin: new Date().toISOString()
+                    });
+                    
+                    iniciarSesionAdmin(userData);
+                    return;
+                }
+
+                // Respaldo: admin fijo
+                if (username === 'admin@goparty.com' && password === 'goparty2026') {
+                    iniciarSesionAdmin({
+                        nombre: 'Administrador Principal',
+                        username: 'admin',
+                        email: 'admin@goparty.com',
+                        rol: 'admin',
+                        estado: 'Todos',
+                        municipios: '',
+                        permisos: {
+                            dashboard: true, cotizaciones: true, cambios: true,
+                            proveedores: true, clientes: true, blog: true,
+                            finanzas: true, colaboradores: true, solicitudes: true,
+                            contenido: true, usuarios: true, perfil: true, config: true
+                        },
+                        activo: true
+                    });
+                    return;
+                }
+
+                alert('❌ Credenciales incorrectas o usuario inactivo');
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
         };
-        window.logout = function() { localStorage.removeItem('adminLogged'); location.reload(); };
-        if (localStorage.getItem('adminLogged') === 'true') {
+
+        function iniciarSesionAdmin(userData) {
+            usuarioActual = userData;
+            
+            // Guardar sesión
+            localStorage.setItem('adminLogged', 'true');
+            localStorage.setItem('adminUser', JSON.stringify(userData));
+
+            // Ocultar login, mostrar panel
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('adminPanel').classList.add('active');
+
+            // Aplicar permisos
+            aplicarPermisos(userData);
+
+            // Cargar dashboard
             cargarDashboard();
+        }
+
+        function aplicarPermisos(userData) {
+            const permisos = userData.permisos || {};
+            const rol = userData.rol;
+            const estado = userData.estado;
+            const nombre = userData.nombre || 'Usuario';
+
+            // Mostrar nombre y rol en topbar
+            document.getElementById('topbarTitle').textContent = `Panel - ${nombre}`;
+            document.getElementById('userBadge').textContent = `${rol.toUpperCase()} ${estado && estado !== 'Todos' ? '• ' + estado : ''}`;
+
+            // Ocultar/mostrar tabs según permisos
+            document.querySelectorAll('.tab').forEach(tab => {
+                const tabName = tab.dataset.tab;
+                if (permisos[tabName] === false) {
+                    tab.classList.add('hidden');
+                } else {
+                    tab.classList.remove('hidden');
+                }
+            });
+
+            // Si no es admin, guardar filtro de estado
+            if (rol !== 'admin' && estado && estado !== 'Todos') {
+                localStorage.setItem('filtroEstado', estado);
+            } else {
+                localStorage.removeItem('filtroEstado');
+            }
+        }
+
+        // Función auxiliar para obtener filtro de estado
+        function getEstadoFilter() {
+            return localStorage.getItem('filtroEstado');
+        }
+
+        window.logout = function() { 
+            localStorage.removeItem('adminLogged'); 
+            localStorage.removeItem('adminUser');
+            localStorage.removeItem('filtroEstado');
+            usuarioActual = null;
+            location.reload(); 
+        };
+
+        // Auto-login
+        if (localStorage.getItem('adminLogged') === 'true') {
+            const savedUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+            if (savedUser && savedUser.username) {
+                iniciarSesionAdmin(savedUser);
+            } else {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminPanel').classList.add('active');
+                cargarDashboard();
+            }
         }
 
         // ==========================================
@@ -760,7 +854,15 @@
         // ==========================================
         async function cargarDashboard() {
             try {
-                const proveedoresSnap = await getDocs(collection(db, "proveedores"));
+                const estadoFilter = getEstadoFilter();
+                let proveedoresSnap;
+                
+                if (estadoFilter && estadoFilter !== 'Todos') {
+                    proveedoresSnap = await getDocs(query(collection(db, "proveedores"), where("estado", "==", estadoFilter)));
+                } else {
+                    proveedoresSnap = await getDocs(collection(db, "proveedores"));
+                }
+                
                 const proveedores = [];
                 proveedoresSnap.forEach(doc => proveedores.push(doc.data()));
                 
@@ -836,7 +938,7 @@
                 const items = [];
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-                if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay categorías.</div>'; return; }
+                if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state"> No hay categorías.</div>'; return; }
                 contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">${item.icono || ''}</div><div class="item-info"><div class="item-title">${item.nombre}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarCategoria('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
             } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
         }
@@ -847,7 +949,7 @@
             const icono = document.getElementById('catIcono').value.trim();
             const descripcion = document.getElementById('catDescripcion').value.trim();
             const orden = parseInt(document.getElementById('catOrden').value) || 1;
-            if (!nombre || !icono) { alert.className = 'alert error'; alert.textContent = ' Nombre e ícono son obligatorios'; return; }
+            if (!nombre || !icono) { alert.className = 'alert error'; alert.textContent = '❌ Nombre e ícono son obligatorios'; return; }
             try {
                 await addDoc(collection(db, "categorias"), { nombre, icono, descripcion, orden, activa: true, creado: new Date().toISOString() });
                 alert.className = 'alert success'; alert.textContent = '✅ Categoría guardada';
@@ -859,7 +961,7 @@
 
         window.eliminarCategoria = async function(id) {
             if (!confirm('¿Eliminar esta categoría?')) return;
-            try { await deleteDoc(doc(db, "categorias", id)); cargarCategorias(); } catch (error) { alert('❌ Error: ' + error.message); }
+            try { await deleteDoc(doc(db, "categorias", id)); cargarCategorias(); } catch (error) { alert(' Error: ' + error.message); }
         };
 
         // ==========================================
@@ -895,7 +997,7 @@
 
         window.eliminarCiudad = async function(id) {
             if (!confirm('¿Eliminar esta ciudad?')) return;
-            try { await deleteDoc(doc(db, "ciudades", id)); cargarCiudades(); } catch (error) { alert(' Error: ' + error.message); }
+            try { await deleteDoc(doc(db, "ciudades", id)); cargarCiudades(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         // ==========================================
@@ -909,8 +1011,8 @@
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
                 if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas frecuentes generales.</div>'; return; }
-                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">❓</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaqGeneral('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
-            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">❓</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaqGeneral('${item.id}')">️ Eliminar</button></div></div>`).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state"> Error al cargar</div>'; }
         }
 
         window.guardarFaqGeneral = async function() {
@@ -918,7 +1020,7 @@
             const pregunta = document.getElementById('faqGeneralPregunta').value.trim();
             const respuesta = document.getElementById('faqGeneralRespuesta').value.trim();
             const orden = parseInt(document.getElementById('faqGeneralOrden').value) || 1;
-            if (!pregunta || !respuesta) { alert.className = 'alert error'; alert.textContent = ' Pregunta y respuesta son obligatorias'; return; }
+            if (!pregunta || !respuesta) { alert.className = 'alert error'; alert.textContent = '❌ Pregunta y respuesta son obligatorias'; return; }
             try {
                 await addDoc(collection(db, "faq_general"), { pregunta, respuesta, orden, activa: true, creado: new Date().toISOString() });
                 alert.className = 'alert success'; alert.textContent = '✅ Pregunta guardada';
@@ -944,7 +1046,7 @@
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
                 if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas para proveedores.</div>'; return; }
-                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">👨‍</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaqProveedores('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">‍💼</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaqProveedores('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
             } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
         }
 
@@ -960,12 +1062,12 @@
                 document.getElementById('faqProvPregunta').value = ''; document.getElementById('faqProvRespuesta').value = ''; document.getElementById('faqProvOrden').value = '1';
                 setTimeout(() => { alert.style.display = 'none'; }, 3000);
                 cargarFaqProveedores();
-            } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; }
+            } catch (error) { alert.className = 'alert error'; alert.textContent = ' Error: ' + error.message; }
         };
 
         window.eliminarFaqProveedores = async function(id) {
             if (!confirm('¿Eliminar esta pregunta?')) return;
-            try { await deleteDoc(doc(db, "faq_proveedores", id)); cargarFaqProveedores(); } catch (error) { alert(' Error: ' + error.message); }
+            try { await deleteDoc(doc(db, "faq_proveedores", id)); cargarFaqProveedores(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         // ==========================================
@@ -979,7 +1081,7 @@
                 snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
                 items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
                 if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay preguntas para clientes.</div>'; return; }
-                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">👥</div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaqClientes('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon"></div><div class="item-info"><div class="item-title">${item.pregunta}</div><div class="item-subtitle">${(item.respuesta || '').substring(0, 80)}... • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarFaqClientes('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
             } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
         }
 
@@ -1004,10 +1106,9 @@
         };
 
         // ==========================================
-        // 🆕 GESTIÓN DE USUARIOS CON PERMISOS
+        //  GESTIÓN DE USUARIOS CON PERMISOS
         // ==========================================
         
-        // Actualizar permisos según rol seleccionado
         window.actualizarPermisosPorRol = function() {
             const rol = document.getElementById('usuarioRol').value;
             const checkboxes = document.querySelectorAll('.permiso-item input[type="checkbox"]');
@@ -1069,18 +1170,9 @@
                             <td>${permisosCount} secciones</td>
                             <td>
                                 <div class="usuario-dashboard">
-                                    <div class="metrica-usuario">
-                                        <span class="metrica-label">Último acceso:</span>
-                                        <span class="metrica-valor">${ultLogin}</span>
-                                    </div>
-                                    <div class="metrica-usuario">
-                                        <span class="metrica-label">Acciones:</span>
-                                        <span class="metrica-valor">${totalAcciones}</span>
-                                    </div>
-                                    <div class="metrica-usuario">
-                                        <span class="metrica-label">Aprobaciones:</span>
-                                        <span class="metrica-valor">${aprobaciones}</span>
-                                    </div>
+                                    <div class="metrica-usuario"><span class="metrica-label">Último acceso:</span><span class="metrica-valor">${ultLogin}</span></div>
+                                    <div class="metrica-usuario"><span class="metrica-label">Acciones:</span><span class="metrica-valor">${totalAcciones}</span></div>
+                                    <div class="metrica-usuario"><span class="metrica-label">Aprobaciones:</span><span class="metrica-valor">${aprobaciones}</span></div>
                                 </div>
                             </td>
                             <td>
@@ -1119,24 +1211,20 @@
 
             if (password.length < 6) {
                 alert.className = 'alert error';
-                alert.textContent = ' La contraseña debe tener al menos 6 caracteres';
+                alert.textContent = '❌ La contraseña debe tener al menos 6 caracteres';
                 alert.style.display = 'block';
                 return;
             }
 
             try {
                 await addDoc(collection(db, "usuarios"), {
-                    nombre,
-                    email,
-                    username,
-                    password,
-                    rol,
+                    nombre, email, username, password, rol,
                     estado: estado || 'Todos',
                     municipios: municipios || '',
                     permisos,
                     activo: true,
                     fechaCreacion: new Date().toISOString(),
-                    creadoPor: 'admin@goparty.com',
+                    creadoPor: usuarioActual ? usuarioActual.email : 'admin@goparty.com',
                     ultimoLogin: null,
                     totalAcciones: 0,
                     aprobaciones: 0
@@ -1167,7 +1255,7 @@
                 await updateDoc(doc(db, "usuarios", id), { activo: nuevoEstado });
                 cargarUsuarios();
             } catch (error) {
-                alert('❌ Error: ' + error.message);
+                alert(' Error: ' + error.message);
             }
         };
 
@@ -1201,22 +1289,22 @@
                 document.getElementById('resenasAprobadas').textContent = todas.docs.filter(d => d.data().estado === 'aprobado').length;
                 document.getElementById('totalClientes').textContent = todas.size;
 
-                if (resenas.length === 0) { contenedor.innerHTML = `<div class="empty-state">📭 No hay reseñas ${filtroResenaActual === 'todas' ? '' : 'con estado "' + filtroResenaActual + '"'}.</div>`; return; }
+                if (resenas.length === 0) { contenedor.innerHTML = `<div class="empty-state"> No hay reseñas ${filtroResenaActual === 'todas' ? '' : 'con estado "' + filtroResenaActual + '"'}.</div>`; return; }
 
                 contenedor.innerHTML = resenas.map(r => {
                     const estadoClase = r.estado === 'aprobado' ? 'aprobada' : r.estado === 'rechazado' ? 'rechazada' : '';
                     const estrellas = '⭐'.repeat(r.calificacion || 0);
                     const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
-                    return `<div class="solicitud-card ${estadoClase}"><div class="solicitud-header"><div><div class="solicitud-cliente">${r.nombreCliente || 'Anónimo'} ${r.inicial ? `<span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-radius: 50%; text-align: center; line-height: 30px; margin-left: 0.5rem;">${r.inicial}</span>` : ''}</div><div class="solicitud-evento">${r.tipoEvento || ''} - ${r.ciudad || ''} • Proveedor: <strong>${r.nombreProveedor || 'N/A'}</strong></div><div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${fecha}</div></div><span style="background: ${r.estado === 'aprobado' ? '#4CAF50' : r.estado === 'rechazado' ? '#FF4444' : '#FFD93D'}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${r.estado ? r.estado.charAt(0).toUpperCase() + r.estado.slice(1) : 'pendiente'}</span></div><div class="solicitud-estrellas">${estrellas}</div><div class="solicitud-descripcion">"${r.comentario || ''}"</div>${r.estado === 'pendiente' ? `<div class="solicitud-acciones"><button class="btn-aprobar" onclick="aprobarResena('${r.id}')">✅ Aprobar</button><button class="btn-rechazar" onclick="rechazarResena('${r.id}')">❌ Rechazar</button></div>` : `<div class="solicitud-acciones">${r.estado === 'aprobado' ? `<button class="btn-rechazar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Volver a Pendiente</button>` : ''}${r.estado === 'rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Revisar de Nuevo</button>` : ''}<button class="btn btn-danger btn-small" onclick="eliminarResena('${r.id}')">🗑️ Eliminar</button></div>`}</div>`;
+                    return `<div class="solicitud-card ${estadoClase}"><div class="solicitud-header"><div><div class="solicitud-cliente">${r.nombreCliente || 'Anónimo'} ${r.inicial ? `<span style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-radius: 50%; text-align: center; line-height: 30px; margin-left: 0.5rem;">${r.inicial}</span>` : ''}</div><div class="solicitud-evento">${r.tipoEvento || ''} - ${r.ciudad || ''} • Proveedor: <strong>${r.nombreProveedor || 'N/A'}</strong></div><div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${fecha}</div></div><span style="background: ${r.estado === 'aprobado' ? '#4CAF50' : r.estado === 'rechazado' ? '#FF4444' : '#FFD93D'}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${r.estado ? r.estado.charAt(0).toUpperCase() + r.estado.slice(1) : 'pendiente'}</span></div><div class="solicitud-estrellas">${estrellas}</div><div class="solicitud-descripcion">"${r.comentario || ''}"</div>${r.estado === 'pendiente' ? `<div class="solicitud-acciones"><button class="btn-aprobar" onclick="aprobarResena('${r.id}')">✅ Aprobar</button><button class="btn-rechazar" onclick="rechazarResena('${r.id}')"> Rechazar</button></div>` : `<div class="solicitud-acciones">${r.estado === 'aprobado' ? `<button class="btn-rechazar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Volver a Pendiente</button>` : ''}${r.estado === 'rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoResena('${r.id}', 'pendiente')">↩️ Revisar de Nuevo</button>` : ''}<button class="btn btn-danger btn-small" onclick="eliminarResena('${r.id}')">🗑️ Eliminar</button></div>`}</div>`;
                 }).join('');
-            } catch (error) { contenedor.innerHTML = '<div class="empty-state"> Error al cargar reseñas: ' + error.message + '</div>'; }
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar reseñas: ' + error.message + '</div>'; }
         }
 
         window.filtrarResenas = function(filtro) { filtroResenaActual = filtro; cargarResenas(); };
-        window.aprobarResena = async function(id) { if (!confirm('¿Aprobar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'aprobado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
-        window.rechazarResena = async function(id) { if (!confirm('¿Rechazar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'rechazado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
+        window.aprobarResena = async function(id) { if (!confirm('¿Aprobar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'aprobado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert(' Error: ' + error.message); } };
+        window.rechazarResena = async function(id) { if (!confirm('¿Rechazar este testimonio?')) return; try { await updateDoc(doc(db, "testimonios", id), { estado: 'rechazado', fechaModeracion: new Date().toISOString() }); cargarResenas(); } catch (error) { alert(' Error: ' + error.message); } };
         window.cambiarEstadoResena = async function(id, nuevoEstado) { try { await updateDoc(doc(db, "testimonios", id), { estado: nuevoEstado }); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
-        window.eliminarResena = async function(id) { if (!confirm('¿Eliminar permanentemente?')) return; try { await deleteDoc(doc(db, "testimonios", id)); cargarResenas(); } catch (error) { alert(' Error: ' + error.message); } };
+        window.eliminarResena = async function(id) { if (!confirm('¿Eliminar permanentemente?')) return; try { await deleteDoc(doc(db, "testimonios", id)); cargarResenas(); } catch (error) { alert('❌ Error: ' + error.message); } };
 
         // ==========================================
         // SOLICITUDES DE INCORPORACIÓN
@@ -1229,7 +1317,15 @@
             if (!contenedor) return;
 
             try {
-                const snap = await getDocs(collection(db, "proveedores"));
+                const estadoFilter = getEstadoFilter();
+                let snap;
+                
+                if (estadoFilter && estadoFilter !== 'Todos') {
+                    snap = await getDocs(query(collection(db, "proveedores"), where("estado", "==", estadoFilter)));
+                } else {
+                    snap = await getDocs(collection(db, "proveedores"));
+                }
+                
                 let solicitudes = [];
                 snap.forEach(doc => solicitudes.push({ id: doc.id, ...doc.data() }));
 
@@ -1257,58 +1353,30 @@
 
                 contenedor.innerHTML = solicitudes.map(s => {
                     const estado = s.estadoVerificacion || 'Pendiente';
-                    const estadoClase = estado === 'Aprobado' || estado === 'Verificado' ? 'aprobada' : estado === 'Rechazado' ? 'rechazada' : 'pendiente';
-                    const estadoBadge = estado === 'Aprobado' || estado === 'Verificado' ? 'estado-aprobado' : estado === 'Rechazado' ? 'estado-rechazado' : 'estado-pendiente';
+                    const estadoColor = estado === 'Aprobado' || estado === 'Verificado' ? '#4CAF50' : estado === 'Rechazado' ? '#FF4444' : '#FFD93D';
                     const fecha = s.fechaSolicitud ? new Date(s.fechaSolicitud).toLocaleDateString('es-MX') : new Date(s.fechaRegistro || 0).toLocaleDateString('es-MX');
                     const servicios = s.servicios && s.servicios.length > 0 ? s.servicios.join(', ') : (s.categoria || 'No especificado');
                     
                     return `
-                        <div class="solicitud-card ${estadoClase}">
+                        <div class="solicitud-card" style="border-left-color: ${estadoColor};">
                             <div class="solicitud-header">
-                                <div class="solicitud-info-principal">
+                                <div>
                                     <div class="solicitud-cliente">🏪 ${s.nombreNegocio || 'Sin nombre'}</div>
-                                    <div class="solicitud-evento">👤 ${s.nombreContacto || 'Sin contacto'}</div>
-                                    <div class="solicitud-evento">📧 ${s.email || 'Sin email'}</div>
-                                    <div class="solicitud-evento">📱 ${s.whatsapp || 'Sin teléfono'}</div>
-                                    <div class="solicitud-evento">📍 ${s.ciudad || ''}, ${s.estado || ''}</div>
+                                    <div class="solicitud-evento">👤 ${s.nombreContacto || 'Sin contacto'} • 📧 ${s.email || 'Sin email'}</div>
+                                    <div class="solicitud-evento">📱 ${s.whatsapp || 'Sin teléfono'} •  ${s.ciudad || ''}, ${s.estado || ''}</div>
                                     <div class="solicitud-evento">🎯 Servicios: ${servicios} • 💎 Plan: ${(s.plan || 'basic').toUpperCase()}</div>
-                                    <div class="solicitud-evento">📅 Solicitud: ${fecha}</div>
+                                    <div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 Solicitud: ${fecha}</div>
                                 </div>
-                                <span class="estado-badge ${estadoBadge}">${estado}</span>
+                                <span style="background: ${estadoColor}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${estado}</span>
                             </div>
-                            
                             ${s.descripcion ? `<div class="solicitud-descripcion">"${s.descripcion}"</div>` : ''}
-                            
-                            <div class="solicitud-detalles">
-                                <div class="detalle-item"><strong>📊 Tipo de Negocio</strong><span>${s.tipoNegocio || 'No especificado'}</span></div>
-                                <div class="detalle-item"><strong>📅 Años de Experiencia</strong><span>${s.aniosExperiencia || 'No especificado'}</span></div>
-                                <div class="detalle-item"><strong>👥 Capacidad de Atención</strong><span>${s.capacidadAtencion || 'No especificado'}</span></div>
-                                <div class="detalle-item"><strong>💰 Rango de Precios</strong><span>${s.rangoPrecios || 'No especificado'}</span></div>
-                                <div class="detalle-item"><strong>🌐 Sitio Web</strong><span>${s.sitioWeb || 'No registrado'}</span></div>
-                                <div class="detalle-item"><strong>📱 Redes Sociales</strong><span>${s.redesSociales || 'No registrado'}</span></div>
-                            </div>
-                            
-                            ${s.motivoRechazo ? `<div style="background: #FFE5E5; padding: 1rem; border-radius: 8px; margin: 1rem 0;"><strong>Motivo de rechazo:</strong> ${s.motivoRechazo}</div>` : ''}
-                            
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-fecha">${fecha}</div>
-                                    <div class="timeline-texto">📝 Solicitud enviada</div>
-                                </div>
-                                ${s.fechaAprobacion ? `<div class="timeline-item"><div class="timeline-fecha">${new Date(s.fechaAprobacion).toLocaleDateString('es-MX')}</div><div class="timeline-texto">✅ Solicitud aprobada</div></div>` : ''}
-                                ${s.fechaRechazo ? `<div class="timeline-item"><div class="timeline-fecha">${new Date(s.fechaRechazo).toLocaleDateString('es-MX')}</div><div class="timeline-texto"> Solicitud rechazada</div></div>` : ''}
-                            </div>
-                            
                             <div class="solicitud-acciones">
                                 ${estado === 'Pendiente' ? `
                                     <button class="btn-aprobar" onclick="aprobarSolicitud('${s.id}', '${s.email}')">✅ Aprobar y Activar Cuenta</button>
                                     <button class="btn-rechazar" onclick="rechazarSolicitud('${s.id}')">❌ Rechazar</button>
-                                    <button class="btn-info" onclick="abrirModalInfo('${s.id}', '${s.nombreNegocio}', '${s.email}')">📋 Solicitar Más Información</button>
-                                    <button class="btn-message" onclick="abrirModalMensaje('${s.nombreNegocio}', '${s.email}')">💬 Enviar Mensaje</button>
                                 ` : `
                                     ${(estado === 'Aprobado' || estado === 'Verificado') ? `<button class="btn-rechazar" onclick="cambiarEstadoSolicitud('${s.id}', 'Pendiente')">↩️ Volver a Pendiente</button>` : ''}
                                     ${estado === 'Rechazado' ? `<button class="btn-aprobar" onclick="cambiarEstadoSolicitud('${s.id}', 'Pendiente')">↩️ Revisar de Nuevo</button>` : ''}
-                                    <button class="btn btn-secondary btn-small" onclick="verDetalleSolicitud('${s.id}')">👁️ Ver Detalle</button>
                                     <button class="btn btn-danger btn-small" onclick="eliminarSolicitud('${s.id}')">🗑️ Eliminar</button>
                                 `}
                             </div>
@@ -1335,21 +1403,19 @@
             const motivo = prompt('Motivo del rechazo (opcional):\n\nEj: Documentación incompleta, información falsa, etc.');
             try {
                 await updateDoc(doc(db, "proveedores", id), { estadoVerificacion: 'Rechazado', motivoRechazo: motivo || 'No especificado', fechaRechazo: new Date().toISOString() });
-                alert('❌ Solicitud rechazada.');
+                alert(' Solicitud rechazada.');
                 cargarSolicitudes();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         window.cambiarEstadoSolicitud = async function(id, nuevoEstado) {
-            try { await updateDoc(doc(db, "proveedores", id), { estadoVerificacion: nuevoEstado }); cargarSolicitudes(); } catch (error) { alert(' Error: ' + error.message); }
+            try { await updateDoc(doc(db, "proveedores", id), { estadoVerificacion: nuevoEstado }); cargarSolicitudes(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         window.eliminarSolicitud = async function(id) {
             if (!confirm('¿Eliminar permanentemente esta solicitud?')) return;
             try { await deleteDoc(doc(db, "proveedores", id)); cargarSolicitudes(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
-
-        window.verDetalleSolicitud = function(id) { alert('Ver detalle completo de solicitud: ' + id); };
 
         // ==========================================
         // MODALES DE COMUNICACIÓN
@@ -1370,7 +1436,7 @@
             const info = document.getElementById('infoSolicitud').value.trim();
             const fechaLimite = document.getElementById('infoFechaLimite').value;
             
-            if (!info) { alert(' Por favor describe la información que necesitas'); return; }
+            if (!info) { alert('❌ Por favor describe la información que necesitas'); return; }
             
             try {
                 await updateDoc(doc(db, "proveedores", solicitudIdActual), {
@@ -1403,7 +1469,7 @@
             const copia = document.getElementById('mensajeCopia').value.trim();
             const email = document.getElementById('mensajeProveedorEmail').value;
             
-            if (!asunto || !contenido) { alert('❌ Por favor completa el asunto y el mensaje'); return; }
+            if (!asunto || !contenido) { alert(' Por favor completa el asunto y el mensaje'); return; }
             
             try {
                 await addDoc(collection(db, "mensajes"), {
@@ -1413,7 +1479,7 @@
                 });
                 alert('✅ Mensaje enviado exitosamente.');
                 cerrarModalMensaje();
-            } catch (error) { alert('❌ Error: ' + error.message); }
+            } catch (error) { alert(' Error: ' + error.message); }
         };
 
         // ==========================================

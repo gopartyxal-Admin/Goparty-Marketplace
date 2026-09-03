@@ -781,6 +781,7 @@
                 const snap = await getDocs(q);
                 if (!snap.empty) {
                     proveedorActual = { id: snap.docs[0].id, ...snap.docs[0].data() };
+                  window.proveedorActual = proveedorActual;
                     iniciarDashboard();
                 }
             } else {
@@ -789,6 +790,7 @@
                     const docSnap = await getDoc(doc(db, "proveedores", proveedorId));
                     if (docSnap.exists()) {
                         proveedorActual = { id: docSnap.id, ...docSnap.data() };
+                        window.proveedorActual = proveedorActual;
                         iniciarDashboard();
                     }
                 }

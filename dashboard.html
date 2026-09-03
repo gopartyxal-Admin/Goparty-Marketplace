@@ -804,6 +804,9 @@
             document.getElementById('infoPlan').textContent = proveedorActual.plan ? proveedorActual.plan.charAt(0).toUpperCase() + proveedorActual.plan.slice(1) : 'Basic';
             
             localStorage.setItem('proveedorId', proveedorActual.id);
+
+            
+            window.proveedorActual = proveedorActual;
             
             cargarPerfil();
             cargarServicios();

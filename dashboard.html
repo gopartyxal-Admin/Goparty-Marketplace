@@ -8,83 +8,25 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; min-height: 100vh; }
 
-        /* ============ AUTH HEADER (estilo "Únete") ============ */
-        .auth-header {
-            background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%);
-            padding: 3rem 2rem;
-            text-align: center;
-            color: white;
-        }
+        /* Auth */
+        .auth-header { background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); padding: 3rem 2rem; text-align: center; color: white; }
         .auth-header img { height: 70px; margin-bottom: 1rem; }
         .auth-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
         .auth-header p { font-size: 1.1rem; opacity: 0.95; }
-
-        /* ============ AUTH CONTAINER ============ */
-        .auth-container {
-            max-width: 500px;
-            margin: -2rem auto 3rem;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 10;
-        }
-
+        .auth-container { max-width: 500px; margin: -2rem auto 3rem; background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; z-index: 10; }
         .auth-container h2 { text-align: center; margin-bottom: 0.5rem; color: #333; }
         .auth-container .subtitle { text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.95rem; }
-
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; font-size: 0.95rem; }
         .form-group label .required { color: #FF6B9D; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 0.9rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #6BCB77;
-        }
-
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.9rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #6BCB77; }
+        .form-group small { color: #999; font-size: 0.8rem; display: block; margin-top: 0.3rem; }
         .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-
-        .btn-auth {
-            width: 100%;
-            padding: 0.9rem;
-            background: linear-gradient(135deg, #6BCB77, #4A90E2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-bottom: 1rem;
-            transition: transform 0.3s;
-        }
+        .btn-auth { width: 100%; padding: 0.9rem; background: linear-gradient(135deg, #6BCB77, #4A90E2); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-bottom: 1rem; transition: transform 0.3s; }
         .btn-auth:hover { transform: translateY(-2px); }
-
-        .btn-google {
-            width: 100%;
-            padding: 0.9rem;
-            background: white;
-            color: #333;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
+        .btn-google { width: 100%; padding: 0.9rem; background: white; color: #333; border: 2px solid #e0e0e0; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .btn-google:hover { background: #f5f5f5; }
-
         .auth-divider { text-align: center; color: #999; margin: 1rem 0; font-size: 0.9rem; }
         .auth-link { text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666; }
         .auth-link a { color: #FF6B9D; text-decoration: none; font-weight: 600; }
@@ -92,81 +34,32 @@
         .forgot-password { text-align: center; margin-top: 0.5rem; }
         .forgot-password a { color: #4A90E2; text-decoration: none; font-size: 0.9rem; }
         .forgot-password a:hover { text-decoration: underline; }
-
-        /* Términos */
-        .terminos-box {
-            background: #FFF9E6;
-            border-left: 4px solid #FFD93D;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-        }
-        .terminos-box label {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.8rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: #333;
-            font-weight: normal;
-        }
-        .terminos-box input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            margin-top: 2px;
-        }
+        .terminos-box { background: #FFF9E6; border-left: 4px solid #FFD93D; padding: 1rem; border-radius: 8px; margin: 1.5rem 0; }
+        .terminos-box label { display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer; font-size: 0.9rem; color: #333; font-weight: normal; }
+        .terminos-box input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; margin-top: 2px; }
         .terminos-box a { color: #4A90E2; font-weight: 600; text-decoration: none; }
         .terminos-box a:hover { text-decoration: underline; }
 
-        /* ============ DASHBOARD PANEL ============ */
+        /* Dashboard */
         .dashboard-panel { display: none; }
         .dashboard-panel.active { display: block; }
-        .topbar {
-            background: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        .topbar { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .topbar-logo { display: flex; align-items: center; gap: 0.5rem; }
         .topbar-logo img { height: 40px; }
         .topbar-logo span { font-weight: 700; font-size: 1.2rem; color: #333; }
         .topbar-user { display: flex; align-items: center; gap: 1rem; }
-        .user-avatar {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(135deg, #FFD93D, #FF6B9D);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: 700;
-        }
-        .btn-logout {
-            background: #f0f0f0; color: #333; border: none;
-            padding: 0.6rem 1.2rem; border-radius: 20px;
-            cursor: pointer; font-weight: 600;
-        }
-
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #FFD93D, #FF6B9D); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+        .btn-logout { background: #f0f0f0; color: #333; border: none; padding: 0.6rem 1.2rem; border-radius: 20px; cursor: pointer; font-weight: 600; }
         .tabs { display: flex; background: white; border-bottom: 2px solid #f0f0f0; overflow-x: auto; padding: 0 1rem; }
-        .tab {
-            padding: 1rem 1.5rem; cursor: pointer; font-weight: 500; color: #666;
-            border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.3s;
-        }
+        .tab { padding: 1rem 1.5rem; cursor: pointer; font-weight: 500; color: #666; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.3s; }
         .tab:hover { color: #FF6B9D; }
         .tab.active { color: #FF6B9D; border-bottom-color: #FF6B9D; }
-
+        .tab .badge { background: #FF6B9D; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: 5px; }
         .content { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        .card {
-            background: white; border-radius: 12px; padding: 1.5rem;
-            margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+        .card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .card h3 { color: #333; margin-bottom: 1rem; font-size: 1.2rem; }
-
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         .stat-card { background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 100%); color: white; padding: 1.5rem; border-radius: 12px; text-align: center; }
         .stat-card.blue { background: linear-gradient(135deg, #4A90E2 0%, #6BCB77 100%); }
@@ -174,17 +67,22 @@
         .stat-card.gold { background: linear-gradient(135deg, #FFD93D 0%, #FF8E53 100%); }
         .stat-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.3rem; }
         .stat-label { font-size: 0.9rem; opacity: 0.95; }
-
         .btn { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.3s; }
         .btn:hover { transform: translateY(-2px); }
         .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-danger { background: linear-gradient(135deg, #FF6B6B, #FF4444); color: white; }
         .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
-
         .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
         .alert.success { background: #d4edda; color: #155724; display: block; }
         .alert.error { background: #f8d7da; color: #721c24; display: block; }
 
-        /* Responsive */
+        /*  Toggle para Datos Fiscales */
+        .toggle-group { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .toggle-option { flex: 1; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s; font-weight: 500; }
+        .toggle-option:hover { border-color: #FF6B9D; }
+        .toggle-option.active { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-color: transparent; }
+        .toggle-option input { display: none; }
+
         @media (max-width: 768px) {
             .auth-header { padding: 2rem 1rem; }
             .auth-header h1 { font-size: 1.8rem; }
@@ -204,7 +102,6 @@
 
     <!-- ============ AUTH: LOGIN / REGISTRO ============ -->
     <div id="authSection">
-        <!-- Header estilo "Únete" -->
         <div class="auth-header">
             <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
             <h1 id="authTitle">Dashboard del Proveedor</h1>
@@ -216,7 +113,6 @@
             <div id="loginForm">
                 <h2>Iniciar Sesión</h2>
                 <p class="subtitle">Bienvenido de vuelta a GoParty</p>
-
                 <div class="form-group">
                     <label>Email <span class="required">*</span></label>
                     <input type="email" id="loginEmail" placeholder="tu@email.com">
@@ -225,31 +121,25 @@
                     <label>Contraseña <span class="required">*</span></label>
                     <input type="password" id="loginPassword" placeholder="••••••••">
                 </div>
-
                 <button class="btn-auth" onclick="login()">Iniciar Sesión</button>
                 <button class="btn-google" onclick="loginWithGoogle()">
                     <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     Continuar con Google
                 </button>
-
                 <div class="auth-divider">O con email</div>
-
                 <div class="auth-link">
                     ¿No tienes cuenta? <a href="unete.html">Solicitar incorporación →</a>
                 </div>
                 <div class="forgot-password"><a href="#" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a></div>
-                <p style="text-align: center; font-size: 0.8rem; color: #999; margin-top: 0.5rem;">
-                    El registro es por invitación. Solicita tu incorporación desde la página principal.
-                </p>
             </div>
 
-            <!-- REGISTRO (Redirigir a unete.html) -->
+            <!-- REGISTRO -->
             <div id="registerForm" style="display: none;">
                 <h2>Acceso Restringido</h2>
                 <p class="subtitle">El registro de proveedores es solo por aprobación</p>
                 <div style="text-align: center; padding: 2rem; background: #FFF9E6; border-radius: 8px; margin: 1.5rem 0;">
                     <p style="margin-bottom: 1rem; color: #333;">Para unirte a GoParty, debes solicitar tu incorporación desde nuestra página principal.</p>
-                    <a href="unete.html" class="btn" style="display: inline-block; text-decoration: none;">Ir a unete.html</a>
+                    <a href="unete.html" class="btn-auth" style="display: inline-block; text-decoration: none; width: auto; padding: 0.9rem 2rem;">Ir a unete.html</a>
                 </div>
                 <div class="auth-link">
                     <a href="#" onclick="showLogin()">← Volver al Login</a>
@@ -290,17 +180,17 @@
 
         <div class="tabs">
             <div class="tab active" data-tab="dashboard">📊 Mi Dashboard</div>
-            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones</div>
-            <div class="tab" data-tab="perfil">👤 Mi Perfil</div>
+            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
+            <div class="tab" data-tab="perfil"> Mi Perfil</div>
             <div class="tab" data-tab="testimonios">⭐ Testimonios</div>
-            <div class="tab" data-tab="membresia"> Membresía</div>
-            <div class="tab" data-tab="mensajes">💬 Mensajes</div>
+            <div class="tab" data-tab="membresia">💎 Membresía</div>
+            <div class="tab" data-tab="mensajes">💬 Mensajes <span id="tabMensajesCount" class="badge">0</span></div>
         </div>
 
         <div class="content">
             <!-- DASHBOARD -->
             <div class="tab-content active" id="tab-dashboard">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">Mi Dashboard</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">📊 Mi Dashboard</h2>
                 <a href="index.html" target="_blank" class="btn" style="margin-bottom: 1.5rem; display: inline-block; text-decoration: none;">🌐 Ver Sitio Principal</a>
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-number" id="statVistas">0</div><div class="stat-label">Vistas al Perfil</div></div>
@@ -314,67 +204,277 @@
                     <p><strong>Plan:</strong> <span id="infoPlan">Basic</span></p>
                     <p><strong>Estado:</strong> <span id="infoEstado">Activo</span></p>
                 </div>
+                <div class="card">
+                    <h3>📝 Cotizaciones Recientes</h3>
+                    <div id="cotizacionesRecientes">Cargando...</div>
+                </div>
+                <div class="card">
+                    <h3> Buzón de Cotizaciones</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">Solicitudes asignadas por GoParty</p>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" onclick="filtrarCotizaciones('todas')">Todas</button>
+                        <button class="btn btn-secondary" onclick="filtrarCotizaciones('Pendiente')">Pendientes</button>
+                        <button class="btn btn-secondary" onclick="filtrarCotizaciones('Respondida')">Respondidas</button>
+                    </div>
+                    <div id="listaCotizaciones">Cargando...</div>
+                </div>
             </div>
 
             <!-- COTIZACIONES -->
             <div class="tab-content" id="tab-cotizaciones">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">📝 Buzón de Cotizaciones</h2>
-                <div class="card"><div id="listaCotizaciones">Cargando...</div></div>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">📝 Cotizaciones</h2>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('todas')">Todas</button>
+                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Pendiente')">Pendientes</button>
+                    <button class="btn btn-secondary" onclick="filtrarCotizaciones('Respondida')">Respondidas</button>
+                </div>
+                <div class="card"><div id="listaCotizacionesTab">Cargando...</div></div>
             </div>
 
-            <!-- PERFIL -->
+            <!-- 🆕 PERFIL CON DATOS FISCALES -->
             <div class="tab-content" id="tab-perfil">
                 <h2 style="margin-bottom: 1.5rem; color: #333;">👤 Mi Perfil</h2>
+                
+                <!-- Información General -->
                 <div class="card">
                     <h3>📋 Información General</h3>
+                    <div class="alert" id="alertPerfil"></div>
                     <div class="form-row">
-                        <div class="form-group"><label>Nombre del Negocio</label><input type="text" id="perfilNombre"></div>
-                        <div class="form-group"><label>Nombre de Contacto</label><input type="text" id="perfilContacto"></div>
+                        <div class="form-group">
+                            <label>Nombre del Negocio *</label>
+                            <input type="text" id="perfilNombre" placeholder="Tu negocio">
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre de Contacto *</label>
+                            <input type="text" id="perfilContacto" placeholder="Persona de contacto">
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="perfilEmail" placeholder="email@ejemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp *</label>
+                            <input type="tel" id="perfilWhatsapp" placeholder="522281234567">
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <input type="text" id="perfilEstado" placeholder="Tu estado" readonly style="background: #f5f5f5;">
+                        </div>
+                        <div class="form-group">
+                            <label>Ciudad *</label>
+                            <input type="text" id="perfilCiudad" placeholder="Tu ciudad">
+                        </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Email</label><input type="email" id="perfilEmail"></div>
-                        <div class="form-group"><label>WhatsApp</label><input type="tel" id="perfilWhatsapp"></div>
+                    <div class="form-group">
+                        <label>Descripción del Negocio</label>
+                        <textarea id="perfilDescripcion" rows="4" placeholder="Cuéntanos sobre tu negocio..."></textarea>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Estado</label><input type="text" id="perfilEstado" readonly></div>
-                        <div class="form-group"><label>Ciudad</label><input type="text" id="perfilCiudad"></div>
-                    </div>
-                    <div class="form-group"><label>Descripción del Negocio</label><textarea id="perfilDescripcion" rows="4"></textarea></div>
                     <button class="btn" onclick="guardarPerfil()">💾 Guardar Cambios</button>
+                </div>
+
+                <!-- 🆕 DATOS FISCALES -->
+                <div class="card">
+                    <h3>📋 Datos Fiscales</h3>
+                    <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Información para facturación. Solo visible para el equipo administrativo de GoParty.</p>
+                    <div class="alert" id="alertFiscal"></div>
+
+                    <div class="form-group">
+                        <label>¿Requieres factura?</label>
+                        <div class="toggle-group">
+                            <label class="toggle-option" id="toggleFacturaSi" onclick="toggleFactura(true)">
+                                <input type="radio" name="requiereFactura" value="si">
+                                ✅ Sí, requiero factura
+                            </label>
+                            <label class="toggle-option active" id="toggleFacturaNo" onclick="toggleFactura(false)">
+                                <input type="radio" name="requiereFactura" value="no" checked>
+                                ❌ No requiero factura
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="datosFiscalesCampos" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>RFC *</label>
+                                <input type="text" id="fiscalRFC" placeholder="XAXX010101000" maxlength="13" style="text-transform: uppercase;">
+                                <small>13 caracteres para persona moral, 10 para física</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Razón Social *</label>
+                                <input type="text" id="fiscalRazon" placeholder="Nombre fiscal completo">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Régimen Fiscal *</label>
+                                <select id="fiscalRegimen" onchange="actualizarRegimenTexto()">
+                                    <option value="">Selecciona tu régimen...</option>
+                                    <option value="612">612 - Personas Físicas con Actividades Empresariales y Profesionales</option>
+                                    <option value="621">621 - Incorporación Fiscal</option>
+                                    <option value="623">623 - RESICO (Régimen Simplificado de Confianza)</option>
+                                    <option value="626">626 - RESICO Personas Morales</option>
+                                    <option value="601">601 - General de Ley Personas Morales</option>
+                                    <option value="603">603 - Personas Morales con Fines no Lucrativos</option>
+                                    <option value="605">605 - Sueldos y Salarios e Ingresos Asimilados</option>
+                                    <option value="606">606 - Arrendamiento</option>
+                                    <option value="607">607 - Régimen de Enajenación o Adquisición de Bienes</option>
+                                    <option value="608">608 - Demás Ingresos</option>
+                                    <option value="610">610 - Residentes en el Extranjero sin Establecimiento Permanente</option>
+                                    <option value="611">611 - Ingresos por Dividendos</option>
+                                    <option value="614">614 - Ingresos por Intereses</option>
+                                    <option value="615">615 - Ingresos de Personas Físicas con Actividades Empresariales</option>
+                                    <option value="616">616 - Sin Obligaciones Fiscales</option>
+                                    <option value="620">620 - Sociedades Cooperativas de Producción</option>
+                                    <option value="622">622 - Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</option>
+                                    <option value="624">624 - Coordinados</option>
+                                    <option value="625">625 - Actividades con Respecto a Hidrocarburos</option>
+                                    <option value="628">628 - Hidrocarburos</option>
+                                    <option value="629">629 - Personas Morales con Fines no Lucrativos</option>
+                                    <option value="630">630 - Fideicomisos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Uso de CFDI *</label>
+                                <select id="fiscalUsoCFDI">
+                                    <option value="">Selecciona el uso...</option>
+                                    <option value="G01">G01 - Adquisición de mercancías</option>
+                                    <option value="G02">G02 - Devoluciones, descuentos o bonificaciones</option>
+                                    <option value="G03">G03 - Gastos en general</option>
+                                    <option value="I01">I01 - Construcciones</option>
+                                    <option value="I02">I02 - Mobiliario y equipo de oficina</option>
+                                    <option value="I03">I03 - Equipo de transporte</option>
+                                    <option value="I04">I04 - Equipo de cómputo y accesorios</option>
+                                    <option value="I05">I05 - Dados, troqueles, moldes, matrices</option>
+                                    <option value="I06">I06 - Comunicaciones telefónicas</option>
+                                    <option value="I07">I07 - Comunicaciones satelitales</option>
+                                    <option value="I08">I08 - Otra maquinaria y equipo</option>
+                                    <option value="P01">P01 - Por definir</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Código Postal Fiscal *</label>
+                                <input type="text" id="fiscalCP" placeholder="91000" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Régimen Fiscal (texto)</label>
+                                <input type="text" id="fiscalRegimenTexto" placeholder="Se llena automáticamente" readonly style="background: #f5f5f5;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Dirección Fiscal</label>
+                            <div class="form-row">
+                                <div class="form-group" style="flex: 2;">
+                                    <input type="text" id="fiscalCalle" placeholder="Calle">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="fiscalNumero" placeholder="Número">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="fiscalColonia" placeholder="Colonia">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="fiscalMunicipio" placeholder="Municipio/Alcaldía">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="guardarDatosFiscales()">💾 Guardar Datos Fiscales</button>
+                </div>
+
+                <!-- Redes Sociales -->
+                <div class="card">
+                    <h3>🌐 Redes Sociales</h3>
+                    <div class="alert" id="alertRedes"></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Instagram</label>
+                            <input type="text" id="redInstagram" placeholder="@tunegocio">
+                        </div>
+                        <div class="form-group">
+                            <label>Facebook</label>
+                            <input type="text" id="redFacebook" placeholder="facebook.com/tunegocio">
+                        </div>
+                        <div class="form-group">
+                            <label>TikTok</label>
+                            <input type="text" id="redTikTok" placeholder="@tunegocio">
+                        </div>
+                        <div class="form-group">
+                            <label>Sitio Web</label>
+                            <input type="url" id="redWeb" placeholder="https://tunegocio.com">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="guardarRedes()">💾 Guardar Redes</button>
                 </div>
             </div>
 
             <!-- TESTIMONIOS -->
             <div class="tab-content" id="tab-testimonios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Deja tu Testimonio</h2>
+                <p style="color: #666; margin-bottom: 1rem;">Cuéntanos tu experiencia. Tu reseña será revisada por el equipo GoParty antes de publicarse.</p>
+                
                 <div class="card">
-                    <h3>Dejar Testimonio</h3>
-                    <div class="form-group"><label>Proveedor</label><input type="text" id="testProveedor"></div>
-                    <div class="form-group"><label>Tipo de Evento</label>
-                        <select id="testTipoEvento">
-                            <option value="">Selecciona...</option>
-                            <option>Cumpleaños Infantil</option><option>Cumpleaños Adulto</option>
-                            <option>Boda</option><option>XV Años</option>
-                            <option>Evento Corporativo</option><option>Baby Shower</option>
-                            <option>Graduación</option><option>Otro</option>
-                        </select>
+                    <h3>📝 Información del Evento</h3>
+                    <div class="form-group">
+                        <label>Nombre del Proveedor que contrataste *</label>
+                        <input type="text" id="testProveedor" placeholder="Nombre del proveedor">
                     </div>
-                    <div class="form-group"><label>Ciudad</label><input type="text" id="testCiudad"></div>
-                    <div class="form-group"><label>Calificación</label>
-                        <div id="estrellasContainer" style="font-size: 2rem; cursor: pointer;">
-                            <span onclick="seleccionarEstrellas(1)">⭐</span><span onclick="seleccionarEstrellas(2)">⭐</span>
-                            <span onclick="seleccionarEstrellas(3)">⭐</span><span onclick="seleccionarEstrellas(4)">⭐</span>
-                            <span onclick="seleccionarEstrellas(5)">⭐</span>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tipo de Evento *</label>
+                            <select id="testTipoEvento">
+                                <option value="">Selecciona...</option>
+                                <option>Cumpleaños Infantil</option>
+                                <option>Cumpleaños Adulto</option>
+                                <option>Boda</option>
+                                <option>XV Años</option>
+                                <option>Evento Corporativo</option>
+                                <option>Baby Shower</option>
+                                <option>Graduación</option>
+                                <option>Otro</option>
+                            </select>
                         </div>
-                        <input type="hidden" id="testCalificacion" value="5">
+                        <div class="form-group">
+                            <label>Ciudad del Evento *</label>
+                            <input type="text" id="testCiudad" placeholder="Ciudad">
+                        </div>
                     </div>
-                    <div class="form-group"><label>Tu Nombre</label><input type="text" id="testNombre"></div>
-                    <div class="form-group"><label>Comentario</label><textarea id="testComentario" rows="4"></textarea></div>
-                    <button class="btn" onclick="enviarTestimonio()">📤 Enviar Testimonio</button>
                 </div>
+
                 <div class="card">
-                    <h3>Mis Testimonios</h3>
-                    <div id="misTestimonios"><p style="color: #999;">Aún no has enviado testimonios.</p></div>
+                    <h3>⭐ Tu Calificación y Comentario</h3>
+                    <div class="form-group">
+                        <label>Calificación *</label>
+                        <div id="estrellasTestimonio" style="font-size: 2rem; cursor: pointer;">
+                            <span onclick="setCalificacion(1)">⭐</span>
+                            <span onclick="setCalificacion(2)">⭐</span>
+                            <span onclick="setCalificacion(3)">⭐</span>
+                            <span onclick="setCalificacion(4)">⭐</span>
+                            <span onclick="setCalificacion(5)">⭐</span>
+                        </div>
+                        <small>Haz clic en las estrellas para calificar</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Tu Nombre (como aparecerá en el testimonio) *</label>
+                        <input type="text" id="testNombre" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Tu Testimonio *</label>
+                        <textarea id="testComentario" rows="4" placeholder="Cuéntanos tu experiencia..."></textarea>
+                    </div>
+                    <button class="btn" onclick="enviarTestimonio()">📤 Enviar Testimonio para Revisión</button>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Mis Testimonios Enviados</h3>
+                    <div id="listaMisTestimonios">Aún no has enviado testimonios.</div>
                 </div>
             </div>
 
@@ -385,21 +485,34 @@
                     <h3>Plan Basic</h3>
                     <p><strong>Estado:</strong> Activo</p>
                     <p><strong>Precio:</strong> Gratis</p>
+                    <p>Aparecer en el directorio general</p>
+                </div>
+                <div class="card">
+                    <h3>Plan Pro - $299/mes</h3>
+                    <p>Todo lo de Basic + Sello de verificación + Mayor visibilidad</p>
+                    <button class="btn" onclick="actualizarPlan('Pro')">Actualizar a Pro</button>
+                </div>
+                <div class="card">
+                    <h3>Plan Gold - $599/mes</h3>
+                    <p>Todo lo de Pro + Posición destacada + Borde dorado</p>
+                    <button class="btn" onclick="actualizarPlan('Gold')">Actualizar a Gold</button>
                 </div>
             </div>
 
             <!-- MENSAJES -->
             <div class="tab-content" id="tab-mensajes">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes</h2>
-                <div class="card"><div id="listaMensajes"><p style="color: #999;">No hay mensajes</p></div></div>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes del Equipo GoParty</h2>
+                <div class="card">
+                    <div id="listaMensajes">No hay mensajes</div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
@@ -412,13 +525,13 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
 
-        // Mostrar/ocultar formularios
-        window.showRegister = function() {
-            window.location.href = 'unete.html';
-        };
+        let proveedorActual = null;
+        let calificacionTestimonio = 0;
+
+        // ==========================================
+        // LOGIN / REGISTRO
+        // ==========================================
         window.showLogin = function() {
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('registerForm').style.display = 'none';
@@ -432,226 +545,64 @@
             document.getElementById('forgotForm').style.display = 'block';
         };
 
-        // LOGIN con validación de estado
         window.login = async function() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                alert('❌ Por favor completa todos los campos');
-                return;
-            }
-
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if (!email || !password) { alert('❌ Completa email y contraseña'); return; }
             try {
-                const cred = await signInWithEmailAndPassword(auth, email, password);
-                const uid = cred.user.uid;
-                
-                // Verificar estado de aprobación
-                const docSnap = await getDoc(doc(db, "proveedores", uid));
-                
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    const estado = data.estadoVerificacion || data.estadoAprobacion || 'Pendiente';
-                    
-                    if (estado !== 'Aprobado' && estado !== 'Verificado') {
-                        // No está aprobado → cerrar sesión y mostrar mensaje
-                        await auth.signOut();
-                        
-                        let mensaje = '⏳ Tu cuenta está en revisión.\n\n';
-                        if (estado === 'Rechazado') {
-                            mensaje = ' Tu solicitud fue rechazada.\n\n';
-                            if (data.motivoRechazo) {
-                                mensaje += `Motivo: ${data.motivoRechazo}\n\n`;
-                            }
-                            mensaje += 'Si consideras que es un error, contacta a soporte@goparty.com';
-                        } else {
-                            mensaje += 'El equipo de GoParty revisará tu perfil en 24-48 horas.\n\n';
-                            mensaje += 'Recibirás un email cuando tu cuenta sea activada.';
-                        }
-                        
-                        alert(mensaje);
-                        return;
-                    }
-                } else {
-                    // No existe en Firestore
-                    await auth.signOut();
-                    alert('❌ No encontramos tu perfil en el sistema. Solicita tu incorporación desde unete.html');
-                    return;
-                }
-                
-                // Aprobado → continuar login normal
-                localStorage.setItem('proveedorId', uid);
-                localStorage.setItem('proveedorEmail', cred.user.email);
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('dashboardPanel').classList.add('active');
-                await cargarDatosProveedor(uid);
-                
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
-        };
-
-        // LOGIN con Google con validación
-        window.loginWithGoogle = async function() {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                const user = result.user;
-                const email = user.email;
-
-                // PASO 1: Buscar si este email ya está registrado en proveedores
-                const q = query(collection(db, "proveedores"), where("email", "==", email));
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    // No existe en la base de datos → No está aprobado
-                    await auth.signOut();
-                    alert(
-                        '🚫 Acceso no autorizado\n\n' +
-                        'No encontramos una cuenta aprobada asociada a este email.\n\n' +
-                        'Para unirte a GoParty, solicita tu incorporación desde:\n' +
-                        '👉 unete.html\n\n' +
-                        'El equipo revisará tu solicitud en 24-48 horas.'
-                    );
-                    return;
-                }
-
-                // PASO 2: Existe → Verificar estado de aprobación
-                const proveedorDoc = querySnapshot.docs[0];
-                const proveedorData = proveedorDoc.data();
-                const estado = proveedorData.estadoVerificacion || 'Pendiente';
-
-                if (estado !== 'Aprobado' && estado !== 'Verificado') {
-                    await auth.signOut();
-                    
-                    let mensaje = '';
-                    if (estado === 'Rechazado') {
-                        mensaje = '❌ Solicitud rechazada\n\n';
-                        if (proveedorData.motivoRechazo) {
-                            mensaje += `Motivo: ${proveedorData.motivoRechazo}\n\n`;
-                        }
-                        mensaje += 'Si consideras que es un error, contacta a soporte@goparty.com';
-                    } else {
-                        mensaje = '⏳ Cuenta en revisión\n\n' +
-                            'Tu solicitud fue recibida y está siendo revisada por el equipo de GoParty.\n\n' +
-                            'Recibirás un email cuando tu cuenta sea activada.\n\n' +
-                            'Tiempo estimado: 24-48 horas.';
-                    }
-                    
-                    alert(mensaje);
-                    return;
-                }
-
-                // PASO 3: Aprobado → Acceso concedido
-                const uid = proveedorDoc.id;
-                
-                localStorage.setItem('proveedorId', uid);
-                localStorage.setItem('proveedorEmail', email);
-                
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('dashboardPanel').classList.add('active');
-                
-                cargarDatosProveedor(uid);
-                
-            } catch (error) {
-                alert(' Error con Google: ' + error.message);
-            }
-        };
-
-        // RECUPERAR CONTRASEÑA
-        window.sendPasswordReset = async function() {
-            const email = document.getElementById('forgotEmail').value;
-            if (!email) { alert('❌ Ingresa tu email'); return; }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert('✅ Enlace de recuperación enviado a ' + email);
-                showLogin();
+                const q = query(collection(db, "proveedores"), where("email", "==", email), where("password", "==", password));
+                const snap = await getDocs(q);
+                if (snap.empty) { alert('❌ Credenciales incorrectas'); return; }
+                proveedorActual = { id: snap.docs[0].id, ...snap.docs[0].data() };
+                iniciarDashboard();
             } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
-        // LOGOUT
+        window.loginWithGoogle = async function() {
+            alert('🔵 Login con Google - Pendiente de implementar con Firebase Auth');
+        };
+
+        window.sendPasswordReset = function() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            if (!email) { alert('❌ Ingresa tu email'); return; }
+            alert('📧 Enlace de recuperación enviado a ' + email);
+            showLogin();
+        };
+
         window.logout = function() {
             localStorage.removeItem('proveedorId');
             localStorage.removeItem('proveedorEmail');
             location.reload();
         };
 
-        // CARGAR DATOS
-        async function cargarDatosProveedor(uid) {
-            try {
-                const docSnap = await getDoc(doc(db, "proveedores", uid));
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('userName').textContent = data.nombreNegocio || 'Proveedor';
-                    document.getElementById('userAvatar').textContent = (data.nombreNegocio || 'P').charAt(0).toUpperCase();
-                    document.getElementById('infoNombre').textContent = data.nombreNegocio || 'Proveedor';
-                    document.getElementById('infoPlan').textContent = data.plan ? data.plan.charAt(0).toUpperCase() + data.plan.slice(1) : 'Basic';
-                    document.getElementById('perfilNombre').value = data.nombreNegocio || '';
-                    document.getElementById('perfilContacto').value = data.nombreContacto || '';
-                    document.getElementById('perfilEmail').value = data.email || '';
-                    document.getElementById('perfilWhatsapp').value = data.whatsapp || '';
-                    document.getElementById('perfilEstado').value = data.estado || '';
-                    document.getElementById('perfilCiudad').value = data.ciudad || '';
-                    document.getElementById('perfilDescripcion').value = data.descripcion || '';
-                }
-            } catch (error) { console.error("Error:", error); }
+        function iniciarDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('dashboardPanel').classList.add('active');
+            document.getElementById('userName').textContent = proveedorActual.nombreNegocio || 'Proveedor';
+            document.getElementById('userAvatar').textContent = (proveedorActual.nombreNegocio || 'P')[0].toUpperCase();
+            document.getElementById('infoNombre').textContent = proveedorActual.nombreNegocio || 'Proveedor';
+            document.getElementById('infoPlan').textContent = proveedorActual.plan ? proveedorActual.plan.charAt(0).toUpperCase() + proveedorActual.plan.slice(1) : 'Basic';
+            
+            localStorage.setItem('proveedorId', proveedorActual.id);
+            localStorage.setItem('proveedorEmail', proveedorActual.email);
+            
+            cargarPerfil();
         }
 
-        // GUARDAR PERFIL
-        window.guardarPerfil = async function() {
-            const uid = localStorage.getItem('proveedorId');
-            if (!uid) return;
-            try {
-                await updateDoc(doc(db, "proveedores", uid), {
-                    nombreNegocio: document.getElementById('perfilNombre').value,
-                    nombreContacto: document.getElementById('perfilContacto').value,
-                    email: document.getElementById('perfilEmail').value,
-                    whatsapp: document.getElementById('perfilWhatsapp').value,
-                    ciudad: document.getElementById('perfilCiudad').value,
-                    estado: document.getElementById('perfilEstado').value,
-                    descripcion: document.getElementById('perfilDescripcion').value
-                });
-                alert('✅ Perfil actualizado');
-            } catch (error) { alert('❌ Error: ' + error.message); }
-        };
+        // Auto-login
+        const proveedorId = localStorage.getItem('proveedorId');
+        if (proveedorId) {
+            getDoc(doc(db, "proveedores", proveedorId)).then(docSnap => {
+                if (docSnap.exists()) {
+                    proveedorActual = { id: docSnap.id, ...docSnap.data() };
+                    iniciarDashboard();
+                }
+            });
+        }
 
-        // TESTIMONIOS
-        window.seleccionarEstrellas = function(valor) {
-            document.getElementById('testCalificacion').value = valor;
-            const estrellas = document.querySelectorAll('#estrellasContainer span');
-            estrellas.forEach((est, idx) => { est.style.opacity = idx < valor ? '1' : '0.3'; });
-        };
-
-        window.enviarTestimonio = async function() {
-            const proveedor = document.getElementById('testProveedor').value.trim();
-            const tipoEvento = document.getElementById('testTipoEvento').value;
-            const ciudad = document.getElementById('testCiudad').value.trim();
-            const calificacion = parseInt(document.getElementById('testCalificacion').value);
-            const nombre = document.getElementById('testNombre').value.trim();
-            const comentario = document.getElementById('testComentario').value.trim();
-
-            if (!proveedor || !tipoEvento || !ciudad || !nombre || !comentario) {
-                alert('❌ Completa todos los campos');
-                return;
-            }
-            try {
-                await addDoc(collection(db, "testimonios"), {
-                    nombreCliente: nombre, inicial: nombre.charAt(0).toUpperCase(),
-                    tipoEvento, ciudad, nombreProveedor: proveedor,
-                    calificacion, comentario, estado: 'pendiente',
-                    fecha: new Date().toISOString(),
-                    proveedorId: localStorage.getItem('proveedorId')
-                });
-                alert('✅ Testimonio enviado. Será revisado en 24-48 horas.');
-                document.getElementById('testProveedor').value = '';
-                document.getElementById('testTipoEvento').value = '';
-                document.getElementById('testCiudad').value = '';
-                document.getElementById('testNombre').value = '';
-                document.getElementById('testComentario').value = '';
-                seleccionarEstrellas(5);
-            } catch (error) { alert('❌ Error: ' + error.message); }
-        };
-
+        // ==========================================
         // TABS
+        // ==========================================
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -661,16 +612,243 @@
             });
         });
 
-        // AUTO-LOGIN
-        const proveedorId = localStorage.getItem('proveedorId');
-        if (proveedorId) {
-            document.getElementById('authSection').style.display = 'none';
-            document.getElementById('dashboardPanel').classList.add('active');
-            cargarDatosProveedor(proveedorId);
+        // ==========================================
+        // 🆕 PERFIL Y DATOS FISCALES
+        // ==========================================
+        async function cargarPerfil() {
+            try {
+                const docSnap = await getDoc(doc(db, "proveedores", proveedorActual.id));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('perfilNombre').value = data.nombreNegocio || '';
+                    document.getElementById('perfilContacto').value = data.nombreContacto || '';
+                    document.getElementById('perfilEmail').value = data.email || '';
+                    document.getElementById('perfilWhatsapp').value = data.whatsapp || '';
+                    document.getElementById('perfilCiudad').value = data.ciudad || '';
+                    document.getElementById('perfilEstado').value = data.estado || '';
+                    document.getElementById('perfilDescripcion').value = data.descripcion || '';
+                    
+                    // 🆕 Cargar datos fiscales
+                    if (data.datosFiscales) {
+                        const df = data.datosFiscales;
+                        toggleFactura(df.requiereFactura === true);
+                        document.getElementById('fiscalRFC').value = df.rfc || '';
+                        document.getElementById('fiscalRazon').value = df.razonSocial || '';
+                        document.getElementById('fiscalRegimen').value = df.regimenFiscal || '';
+                        document.getElementById('fiscalUsoCFDI').value = df.usoCFDI || '';
+                        document.getElementById('fiscalCP').value = df.codigoPostal || '';
+                        document.getElementById('fiscalCalle').value = df.calle || '';
+                        document.getElementById('fiscalNumero').value = df.numero || '';
+                        document.getElementById('fiscalColonia').value = df.colonia || '';
+                        document.getElementById('fiscalMunicipio').value = df.municipio || '';
+                        actualizarRegimenTexto();
+                    }
+                    
+                    // Cargar redes
+                    if (data.redesSociales) {
+                        document.getElementById('redInstagram').value = data.redesSociales.instagram || '';
+                        document.getElementById('redFacebook').value = data.redesSociales.facebook || '';
+                        document.getElementById('redTikTok').value = data.redesSociales.tiktok || '';
+                        document.getElementById('redWeb').value = data.redesSociales.sitioWeb || '';
+                    }
+                }
+            } catch (error) { console.error("Error cargando perfil:", error); }
         }
 
-        // Inicializar estrellas
-        seleccionarEstrellas(5);
+        window.toggleFactura = function(requiere) {
+            const campos = document.getElementById('datosFiscalesCampos');
+            const toggleSi = document.getElementById('toggleFacturaSi');
+            const toggleNo = document.getElementById('toggleFacturaNo');
+            
+            if (requiere) {
+                campos.style.display = 'block';
+                toggleSi.classList.add('active');
+                toggleNo.classList.remove('active');
+            } else {
+                campos.style.display = 'none';
+                toggleSi.classList.remove('active');
+                toggleNo.classList.add('active');
+            }
+        };
+
+        window.actualizarRegimenTexto = function() {
+            const select = document.getElementById('fiscalRegimen');
+            const texto = select.options[select.selectedIndex].text;
+            document.getElementById('fiscalRegimenTexto').value = select.value ? texto : '';
+        };
+
+        window.guardarPerfil = async function() {
+            const alert = document.getElementById('alertPerfil');
+            const data = {
+                nombreNegocio: document.getElementById('perfilNombre').value.trim(),
+                nombreContacto: document.getElementById('perfilContacto').value.trim(),
+                email: document.getElementById('perfilEmail').value.trim(),
+                whatsapp: document.getElementById('perfilWhatsapp').value.trim(),
+                ciudad: document.getElementById('perfilCiudad').value.trim(),
+                estado: document.getElementById('perfilEstado').value.trim(),
+                descripcion: document.getElementById('perfilDescripcion').value.trim(),
+                ultimaModificacion: new Date().toISOString()
+            };
+            
+            if (!data.nombreNegocio || !data.email) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Nombre y email son obligatorios';
+                alert.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await updateDoc(doc(db, "proveedores", proveedorActual.id), data);
+                proveedorActual = { ...proveedorActual, ...data };
+                document.getElementById('userName').textContent = data.nombreNegocio;
+                alert.className = 'alert success';
+                alert.textContent = '✅ Perfil actualizado';
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+            } catch (error) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        window.guardarDatosFiscales = async function() {
+            const alert = document.getElementById('alertFiscal');
+            const requiereFactura = document.getElementById('toggleFacturaSi').classList.contains('active');
+            
+            const datosFiscales = {
+                requiereFactura,
+                fechaActualizacion: new Date().toISOString()
+            };
+            
+            if (requiereFactura) {
+                const rfc = document.getElementById('fiscalRFC').value.trim().toUpperCase();
+                const razon = document.getElementById('fiscalRazon').value.trim();
+                const regimen = document.getElementById('fiscalRegimen').value;
+                const usoCFDI = document.getElementById('fiscalUsoCFDI').value;
+                const cp = document.getElementById('fiscalCP').value.trim();
+                
+                if (!rfc || !razon || !regimen || !usoCFDI || !cp) {
+                    alert.className = 'alert error';
+                    alert.textContent = '❌ Completa todos los campos fiscales obligatorios';
+                    alert.style.display = 'block';
+                    return;
+                }
+                
+                if (rfc.length < 10 || rfc.length > 13) {
+                    alert.className = 'alert error';
+                    alert.textContent = '❌ RFC debe tener 10 (física) o 13 (moral) caracteres';
+                    alert.style.display = 'block';
+                    return;
+                }
+                
+                if (cp.length !== 5 || !/^\d{5}$/.test(cp)) {
+                    alert.className = 'alert error';
+                    alert.textContent = '❌ Código Postal debe ser de 5 dígitos';
+                    alert.style.display = 'block';
+                    return;
+                }
+                
+                datosFiscales.rfc = rfc;
+                datosFiscales.razonSocial = razon;
+                datosFiscales.regimenFiscal = regimen;
+                datosFiscales.regimenFiscalTexto = document.getElementById('fiscalRegimenTexto').value;
+                datosFiscales.usoCFDI = usoCFDI;
+                datosFiscales.codigoPostal = cp;
+                datosFiscales.calle = document.getElementById('fiscalCalle').value.trim();
+                datosFiscales.numero = document.getElementById('fiscalNumero').value.trim();
+                datosFiscales.colonia = document.getElementById('fiscalColonia').value.trim();
+                datosFiscales.municipio = document.getElementById('fiscalMunicipio').value.trim();
+            }
+            
+            try {
+                await updateDoc(doc(db, "proveedores", proveedorActual.id), { datosFiscales });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Datos fiscales guardados';
+                alert.style.display = 'block';
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+            } catch (error) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        window.guardarRedes = async function() {
+            const alert = document.getElementById('alertRedes');
+            const redes = {
+                instagram: document.getElementById('redInstagram').value.trim(),
+                facebook: document.getElementById('redFacebook').value.trim(),
+                tiktok: document.getElementById('redTikTok').value.trim(),
+                sitioWeb: document.getElementById('redWeb').value.trim()
+            };
+            
+            try {
+                await updateDoc(doc(db, "proveedores", proveedorActual.id), { redesSociales: redes });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Redes actualizadas';
+                alert.style.display = 'block';
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+            } catch (error) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        // ==========================================
+        // TESTIMONIOS
+        // ==========================================
+        window.setCalificacion = function(n) {
+            calificacionTestimonio = n;
+            const estrellas = document.querySelectorAll('#estrellasTestimonio span');
+            estrellas.forEach((e, i) => { e.style.opacity = i < n ? '1' : '0.3'; });
+        };
+
+        window.enviarTestimonio = async function() {
+            const proveedor = document.getElementById('testProveedor').value.trim();
+            const tipoEvento = document.getElementById('testTipoEvento').value;
+            const ciudad = document.getElementById('testCiudad').value.trim();
+            const nombre = document.getElementById('testNombre').value.trim();
+            const comentario = document.getElementById('testComentario').value.trim();
+            
+            if (!proveedor || !tipoEvento || !ciudad || !nombre || !comentario || calificacionTestimonio === 0) {
+                alert('❌ Completa todos los campos y selecciona una calificación'); return;
+            }
+            
+            try {
+                await addDoc(collection(db, "testimonios"), {
+                    nombreProveedor: proveedor,
+                    tipoEvento, ciudad,
+                    nombreCliente: nombre,
+                    comentario,
+                    calificacion: calificacionTestimonio,
+                    estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: proveedorActual.id
+                });
+                alert('✅ Testimonio enviado. Será revisado antes de publicarse.');
+                document.getElementById('testProveedor').value = '';
+                document.getElementById('testComentario').value = '';
+                setCalificacion(0);
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // ==========================================
+        // MEMBRESÍA
+        // ==========================================
+        window.actualizarPlan = function(plan) {
+            if (confirm(`¿Actualizar al Plan ${plan}?\n\nSerás redirigido al proceso de pago.`)) {
+                alert(`💳 Redirigiendo a pasarela de pago para Plan ${plan}...`);
+            }
+        };
+
+        // ==========================================
+        // COTIZACIONES
+        // ==========================================
+        window.filtrarCotizaciones = function(filtro) {
+            alert('Filtro: ' + filtro + ' - Pendiente de implementar');
+        };
     </script>
+
 </body>
 </html>

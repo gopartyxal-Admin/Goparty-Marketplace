@@ -630,125 +630,35 @@
                     <button class="sub-tab" data-sub="casos-exito">🏆 Casos de Éxito</button>
                 </div>
 
-                <!-- SUB 1: Testimonios de Clientes -->
+                                <!-- SUB 1: Testimonios de Clientes (VISTA DE PROVEEDOR) -->
                 <div class="sub-content active" id="sub-testimonios-clientes">
                     <div class="card">
-                        <h3>⭐ Dejar Testimonio de Cliente</h3>
-                        <p style="color: #666; margin-bottom: 1rem;">Como proveedor, puedes registrar testimonios de tus clientes (con su permiso) para mostrar en tu perfil.</p>
-                        <div class="alert" id="alertTestimonioCliente"></div>
+                        <h3>⭐ Mis Reseñas Aprobadas</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">
+                            Aquí puedes ver los testimonios que tus clientes han dejado sobre ti y que han sido aprobados por el equipo de GoParty. 
+                            Estos son los que aparecen públicamente en tu perfil.
+                        </p>
                         
-                        <div class="form-group">
-                            <label>Nombre del Proveedor que contrataron *</label>
-                            <input type="text" id="testProveedor" placeholder="Nombre del proveedor">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Tipo de Evento *</label>
-                                <select id="testTipoEvento">
-                                    <option value="">Selecciona...</option>
-                                    <option>Cumpleaños Infantil</option>
-                                    <option>Cumpleaños Adulto</option>
-                                    <option>Boda</option>
-                                    <option>XV Años</option>
-                                    <option>Evento Corporativo</option>
-                                    <option>Baby Shower</option>
-                                    <option>Graduación</option>
-                                    <option>Otro</option>
-                                </select>
+                        <div class="alert" id="alertResenasProveedor"></div>
+
+                        <!-- Estadísticas rápidas de reseñas -->
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                            <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
+                                <div style="font-size: 0.9rem; color: #666;">Total Reseñas</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4A90E2;" id="countTotalResenas">0</div>
                             </div>
-                            <div class="form-group">
-                                <label>Ciudad del Evento *</label>
-                                <input type="text" id="testCiudad" placeholder="Ciudad">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Calificación *</label>
-                            <div id="estrellasTestimonio" style="font-size: 2rem; cursor: pointer;">
-                                <span onclick="setCalificacion(1)">⭐</span>
-                                <span onclick="setCalificacion(2)">⭐</span>
-                                <span onclick="setCalificacion(3)">⭐</span>
-                                <span onclick="setCalificacion(4)">⭐</span>
-                                <span onclick="setCalificacion(5)">⭐</span>
-                            </div>
-                            <small>Haz clic en las estrellas para calificar</small>
-                        </div>
-                        <div class="form-group">
-                            <label>Nombre del Cliente (como aparecerá en el testimonio) *</label>
-                            <input type="text" id="testNombre" placeholder="Nombre del cliente">
-                        </div>
-                        <div class="form-group">
-                            <label>Comentario del Cliente *</label>
-                            <textarea id="testComentario" rows="4" placeholder="Cuéntanos la experiencia del cliente..."></textarea>
-                        </div>
-                        <button class="btn" onclick="enviarTestimonioCliente()">📤 Enviar Testimonio para Revisión</button>
-                    </div>
-
-                    <div class="card">
-                        <h3>📋 Testimonios Enviados</h3>
-                        <div id="listaTestimoniosClientes">Aún no has enviado testimonios.</div>
-                    </div>
-                </div>
-
-                <!-- SUB 2: Experiencia con GoParty -->
-                <div class="sub-content" id="sub-experiencia-goparty">
-                    <div class="card">
-                        <h3>💬 Tu Experiencia con GoParty</h3>
-                        <p style="color: #666; margin-bottom: 1rem;">Cuéntanos cómo ha sido tu experiencia usando la plataforma GoParty. Tu testimonio ayudará a otros proveedores a decidir unirse.</p>
-                        <div class="alert" id="alertExperienciaGoParty"></div>
-
-                        <div class="form-group">
-                            <label>¿Cuánto tiempo llevas usando GoParty? *</label>
-                            <select id="expTiempo">
-                                <option value="">Selecciona...</option>
-                                <option value="Menos de 6 meses">Menos de 6 meses</option>
-                                <option value="6-12 meses">6-12 meses</option>
-                                <option value="1-2 años">1-2 años</option>
-                                <option value="Más de 2 años">Más de 2 años</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Calificación de la plataforma GoParty *</label>
-                            <div id="estrellasGoParty" style="font-size: 2rem; cursor: pointer;">
-                                <span onclick="setCalificacionGoParty(1)">⭐</span>
-                                <span onclick="setCalificacionGoParty(2)">⭐</span>
-                                <span onclick="setCalificacionGoParty(3)">⭐</span>
-                                <span onclick="setCalificacionGoParty(4)">⭐</span>
-                                <span onclick="setCalificacionGoParty(5)">⭐</span>
-                            </div>
-                            <small>¿Cómo calificarías tu experiencia con GoParty?</small>
-                        </div>
-
-                        <div class="form-group">
-                            <label>¿Qué te gusta más de GoParty? *</label>
-                            <textarea id="expGusta" rows="3" placeholder="Ej: La facilidad para conectar con clientes, el soporte técnico, la visibilidad..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>¿Qué mejorarías de GoParty? *</label>
-                            <textarea id="expMejoraria" rows="3" placeholder="Ej: Más herramientas de marketing, mejor app móvil, más categorías..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>¿Recomendarías GoParty a otros proveedores? *</label>
-                            <div class="toggle-group">
-                                <label class="toggle-option" id="toggleRecomendarSi" onclick="toggleRecomendar(true)">
-                                    <input type="radio" name="recomendar" value="si">
-                                    ✅ Sí, la recomendaría
-                                </label>
-                                <label class="toggle-option" id="toggleRecomendarNo" onclick="toggleRecomendar(false)">
-                                    <input type="radio" name="recomendar" value="no">
-                                    ❌ No la recomendaría
-                                </label>
+                            <div style="background: #fffbe6; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
+                                <div style="font-size: 0.9rem; color: #666;">Calificación Promedio</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #FFD93D;" id="avgCalificacion">0.0 ⭐</div>
                             </div>
                         </div>
 
-                        <button class="btn" onclick="enviarExperienciaGoParty()">📤 Enviar Experiencia para Revisión</button>
-                    </div>
-
-                    <div class="card">
-                        <h3>📋 Mis Experiencias Enviadas</h3>
-                        <div id="listaExperienciasGoParty">Aún no has enviado tu experiencia.</div>
+                        <!-- Lista de testimonios -->
+                        <div id="listaResenasRecibidas">
+                            <div style="text-align: center; padding: 2rem; color: #999;">
+                                Cargando tus reseñas aprobadas...
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2110,6 +2020,103 @@
         window.actualizarPlan = actualizarPlan;
         window.filtrarCotizaciones = filtrarCotizaciones;
         window.proveedorActual = proveedorActual;
+           // ==========================================
+        // CARGAR RESEÑAS RECIBIDAS (SOLO APROBADAS)
+        // ==========================================
+        async function cargarResenasRecibidas() {
+            const contenedor = document.getElementById('listaResenasRecibidas');
+            const countTotal = document.getElementById('countTotalResenas');
+            const avgCalif = document.getElementById('avgCalificacion');
+            
+            try {
+                // Obtenemos el nombre exacto del negocio del proveedor logueado
+                const nombreNegocio = proveedorActual.nombreNegocio; 
+
+                if (!nombreNegocio) {
+                    contenedor.innerHTML = '<p style="color: #999;">Error: No se pudo identificar tu negocio.</p>';
+                    return;
+                }
+
+                // Consulta a Firestore: Traer testimonios donde nombreProveedor == mi negocio
+                const q = query(collection(db, "testimonios"), where("nombreProveedor", "==", nombreNegocio));
+                const snap = await getDocs(q);
+                
+                let resenas = [];
+                let sumaCalificaciones = 0;
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    // FILTRO MANUAL: Solo mostramos si el admin lo aprobó
+                    if (data.estado === 'aprobado') {
+                        resenas.push({ id: doc.id, ...data });
+                        sumaCalificaciones += (data.calificacion || 0);
+                    }
+                });
+
+                // Actualizar contadores
+                if(countTotal) countTotal.textContent = resenas.length;
+                if(avgCalif) {
+                    const promedio = resenas.length > 0 ? (sumaCalificaciones / resenas.length).toFixed(1) : "0.0";
+                    avgCalif.textContent = promedio + " ⭐";
+                }
+
+                // Renderizar lista
+                if (resenas.length === 0) {
+                    contenedor.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; background: #f9f9f9; border-radius: 8px;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                            <h4>Aún no tienes reseñas aprobadas</h4>
+                            <p style="color: #666;">Cuando un cliente deje un testimonio y el administrador lo apruebe, aparecerá aquí.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Generar HTML de las tarjetas
+                contenedor.innerHTML = resenas.map(r => {
+                    const estrellas = '⭐'.repeat(r.calificacion || 0);
+                    const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
+                    
+                    return `
+                        <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <strong style="font-size: 1.1rem; color: #333;">${r.nombreCliente || 'Cliente Anónimo'}</strong>
+                                    <span style="background: #4CAF50; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 10px; vertical-align: middle;">Aprobado</span>
+                                </div>
+                                <div style="font-size: 1.2rem;">${estrellas}</div>
+                            </div>
+                            
+                            <div style="font-size: 0.85rem; color: #888; margin-bottom: 1rem;">
+                                ${r.tipoEvento || ''} • ${r.ciudad || ''} • ${fecha}
+                            </div>
+                            
+                            <p style="color: #555; font-style: italic; line-height: 1.6; background: #fdfdfd; padding: 1rem; border-left: 3px solid #FFD93D; border-radius: 4px;">
+                                "${r.comentario || ''}"
+                            </p>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error("Error cargando reseñas:", error);
+                contenedor.innerHTML = '<p style="color: red;">Error al cargar las reseñas. Intenta recargar la página.</p>';
+            }
+        }
+
+        // Llamar a la función cuando se inicie el dashboard o se cambie de pestaña
+        // Si ya tienes una función iniciarDashboard(), agrega esto dentro:
+        if (typeof iniciarDashboard !== 'undefined') {
+             // Sobrescribimos o agregamos la llamada
+             const originalInit = iniciarDashboard;
+             iniciarDashboard = function() {
+                 originalInit();
+                 cargarResenasRecibidas();
+             }
+        } else {
+            // Si no existe iniciarDashboard, la creamos o llamamos directo
+            cargarResenasRecibidas();
+        }
     </script>
 
 </body>

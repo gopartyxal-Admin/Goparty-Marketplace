@@ -1,4 +1,4 @@
-           <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -216,12 +216,11 @@
         .sub-content { display: none; }
         .sub-content.active { display: block; }
 
-        /* Items de testimonios */
+        /* Items de testimonios/casos */
         .testimonio-item { background: #f9f9f9; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border-left: 4px solid #FF6B9D; }
         .testimonio-item.aprobado { border-left-color: #4CAF50; }
         .testimonio-item.pendiente { border-left-color: #FFD93D; }
         .testimonio-item.rechazado { border-left-color: #FF4444; }
-        .testimonio-item.negativo { border-left-color: #FF4444; background: #fff5f5; }
         .testimonio-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
         .testimonio-estrellas { font-size: 1.5rem; margin: 0.5rem 0; }
         .testimonio-acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
@@ -229,7 +228,6 @@
         .estado-aprobado { background: #4CAF50; color: white; }
         .estado-pendiente { background: #FFD93D; color: #333; }
         .estado-rechazado { background: #FF4444; color: white; }
-        .estado-negativo { background: #FF4444; color: white; }
 
         /* Toggle mejorado */
         .toggle-option { 
@@ -373,7 +371,7 @@
 
         <div class="tabs">
             <div class="tab active" data-tab="dashboard">📊 Mi Dashboard</div>
-            <div class="tab" data-tab="cotizaciones"> Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
+            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
             <div class="tab" data-tab="perfil">👤 Mi Perfil</div>
             <div class="tab" data-tab="servicios">🛎️ Mis Servicios <span id="tabServiciosCount" class="badge">0</span></div>
             <div class="tab" data-tab="testimonios">⭐ Testimonios <span id="tabTestimoniosCount" class="badge">0</span></div>
@@ -452,12 +450,12 @@
                         <label>Descripción del Negocio</label>
                         <textarea id="perfilDescripcion" rows="4" placeholder="Cuéntanos sobre tu negocio..."></textarea>
                     </div>
-                    <button class="btn" onclick="guardarPerfil()"> Guardar Cambios</button>
+                    <button class="btn" onclick="guardarPerfil()">💾 Guardar Cambios</button>
                 </div>
 
                 <!-- Datos Fiscales -->
                 <div class="card">
-                    <h3> Datos Fiscales</h3>
+                    <h3>📋 Datos Fiscales</h3>
                     <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Información para facturación. Solo visible para el equipo administrativo de GoParty.</p>
                     <div class="alert" id="alertFiscal"></div>
 
@@ -594,13 +592,13 @@
                             <input type="url" id="redWeb" placeholder="https://tunegocio.com">
                         </div>
                     </div>
-                    <button class="btn" onclick="guardarRedes()"> Guardar Redes</button>
+                    <button class="btn" onclick="guardarRedes()">💾 Guardar Redes</button>
                 </div>
             </div>
 
             <!-- FASE 3: MIS SERVICIOS -->
             <div class="tab-content" id="tab-servicios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">️ Mis Servicios</h2>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">🛎️ Mis Servicios</h2>
                 <p style="color: #666; margin-bottom: 1.5rem;">Gestiona los servicios que ofreces. Cada servicio aparecerá en tu perfil público con sus fotos, descripción y área de cobertura.</p>
                 
                 <div class="alert" id="alertServicios"></div>
@@ -620,21 +618,197 @@
                 </div>
             </div>
 
-            <!-- 🆕 FASE 4: TESTIMONIOS RECIBIDOS -->
+            <!-- 🆕 FASE 4: TESTIMONIOS EN 3 SECCIONES -->
             <div class="tab-content" id="tab-testimonios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios de Mis Clientes</h2>
-                <p style="color: #666; margin-bottom: 1.5rem;">Aquí verás los testimonios que tus clientes han dejado sobre tu negocio. Puedes aceptarlos o hacer aclaraciones si es necesario.</p>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios y Casos de Éxito</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Comparte tu experiencia y destaca tus mejores eventos. Todo contenido es revisado por el equipo GoParty antes de publicarse.</p>
 
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-number" id="statTotalTestimonios">0</div><div class="stat-label">Total Testimonios</div></div>
-                    <div class="stat-card blue"><div class="stat-number" id="statTestimoniosPendientes">0</div><div class="stat-label">Pendientes</div></div>
-                    <div class="stat-card green"><div class="stat-number" id="statTestimoniosAprobados">0</div><div class="stat-label">Aceptados</div></div>
-                    <div class="stat-card gold"><div class="stat-number" id="statTestimoniosNegativos">0</div><div class="stat-label">Con Aclaración</div></div>
+                <!-- Sub-tabs -->
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-sub="testimonios-clientes">⭐ Testimonios de Clientes</button>
+                    <button class="sub-tab" data-sub="experiencia-goparty"> Experiencia GoParty</button>
+                    <button class="sub-tab" data-sub="casos-exito">🏆 Casos de Éxito</button>
                 </div>
 
-                <div class="card">
-                    <h3>📋 Testimonios Recibidos</h3>
-                    <div id="listaTestimoniosRecibidos">Cargando testimonios...</div>
+                <!-- SUB 1: Testimonios de Clientes -->
+                <div class="sub-content active" id="sub-testimonios-clientes">
+                    <div class="card">
+                        <h3>⭐ Dejar Testimonio de Cliente</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Como proveedor, puedes registrar testimonios de tus clientes (con su permiso) para mostrar en tu perfil.</p>
+                        <div class="alert" id="alertTestimonioCliente"></div>
+                        
+                        <div class="form-group">
+                            <label>Nombre del Proveedor que contrataron *</label>
+                            <input type="text" id="testProveedor" placeholder="Nombre del proveedor">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tipo de Evento *</label>
+                                <select id="testTipoEvento">
+                                    <option value="">Selecciona...</option>
+                                    <option>Cumpleaños Infantil</option>
+                                    <option>Cumpleaños Adulto</option>
+                                    <option>Boda</option>
+                                    <option>XV Años</option>
+                                    <option>Evento Corporativo</option>
+                                    <option>Baby Shower</option>
+                                    <option>Graduación</option>
+                                    <option>Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Ciudad del Evento *</label>
+                                <input type="text" id="testCiudad" placeholder="Ciudad">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Calificación *</label>
+                            <div id="estrellasTestimonio" style="font-size: 2rem; cursor: pointer;">
+                                <span onclick="setCalificacion(1)">⭐</span>
+                                <span onclick="setCalificacion(2)">⭐</span>
+                                <span onclick="setCalificacion(3)">⭐</span>
+                                <span onclick="setCalificacion(4)">⭐</span>
+                                <span onclick="setCalificacion(5)">⭐</span>
+                            </div>
+                            <small>Haz clic en las estrellas para calificar</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre del Cliente (como aparecerá en el testimonio) *</label>
+                            <input type="text" id="testNombre" placeholder="Nombre del cliente">
+                        </div>
+                        <div class="form-group">
+                            <label>Comentario del Cliente *</label>
+                            <textarea id="testComentario" rows="4" placeholder="Cuéntanos la experiencia del cliente..."></textarea>
+                        </div>
+                        <button class="btn" onclick="enviarTestimonioCliente()">📤 Enviar Testimonio para Revisión</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Testimonios Enviados</h3>
+                        <div id="listaTestimoniosClientes">Aún no has enviado testimonios.</div>
+                    </div>
+                </div>
+
+                <!-- SUB 2: Experiencia con GoParty -->
+                <div class="sub-content" id="sub-experiencia-goparty">
+                    <div class="card">
+                        <h3>💬 Tu Experiencia con GoParty</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Cuéntanos cómo ha sido tu experiencia usando la plataforma GoParty. Tu testimonio ayudará a otros proveedores a decidir unirse.</p>
+                        <div class="alert" id="alertExperienciaGoParty"></div>
+
+                        <div class="form-group">
+                            <label>¿Cuánto tiempo llevas usando GoParty? *</label>
+                            <select id="expTiempo">
+                                <option value="">Selecciona...</option>
+                                <option value="Menos de 6 meses">Menos de 6 meses</option>
+                                <option value="6-12 meses">6-12 meses</option>
+                                <option value="1-2 años">1-2 años</option>
+                                <option value="Más de 2 años">Más de 2 años</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Calificación de la plataforma GoParty *</label>
+                            <div id="estrellasGoParty" style="font-size: 2rem; cursor: pointer;">
+                                <span onclick="setCalificacionGoParty(1)">⭐</span>
+                                <span onclick="setCalificacionGoParty(2)">⭐</span>
+                                <span onclick="setCalificacionGoParty(3)">⭐</span>
+                                <span onclick="setCalificacionGoParty(4)">⭐</span>
+                                <span onclick="setCalificacionGoParty(5)">⭐</span>
+                            </div>
+                            <small>¿Cómo calificarías tu experiencia con GoParty?</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>¿Qué te gusta más de GoParty? *</label>
+                            <textarea id="expGusta" rows="3" placeholder="Ej: La facilidad para conectar con clientes, el soporte técnico, la visibilidad..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>¿Qué mejorarías de GoParty? *</label>
+                            <textarea id="expMejoraria" rows="3" placeholder="Ej: Más herramientas de marketing, mejor app móvil, más categorías..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>¿Recomendarías GoParty a otros proveedores? *</label>
+                            <div class="toggle-group">
+                                <label class="toggle-option" id="toggleRecomendarSi" onclick="toggleRecomendar(true)">
+                                    <input type="radio" name="recomendar" value="si">
+                                    ✅ Sí, la recomendaría
+                                </label>
+                                <label class="toggle-option" id="toggleRecomendarNo" onclick="toggleRecomendar(false)">
+                                    <input type="radio" name="recomendar" value="no">
+                                    ❌ No la recomendaría
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="btn" onclick="enviarExperienciaGoParty()">📤 Enviar Experiencia para Revisión</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Mis Experiencias Enviadas</h3>
+                        <div id="listaExperienciasGoParty">Aún no has enviado tu experiencia.</div>
+                    </div>
+                </div>
+
+                <!-- SUB 3: Casos de Éxito -->
+                <div class="sub-content" id="sub-casos-exito">
+                    <div class="card">
+                        <h3>🏆 Proponer Caso de Éxito</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Comparte una historia real de un evento exitoso. Si es aprobado, aparecerá en la página principal de GoParty como inspiración para otros.</p>
+                        <div class="alert" id="alertCasoExito"></div>
+
+                        <div class="form-group">
+                            <label>Título del Caso *</label>
+                            <input type="text" id="casoTitulo" placeholder="Ej: Boda de ensueño para 200 invitados en Xalapa">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tipo de Evento *</label>
+                                <select id="casoTipoEvento">
+                                    <option value="">Selecciona...</option>
+                                    <option>Cumpleaños Infantil</option>
+                                    <option>Cumpleaños Adulto</option>
+                                    <option>Boda</option>
+                                    <option>XV Años</option>
+                                    <option>Evento Corporativo</option>
+                                    <option>Baby Shower</option>
+                                    <option>Graduación</option>
+                                    <option>Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Ciudad *</label>
+                                <input type="text" id="casoCiudad" placeholder="Ciudad del evento">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Historia Completa *</label>
+                            <textarea id="casoHistoria" rows="6" placeholder="Cuéntanos la historia completa: el desafío, cómo lo resolviste, qué servicios ofreciste, cómo fue la experiencia del cliente..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Resultado Logrado *</label>
+                            <input type="text" id="casoResultado" placeholder="Ej: 100% de satisfacción, 200 invitados felices, evento sin contratiempos">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fotos del Evento (hasta 5)</label>
+                            <input type="file" id="casoFotos" accept="image/jpeg,image/png" multiple onchange="previewFotosCaso(event)">
+                            <small style="color: #666;">JPG, PNG (Max 5MB cada una)</small>
+                            <div class="foto-preview-container" id="fotoPreviewCaso"></div>
+                        </div>
+
+                        <button class="btn" onclick="enviarCasoExito()">📤 Enviar Caso de Éxito para Revisión</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Mis Casos de Éxito Enviados</h3>
+                        <div id="listaCasosExito">Aún no has propuesto casos de éxito.</div>
+                    </div>
                 </div>
             </div>
 
@@ -682,7 +856,7 @@
             <input type="hidden" id="servicioId">
 
             <div class="form-group">
-                <label style="font-weight: 700; color: #333;">📝 Nombre del Servicio *</label>
+                <label style="font-weight: 700; color: #333;"> Nombre del Servicio *</label>
                 <input type="text" id="servicioNombre" placeholder="Ej: Paquete Básico de Decoración" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
             </div>
 
@@ -693,18 +867,18 @@
                         <option value="">Selecciona una categoría...</option>
                         <option value="Salones">🏰 Salones</option>
                         <option value="Alimentos">🍽️ Alimentos</option>
-                        <option value="Fotografía">📸 Fotografía</option>
+                        <option value="Fotografía"> Fotografía</option>
                         <option value="Música/DJ">🎵 Música/DJ</option>
-                        <option value="Decoración"> Decoración</option>
+                        <option value="Decoración">🎈 Decoración</option>
                         <option value="Animación">🎪 Animación</option>
-                        <option value="Mobiliario">🪑 Mobiliario</option>
+                        <option value="Mobiliario"> Mobiliario</option>
                         <option value="Vestuario">👗 Vestuario</option>
-                        <option value="Transporte">🚗 Transporte</option>
+                        <option value="Transporte"> Transporte</option>
                         <option value="Otros">✨ Otros</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label style="font-weight: 700; color: #333;"> Precio Base (opcional)</label>
+                    <label style="font-weight: 700; color: #333;">💰 Precio Base (opcional)</label>
                     <input type="text" id="servicioPrecio" placeholder="Ej: $5,000 o 'Desde $3,000'" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
                 </div>
             </div>
@@ -769,26 +943,26 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label style="font-weight: 600; color: #333;">📏 Radio de Cobertura (km)</label>
+                        <label style="font-weight: 600; color: #333;"> Radio de Cobertura (km)</label>
                         <input type="number" id="servicioRadio" placeholder="Ej: 50" min="0" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
                         <small style="color: #666; font-size: 0.85rem;">Distancia máxima desde la ciudad base</small>
                     </div>
                     <div class="form-group">
-                        <label style="font-weight: 600; color: #333;">🗺️ Estado</label>
+                        <label style="font-weight: 600; color: #333;">️ Estado</label>
                         <input type="text" id="servicioEstado" placeholder="Ej: Veracruz" readonly style="background: #f5f5f5; border: 2px solid #e0e0e0; padding: 0.8rem;">
                     </div>
                 </div>
 
                 <!-- Google Maps Link -->
                 <div class="form-group" style="margin-top: 1rem;">
-                    <label style="font-weight: 600; color: #333;">🔗 Link de Google Maps (opcional)</label>
+                    <label style="font-weight: 600; color: #333;"> Link de Google Maps (opcional)</label>
                     <input type="url" id="servicioMapsLink" placeholder="https://maps.google.com/?q=..." style="border: 2px solid #e0e0e0; padding: 0.8rem;">
                     <small style="color: #666; font-size: 0.85rem;">Pega aquí el link de Google Maps de tu ubicación</small>
                 </div>
 
                 <!-- Dirección fija -->
                 <div id="ubicacionFijaContainer" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e0e0e0;">
-                    <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;">🏠 Dirección del Negocio</label>
+                    <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;"> Dirección del Negocio</label>
                     <div class="form-row">
                         <div class="form-group" style="flex: 2;">
                             <input type="text" id="servicioCalle" placeholder="Calle" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
@@ -815,36 +989,6 @@
         </div>
     </div>
 
-    <!-- MODAL: HACER ACLARACIÓN -->
-    <div class="modal-overlay" id="modalAclaracion">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>📝 Hacer Aclaración al Testimonio</h3>
-                <button class="modal-close" onclick="cerrarModalAclaracion()">✕</button>
-            </div>
-
-            <div class="alert" id="alertAclaracion"></div>
-
-            <input type="hidden" id="testimonioAclararId">
-
-            <div class="form-group">
-                <label style="font-weight: 700; color: #333;">Testimonio Original</label>
-                <div id="testimonioOriginal" style="background: #f9f9f9; padding: 1rem; border-radius: 8px; border-left: 4px solid #FF4444;"></div>
-            </div>
-
-            <div class="form-group">
-                <label style="font-weight: 700; color: #333;">Tu Aclaración *</label>
-                <textarea id="textoAclaracion" rows="6" placeholder="Explica tu punto de vista sobre este testimonio. Esta aclaración será revisada por el equipo de GoParty antes de publicarse..." style="border: 2px solid #e0e0e0; padding: 0.8rem;"></textarea>
-                <small style="color: #666;">Tu aclaración será enviada a moderación del administrador</small>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="cerrarModalAclaracion()" style="padding: 1rem 2rem; font-size: 1rem;">Cancelar</button>
-                <button class="btn btn-warning" onclick="enviarAclaracion()" style="padding: 1rem 2rem; font-size: 1rem; background: linear-gradient(135deg, #FFD93D, #FF8E53);">📤 Enviar a Moderación</button>
-            </div>
-        </div>
-    </div>
-
     <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -866,7 +1010,11 @@
         const googleProvider = new GoogleAuthProvider();
 
         let proveedorActual = null;
+        let calificacionTestimonio = 0;
+        let calificacionGoParty = 0;
+        let recomendarGoParty = null;
         let fotosTemporales = [];
+        let fotosCasoTemporales = [];
         let variedadesTemporales = [];
         let servicioEditandoId = null;
         let esServicioMovil = false;
@@ -907,7 +1055,7 @@
                 
                 if (snap.empty) {
                     await auth.signOut();
-                    alert('🚫 Acceso no autorizado\n\nNo encontramos una cuenta aprobada asociada a este email.\n\nPara unirte a GoParty, solicita tu incorporación desde:\n👉 unete.html');
+                    alert(' Acceso no autorizado\n\nNo encontramos una cuenta aprobada asociada a este email.\n\nPara unirte a GoParty, solicita tu incorporación desde:\n unete.html');
                     return;
                 }
 
@@ -923,13 +1071,13 @@
                         if (proveedorData.motivoRechazo) mensaje += `Motivo: ${proveedorData.motivoRechazo}\n\n`;
                         mensaje += 'Si consideras que es un error, contacta a soporte@goparty.com';
                     } else {
-                        mensaje = ' Cuenta en revisión\n\nTu solicitud está siendo revisada por el equipo de GoParty.\n\nTiempo estimado: 24-48 horas.';
+                        mensaje = '⏳ Cuenta en revisión\n\nTu solicitud está siendo revisada por el equipo de GoParty.\n\nTiempo estimado: 24-48 horas.';
                     }
                     alert(mensaje);
                     return;
                 }
             } catch (error) {
-                alert('❌ Error con Google: ' + error.message);
+                alert(' Error con Google: ' + error.message);
             }
         };
 
@@ -985,7 +1133,7 @@
             
             cargarPerfil();
             cargarServicios();
-            cargarTestimoniosRecibidos();
+            cargarTestimonios();
         }
 
         // ==========================================
@@ -1004,10 +1152,20 @@
                     }
                 }
                 if (tab.dataset.tab === 'testimonios') {
-                    if (typeof window.cargarTestimoniosRecibidos === 'function') {
-                        window.cargarTestimoniosRecibidos();
+                    if (typeof window.cargarTestimonios === 'function') {
+                        window.cargarTestimonios();
                     }
                 }
+            });
+        });
+
+        // Sub-tabs de Testimonios
+        document.querySelectorAll('.sub-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('sub-' + tab.dataset.sub).classList.add('active');
             });
         });
 
@@ -1119,14 +1277,14 @@
                 
                 if (!rfc || !razon || !regimen || !usoCFDI || !cp) {
                     alert.className = 'alert error';
-                    alert.textContent = '❌ Completa todos los campos fiscales obligatorios';
+                    alert.textContent = ' Completa todos los campos fiscales obligatorios';
                     alert.style.display = 'block';
                     return;
                 }
                 
                 if (rfc.length < 10 || rfc.length > 13) {
                     alert.className = 'alert error';
-                    alert.textContent = ' RFC debe tener 10 (física) o 13 (moral) caracteres';
+                    alert.textContent = '❌ RFC debe tener 10 (física) o 13 (moral) caracteres';
                     alert.style.display = 'block';
                     return;
                 }
@@ -1454,7 +1612,7 @@
                     cargarServicios();
                 }
             } catch (error) {
-                alert(' Error: ' + error.message);
+                alert('❌ Error: ' + error.message);
             }
         };
 
@@ -1526,99 +1684,433 @@
         };
 
         // ==========================================
-        // 🆕 FASE 4: TESTIMONIOS RECIBIDOS
+        // 🆕 FASE 4: TESTIMONIOS EN 3 SECCIONES
         // ==========================================
         
-        async function cargarTestimoniosRecibidos() {
+        async function cargarTestimonios() {
             try {
-                // Buscar testimonios donde el proveedor es el receptor
-                const q = query(collection(db, "testimonios"), where("nombreProveedor", "==", proveedorActual.nombreNegocio));
-                const snap = await getDocs(q);
-                const testimonios = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                // Cargar testimonios de clientes
+                const qTestimonios = query(collection(db, "testimonios"), where("proveedorId", "==", proveedorActual.id));
+                const snapTestimonios = await getDocs(qTestimonios);
+                const testimonios = snapTestimonios.docs.map(d => ({ id: d.id, ...d.data() }));
                 
-                const total = testimonios.length;
-                const pendientes = testimonios.filter(t => t.estadoProveedor !== 'aceptado' && t.estadoProveedor !== 'aclarado').length;
-                const aceptados = testimonios.filter(t => t.estadoProveedor === 'aceptado').length;
-                const conAclaracion = testimonios.filter(t => t.estadoProveedor === 'aclarado').length;
+                document.getElementById('tabTestimoniosCount').textContent = testimonios.length;
                 
-                document.getElementById('statTotalTestimonios').textContent = total;
-                document.getElementById('statTestimoniosPendientes').textContent = pendientes;
-                document.getElementById('statTestimoniosAprobados').textContent = aceptados;
-                document.getElementById('statTestimoniosNegativos').textContent = conAclaracion;
-                document.getElementById('tabTestimoniosCount').textContent = pendientes;
-                
-                const contenedor = document.getElementById('listaTestimoniosRecibidos');
-                
+                const contenedorTestimonios = document.getElementById('listaTestimoniosClientes');
                 if (testimonios.length === 0) {
-                    contenedor.innerHTML = '<p style="color: #999;">Aún no has recibido testimonios de tus clientes.</p>';
-                    return;
-                }
-                
-                contenedor.innerHTML = testimonios.map(t => {
-                    const estrellas = '⭐'.repeat(t.calificacion || 0);
-                    const esNegativo = t.calificacion <= 2;
-                    const estadoClass = t.estadoProveedor === 'aceptado' ? 'aprobado' : t.estadoProveedor === 'aclarado' ? 'negativo' : 'pendiente';
-                    const estadoBadge = t.estadoProveedor === 'aceptado' ? 'estado-aprobado' : t.estadoProveedor === 'aclarado' ? 'estado-negativo' : 'estado-pendiente';
-                    
-                    return `
-                        <div class="testimonio-item ${estadoClass}">
-                            <div class="testimonio-header">
-                                <div>
-                                    <div class="solicitud-cliente">${t.nombreCliente || 'Anónimo'}</div>
-                                    <div class="solicitud-evento">${t.tipoEvento || ''} - ${t.ciudad || ''}</div>
-                                    <div class="testimonio-estrellas">${estrellas}</div>
-                                    <div style="font-size: 0.8rem; color: #999; margin-top: 0.3rem;">📅 ${t.fecha ? new Date(t.fecha).toLocaleDateString('es-MX') : ''}</div>
+                    contenedorTestimonios.innerHTML = '<p style="color: #999;">Aún no has enviado testimonios.</p>';
+                } else {
+                    contenedorTestimonios.innerHTML = testimonios.map(t => {
+                        const estadoClass = t.estado === 'aprobado' ? 'aprobado' : t.estado === 'rechazado' ? 'rechazado' : 'pendiente';
+                        const estadoBadge = t.estado === 'aprobado' ? 'estado-aprobado' : t.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
+                        const estrellas = '⭐'.repeat(t.calificacion || 0);
+                        
+                        return `
+                            <div class="testimonio-item ${estadoClass}">
+                                <div class="testimonio-header">
+                                    <div>
+                                        <strong>${t.nombreCliente || 'Anónimo'}</strong> sobre ${t.nombreProveedor || 'Proveedor'}
+                                        <span class="estado-badge ${estadoBadge}">${t.estado || 'pendiente'}</span>
+                                    </div>
                                 </div>
-                                <span class="estado-badge ${estadoBadge}">${t.estadoProveedor === 'aceptado' ? 'Aceptado' : t.estadoProveedor === 'aclarado' ? 'Con Aclaración' : 'Pendiente'}</span>
+                                <div class="testimonio-estrellas">${estrellas}</div>
+                                <p style="color: #666; font-style: italic;">"${t.comentario || ''}"</p>
+                                <small style="color: #999;">${t.tipoEvento || ''} - ${t.ciudad || ''} • ${t.fecha ? new Date(t.fecha).toLocaleDateString('es-MX') : ''}</small>
+                                <div class="testimonio-acciones">
+                                    ${t.estado === 'aprobado' ? `
+                                        <button class="btn btn-small btn-secondary" onclick="solicitarCambioTestimonio('${t.id}', 'testimonios')">✏️ Solicitar Cambio</button>
+                                        <button class="btn btn-small btn-danger" onclick="solicitarEliminacionTestimonio('${t.id}', 'testimonios')">🗑️ Solicitar Eliminación</button>
+                                    ` : ''}
+                                </div>
                             </div>
-                            <div class="solicitud-descripcion">"${t.comentario || ''}"</div>
-                            ${t.aclaracion ? `<div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin-top: 1rem; border-left: 4px solid #FFD93D;"><strong>📝 Tu Aclaración:</strong><br>${t.aclaracion}</div>` : ''}
-                            <div class="testimonio-acciones">
-                                ${t.estadoProveedor !== 'aceptado' && t.estadoProveedor !== 'aclarado' ? `
-                                    <button class="btn btn-small btn-success" onclick="aceptarTestimonio('${t.id}')">✅ Aceptar Testimonio</button>
-                                    <button class="btn btn-small btn-warning" onclick="abrirModalAclaracion('${t.id}', '${t.nombreCliente}', '${t.comentario}', ${t.calificacion})">📝 Hacer Aclaración</button>
-                                ` : ''}
+                        `;
+                    }).join('');
+                }
+
+                // Cargar experiencias GoParty
+                const qExperiencias = query(collection(db, "testimonios_proveedores"), where("proveedorId", "==", proveedorActual.id));
+                const snapExperiencias = await getDocs(qExperiencias);
+                const experiencias = snapExperiencias.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                const contenedorExperiencias = document.getElementById('listaExperienciasGoParty');
+                if (experiencias.length === 0) {
+                    contenedorExperiencias.innerHTML = '<p style="color: #999;">Aún no has enviado tu experiencia.</p>';
+                } else {
+                    contenedorExperiencias.innerHTML = experiencias.map(e => {
+                        const estadoClass = e.estado === 'aprobado' ? 'aprobado' : e.estado === 'rechazado' ? 'rechazado' : 'pendiente';
+                        const estadoBadge = e.estado === 'aprobado' ? 'estado-aprobado' : e.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
+                        const estrellas = '⭐'.repeat(e.calificacion || 0);
+                        
+                        return `
+                            <div class="testimonio-item ${estadoClass}">
+                                <div class="testimonio-header">
+                                    <div>
+                                        <strong>Experiencia con GoParty</strong>
+                                        <span class="estado-badge ${estadoBadge}">${e.estado || 'pendiente'}</span>
+                                    </div>
+                                </div>
+                                <div class="testimonio-estrellas">${estrellas}</div>
+                                <p><strong>Tiempo usando:</strong> ${e.tiempo || 'No especificado'}</p>
+                                <p><strong>Me gusta:</strong> ${e.meGusta || ''}</p>
+                                <p><strong>Mejoraría:</strong> ${e.mejoraria || ''}</p>
+                                <p><strong>Recomendaría:</strong> ${e.recomendar === true ? '✅ Sí' : '❌ No'}</p>
+                                <small style="color: #999;">${e.fecha ? new Date(e.fecha).toLocaleDateString('es-MX') : ''}</small>
+                                <div class="testimonio-acciones">
+                                    ${e.estado === 'aprobado' ? `
+                                        <button class="btn btn-small btn-secondary" onclick="solicitarCambioTestimonio('${e.id}', 'experiencias')">✏️ Solicitar Cambio</button>
+                                        <button class="btn btn-small btn-danger" onclick="solicitarEliminacionTestimonio('${e.id}', 'experiencias')">🗑️ Solicitar Eliminación</button>
+                                    ` : ''}
+                                </div>
                             </div>
-                        </div>
-                    `;
-                }).join('');
+                        `;
+                    }).join('');
+                }
+
+                // Cargar casos de éxito
+                const qCasos = query(collection(db, "casos_exito"), where("proveedorId", "==", proveedorActual.id));
+                const snapCasos = await getDocs(qCasos);
+                const casos = snapCasos.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                const contenedorCasos = document.getElementById('listaCasosExito');
+                if (casos.length === 0) {
+                    contenedorCasos.innerHTML = '<p style="color: #999;">Aún no has propuesto casos de éxito.</p>';
+                } else {
+                    contenedorCasos.innerHTML = casos.map(c => {
+                        const estadoClass = c.estado === 'aprobado' ? 'aprobado' : c.estado === 'rechazado' ? 'rechazado' : 'pendiente';
+                        const estadoBadge = c.estado === 'aprobado' ? 'estado-aprobado' : c.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
+                        
+                        return `
+                            <div class="testimonio-item ${estadoClass}">
+                                <div class="testimonio-header">
+                                    <div>
+                                        <strong>🏆 ${c.titulo || 'Sin título'}</strong>
+                                        <span class="estado-badge ${estadoBadge}">${c.estado || 'pendiente'}</span>
+                                    </div>
+                                </div>
+                                <p><strong>Tipo:</strong> ${c.tipoEvento || ''} - ${c.ciudad || ''}</p>
+                                <p><strong>Historia:</strong> ${c.historia || ''}</p>
+                                <p><strong>Resultado:</strong> ${c.resultado || ''}</p>
+                                ${c.fotos && c.fotos.length > 0 ? `<div class="servicio-fotos">${c.fotos.map(f => `<img src="${f}" class="servicio-foto" alt="Foto">`).join('')}</div>` : ''}
+                                <small style="color: #999;">${c.fecha ? new Date(c.fecha).toLocaleDateString('es-MX') : ''}</small>
+                                <div class="testimonio-acciones">
+                                    ${c.estado === 'aprobado' ? `
+                                        <button class="btn btn-small btn-secondary" onclick="solicitarCambioTestimonio('${c.id}', 'casos')">️ Solicitar Cambio</button>
+                                        <button class="btn btn-small btn-danger" onclick="solicitarEliminacionTestimonio('${c.id}', 'casos')">🗑️ Solicitar Eliminación</button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
             } catch (error) {
-                console.error("Error cargando testimonios recibidos:", error);
+                console.error("Error cargando testimonios:", error);
             }
         }
 
-        window.aceptarTestimonio = async function(id) {
-            if (confirm('¿Aceptar este testimonio? Aparecerá en tu perfil público.')) {
+        // Testimonios de Clientes
+        window.setCalificacion = function(n) {
+            calificacionTestimonio = n;
+            const estrellas = document.querySelectorAll('#estrellasTestimonio span');
+            estrellas.forEach((e, i) => { e.style.opacity = i < n ? '1' : '0.3'; });
+        };
+
+        window.enviarTestimonioCliente = async function() {
+            const alert = document.getElementById('alertTestimonioCliente');
+            const proveedor = document.getElementById('testProveedor').value.trim();
+            const tipoEvento = document.getElementById('testTipoEvento').value;
+            const ciudad = document.getElementById('testCiudad').value.trim();
+            const nombre = document.getElementById('testNombre').value.trim();
+            const comentario = document.getElementById('testComentario').value.trim();
+            
+            if (!proveedor || !tipoEvento || !ciudad || !nombre || !comentario || calificacionTestimonio === 0) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Completa todos los campos y selecciona una calificación';
+                alert.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await addDoc(collection(db, "testimonios"), {
+                    nombreProveedor: proveedor,
+                    tipoEvento, ciudad,
+                    nombreCliente: nombre,
+                    comentario,
+                    calificacion: calificacionTestimonio,
+                    estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: proveedorActual.id
+                });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Testimonio enviado. Será revisado antes de publicarse.';
+                alert.style.display = 'block';
+                document.getElementById('testProveedor').value = '';
+                document.getElementById('testComentario').value = '';
+                setCalificacion(0);
+                setTimeout(() => { alert.style.display = 'none'; cargarTestimonios(); }, 3000);
+            } catch (error) { 
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        // Experiencia GoParty
+        window.setCalificacionGoParty = function(n) {
+            calificacionGoParty = n;
+            const estrellas = document.querySelectorAll('#estrellasGoParty span');
+            estrellas.forEach((e, i) => { e.style.opacity = i < n ? '1' : '0.3'; });
+        };
+
+        window.toggleRecomendar = function(recomendar) {
+            recomendarGoParty = recomendar;
+            const toggleSi = document.getElementById('toggleRecomendarSi');
+            const toggleNo = document.getElementById('toggleRecomendarNo');
+            
+            if (recomendar) {
+                toggleSi.classList.add('active');
+                toggleSi.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+                toggleSi.style.color = 'white';
+                toggleSi.style.borderColor = '#FF6B9D';
+                
+                toggleNo.classList.remove('active');
+                toggleNo.style.background = 'white';
+                toggleNo.style.color = '#333';
+                toggleNo.style.borderColor = '#e0e0e0';
+            } else {
+                toggleSi.classList.remove('active');
+                toggleSi.style.background = 'white';
+                toggleSi.style.color = '#333';
+                toggleSi.style.borderColor = '#e0e0e0';
+                
+                toggleNo.classList.add('active');
+                toggleNo.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+                toggleNo.style.color = 'white';
+                toggleNo.style.borderColor = '#FF6B9D';
+            }
+        };
+
+        window.enviarExperienciaGoParty = async function() {
+            const alert = document.getElementById('alertExperienciaGoParty');
+            const tiempo = document.getElementById('expTiempo').value;
+            const meGusta = document.getElementById('expGusta').value.trim();
+            const mejoraria = document.getElementById('expMejoraria').value.trim();
+            
+            if (!tiempo || !meGusta || !mejoraria || calificacionGoParty === 0 || recomendarGoParty === null) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Completa todos los campos y selecciona una calificación';
+                alert.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await addDoc(collection(db, "testimonios_proveedores"), {
+                    tiempo,
+                    calificacion: calificacionGoParty,
+                    meGusta,
+                    mejoraria,
+                    recomendar: recomendarGoParty,
+                    nombreNegocio: proveedorActual.nombreNegocio || '',
+                    estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: proveedorActual.id
+                });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Experiencia enviada. Será revisada antes de publicarse.';
+                alert.style.display = 'block';
+                document.getElementById('expTiempo').value = '';
+                document.getElementById('expGusta').value = '';
+                document.getElementById('expMejoraria').value = '';
+                setCalificacionGoParty(0);
+                toggleRecomendar(null);
+                setTimeout(() => { alert.style.display = 'none'; cargarTestimonios(); }, 3000);
+            } catch (error) { 
+                alert.className = 'alert error';
+                alert.textContent = ' Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        // Casos de Éxito
+        window.previewFotosCaso = function(event) {
+            const files = event.target.files;
+            
+            Array.from(files).forEach(file => {
+                if (fotosCasoTemporales.length >= 5) {
+                    alert('⚠️ Máximo 5 fotos por caso');
+                    return;
+                }
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`⚠️ La foto "${file.name}" excede 5MB`);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fotosCasoTemporales.push(e.target.result);
+                    renderFotosPreviewCaso();
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
+        function renderFotosPreviewCaso() {
+            const contenedor = document.getElementById('fotoPreviewCaso');
+            contenedor.innerHTML = fotosCasoTemporales.map((f, i) => `
+                <div class="foto-preview-wrapper">
+                    <img src="${f}" class="foto-preview">
+                    <button type="button" class="foto-remove" onclick="eliminarFotoCaso(${i})"></button>
+                </div>
+            `).join('');
+        }
+
+        window.eliminarFotoCaso = function(index) {
+            fotosCasoTemporales.splice(index, 1);
+            renderFotosPreviewCaso();
+        };
+
+        window.enviarCasoExito = async function() {
+            const alert = document.getElementById('alertCasoExito');
+            const titulo = document.getElementById('casoTitulo').value.trim();
+            const tipoEvento = document.getElementById('casoTipoEvento').value;
+            const ciudad = document.getElementById('casoCiudad').value.trim();
+            const historia = document.getElementById('casoHistoria').value.trim();
+            const resultado = document.getElementById('casoResultado').value.trim();
+            
+            if (!titulo || !tipoEvento || !ciudad || !historia || !resultado) {
+                alert.className = 'alert error';
+                alert.textContent = ' Completa todos los campos obligatorios';
+                alert.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await addDoc(collection(db, "casos_exito"), {
+                    titulo,
+                    tipoEvento,
+                    ciudad,
+                    historia,
+                    resultado,
+                    fotos: fotosCasoTemporales,
+                    nombreNegocio: proveedorActual.nombreNegocio || '',
+                    estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: proveedorActual.id
+                });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Caso de éxito enviado. Será revisado antes de publicarse en la página principal.';
+                alert.style.display = 'block';
+                document.getElementById('casoTitulo').value = '';
+                document.getElementById('casoTipoEvento').value = '';
+                document.getElementById('casoCiudad').value = '';
+                document.getElementById('casoHistoria').value = '';
+                document.getElementById('casoResultado').value = '';
+                document.getElementById('casoFotos').value = '';
+                document.getElementById('fotoPreviewCaso').innerHTML = '';
+                fotosCasoTemporales = [];
+                setTimeout(() => { alert.style.display = 'none'; cargarTestimonios(); }, 3000);
+            } catch (error) { 
+                alert.className = 'alert error';
+                alert.textContent = ' Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        // Solicitar cambio/eliminación
+        window.solicitarCambioTestimonio = async function(id, tipo) {
+            const cambio = prompt('Describe el cambio que solicitas:');
+            if (cambio && cambio.trim()) {
                 try {
-                    await updateDoc(doc(db, "testimonios", id), { 
-                        estadoProveedor: 'aceptado',
-                        fechaAceptacion: new Date().toISOString()
+                    await addDoc(collection(db, "moderaciones_pendientes"), {
+                        tipo: 'cambio',
+                        coleccion: tipo,
+                        documentoId: id,
+                        solicitud: cambio.trim(),
+                        estado: 'pendiente',
+                        fecha: new Date().toISOString(),
+                        proveedorId: proveedorActual.id
                     });
-                    alert('✅ Testimonio aceptado');
-                    cargarTestimoniosRecibidos();
+                    alert('✅ Solicitud de cambio enviada. El equipo GoParty la revisará.');
                 } catch (error) {
                     alert('❌ Error: ' + error.message);
                 }
             }
         };
 
-        window.abrirModalAclaracion = function(id, nombreCliente, comentario, calificacion) {
-            document.getElementById('testimonioAclararId').value = id;
-            document.getElementById('testimonioOriginal').innerHTML = `
-                <strong>${nombreCliente}</strong> - ${'⭐'.repeat(calificacion)}<br>
-                <p style="margin-top: 0.5rem; font-style: italic;">"${comentario}"</p>
-            `;
-            document.getElementById('textoAclaracion').value = '';
-            document.getElementById('modalAclaracion').classList.add('active');
+        window.solicitarEliminacionTestimonio = async function(id, tipo) {
+            if (confirm('¿Solicitar la eliminación de este contenido? El equipo GoParty revisará tu solicitud.')) {
+                try {
+                    await addDoc(collection(db, "moderaciones_pendientes"), {
+                        tipo: 'eliminacion',
+                        coleccion: tipo,
+                        documentoId: id,
+                        estado: 'pendiente',
+                        fecha: new Date().toISOString(),
+                        proveedorId: proveedorActual.id
+                    });
+                    alert('✅ Solicitud de eliminación enviada. El equipo GoParty la revisará.');
+                } catch (error) {
+                    alert('❌ Error: ' + error.message);
+                }
+            }
         };
 
-        window.cerrarModalAclaracion = function() {
-            document.getElementById('modalAclaracion').classList.remove('active');
+        // ==========================================
+        // MEMBRESÍA
+        // ==========================================
+        window.actualizarPlan = function(plan) {
+            if (confirm(`¿Actualizar al Plan ${plan}?\n\nSerás redirigido al proceso de pago.`)) {
+                alert(`💳 Redirigiendo a pasarela de pago para Plan ${plan}...`);
+            }
         };
 
-        window.enviarAclaracion = async function() {
-            const alert = document.getElementById('alertAclaracion');
-            const id = document.getElementById('testimonioAclararId').value;
-            const aclaracion = document.getElementById('textoAclaracion').value.trim();
-            
-            if (!acl
+        // ==========================================
+        // COTIZACIONES
+        // ==========================================
+        window.filtrarCotizaciones = function(filtro) {
+            alert('Filtro: ' + filtro + ' - Pendiente de implementar');
+        };
+
+        // ==========================================
+        // EXPOSICIÓN DE FUNCIONES AL WINDOW
+        // ==========================================
+        window.cargarServicios = cargarServicios;
+        window.cargarTestimonios = cargarTestimonios;
+        window.abrirModalServicio = abrirModalServicio;
+        window.cerrarModalServicio = cerrarModalServicio;
+        window.guardarServicio = guardarServicio;
+        window.editarServicio = editarServicio;
+        window.eliminarServicio = eliminarServicio;
+        window.toggleServicioMovil = toggleServicioMovil;
+        window.agregarVariedad = agregarVariedad;
+        window.agregarVariedadDesdeInput = agregarVariedadDesdeInput;
+        window.eliminarVariedad = eliminarVariedad;
+        window.previewFotos = previewFotos;
+        window.eliminarFoto = eliminarFoto;
+        window.guardarPerfil = guardarPerfil;
+        window.guardarDatosFiscales = guardarDatosFiscales;
+        window.guardarRedes = guardarRedes;
+        window.toggleFactura = toggleFactura;
+        window.login = login;
+        window.loginWithGoogle = loginWithGoogle;
+        window.logout = logout;
+        window.showLogin = showLogin;
+        window.showForgotPassword = showForgotPassword;
+        window.sendPasswordReset = sendPasswordReset;
+        window.setCalificacion = setCalificacion;
+        window.setCalificacionGoParty = setCalificacionGoParty;
+        window.toggleRecomendar = toggleRecomendar;
+        window.enviarTestimonioCliente = enviarTestimonioCliente;
+        window.enviarExperienciaGoParty = enviarExperienciaGoParty;
+        window.previewFotosCaso = previewFotosCaso;
+        window.eliminarFotoCaso = eliminarFotoCaso;
+        window.enviarCasoExito = enviarCasoExito;
+        window.solicitarCambioTestimonio = solicitarCambioTestimonio;
+        window.solicitarEliminacionTestimonio = solicitarEliminacionTestimonio;
+        window.actualizarPlan = actualizarPlan;
+        window.filtrarCotizaciones = filtrarCotizaciones;
+        window.proveedorActual = proveedorActual;
+    </script>
+
+</body>
+</html>

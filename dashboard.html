@@ -908,7 +908,7 @@
             <!-- Fotos -->
             <div class="form-group" style="background: #f9f9f9; padding: 1.5rem; border-radius: 12px; border: 2px solid #e0e0e0;">
                 <label style="font-weight: 700; color: #333; display: block; margin-bottom: 0.5rem;">📸 Fotos del Servicio (máx. 5)</label>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">JPG, PNG (Max 5MB cada una)</p>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">JPG, PNG (Max 1MB cada una)</p>
                 
                 <input type="file" id="servicioFotos" accept="image/jpeg,image/png" multiple onchange="previewFotos(event)" style="border: 2px dashed #4A90E2; padding: 1rem; border-radius: 8px; background: white; width: 100%;">
                 
@@ -1941,7 +1941,7 @@
                 }
                 
                 if (file.size > 5 * 1024 * 1024) {
-                    alert(`⚠️ La foto "${file.name}" excede 5MB`);
+                    alert(`⚠️ La foto "${file.name}" excede 1MB`);
                     return;
                 }
                 

@@ -798,7 +798,7 @@
                         <div class="form-group">
                             <label>Fotos del Evento (hasta 5)</label>
                             <input type="file" id="casoFotos" accept="image/jpeg,image/png" multiple onchange="previewFotosCaso(event)">
-                            <small style="color: #666;">JPG, PNG (Max 5MB cada una)</small>
+                            <small style="color: #666;">JPG, PNG (Max 1MB cada una)</small>
                             <div class="foto-preview-container" id="fotoPreviewCaso"></div>
                         </div>
 
@@ -1536,7 +1536,7 @@
                 }
                 
                 if (file.size > 5 * 1024 * 1024) {
-                    alert(`⚠️ La foto "${file.name}" excede 5MB`);
+                    alert(`⚠️ La foto "${file.name}" excede 1MB`);
                     return;
                 }
                 

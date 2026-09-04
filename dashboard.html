@@ -154,6 +154,14 @@
         .btn { transition: all 0.3s ease; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,157,0.4); }
 
+        /* Sub-tabs para Testimonios */
+        .sub-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; }
+        .sub-tab { padding: 0.8rem 1.5rem; background: #f0f0f0; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 600; color: #666; transition: all 0.3s; font-size: 0.95rem; }
+        .sub-tab:hover { background: #e0e0e0; }
+        .sub-tab.active { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; }
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
+
         @media (max-width: 768px) {
             .auth-header { padding: 2rem 1rem; }
             .auth-header h1 { font-size: 1.8rem; }
@@ -168,6 +176,7 @@
             .servicio-header { flex-direction: column; }
             .modal { padding: 1rem; }
             .modal-header { margin: -1rem -1rem 1rem -1rem; padding: 1rem; }
+            .sub-tabs { flex-direction: column; }
         }
         @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
     </style>
@@ -275,7 +284,7 @@
                     <p><strong>Estado:</strong> <span id="infoEstado">Activo</span></p>
                 </div>
                 <div class="card">
-                    <h3>📝 Cotizaciones Recientes</h3>
+                    <h3> Cotizaciones Recientes</h3>
                     <div id="cotizacionesRecientes">Cargando...</div>
                 </div>
             </div>
@@ -328,12 +337,12 @@
                         <label>Descripción del Negocio</label>
                         <textarea id="perfilDescripcion" rows="4" placeholder="Cuéntanos sobre tu negocio..."></textarea>
                     </div>
-                    <button class="btn" onclick="guardarPerfil()">💾 Guardar Cambios</button>
+                    <button class="btn" onclick="guardarPerfil()"> Guardar Cambios</button>
                 </div>
 
                 <!-- Datos Fiscales -->
                 <div class="card">
-                    <h3>📋 Datos Fiscales</h3>
+                    <h3> Datos Fiscales</h3>
                     <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Información para facturación. Solo visible para el equipo administrativo de GoParty.</p>
                     <div class="alert" id="alertFiscal"></div>
 
@@ -496,21 +505,170 @@
                 </div>
             </div>
 
-            <!-- 🆕 FASE 4: TESTIMONIOS RECIBIDOS -->
+            <!-- 🆕 FASE 4: TESTIMONIOS Y CASOS DE ÉXITO (RESTAURADO COMPLETO) -->
             <div class="tab-content" id="tab-testimonios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios de Mis Clientes</h2>
-                <p style="color: #666; margin-bottom: 1.5rem;">Aquí verás los testimonios que tus clientes han dejado sobre tu negocio. Puedes aceptarlos o hacer aclaraciones si es necesario.</p>
+                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios y Casos de Éxito</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Comparte tu experiencia y destaca tus mejores eventos. Todo contenido es revisado por el equipo GoParty antes de publicarse.</p>
 
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-number" id="statTotalTestimonios">0</div><div class="stat-label">Total Testimonios</div></div>
-                    <div class="stat-card blue"><div class="stat-number" id="statTestimoniosPendientes">0</div><div class="stat-label">Pendientes</div></div>
-                    <div class="stat-card green"><div class="stat-number" id="statTestimoniosAprobados">0</div><div class="stat-label">Aceptados</div></div>
-                    <div class="stat-card gold"><div class="stat-number" id="statTestimoniosNegativos">0</div><div class="stat-label">Con Aclaración</div></div>
+                <!-- Sub-tabs -->
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-sub="testimonios-clientes">⭐ Testimonios de Clientes</button>
+                    <button class="sub-tab" data-sub="experiencias-goparty"> Experiencia GoParty</button>
+                    <button class="sub-tab" data-sub="casos-exito">🏆 Casos de Éxito</button>
                 </div>
 
-                <div class="card">
-                    <h3>📋 Testimonios Recibidos</h3>
-                    <div id="listaTestimoniosRecibidos">Cargando testimonios...</div>
+                <!-- SUB 1: Testimonios de Clientes (VISTA DE PROVEEDOR - SOLO LECTURA) -->
+                <div class="sub-content active" id="sub-testimonios-clientes">
+                    <div class="card">
+                        <h3>⭐ Mis Reseñas Aprobadas</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">
+                            Aquí puedes ver los testimonios que tus clientes han dejado sobre ti y que han sido aprobados por el equipo de GoParty. 
+                            Estos son los que aparecen públicamente en tu perfil.
+                        </p>
+                        
+                        <div class="alert" id="alertResenasProveedor"></div>
+
+                        <!-- Estadísticas rápidas de reseñas -->
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                            <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
+                                <div style="font-size: 0.9rem; color: #666;">Total Reseñas</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #4A90E2;" id="countTotalResenas">0</div>
+                            </div>
+                            <div style="background: #fffbe6; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
+                                <div style="font-size: 0.9rem; color: #666;">Calificación Promedio</div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #FFD93D;" id="avgCalificacion">0.0 ⭐</div>
+                            </div>
+                        </div>
+
+                        <!-- Lista de testimonios -->
+                        <div id="listaResenasRecibidas">
+                            <div style="text-align: center; padding: 2rem; color: #999;">
+                                Cargando tus reseñas aprobadas...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB 2: Experiencia GoParty -->
+                <div class="sub-content" id="sub-experiencias-goparty">
+                    <div class="card">
+                        <h3>💬 Tu Experiencia con GoParty</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Cuéntanos cómo ha sido tu experiencia usando la plataforma GoParty. Tu testimonio ayudará a otros proveedores a decidir unirse.</p>
+                        <div class="alert" id="alertExperienciaGoParty"></div>
+
+                        <div class="form-group">
+                            <label>¿Cuánto tiempo llevas usando GoParty? *</label>
+                            <select id="expTiempo">
+                                <option value="">Selecciona...</option>
+                                <option value="Menos de 6 meses">Menos de 6 meses</option>
+                                <option value="6-12 meses">6-12 meses</option>
+                                <option value="1-2 años">1-2 años</option>
+                                <option value="Más de 2 años">Más de 2 años</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Calificación de la plataforma GoParty *</label>
+                            <div id="estrellasGoParty" style="font-size: 2rem; cursor: pointer;">
+                                <span onclick="setCalificacionGoParty(1)">⭐</span>
+                                <span onclick="setCalificacionGoParty(2)">⭐</span>
+                                <span onclick="setCalificacionGoParty(3)">⭐</span>
+                                <span onclick="setCalificacionGoParty(4)">⭐</span>
+                                <span onclick="setCalificacionGoParty(5)">⭐</span>
+                            </div>
+                            <small>Haz clic en las estrellas para calificar</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>¿Qué te gusta más de GoParty? *</label>
+                            <textarea id="expGusta" rows="3" placeholder="Ej: La facilidad para conectar con clientes, el soporte técnico..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>¿Qué mejorarías de GoParty? *</label>
+                            <textarea id="expMejoraria" rows="3" placeholder="Ej: Más herramientas de marketing, mejor app móvil..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>¿Recomendarías GoParty a otros proveedores? *</label>
+                            <div class="toggle-group">
+                                <label class="toggle-option" id="toggleRecomendarSi" onclick="toggleRecomendar(true)">
+                                    <input type="radio" name="recomendar" value="si">
+                                    ✅ Sí, la recomendaría
+                                </label>
+                                <label class="toggle-option" id="toggleRecomendarNo" onclick="toggleRecomendar(false)">
+                                    <input type="radio" name="recomendar" value="no">
+                                    ❌ No la recomendaría
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="btn" onclick="enviarExperienciaGoParty()"> Enviar Experiencia para Revisión</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Mis Experiencias Enviadas</h3>
+                        <div id="listaExperienciasGoParty">Aún no has enviado tu experiencia.</div>
+                    </div>
+                </div>
+
+                <!-- SUB 3: Casos de Éxito -->
+                <div class="sub-content" id="sub-casos-exito">
+                    <div class="card">
+                        <h3>🏆 Proponer Caso de Éxito</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Comparte una historia real de un evento exitoso. Si es aprobado, aparecerá en la página principal de GoParty como inspiración para otros.</p>
+                        <div class="alert" id="alertCasoExito"></div>
+
+                        <div class="form-group">
+                            <label>Título del Caso *</label>
+                            <input type="text" id="casoTitulo" placeholder="Ej: Boda de ensueño para 200 invitados en Xalapa">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tipo de Evento *</label>
+                                <select id="casoTipoEvento">
+                                    <option value="">Selecciona...</option>
+                                    <option>Cumpleaños Infantil</option>
+                                    <option>Cumpleaños Adulto</option>
+                                    <option>Boda</option>
+                                    <option>XV Años</option>
+                                    <option>Evento Corporativo</option>
+                                    <option>Baby Shower</option>
+                                    <option>Graduación</option>
+                                    <option>Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Ciudad *</label>
+                                <input type="text" id="casoCiudad" placeholder="Ciudad del evento">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Historia Completa *</label>
+                            <textarea id="casoHistoria" rows="6" placeholder="Cuéntanos la historia completa: el desafío, cómo lo resolviste, qué servicios ofreciste..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Resultado Logrado *</label>
+                            <input type="text" id="casoResultado" placeholder="Ej: 100% de satisfacción, 200 invitados felices">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fotos del Evento (hasta 5)</label>
+                            <input type="file" id="casoFotos" accept="image/jpeg,image/png" multiple onchange="previewFotosCaso(event)">
+                            <small style="color: #666;">JPG, PNG (Max 1MB cada una para evitar errores de tamaño)</small>
+                            <div class="foto-preview-container" id="fotoPreviewCaso"></div>
+                        </div>
+
+                        <button class="btn" onclick="enviarCasoExito()">📤 Enviar Caso de Éxito para Revisión</button>
+                    </div>
+
+                    <div class="card">
+                        <h3> Mis Casos de Éxito Enviados</h3>
+                        <div id="listaCasosExito">Aún no has propuesto casos de éxito.</div>
+                    </div>
                 </div>
             </div>
 
@@ -571,9 +729,9 @@
                         <option value="Salones">🏰 Salones</option>
                         <option value="Alimentos">🍽️ Alimentos</option>
                         <option value="Fotografía"> Fotografía</option>
-                        <option value="Música/DJ">🎵 Música/DJ</option>
+                        <option value="Música/DJ"> Música/DJ</option>
                         <option value="Decoración">🎈 Decoración</option>
-                        <option value="Animación">🎪 Animación</option>
+                        <option value="Animación"> Animación</option>
                         <option value="Mobiliario"> Mobiliario</option>
                         <option value="Vestuario">👗 Vestuario</option>
                         <option value="Transporte">🚗 Transporte</option>
@@ -665,7 +823,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label style="font-weight: 600; color: #333;">📏 Radio de Cobertura (km)</label>
+                        <label style="font-weight: 600; color: #333;"> Radio de Cobertura (km)</label>
                         <input type="number" id="servicioRadio" placeholder="Ej: 50" min="0" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
                     </div>
                     <div class="form-group">
@@ -722,6 +880,9 @@
         let variedadesTemporales = [];
         let servicioEditandoId = null;
         let esServicioMovil = false;
+        let fotosCasoTemporales = [];
+        let calificacionGoParty = 0;
+        let recomendarGoParty = null;
 
         // ==========================================
         // LOGIN
@@ -837,7 +998,7 @@
             
             cargarPerfil();
             cargarServicios();
-            cargarTestimoniosRecibidos();
+            cargarTestimoniosRecibidos(); // Cargar reseñas al inicio
         }
 
         // ==========================================
@@ -860,6 +1021,17 @@
                         window.cargarTestimoniosRecibidos();
                     }
                 }
+            });
+        });
+
+        // Event listeners para sub-tabs de testimonios
+        document.querySelectorAll('.sub-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const parent = tab.closest('.tab-content');
+                parent.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+                parent.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                parent.querySelector('#sub-' + tab.dataset.sub).classList.add('active');
             });
         });
 
@@ -1062,8 +1234,12 @@
                             ? '<div class="servicio-fotos">' + s.fotos.map(f => '<img src="' + f + '" class="servicio-foto" alt="Foto">').join('') + '</div>'
                             : '';
                         
-                        const variedadHTML = s.variedad && s.variedad.length > 0
-                            ? '<div class="paquete-lista"><strong>Variedad/Paquetes:</strong>' + s.variedad.map(v => '<div class="paquete-item">• ' + (typeof v === 'string' ? v : v.nombre) + '</div>').join('') + '</div>'
+                        // Parsear variedad si es string JSON
+                        let packs = [];
+                        try { packs = typeof s.variedad === 'string' ? JSON.parse(s.variedad) : s.variedad; } catch(e) {}
+                        
+                        const variedadHTML = packs && packs.length > 0
+                            ? '<div class="paquete-lista"><strong>Variedad/Paquetes:</strong>' + packs.map(v => '<div class="paquete-item">• ' + (typeof v === 'string' ? v : v.nombre) + '</div>').join('') + '</div>'
                             : '';
                         
                         const mapsHTML = s.mapsLink 
@@ -1071,7 +1247,7 @@
                             : '';
                         
                         const ubicacionHTML = s.esMovil 
-                            ? '<div class="servicio-meta-item"><strong> Tipo</strong>Servicio móvil</div><div class="servicio-meta-item"><strong>🌍 Cobertura</strong>' + s.ciudad + ' + ' + (s.radio || 0) + ' km</div>' + mapsHTML
+                            ? '<div class="servicio-meta-item"><strong> Tipo</strong>Servicio móvil</div><div class="servicio-meta-item"><strong> Cobertura</strong>' + s.ciudad + ' + ' + (s.radio || 0) + ' km</div>' + mapsHTML
                             : '<div class="servicio-meta-item"><strong> Ubicación Fija</strong>' + (s.calle || '') + ' ' + (s.numero || '') + ', ' + (s.colonia || '') + '</div><div class="servicio-meta-item"><strong>🏙️ Ciudad</strong>' + s.ciudad + ', ' + (s.estado || '') + '</div>' + mapsHTML;
                         
                         return '<div class="servicio-card"><div class="servicio-header"><div><div class="servicio-titulo">' + s.nombre + '</div><span class="servicio-categoria">' + (s.categoria || 'Sin categoría') + '</span>' + (s.precio ? '<div style="margin-top: 0.5rem; font-weight: 700; color: #FF6B9D;">💰 ' + s.precio + '</div>' : '') + '</div><div class="servicio-acciones"><button class="btn btn-small" onclick="editarServicio(' + index + ')">✏️ Editar</button><button class="btn btn-danger btn-small" onclick="eliminarServicio(' + index + ')">🗑️ Eliminar</button></div></div><div class="servicio-descripcion">' + (s.descripcion || '') + '</div>' + variedadHTML + fotosHTML + '<div class="servicio-meta">' + ubicacionHTML + '</div></div>';
@@ -1212,10 +1388,15 @@
                     
                     servicioEditandoId = index;
                     fotosTemporales = s.fotos || [];
-                    // Convertir strings viejos a objetos si es necesario
-                    variedadesTemporales = (s.variedad || []).map(v => 
+                    
+                    // Convertir strings viejos a objetos si es necesario y parsear JSON
+                    let packs = [];
+                    try { packs = typeof s.variedad === 'string' ? JSON.parse(s.variedad) : (s.variedad || []); } catch(e) { packs = []; }
+                    
+                    variedadesTemporales = packs.map(v => 
                         typeof v === 'string' ? { nombre: v, precio: '', descripcion: '' } : v
                     );
+                    
                     esServicioMovil = s.esMovil || false;
                     
                     document.getElementById('modalServicioTitulo').textContent = '✏️ Editar Servicio';
@@ -1289,14 +1470,20 @@
                 descCategoriaExtra = descCatOtro;
             }
             
+            // CORRECCIÓN: Convertir variedad a string JSON para Firestore
+            const variedadParaGuardar = JSON.stringify(variedadesTemporales);
+            
             const servicio = {
-                nombre, categoria: categoriaFinal, descripcion,
+                nombre, 
+                categoria: categoriaFinal, 
+                descripcion,
                 precio: document.getElementById('servicioPrecio').value.trim(),
-                ciudad, estado: document.getElementById('servicioEstado').value.trim(),
+                ciudad, 
+                estado: document.getElementById('servicioEstado').value.trim(),
                 radio: parseInt(document.getElementById('servicioRadio').value) || 0,
                 esMovil: esServicioMovil,
                 mapsLink: document.getElementById('servicioMapsLink').value.trim(),
-                variedad: variedadesTemporales, // Ahora guarda objetos {nombre, precio, descripcion}
+                variedad: variedadParaGuardar, // Guardamos como string JSON
                 fotos: fotosTemporales,
                 fechaCreacion: new Date().toISOString(),
                 fechaActualizacion: new Date().toISOString()
@@ -1338,8 +1525,9 @@
                 }, 1500);
                 
             } catch (error) {
+                console.error("Error detallado:", error);
                 alert.className = 'alert error';
-                alert.textContent = '❌ Error: ' + error.message;
+                alert.textContent = ' Error al guardar: ' + error.message;
                 alert.style.display = 'block';
             }
         };
@@ -1412,12 +1600,183 @@
         };
 
         // ==========================================
-        // FASE 4: TESTIMONIOS RECIBIDOS
+        // FASE 4: TESTIMONIOS RECIBIDOS Y CASOS DE ÉXITO
         // ==========================================
+        
+        // Calificación estrellas GoParty
+        window.setCalificacionGoParty = function(n) {
+            calificacionGoParty = n;
+            const estrellas = document.querySelectorAll('#estrellasGoParty span');
+            estrellas.forEach((e, i) => { e.style.opacity = i < n ? '1' : '0.3'; });
+        };
+
+        // Toggle Recomendar
+        window.toggleRecomendar = function(recomendar) {
+            recomendarGoParty = recomendar;
+            const toggleSi = document.getElementById('toggleRecomendarSi');
+            const toggleNo = document.getElementById('toggleRecomendarNo');
+            
+            if (recomendar) {
+                toggleSi.classList.add('active');
+                toggleSi.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+                toggleSi.style.color = 'white';
+                toggleSi.style.borderColor = '#FF6B9D';
+                
+                toggleNo.classList.remove('active');
+                toggleNo.style.background = 'white';
+                toggleNo.style.color = '#333';
+                toggleNo.style.borderColor = '#e0e0e0';
+            } else {
+                toggleSi.classList.remove('active');
+                toggleSi.style.background = 'white';
+                toggleSi.style.color = '#333';
+                toggleSi.style.borderColor = '#e0e0e0';
+                
+                toggleNo.classList.add('active');
+                toggleNo.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+                toggleNo.style.color = 'white';
+                toggleNo.style.borderColor = '#FF6B9D';
+            }
+        };
+
+        // Enviar Experiencia GoParty
+        window.enviarExperienciaGoParty = async function() {
+            const alert = document.getElementById('alertExperienciaGoParty');
+            const tiempo = document.getElementById('expTiempo').value;
+            const meGusta = document.getElementById('expGusta').value.trim();
+            const mejoraria = document.getElementById('expMejoraria').value.trim();
+            
+            if (!tiempo || !meGusta || !mejoraria || calificacionGoParty === 0 || recomendarGoParty === null) {
+                alert.className = 'alert error';
+                alert.textContent = ' Completa todos los campos y selecciona una calificación';
+                alert.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await addDoc(collection(db, "testimonios_proveedores"), {
+                    tiempo,
+                    calificacion: calificacionGoParty,
+                    meGusta,
+                    mejoraria,
+                    recomendar: recomendarGoParty,
+                    nombreNegocio: proveedorActual.nombreNegocio || '',
+                    estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: proveedorActual.id
+                });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Experiencia enviada. Será revisada antes de publicarse.';
+                alert.style.display = 'block';
+                // Limpiar formulario
+                document.getElementById('expTiempo').value = '';
+                document.getElementById('expGusta').value = '';
+                document.getElementById('expMejoraria').value = '';
+                setCalificacionGoParty(0);
+                toggleRecomendar(null);
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+            } catch (error) { 
+                alert.className = 'alert error';
+                alert.textContent = ' Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        // Preview Fotos Caso
+        window.previewFotosCaso = function(event) {
+            const files = event.target.files;
+            const contenedor = document.getElementById('fotoPreviewCaso');
+            
+            Array.from(files).forEach(file => {
+                if (fotosCasoTemporales.length >= 5) {
+                    alert('⚠️ Máximo 5 fotos por caso');
+                    return;
+                }
+                
+                // Validar tamaño (1MB max para evitar error de Firestore)
+                if (file.size > 1 * 1024 * 1024) {
+                    alert(`⚠️ La foto "${file.name}" excede 1MB. Por favor comprímela.`);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fotosCasoTemporales.push(e.target.result);
+                    renderFotosPreviewCaso();
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
+        function renderFotosPreviewCaso() {
+            const contenedor = document.getElementById('fotoPreviewCaso');
+            contenedor.innerHTML = fotosCasoTemporales.map((f, i) => `
+                <div class="foto-preview-wrapper">
+                    <img src="${f}" class="foto-preview">
+                    <button type="button" class="foto-remove" onclick="eliminarFotoCaso(${i})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        window.eliminarFotoCaso = function(index) {
+            fotosCasoTemporales.splice(index, 1);
+            renderFotosPreviewCaso();
+        };
+
+        // Enviar Caso de Éxito
+        window.enviarCasoExito = async function() {
+            const alert = document.getElementById('alertCasoExito');
+            const titulo = document.getElementById('casoTitulo').value.trim();
+            const tipoEvento = document.getElementById('casoTipoEvento').value;
+            const ciudad = document.getElementById('casoCiudad').value.trim();
+            const historia = document.getElementById('casoHistoria').value.trim();
+            const resultado = document.getElementById('casoResultado').value.trim();
+            
+            if (!titulo || !tipoEvento || !ciudad || !historia || !resultado) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Completa todos los campos obligatorios';
+                alert.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await addDoc(collection(db, "casos_exito"), {
+                    titulo,
+                    tipoEvento,
+                    ciudad,
+                    historia,
+                    resultado,
+                    fotos: fotosCasoTemporales,
+                    nombreNegocio: proveedorActual.nombreNegocio || '',
+                    estado: 'pendiente',
+                    fecha: new Date().toISOString(),
+                    proveedorId: proveedorActual.id
+                });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Caso de éxito enviado. Será revisado antes de publicarse en la página principal.';
+                alert.style.display = 'block';
+                // Limpiar
+                document.getElementById('casoTitulo').value = '';
+                document.getElementById('casoTipoEvento').value = '';
+                document.getElementById('casoCiudad').value = '';
+                document.getElementById('casoHistoria').value = '';
+                document.getElementById('casoResultado').value = '';
+                document.getElementById('casoFotos').value = '';
+                document.getElementById('fotoPreviewCaso').innerHTML = '';
+                fotosCasoTemporales = [];
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+            } catch (error) { 
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        // Cargar Reseñas Recibidas (Solo Aprobadas)
         async function cargarTestimoniosRecibidos() {
-            const contenedor = document.getElementById('listaTestimoniosRecibidos');
-            const countTotal = document.getElementById('statTotalTestimonios');
-            const avgCalif = document.getElementById('statCalificacion'); // Usamos el del dashboard como ejemplo o creamos uno nuevo
+            const contenedor = document.getElementById('listaResenasRecibidas');
+            const countTotal = document.getElementById('countTotalResenas');
+            const avgCalif = document.getElementById('avgCalificacion'); 
             
             if (!contenedor || !proveedorActual) return;
 
@@ -1441,7 +1800,11 @@
 
                 // Actualizar contadores si existen
                 if(countTotal) countTotal.textContent = resenas.length;
-                
+                if(avgCalif) {
+                    const promedio = resenas.length > 0 ? (sumaCalificaciones / resenas.length).toFixed(1) : "0.0";
+                    avgCalif.textContent = promedio + " ⭐";
+                }
+
                 // Renderizar lista
                 if (resenas.length === 0) {
                     contenedor.innerHTML = '<div style="text-align: center; padding: 2rem; background: #f9f9f9; border-radius: 8px;"><div style="font-size: 3rem; margin-bottom: 1rem;">📭</div><h4>Aún no tienes reseñas aprobadas</h4><p style="color: #666;">Cuando un cliente deje un testimonio y el administrador lo apruebe, aparecerá aquí.</p></div>';
@@ -1466,4 +1829,3 @@
 
 </body>
 </html>
-```

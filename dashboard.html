@@ -79,7 +79,7 @@
         .toggle-option.active { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-color: transparent; }
         .toggle-option input { display: none; }
 
-        /* Servicios */
+                /* Estilos Base de Servicios (Los que ya tenías) */
         .servicio-card { background: #f9f9f9; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border-left: 4px solid #FF6B9D; transition: all 0.3s; }
         .servicio-card:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .servicio-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
@@ -92,51 +92,57 @@
         .servicio-fotos { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
         .servicio-foto { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; background: #e0e0e0; }
         .servicio-acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .paquete-lista { background: white; padding: 1rem; border-radius: 8px; margin-top: 0.5rem; }
-        .paquete-item { padding: 0.5rem; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
-        .paquete-item:last-child { border-bottom: none; }
-
-        /* Modal */
-        .modal-overlay { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0,0,0,0.6); 
-            z-index: 1000; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 1rem;
-            backdrop-filter: blur(5px);
-        }
+        
+        /* Modal Base */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; }
-        .modal { 
-            background: white; 
-            border-radius: 15px; 
-            max-width: 800px; 
-            width: 100%; 
-            max-height: 90vh; 
-            overflow-y: auto; 
-            padding: 2rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .modal-header { 
-            background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); 
-            color: white; 
-            padding: 1.5rem; 
-            border-radius: 15px 15px 0 0; 
-            margin: -2rem -2rem 1.5rem -2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .modal { background: white; border-radius: 15px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal-header { background: linear-gradient(135deg, #6BCB77 0%, #4A90E2 100%); color: white; padding: 1.5rem; border-radius: 15px 15px 0 0; margin: -2rem -2rem 1.5rem -2rem; display: flex; justify-content: space-between; align-items: center; }
         .modal-header h3 { color: white; margin: 0; font-size: 1.5rem; }
         .modal-close { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: white; padding: 0.5rem; }
-        .modal-close:hover { color: #f0f0f0; }
         .modal-footer { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #f0f0f0; }
 
+        /* NUEVO: Estilos para Categoría OTRO */
+        .categoria-otro-box {
+            background: #fffbe6; 
+            padding: 1.5rem; 
+            border-radius: 12px; 
+            border: 2px dashed #FFD93D;
+            margin-bottom: 1.5rem;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* NUEVO: Estilos para Paquetes Editables */
+        .paquete-form-inline {
+            background: white; 
+            padding: 1.5rem; 
+            border-radius: 12px; 
+            border: 2px solid #e0e0e0;
+            margin-top: 1rem;
+        }
+        .paquete-editable-card {
+            background: white; 
+            padding: 1rem; 
+            border-radius: 8px; 
+            border: 1px solid #e0e0e0; 
+            margin-bottom: 0.8rem;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+        .btn-remove-paquete {
+            position: absolute; top: 10px; right: 10px;
+            background: #FF4444; color: white; border: none; 
+            width: 24px; height: 24px; border-radius: 50%; 
+            cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Preview fotos */
+        .foto-preview-container { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+        .foto-preview { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 2px solid #e0e0e0; }
+        .foto-preview-wrapper { position: relative; display: inline-block; }
+        .foto-remove { position: absolute; top: -5px; right: -5px; background: #FF4444; color: white; border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+       
         /* Variedad/Paquetes */
         .variedad-container { 
             background: #f9f9f9; 
@@ -597,26 +603,156 @@
             </div>
 
             <!-- FASE 3: MIS SERVICIOS -->
-            <div class="tab-content" id="tab-servicios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">🛎️ Mis Servicios</h2>
-                <p style="color: #666; margin-bottom: 1.5rem;">Gestiona los servicios que ofreces. Cada servicio aparecerá en tu perfil público con sus fotos, descripción y área de cobertura.</p>
-                
-                <div class="alert" id="alertServicios"></div>
+    <div class="modal-overlay" id="modalServicio">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalServicioTitulo">➕ Agregar Nuevo Servicio</h3>
+                <button class="modal-close" onclick="cerrarModalServicio()">✕</button>
+            </div>
 
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    <button class="btn" onclick="abrirModalServicio()" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                        ➕ Agregar Nuevo Servicio
-                    </button>
+            <div class="alert" id="alertModalServicio"></div>
+            <input type="hidden" id="servicioId">
+
+            <!-- Nombre del Servicio -->
+            <div class="form-group">
+                <label style="font-weight: 700; color: #333;">📝 Nombre del Servicio *</label>
+                <input type="text" id="servicioNombre" placeholder="Ej: Paquete Básico de Decoración" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
+            </div>
+
+            <!-- Categoría con opción OTRO -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #333;">️ Categoría *</label>
+                    <select id="servicioCategoria" onchange="manejarCategoriaOtro()" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
+                        <option value="">Selecciona una categoría...</option>
+                        <option value="Salones"> Salones</option>
+                        <option value="Alimentos">🍽️ Alimentos</option>
+                        <option value="Fotografía"> Fotografía</option>
+                        <option value="Música/DJ">🎵 Música/DJ</option>
+                        <option value="Decoración"> Decoración</option>
+                        <option value="Animación">🎪 Animación</option>
+                        <option value="Mobiliario">🪑 Mobiliario</option>
+                        <option value="Vestuario">👗 Vestuario</option>
+                        <option value="Transporte">🚗 Transporte</option>
+                        <option value="OTRO">✨ Otro (Personalizado)</option>
+                    </select>
                 </div>
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #333;">💰 Precio Base (opcional)</label>
+                    <input type="text" id="servicioPrecio" placeholder="Ej: $5,000 o 'Desde $3,000'" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
+                </div>
+            </div>
 
-                <div id="listaServicios">
-                    <div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">🛎️</div>
-                        <h3>Aún no tienes servicios registrados</h3>
-                        <p>Haz clic en "Agregar Nuevo Servicio" para comenzar</p>
+            <!-- Campo oculto para Categoría Personalizada -->
+            <div class="categoria-otro-box" id="contenedorCategoriaOtro" style="display: none;">
+                <label style="font-weight: 700; color: #333; display:block; margin-bottom:0.5rem;"> Define tu Categoría Personalizada *</label>
+                <input type="text" id="servicioCategoriaOtro" placeholder="Escribe UNA SOLA PALABRA (Ej: Magia, Piñatas)" maxlength="20" style="border: 2px solid #FFD93D; padding: 0.8rem; width: 100%; margin-bottom: 1rem;">
+                
+                <label style="font-weight: 700; color: #333; display:block; margin-bottom:0.5rem;">📄 Descripción de esta nueva categoría *</label>
+                <textarea id="servicioDescCategoriaOtro" rows="2" placeholder="Describe brevemente qué incluye esta categoría..." style="border: 2px solid #FFD93D; padding: 0.8rem; width: 100%;"></textarea>
+                
+                <small style="color: #666; display: block; margin-top: 0.5rem;">⚠️ Importante: Usa una sola palabra descriptiva. La administración revisará esta categoría y podría ajustarla para mantener el orden en la plataforma.</small>
+            </div>
+
+            <!-- Descripción General -->
+            <div class="form-group">
+                <label style="font-weight: 700; color: #333;">📝 Descripción del Servicio *</label>
+                <textarea id="servicioDescripcion" rows="4" placeholder="Describe tu servicio con detalle..." style="border: 2px solid #e0e0e0; padding: 0.8rem;"></textarea>
+            </div>
+
+            <!-- Variedad / Paquetes EDITABLES -->
+            <div class="variedad-container">
+                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 0.5rem;">📦 Variedad / Paquetes</label>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Agrega diferentes opciones o paquetes. Puedes editar nombre, precio y descripción antes de guardar.</p>
+                
+                <!-- Lista de paquetes agregados (Renderizado dinámico) -->
+                <div id="variedadLista" style="margin-bottom: 1rem;">
+                    <p style="color: #999; font-style: italic;" id="msgSinPaquetes">Aún no hay paquetes agregados</p>
+                </div>
+                
+                <!-- Formulario inline para agregar nuevo paquete -->
+                <div class="paquete-form-inline">
+                    <div class="form-row" style="margin-bottom: 0.5rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-size: 0.8rem; color:#666;">Nombre del Paquete *</label>
+                            <input type="text" id="nuevoPaqNombre" placeholder="Ej: Paquete Premium" style="padding: 0.6rem;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-size: 0.8rem; color:#666;">Precio</label>
+                            <input type="text" id="nuevoPaqPrecio" placeholder="Ej: $3,500" style="padding: 0.6rem;">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0.5rem;">
+                        <label style="font-size: 0.8rem; color:#666;">Descripción breve</label>
+                        <input type="text" id="nuevoPaqDesc" placeholder="¿Qué incluye este paquete?" style="padding: 0.6rem;">
+                    </div>
+                    <button type="button" class="btn btn-small" onclick="agregarPaqueteInline()" style="width: 100%;">➕ Agregar Paquete a la Lista</button>
+                </div>
+            </div>
+
+            <!-- Fotos -->
+            <div class="form-group" style="background: #f9f9f9; padding: 1.5rem; border-radius: 12px; border: 2px solid #e0e0e0;">
+                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 0.5rem;">📸 Fotos del Servicio (máx. 5)</label>
+                <input type="file" id="servicioFotos" accept="image/jpeg,image/png" multiple onchange="previewFotos(event)" style="border: 2px dashed #4A90E2; padding: 1rem; border-radius: 8px; background: white; width: 100%;">
+                <div class="foto-preview-container" id="fotoPreviewContainer"></div>
+            </div>
+
+            <!-- Ubicación y Móvil (Se mantiene igual) -->
+            <div class="form-group">
+                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;">🚗 ¿Este servicio es móvil? *</label>
+                <div class="toggle-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <label class="toggle-option" id="toggleMovilSi" onclick="toggleServicioMovil(true)">
+                        <input type="radio" name="esMovil" value="si" style="display: none;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚗</div>
+                        <div>Sí, voy al cliente</div>
+                    </label>
+                    <label class="toggle-option active" id="toggleMovilNo" onclick="toggleServicioMovil(false)">
+                        <input type="radio" name="esMovil" value="no" checked style="display: none;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📍</div>
+                        <div>No, tiene ubicación fija</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="ubicacion-section">
+                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem; font-size: 1.1rem;">📍 Ubicación del Servicio</label>
+                <div class="form-group">
+                    <label style="font-weight: 600; color: #333;">🏙️ Ciudad Base *</label>
+                    <input type="text" id="servicioCiudad" placeholder="Ej: Xalapa" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: #333;">📏 Radio de Cobertura (km)</label>
+                        <input type="number" id="servicioRadio" placeholder="Ej: 50" min="0" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: #333;">🗺️ Estado</label>
+                        <input type="text" id="servicioEstado" placeholder="Ej: Veracruz" readonly style="background: #f5f5f5; border: 2px solid #e0e0e0; padding: 0.8rem;">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label style="font-weight: 600; color: #333;">🔗 Link de Google Maps (opcional)</label>
+                    <input type="url" id="servicioMapsLink" placeholder="https://maps.google.com/?q=..." style="border: 2px solid #e0e0e0; padding: 0.8rem;">
+                </div>
+                <div id="ubicacionFijaContainer" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e0e0e0;">
+                    <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;"> Dirección del Negocio</label>
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 2;"><input type="text" id="servicioCalle" placeholder="Calle" style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
+                        <div class="form-group"><input type="text" id="servicioNumero" placeholder="Número" style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><input type="text" id="servicioColonia" placeholder="Colonia" style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
+                        <div class="form-group"><input type="text" id="servicioCP" placeholder="C.P." style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
                     </div>
                 </div>
             </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModalServicio()" style="padding: 1rem 2rem; font-size: 1rem;">Cancelar</button>
+                <button class="btn btn-success" onclick="guardarServicio()" style="padding: 1rem 2rem; font-size: 1rem; background: linear-gradient(135deg, #6BCB77, #4A90E2);"> Guardar Servicio</button>
+            </div>
+        </div>
+    </div>
 
 <!-- 🆕 FASE 4: TESTIMONIOS Y CASOS DE ÉXITO -->
 <div class="tab-content" id="tab-testimonios">

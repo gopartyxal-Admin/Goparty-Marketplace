@@ -2316,6 +2316,288 @@
             // Si no existe iniciarDashboard, la creamos o llamamos directo
             cargarResenasRecibidas();
         }
+                // ==========================================
+        // LÓGICA DE CATEGORÍA "OTRO"
+        // ==========================================
+        window.manejarCategoriaOtro = function() {
+            const select = document.getElementById('servicioCategoria');
+            const contenedorOtro = document.getElementById('contenedorCategoriaOtro');
+            
+            if (select.value === 'OTRO') {
+                contenedorOtro.style.display = 'block';
+                document.getElementById('servicioCategoriaOtro').required = true;
+                document.getElementById('servicioDescCategoriaOtro').required = true;
+            } else {
+                contenedorOtro.style.display = 'none';
+                document.getElementById('servicioCategoriaOtro').required = false;
+                document.getElementById('servicioDescCategoriaOtro').required = false;
+                document.getElementById('servicioCategoriaOtro').value = '';
+                document.getElementById('servicioDescCategoriaOtro').value = '';
+            }
+        };
+
+        // ==========================================
+        // GESTIÓN DE PAQUETES EDITABLES
+        // ==========================================
+        
+        // Renderiza la lista de paquetes con inputs editables
+        function renderVariedadesEditables() {
+            const contenedor = document.getElementById('variedadLista');
+            const msgSinPaquetes = document.getElementById('msgSinPaquetes');
+            
+            if (variedadesTemporales.length === 0) {
+                contenedor.innerHTML = '';
+                contenedor.appendChild(msgSinPaquetes);
+                msgSinPaquetes.style.display = 'block';
+                return;
+            }
+            
+            msgSinPaquetes.style.display = 'none';
+            
+            contenedor.innerHTML = variedadesTemporales.map((v, i) => `
+                <div class="paquete-editable-card">
+                    <button type="button" class="btn-remove-paquete" onclick="eliminarVariedad(${i})">✕</button>
+                    
+                    <div class="form-row" style="margin-bottom: 0.5rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-size: 0.8rem; color: #666;">Nombre</label>
+                            <input type="text" value="${v.nombre || ''}" onchange="actualizarPaquete(${i}, 'nombre', this.value)" style="padding: 0.5rem; width: 100%;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-size: 0.8rem; color: #666;">Precio</label>
+                            <input type="text" value="${v.precio || ''}" onchange="actualizarPaquete(${i}, 'precio', this.value)" style="padding: 0.5rem; width: 100%;">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 0.8rem; color: #666;">Descripción</label>
+                        <input type="text" value="${v.descripcion || ''}" onchange="actualizarPaquete(${i}, 'descripcion', this.value)" style="padding: 0.5rem; width: 100%;">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Agrega un nuevo paquete desde el formulario inline
+        window.agregarPaqueteInline = function() {
+            const nombre = document.getElementById('nuevoPaqNombre').value.trim();
+            const precio = document.getElementById('nuevoPaqPrecio').value.trim();
+            const desc = document.getElementById('nuevoPaqDesc').value.trim();
+            
+            if (!nombre) {
+                alert('El nombre del paquete es obligatorio');
+                return;
+            }
+            
+            variedadesTemporales.push({ nombre, precio, descripcion: desc });
+            
+            // Limpiar inputs
+            document.getElementById('nuevoPaqNombre').value = '';
+            document.getElementById('nuevoPaqPrecio').value = '';
+            document.getElementById('nuevoPaqDesc').value = '';
+            
+            renderVariedadesEditables();
+        };
+
+        // Actualiza un paquete existente cuando se edita
+        window.actualizarPaquete = function(index, campo, valor) {
+            if (!variedadesTemporales[index]) variedadesTemporales[index] = {};
+            variedadesTemporales[index][campo] = valor;
+        };
+
+        // Eliminar paquete
+        window.eliminarVariedad = function(index) {
+            variedadesTemporales.splice(index, 1);
+            renderVariedadesEditables();
+        };
+
+        // ==========================================
+        // ACTUALIZACIÓN DE GUARDAR SERVICIO
+        // ==========================================
+        window.guardarServicio = async function() {
+            const alert = document.getElementById('alertModalServicio');
+            
+            const nombre = document.getElementById('servicioNombre').value.trim();
+            let categoria = document.getElementById('servicioCategoria').value;
+            const descripcion = document.getElementById('servicioDescripcion').value.trim();
+            const ciudad = document.getElementById('servicioCiudad').value.trim();
+            
+            if (!nombre || !categoria || !descripcion || !ciudad) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Nombre, categoría, descripción y ciudad son obligatorios';
+                alert.style.display = 'block';
+                return;
+            }
+
+            // Lógica especial para categoría OTRO
+            let categoriaFinal = categoria;
+            let descCategoriaExtra = null;
+            
+            if (categoria === 'OTRO') {
+                const catOtro = document.getElementById('servicioCategoriaOtro').value.trim();
+                const descCatOtro = document.getElementById('servicioDescCategoriaOtro').value.trim();
+                
+                if (!catOtro || !descCatOtro) {
+                    alert.className = 'alert error';
+                    alert.textContent = '❌ Debes definir el nombre (una sola palabra) y descripción de tu categoría personalizada.';
+                    alert.style.display = 'block';
+                    return;
+                }
+                
+                if (catOtro.includes(' ')) {
+                    alert.className = 'alert error';
+                    alert.textContent = '❌ La categoría personalizada debe ser UNA SOLA PALABRA (sin espacios).';
+                    alert.style.display = 'block';
+                    return;
+                }
+                
+                categoriaFinal = catOtro;
+                descCategoriaExtra = descCatOtro;
+            }
+            
+            const servicio = {
+                nombre,
+                categoria: categoriaFinal,
+                descripcion,
+                precio: document.getElementById('servicioPrecio').value.trim(),
+                ciudad,
+                estado: document.getElementById('servicioEstado').value.trim(),
+                radio: parseInt(document.getElementById('servicioRadio').value) || 0,
+                esMovil: esServicioMovil,
+                mapsLink: document.getElementById('servicioMapsLink').value.trim(),
+                variedad: variedadesTemporales, // Guarda objetos {nombre, precio, descripcion}
+                fotos: fotosTemporales,
+                fechaCreacion: new Date().toISOString(),
+                fechaActualizacion: new Date().toISOString()
+            };
+
+            // Metadatos para revisión admin si es categoría personalizada
+            if (descCategoriaExtra) {
+                servicio.categoriaOriginalSugerida = categoriaFinal;
+                servicio.descripcionCategoriaSugerida = descCategoriaExtra;
+                servicio.requiereRevisionCategoria = true;
+            }
+            
+            if (!esServicioMovil) {
+                servicio.calle = document.getElementById('servicioCalle').value.trim();
+                servicio.numero = document.getElementById('servicioNumero').value.trim();
+                servicio.colonia = document.getElementById('servicioColonia').value.trim();
+                servicio.cp = document.getElementById('servicioCP').value.trim();
+            }
+            
+            try {
+                const docSnap = await getDoc(doc(db, "proveedores", proveedorActual.id));
+                let servicios = docSnap.data().servicios || [];
+                
+                if (servicioEditandoId !== null) {
+                    servicios[servicioEditandoId] = servicio;
+                } else {
+                    servicios.push(servicio);
+                }
+                
+                await updateDoc(doc(db, "proveedores", proveedorActual.id), { servicios });
+                
+                alert.className = 'alert success';
+                alert.textContent = '✅ Servicio guardado exitosamente';
+                alert.style.display = 'block';
+                
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                    cerrarModalServicio();
+                    cargarServicios();
+                }, 1500);
+                
+            } catch (error) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error: ' + error.message;
+                alert.style.display = 'block';
+            }
+        };
+
+        // Modificar abrirModalServicio para resetear correctamente
+        window.abrirModalServicio = function() {
+            servicioEditandoId = null;
+            fotosTemporales = [];
+            variedadesTemporales = [];
+            esServicioMovil = false;
+            
+            document.getElementById('modalServicioTitulo').textContent = '➕ Agregar Nuevo Servicio';
+            document.getElementById('servicioId').value = '';
+            document.getElementById('servicioNombre').value = '';
+            document.getElementById('servicioCategoria').value = '';
+            manejarCategoriaOtro(); // Resetear vista de OTRO
+            document.getElementById('servicioPrecio').value = '';
+            document.getElementById('servicioDescripcion').value = '';
+            document.getElementById('servicioCiudad').value = proveedorActual.ciudad || '';
+            document.getElementById('servicioEstado').value = proveedorActual.estado || '';
+            document.getElementById('servicioRadio').value = '';
+            document.getElementById('servicioMapsLink').value = '';
+            document.getElementById('servicioCalle').value = '';
+            document.getElementById('servicioNumero').value = '';
+            document.getElementById('servicioColonia').value = '';
+            document.getElementById('servicioCP').value = '';
+            document.getElementById('servicioFotos').value = '';
+            document.getElementById('fotoPreviewContainer').innerHTML = '';
+            
+            // Limpiar inputs de nuevo paquete
+            document.getElementById('nuevoPaqNombre').value = '';
+            document.getElementById('nuevoPaqPrecio').value = '';
+            document.getElementById('nuevoPaqDesc').value = '';
+            
+            renderVariedadesEditables();
+            toggleServicioMovil(false);
+            
+            document.getElementById('modalServicio').classList.add('active');
+        };
+
+        // Modificar editarServicio para cargar paquetes complejos
+        window.editarServicio = function(index) {
+            const docSnap = getDoc(doc(db, "proveedores", proveedorActual.id)).then(snap => {
+                if (snap.exists()) {
+                    const servicios = snap.data().servicios || [];
+                    const s = servicios[index];
+                    if (!s) return;
+                    
+                    servicioEditandoId = index;
+                    fotosTemporales = s.fotos || [];
+                    // Asegurar compatibilidad: convertir strings viejos a objetos
+                    variedadesTemporales = (s.variedad || []).map(v => 
+                        typeof v === 'string' ? { nombre: v, precio: '', descripcion: '' } : v
+                    );
+                    esServicioMovil = s.esMovil || false;
+                    
+                    document.getElementById('modalServicioTitulo').textContent = '✏️ Editar Servicio';
+                    document.getElementById('servicioId').value = index;
+                    document.getElementById('servicioNombre').value = s.nombre || '';
+                    
+                    // Manejo de categoría personalizada al editar
+                    if (s.requiereRevisionCategoria) {
+                        document.getElementById('servicioCategoria').value = 'OTRO';
+                        manejarCategoriaOtro();
+                        document.getElementById('servicioCategoriaOtro').value = s.categoria || '';
+                        document.getElementById('servicioDescCategoriaOtro').value = s.descripcionCategoriaSugerida || '';
+                    } else {
+                        document.getElementById('servicioCategoria').value = s.categoria || '';
+                        manejarCategoriaOtro();
+                    }
+                    
+                    document.getElementById('servicioPrecio').value = s.precio || '';
+                    document.getElementById('servicioDescripcion').value = s.descripcion || '';
+                    document.getElementById('servicioCiudad').value = s.ciudad || '';
+                    document.getElementById('servicioEstado').value = s.estado || '';
+                    document.getElementById('servicioRadio').value = s.radio || '';
+                    document.getElementById('servicioMapsLink').value = s.mapsLink || '';
+                    document.getElementById('servicioCalle').value = s.calle || '';
+                    document.getElementById('servicioNumero').value = s.numero || '';
+                    document.getElementById('servicioColonia').value = s.colonia || '';
+                    document.getElementById('servicioCP').value = s.cp || '';
+                    
+                    toggleServicioMovil(esServicioMovil);
+                    renderVariedadesEditables();
+                    renderFotosPreview();
+                    
+                    document.getElementById('modalServicio').classList.add('active');
+                }
+            });
+        };
     </script>
 
 </body>

@@ -1,3 +1,13 @@
+Entiendo perfectamente. El problema es que al pegar los fragmentos anteriores, se rompieron las etiquetas de cierre del modal o quedaron funciones duplicadas en el JavaScript, causando la pantalla en blanco.
+
+Aquí tienes el **código completo y corregido** de tu archivo `dashboard.html`. He integrado:
+1.  **CSS necesario** para los nuevos campos (Categoría Otro y Paquetes Editables).
+2.  **HTML del Modal** actualizado con la lógica condicional y el formulario inline.
+3.  **JavaScript limpio** sin duplicados, manejando correctamente la edición y guardado.
+
+Reemplaza **todo** el contenido de tu archivo actual con este código:
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -79,7 +89,7 @@
         .toggle-option.active { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; border-color: transparent; }
         .toggle-option input { display: none; }
 
-                /* Estilos Base de Servicios (Los que ya tenías) */
+        /* Servicios */
         .servicio-card { background: #f9f9f9; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border-left: 4px solid #FF6B9D; transition: all 0.3s; }
         .servicio-card:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .servicio-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
@@ -102,6 +112,9 @@
         .modal-close { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: white; padding: 0.5rem; }
         .modal-footer { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #f0f0f0; }
 
+        /* Variedad/Paquetes */
+        .variedad-container { background: #f9f9f9; padding: 1.5rem; border-radius: 12px; border: 2px solid #e0e0e0; margin-bottom: 1rem; }
+        
         /* NUEVO: Estilos para Categoría OTRO */
         .categoria-otro-box {
             background: #fffbe6; 
@@ -142,144 +155,14 @@
         .foto-preview { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 2px solid #e0e0e0; }
         .foto-preview-wrapper { position: relative; display: inline-block; }
         .foto-remove { position: absolute; top: -5px; right: -5px; background: #FF4444; color: white; border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
-       
-        /* Variedad/Paquetes */
-        .variedad-container { 
-            background: #f9f9f9; 
-            padding: 1.5rem; 
-            border-radius: 12px; 
-            border: 2px solid #e0e0e0;
-            margin-bottom: 1rem;
-        }
-        .variedad-item { 
-            display: flex; 
-            gap: 0.5rem; 
-            margin-bottom: 0.5rem; 
-            align-items: center;
-            background: white;
-            padding: 0.8rem;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            animation: slideIn 0.3s ease;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .variedad-item input { flex: 1; border: none; background: transparent; font-weight: 500; }
-        .btn-remove-variedad { 
-            background: #FF4444; 
-            color: white; 
-            border: none; 
-            padding: 0.5rem 0.8rem; 
-            border-radius: 6px; 
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-remove-variedad:hover { background: #d32f2f; }
-
-        /* Preview fotos */
-        .foto-preview-container { 
-            display: flex; 
-            gap: 0.5rem; 
-            flex-wrap: wrap; 
-            margin-top: 1rem;
-        }
-        .foto-preview { 
-            width: 80px; 
-            height: 80px; 
-            border-radius: 8px; 
-            object-fit: cover;
-            border: 2px solid #e0e0e0;
-        }
-        .foto-preview-wrapper { 
-            position: relative; 
-            display: inline-block;
-        }
-        .foto-remove { 
-            position: absolute; 
-            top: -5px; 
-            right: -5px; 
-            background: #FF4444; 
-            color: white; 
-            border: none; 
-            width: 20px; 
-            height: 20px; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .foto-remove:hover { background: #d32f2f; }
-
-        /* Sub-tabs para Testimonios */
-        .sub-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; }
-        .sub-tab { padding: 0.8rem 1.5rem; background: #f0f0f0; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 600; color: #666; transition: all 0.3s; font-size: 0.95rem; }
-        .sub-tab:hover { background: #e0e0e0; }
-        .sub-tab.active { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; }
-        .sub-content { display: none; }
-        .sub-content.active { display: block; }
-
-        /* Items de testimonios/casos */
-        .testimonio-item { background: #f9f9f9; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border-left: 4px solid #FF6B9D; }
-        .testimonio-item.aprobado { border-left-color: #4CAF50; }
-        .testimonio-item.pendiente { border-left-color: #FFD93D; }
-        .testimonio-item.rechazado { border-left-color: #FF4444; }
-        .testimonio-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
-        .testimonio-estrellas { font-size: 1.5rem; margin: 0.5rem 0; }
-        .testimonio-acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
-        .estado-badge { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; font-weight: 600; }
-        .estado-aprobado { background: #4CAF50; color: white; }
-        .estado-pendiente { background: #FFD93D; color: #333; }
-        .estado-rechazado { background: #FF4444; color: white; }
-
-        /* Toggle mejorado */
-        .toggle-option { 
-            transition: all 0.3s ease;
-            cursor: pointer;
-            padding: 1.5rem;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        .toggle-option:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .toggle-option.active { 
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(255,107,157,0.3);
-        }
-        .toggle-option input { display: none; }
-
+        
         /* Sección de ubicación destacada */
-        .ubicacion-section {
-            background: #f0f8ff;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 2px solid #4A90E2;
-            margin-bottom: 1rem;
-        }
+        .ubicacion-section { background: #f0f8ff; padding: 1.5rem; border-radius: 12px; border: 2px solid #4A90E2; margin-bottom: 1rem; }
 
         /* Inputs mejorados */
-        input:focus, select:focus, textarea:focus {
-            border-color: #6BCB77 !important;
-            box-shadow: 0 0 0 3px rgba(107,203,119,0.1);
-            outline: none;
-        }
-
-        /* Botones mejorados */
-        .btn {
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,107,157,0.4);
-        }
+        input:focus, select:focus, textarea:focus { border-color: #6BCB77 !important; box-shadow: 0 0 0 3px rgba(107,203,119,0.1); outline: none; }
+        .btn { transition: all 0.3s ease; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,157,0.4); }
 
         @media (max-width: 768px) {
             .auth-header { padding: 2rem 1rem; }
@@ -295,7 +178,6 @@
             .servicio-header { flex-direction: column; }
             .modal { padding: 1rem; }
             .modal-header { margin: -1rem -1rem 1rem -1rem; padding: 1rem; }
-            .sub-tabs { flex-direction: column; }
         }
         @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
     </style>
@@ -377,7 +259,7 @@
 
         <div class="tabs">
             <div class="tab active" data-tab="dashboard">📊 Mi Dashboard</div>
-            <div class="tab" data-tab="cotizaciones">📝 Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
+            <div class="tab" data-tab="cotizaciones"> Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
             <div class="tab" data-tab="perfil">👤 Mi Perfil</div>
             <div class="tab" data-tab="servicios">🛎️ Mis Servicios <span id="tabServiciosCount" class="badge">0</span></div>
             <div class="tab" data-tab="testimonios">⭐ Testimonios <span id="tabTestimoniosCount" class="badge">0</span></div>
@@ -603,10 +485,81 @@
             </div>
 
             <!-- FASE 3: MIS SERVICIOS -->
+            <div class="tab-content" id="tab-servicios">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">🛎️ Mis Servicios</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Gestiona los servicios que ofreces. Cada servicio aparecerá en tu perfil público con sus fotos, descripción y área de cobertura.</p>
+                
+                <div class="alert" id="alertServicios"></div>
+
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <button class="btn" onclick="abrirModalServicio()" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                        ➕ Agregar Nuevo Servicio
+                    </button>
+                </div>
+
+                <div id="listaServicios">
+                    <div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🛎️</div>
+                        <h3>Aún no tienes servicios registrados</h3>
+                        <p>Haz clic en "Agregar Nuevo Servicio" para comenzar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🆕 FASE 4: TESTIMONIOS RECIBIDOS -->
+            <div class="tab-content" id="tab-testimonios">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios de Mis Clientes</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Aquí verás los testimonios que tus clientes han dejado sobre tu negocio. Puedes aceptarlos o hacer aclaraciones si es necesario.</p>
+
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-number" id="statTotalTestimonios">0</div><div class="stat-label">Total Testimonios</div></div>
+                    <div class="stat-card blue"><div class="stat-number" id="statTestimoniosPendientes">0</div><div class="stat-label">Pendientes</div></div>
+                    <div class="stat-card green"><div class="stat-number" id="statTestimoniosAprobados">0</div><div class="stat-label">Aceptados</div></div>
+                    <div class="stat-card gold"><div class="stat-number" id="statTestimoniosNegativos">0</div><div class="stat-label">Con Aclaración</div></div>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Testimonios Recibidos</h3>
+                    <div id="listaTestimoniosRecibidos">Cargando testimonios...</div>
+                </div>
+            </div>
+
+            <!-- MEMBRESÍA -->
+            <div class="tab-content" id="tab-membresia">
+                <h2 style="margin-bottom: 1.5rem; color: #333;"> Tu Plan Actual</h2>
+                <div class="card">
+                    <h3>Plan Basic</h3>
+                    <p><strong>Estado:</strong> Activo</p>
+                    <p><strong>Precio:</strong> Gratis</p>
+                    <p>Aparecer en el directorio general</p>
+                </div>
+                <div class="card">
+                    <h3>Plan Pro - $299/mes</h3>
+                    <p>Todo lo de Basic + Sello de verificación + Mayor visibilidad</p>
+                    <button class="btn" onclick="actualizarPlan('Pro')">Actualizar a Pro</button>
+                </div>
+                <div class="card">
+                    <h3>Plan Gold - $599/mes</h3>
+                    <p>Todo lo de Pro + Posición destacada + Borde dorado</p>
+                    <button class="btn" onclick="actualizarPlan('Gold')">Actualizar a Gold</button>
+                </div>
+            </div>
+
+            <!-- MENSAJES -->
+            <div class="tab-content" id="tab-mensajes">
+                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes del Equipo GoParty</h2>
+                <div class="card">
+                    <div id="listaMensajes">No hay mensajes</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: AGREGAR/EDITAR SERVICIO ACTUALIZADO -->
     <div class="modal-overlay" id="modalServicio">
         <div class="modal">
             <div class="modal-header">
-                <h3 id="modalServicioTitulo">➕ Agregar Nuevo Servicio</h3>
+                <h3 id="modalServicioTitulo"> Agregar Nuevo Servicio</h3>
                 <button class="modal-close" onclick="cerrarModalServicio()">✕</button>
             </div>
 
@@ -622,16 +575,16 @@
             <!-- Categoría con opción OTRO -->
             <div class="form-row">
                 <div class="form-group">
-                    <label style="font-weight: 700; color: #333;">️ Categoría *</label>
+                    <label style="font-weight: 700; color: #333;">🏷️ Categoría *</label>
                     <select id="servicioCategoria" onchange="manejarCategoriaOtro()" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
                         <option value="">Selecciona una categoría...</option>
-                        <option value="Salones"> Salones</option>
+                        <option value="Salones">🏰 Salones</option>
                         <option value="Alimentos">🍽️ Alimentos</option>
                         <option value="Fotografía"> Fotografía</option>
                         <option value="Música/DJ">🎵 Música/DJ</option>
-                        <option value="Decoración"> Decoración</option>
+                        <option value="Decoración">🎈 Decoración</option>
                         <option value="Animación">🎪 Animación</option>
-                        <option value="Mobiliario">🪑 Mobiliario</option>
+                        <option value="Mobiliario"> Mobiliario</option>
                         <option value="Vestuario">👗 Vestuario</option>
                         <option value="Transporte">🚗 Transporte</option>
                         <option value="OTRO">✨ Otro (Personalizado)</option>
@@ -645,7 +598,7 @@
 
             <!-- Campo oculto para Categoría Personalizada -->
             <div class="categoria-otro-box" id="contenedorCategoriaOtro" style="display: none;">
-                <label style="font-weight: 700; color: #333; display:block; margin-bottom:0.5rem;"> Define tu Categoría Personalizada *</label>
+                <label style="font-weight: 700; color: #333; display:block; margin-bottom:0.5rem;">Define tu Categoría Personalizada *</label>
                 <input type="text" id="servicioCategoriaOtro" placeholder="Escribe UNA SOLA PALABRA (Ej: Magia, Piñatas)" maxlength="20" style="border: 2px solid #FFD93D; padding: 0.8rem; width: 100%; margin-bottom: 1rem;">
                 
                 <label style="font-weight: 700; color: #333; display:block; margin-bottom:0.5rem;">📄 Descripción de esta nueva categoría *</label>
@@ -699,7 +652,7 @@
 
             <!-- Ubicación y Móvil (Se mantiene igual) -->
             <div class="form-group">
-                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;">🚗 ¿Este servicio es móvil? *</label>
+                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;"> ¿Este servicio es móvil? *</label>
                 <div class="toggle-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <label class="toggle-option" id="toggleMovilSi" onclick="toggleServicioMovil(true)">
                         <input type="radio" name="esMovil" value="si" style="display: none;">
@@ -717,7 +670,7 @@
             <div class="ubicacion-section">
                 <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem; font-size: 1.1rem;">📍 Ubicación del Servicio</label>
                 <div class="form-group">
-                    <label style="font-weight: 600; color: #333;">🏙️ Ciudad Base *</label>
+                    <label style="font-weight: 600; color: #333;">️ Ciudad Base *</label>
                     <input type="text" id="servicioCiudad" placeholder="Ej: Xalapa" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
                 </div>
                 <div class="form-row">
@@ -735,7 +688,7 @@
                     <input type="url" id="servicioMapsLink" placeholder="https://maps.google.com/?q=..." style="border: 2px solid #e0e0e0; padding: 0.8rem;">
                 </div>
                 <div id="ubicacionFijaContainer" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e0e0e0;">
-                    <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;"> Dirección del Negocio</label>
+                    <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;">🏠 Dirección del Negocio</label>
                     <div class="form-row">
                         <div class="form-group" style="flex: 2;"><input type="text" id="servicioCalle" placeholder="Calle" style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
                         <div class="form-group"><input type="text" id="servicioNumero" placeholder="Número" style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
@@ -743,350 +696,6 @@
                     <div class="form-row">
                         <div class="form-group"><input type="text" id="servicioColonia" placeholder="Colonia" style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
                         <div class="form-group"><input type="text" id="servicioCP" placeholder="C.P." style="border: 2px solid #e0e0e0; padding: 0.8rem;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="cerrarModalServicio()" style="padding: 1rem 2rem; font-size: 1rem;">Cancelar</button>
-                <button class="btn btn-success" onclick="guardarServicio()" style="padding: 1rem 2rem; font-size: 1rem; background: linear-gradient(135deg, #6BCB77, #4A90E2);"> Guardar Servicio</button>
-            </div>
-        </div>
-    </div>
-
-<!-- 🆕 FASE 4: TESTIMONIOS Y CASOS DE ÉXITO -->
-<div class="tab-content" id="tab-testimonios">
-    <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios y Casos de Éxito</h2>
-    <p style="color: #666; margin-bottom: 1.5rem;">Comparte tu experiencia y destaca tus mejores eventos. Todo contenido es revisado por el equipo GoParty antes de publicarse.</p>
-
-    <!-- Sub-tabs -->
-    <div class="sub-tabs">
-        <button class="sub-tab active" data-sub="testimonios-clientes">⭐ Testimonios de Clientes</button>
-        <button class="sub-tab" data-sub="experiencias-goparty">💬 Experiencia GoParty</button>
-        <button class="sub-tab" data-sub="casos-exito">🏆 Casos de Éxito</button>
-    </div>
-
-    <!-- SUB 1: Testimonios de Clientes (VISTA DE PROVEEDOR - SOLO LECTURA) -->
-    <div class="sub-content active" id="sub-testimonios-clientes">
-        <div class="card">
-            <h3>⭐ Mis Reseñas Aprobadas</h3>
-            <p style="color: #666; margin-bottom: 1rem;">
-                Aquí puedes ver los testimonios que tus clientes han dejado sobre ti y que han sido aprobados por el equipo de GoParty. 
-                Estos son los que aparecen públicamente en tu perfil.
-            </p>
-            
-            <div class="alert" id="alertResenasProveedor"></div>
-
-            <!-- Estadísticas rápidas de reseñas -->
-            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
-                    <div style="font-size: 0.9rem; color: #666;">Total Reseñas</div>
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #4A90E2;" id="countTotalResenas">0</div>
-                </div>
-                <div style="background: #fffbe6; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
-                    <div style="font-size: 0.9rem; color: #666;">Calificación Promedio</div>
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #FFD93D;" id="avgCalificacion">0.0 ⭐</div>
-                </div>
-            </div>
-
-            <!-- Lista de testimonios -->
-            <div id="listaResenasRecibidas">
-                <div style="text-align: center; padding: 2rem; color: #999;">
-                    Cargando tus reseñas aprobadas...
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SUB 2: Experiencia GoParty -->
-    <div class="sub-content" id="sub-experiencias-goparty">
-        <div class="card">
-            <h3>💬 Tu Experiencia con GoParty</h3>
-            <p style="color: #666; margin-bottom: 1rem;">Cuéntanos cómo ha sido tu experiencia usando la plataforma GoParty. Tu testimonio ayudará a otros proveedores a decidir unirse.</p>
-            <div class="alert" id="alertExperienciaGoParty"></div>
-
-            <div class="form-group">
-                <label>¿Cuánto tiempo llevas usando GoParty? *</label>
-                <select id="expTiempo">
-                    <option value="">Selecciona...</option>
-                    <option value="Menos de 6 meses">Menos de 6 meses</option>
-                    <option value="6-12 meses">6-12 meses</option>
-                    <option value="1-2 años">1-2 años</option>
-                    <option value="Más de 2 años">Más de 2 años</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Calificación de la plataforma GoParty *</label>
-                <div id="estrellasGoParty" style="font-size: 2rem; cursor: pointer;">
-                    <span onclick="setCalificacionGoParty(1)">⭐</span>
-                    <span onclick="setCalificacionGoParty(2)">⭐</span>
-                    <span onclick="setCalificacionGoParty(3)">⭐</span>
-                    <span onclick="setCalificacionGoParty(4)">⭐</span>
-                    <span onclick="setCalificacionGoParty(5)">⭐</span>
-                </div>
-                <small>Haz clic en las estrellas para calificar</small>
-            </div>
-
-            <div class="form-group">
-                <label>¿Qué te gusta más de GoParty? *</label>
-                <textarea id="expGusta" rows="3" placeholder="Ej: La facilidad para conectar con clientes, el soporte técnico..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>¿Qué mejorarías de GoParty? *</label>
-                <textarea id="expMejoraria" rows="3" placeholder="Ej: Más herramientas de marketing, mejor app móvil..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>¿Recomendarías GoParty a otros proveedores? *</label>
-                <div class="toggle-group">
-                    <label class="toggle-option" id="toggleRecomendarSi" onclick="toggleRecomendar(true)">
-                        <input type="radio" name="recomendar" value="si">
-                        ✅ Sí, la recomendaría
-                    </label>
-                    <label class="toggle-option" id="toggleRecomendarNo" onclick="toggleRecomendar(false)">
-                        <input type="radio" name="recomendar" value="no">
-                        ❌ No la recomendaría
-                    </label>
-                </div>
-            </div>
-
-            <button class="btn" onclick="enviarExperienciaGoParty()"> Enviar Experiencia para Revisión</button>
-        </div>
-
-        <div class="card">
-            <h3>📋 Mis Experiencias Enviadas</h3>
-            <div id="listaExperienciasGoParty">Aún no has enviado tu experiencia.</div>
-        </div>
-    </div>
-
-    <!-- SUB 3: Casos de Éxito -->
-    <div class="sub-content" id="sub-casos-exito">
-        <div class="card">
-            <h3>🏆 Proponer Caso de Éxito</h3>
-            <p style="color: #666; margin-bottom: 1rem;">Comparte una historia real de un evento exitoso. Si es aprobado, aparecerá en la página principal de GoParty como inspiración para otros.</p>
-            <div class="alert" id="alertCasoExito"></div>
-
-            <div class="form-group">
-                <label>Título del Caso *</label>
-                <input type="text" id="casoTitulo" placeholder="Ej: Boda de ensueño para 200 invitados en Xalapa">
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Tipo de Evento *</label>
-                    <select id="casoTipoEvento">
-                        <option value="">Selecciona...</option>
-                        <option>Cumpleaños Infantil</option>
-                        <option>Cumpleaños Adulto</option>
-                        <option>Boda</option>
-                        <option>XV Años</option>
-                        <option>Evento Corporativo</option>
-                        <option>Baby Shower</option>
-                        <option>Graduación</option>
-                        <option>Otro</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Ciudad *</label>
-                    <input type="text" id="casoCiudad" placeholder="Ciudad del evento">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Historia Completa *</label>
-                <textarea id="casoHistoria" rows="6" placeholder="Cuéntanos la historia completa: el desafío, cómo lo resolviste, qué servicios ofreciste..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Resultado Logrado *</label>
-                <input type="text" id="casoResultado" placeholder="Ej: 100% de satisfacción, 200 invitados felices">
-            </div>
-
-            <div class="form-group">
-                <label>Fotos del Evento (hasta 5)</label>
-                <input type="file" id="casoFotos" accept="image/jpeg,image/png" multiple onchange="previewFotosCaso(event)">
-                <small style="color: #666;">JPG, PNG (Max 1MB cada una para evitar errores de tamaño)</small>
-                <div class="foto-preview-container" id="fotoPreviewCaso"></div>
-            </div>
-
-            <button class="btn" onclick="enviarCasoExito()">📤 Enviar Caso de Éxito para Revisión</button>
-        </div>
-
-        <div class="card">
-            <h3>📋 Mis Casos de Éxito Enviados</h3>
-            <div id="listaCasosExito">Aún no has propuesto casos de éxito.</div>
-        </div>
-    </div>
-</div>
-
-            <!-- MEMBRESÍA -->
-            <div class="tab-content" id="tab-membresia">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">💎 Tu Plan Actual</h2>
-                <div class="card">
-                    <h3>Plan Basic</h3>
-                    <p><strong>Estado:</strong> Activo</p>
-                    <p><strong>Precio:</strong> Gratis</p>
-                    <p>Aparecer en el directorio general</p>
-                </div>
-                <div class="card">
-                    <h3>Plan Pro - $299/mes</h3>
-                    <p>Todo lo de Basic + Sello de verificación + Mayor visibilidad</p>
-                    <button class="btn" onclick="actualizarPlan('Pro')">Actualizar a Pro</button>
-                </div>
-                <div class="card">
-                    <h3>Plan Gold - $599/mes</h3>
-                    <p>Todo lo de Pro + Posición destacada + Borde dorado</p>
-                    <button class="btn" onclick="actualizarPlan('Gold')">Actualizar a Gold</button>
-                </div>
-            </div>
-
-            <!-- MENSAJES -->
-            <div class="tab-content" id="tab-mensajes">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">💬 Mensajes del Equipo GoParty</h2>
-                <div class="card">
-                    <div id="listaMensajes">No hay mensajes</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: AGREGAR/EDITAR SERVICIO -->
-    <div class="modal-overlay" id="modalServicio">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 id="modalServicioTitulo">➕ Agregar Nuevo Servicio</h3>
-                <button class="modal-close" onclick="cerrarModalServicio()">✕</button>
-            </div>
-
-            <div class="alert" id="alertModalServicio"></div>
-
-            <input type="hidden" id="servicioId">
-
-            <div class="form-group">
-                <label style="font-weight: 700; color: #333;"> Nombre del Servicio *</label>
-                <input type="text" id="servicioNombre" placeholder="Ej: Paquete Básico de Decoración" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label style="font-weight: 700; color: #333;">🏷️ Categoría *</label>
-                    <select id="servicioCategoria" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                        <option value="">Selecciona una categoría...</option>
-                        <option value="Salones">🏰 Salones</option>
-                        <option value="Alimentos">🍽️ Alimentos</option>
-                        <option value="Fotografía"> Fotografía</option>
-                        <option value="Música/DJ">🎵 Música/DJ</option>
-                        <option value="Decoración">🎈 Decoración</option>
-                        <option value="Animación">🎪 Animación</option>
-                        <option value="Mobiliario"> Mobiliario</option>
-                        <option value="Vestuario">👗 Vestuario</option>
-                        <option value="Transporte"> Transporte</option>
-                        <option value="Otros">✨ Otros</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label style="font-weight: 700; color: #333;">💰 Precio Base (opcional)</label>
-                    <input type="text" id="servicioPrecio" placeholder="Ej: $5,000 o 'Desde $3,000'" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label style="font-weight: 700; color: #333;">📝 Descripción del Servicio *</label>
-                <textarea id="servicioDescripcion" rows="4" placeholder="Describe tu servicio con detalle: qué incluye, duración, materiales, etc." style="border: 2px solid #e0e0e0; padding: 0.8rem;"></textarea>
-            </div>
-
-            <!-- Variedad/Paquetes -->
-            <div class="variedad-container">
-                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 0.5rem;">📦 Variedad / Paquetes</label>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Agrega diferentes opciones o paquetes de este servicio</p>
-                
-                <div id="variedadLista" style="margin-bottom: 1rem;">
-                    <p style="color: #999; font-style: italic;">Aún no hay paquetes agregados</p>
-                </div>
-                
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="nuevaVariedadInput" placeholder="Ej: Paquete Premium - $8,000" style="flex: 1; border: 2px solid #e0e0e0; padding: 0.8rem; border-radius: 8px;">
-                    <button type="button" class="btn" onclick="agregarVariedadDesdeInput()" style="padding: 0.8rem 1.5rem; white-space: nowrap;">
-                        ➕ Agregar
-                    </button>
-                </div>
-            </div>
-
-            <!-- Fotos -->
-            <div class="form-group" style="background: #f9f9f9; padding: 1.5rem; border-radius: 12px; border: 2px solid #e0e0e0;">
-                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 0.5rem;">📸 Fotos del Servicio (máx. 5)</label>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">JPG, PNG (Max 1MB cada una)</p>
-                
-                <input type="file" id="servicioFotos" accept="image/jpeg,image/png" multiple onchange="previewFotos(event)" style="border: 2px dashed #4A90E2; padding: 1rem; border-radius: 8px; background: white; width: 100%;">
-                
-                <div class="foto-preview-container" id="fotoPreviewContainer"></div>
-            </div>
-
-            <!-- Tipo de Servicio -->
-            <div class="form-group">
-                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;">🚗 ¿Este servicio es móvil? *</label>
-                <div class="toggle-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <label class="toggle-option" id="toggleMovilSi" onclick="toggleServicioMovil(true)">
-                        <input type="radio" name="esMovil" value="si" style="display: none;">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚗</div>
-                        <div>Sí, voy al cliente</div>
-                    </label>
-                    <label class="toggle-option active" id="toggleMovilNo" onclick="toggleServicioMovil(false)">
-                        <input type="radio" name="esMovil" value="no" checked style="display: none;">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📍</div>
-                        <div>No, tiene ubicación fija</div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Ubicación con Google Maps -->
-            <div class="ubicacion-section">
-                <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem; font-size: 1.1rem;"> Ubicación del Servicio</label>
-                
-                <div class="form-group">
-                    <label style="font-weight: 600; color: #333;">🏙️ Ciudad Base *</label>
-                    <input type="text" id="servicioCiudad" placeholder="Ej: Xalapa" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label style="font-weight: 600; color: #333;"> Radio de Cobertura (km)</label>
-                        <input type="number" id="servicioRadio" placeholder="Ej: 50" min="0" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                        <small style="color: #666; font-size: 0.85rem;">Distancia máxima desde la ciudad base</small>
-                    </div>
-                    <div class="form-group">
-                        <label style="font-weight: 600; color: #333;">️ Estado</label>
-                        <input type="text" id="servicioEstado" placeholder="Ej: Veracruz" readonly style="background: #f5f5f5; border: 2px solid #e0e0e0; padding: 0.8rem;">
-                    </div>
-                </div>
-
-                <!-- Google Maps Link -->
-                <div class="form-group" style="margin-top: 1rem;">
-                    <label style="font-weight: 600; color: #333;"> Link de Google Maps (opcional)</label>
-                    <input type="url" id="servicioMapsLink" placeholder="https://maps.google.com/?q=..." style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                    <small style="color: #666; font-size: 0.85rem;">Pega aquí el link de Google Maps de tu ubicación</small>
-                </div>
-
-                <!-- Dirección fija -->
-                <div id="ubicacionFijaContainer" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e0e0e0;">
-                    <label style="font-weight: 700; color: #333; display: block; margin-bottom: 1rem;"> Dirección del Negocio</label>
-                    <div class="form-row">
-                        <div class="form-group" style="flex: 2;">
-                            <input type="text" id="servicioCalle" placeholder="Calle" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="servicioNumero" placeholder="Número" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" id="servicioColonia" placeholder="Colonia" style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="servicioCP" placeholder="C.P." style="border: 2px solid #e0e0e0; padding: 0.8rem;">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1119,11 +728,7 @@
         const googleProvider = new GoogleAuthProvider();
 
         let proveedorActual = null;
-        let calificacionTestimonio = 0;
-        let calificacionGoParty = 0;
-        let recomendarGoParty = null;
         let fotosTemporales = [];
-        let fotosCasoTemporales = [];
         let variedadesTemporales = [];
         let servicioEditandoId = null;
         let esServicioMovil = false;
@@ -1164,7 +769,7 @@
                 
                 if (snap.empty) {
                     await auth.signOut();
-                    alert(' Acceso no autorizado\n\nNo encontramos una cuenta aprobada asociada a este email.\n\nPara unirte a GoParty, solicita tu incorporación desde:\n unete.html');
+                    alert('🚫 Acceso no autorizado\n\nNo encontramos una cuenta aprobada asociada a este email.\n\nPara unirte a GoParty, solicita tu incorporación desde:\n👉 unete.html');
                     return;
                 }
 
@@ -1180,13 +785,13 @@
                         if (proveedorData.motivoRechazo) mensaje += `Motivo: ${proveedorData.motivoRechazo}\n\n`;
                         mensaje += 'Si consideras que es un error, contacta a soporte@goparty.com';
                     } else {
-                        mensaje = '⏳ Cuenta en revisión\n\nTu solicitud está siendo revisada por el equipo de GoParty.\n\nTiempo estimado: 24-48 horas.';
+                        mensaje = ' Cuenta en revisión\n\nTu solicitud está siendo revisada por el equipo de GoParty.\n\nTiempo estimado: 24-48 horas.';
                     }
                     alert(mensaje);
                     return;
                 }
             } catch (error) {
-                alert(' Error con Google: ' + error.message);
+                alert('❌ Error con Google: ' + error.message);
             }
         };
 
@@ -1242,7 +847,7 @@
             
             cargarPerfil();
             cargarServicios();
-            cargarTestimonios();
+            cargarTestimoniosRecibidos();
         }
 
         // ==========================================
@@ -1261,20 +866,10 @@
                     }
                 }
                 if (tab.dataset.tab === 'testimonios') {
-                    if (typeof window.cargarTestimonios === 'function') {
-                        window.cargarTestimonios();
+                    if (typeof window.cargarTestimoniosRecibidos === 'function') {
+                        window.cargarTestimoniosRecibidos();
                     }
                 }
-            });
-        });
-
-        // Sub-tabs de Testimonios
-        document.querySelectorAll('.sub-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById('sub-' + tab.dataset.sub).classList.add('active');
             });
         });
 
@@ -1386,7 +981,7 @@
                 
                 if (!rfc || !razon || !regimen || !usoCFDI || !cp) {
                     alert.className = 'alert error';
-                    alert.textContent = ' Completa todos los campos fiscales obligatorios';
+                    alert.textContent = '❌ Completa todos los campos fiscales obligatorios';
                     alert.style.display = 'block';
                     return;
                 }
@@ -1468,58 +1063,28 @@
                     const contenedor = document.getElementById('listaServicios');
                     
                     if (servicios.length === 0) {
-                        contenedor.innerHTML = `
-                            <div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">
-                                <div style="font-size: 4rem; margin-bottom: 1rem;">🛎️</div>
-                                <h3>Aún no tienes servicios registrados</h3>
-                                <p>Haz clic en "Agregar Nuevo Servicio" para comenzar</p>
-                            </div>
-                        `;
+                        contenedor.innerHTML = '<div class="empty-state" style="text-align: center; padding: 3rem; color: #999;"><div style="font-size: 4rem; margin-bottom: 1rem;">🛎️</div><h3>Aún no tienes servicios registrados</h3><p>Haz clic en "Agregar Nuevo Servicio" para comenzar</p></div>';
                         return;
                     }
                     
                     contenedor.innerHTML = servicios.map((s, index) => {
                         const fotosHTML = s.fotos && s.fotos.length > 0 
-                            ? `<div class="servicio-fotos">${s.fotos.map(f => `<img src="${f}" class="servicio-foto" alt="Foto">`).join('')}</div>`
+                            ? '<div class="servicio-fotos">' + s.fotos.map(f => '<img src="' + f + '" class="servicio-foto" alt="Foto">').join('') + '</div>'
                             : '';
                         
                         const variedadHTML = s.variedad && s.variedad.length > 0
-                            ? `<div class="paquete-lista"><strong>Variedad/Paquetes:</strong>${s.variedad.map(v => `<div class="paquete-item">• ${v}</div>`).join('')}</div>`
+                            ? '<div class="paquete-lista"><strong>Variedad/Paquetes:</strong>' + s.variedad.map(v => '<div class="paquete-item">• ' + (typeof v === 'string' ? v : v.nombre) + '</div>').join('') + '</div>'
                             : '';
                         
                         const mapsHTML = s.mapsLink 
-                            ? `<div class="servicio-meta-item"><strong>🗺️ Ubicación</strong><a href="${s.mapsLink}" target="_blank" style="color: #4A90E2;">Ver en Google Maps</a></div>`
+                            ? '<div class="servicio-meta-item"><strong>🗺️ Ubicación</strong><a href="' + s.mapsLink + '" target="_blank" style="color: #4A90E2;">Ver en Google Maps</a></div>'
                             : '';
                         
                         const ubicacionHTML = s.esMovil 
-                            ? `<div class="servicio-meta-item"><strong>🚗 Tipo</strong>Servicio móvil</div>
-                               <div class="servicio-meta-item"><strong>🌍 Cobertura</strong>${s.ciudad} + ${s.radio || 0} km</div>
-                               ${mapsHTML}`
-                            : `<div class="servicio-meta-item"><strong>📍 Ubicación Fija</strong>${s.calle || ''} ${s.numero || ''}, ${s.colonia || ''}</div>
-                               <div class="servicio-meta-item"><strong>🏙️ Ciudad</strong>${s.ciudad}, ${s.estado || ''}</div>
-                               ${mapsHTML}`;
+                            ? '<div class="servicio-meta-item"><strong> Tipo</strong>Servicio móvil</div><div class="servicio-meta-item"><strong>🌍 Cobertura</strong>' + s.ciudad + ' + ' + (s.radio || 0) + ' km</div>' + mapsHTML
+                            : '<div class="servicio-meta-item"><strong> Ubicación Fija</strong>' + (s.calle || '') + ' ' + (s.numero || '') + ', ' + (s.colonia || '') + '</div><div class="servicio-meta-item"><strong>🏙️ Ciudad</strong>' + s.ciudad + ', ' + (s.estado || '') + '</div>' + mapsHTML;
                         
-                        return `
-                            <div class="servicio-card">
-                                <div class="servicio-header">
-                                    <div>
-                                        <div class="servicio-titulo">${s.nombre}</div>
-                                        <span class="servicio-categoria">${s.categoria || 'Sin categoría'}</span>
-                                        ${s.precio ? `<div style="margin-top: 0.5rem; font-weight: 700; color: #FF6B9D;">💰 ${s.precio}</div>` : ''}
-                                    </div>
-                                    <div class="servicio-acciones">
-                                        <button class="btn btn-small" onclick="editarServicio(${index})">✏️ Editar</button>
-                                        <button class="btn btn-danger btn-small" onclick="eliminarServicio(${index})">🗑️ Eliminar</button>
-                                    </div>
-                                </div>
-                                <div class="servicio-descripcion">${s.descripcion || ''}</div>
-                                ${variedadHTML}
-                                ${fotosHTML}
-                                <div class="servicio-meta">
-                                    ${ubicacionHTML}
-                                </div>
-                            </div>
-                        `;
+                        return '<div class="servicio-card"><div class="servicio-header"><div><div class="servicio-titulo">' + s.nombre + '</div><span class="servicio-categoria">' + (s.categoria || 'Sin categoría') + '</span>' + (s.precio ? '<div style="margin-top: 0.5rem; font-weight: 700; color: #FF6B9D;">💰 ' + s.precio + '</div>' : '') + '</div><div class="servicio-acciones"><button class="btn btn-small" onclick="editarServicio(' + index + ')">✏️ Editar</button><button class="btn btn-danger btn-small" onclick="eliminarServicio(' + index + ')">🗑️ Eliminar</button></div></div><div class="servicio-descripcion">' + (s.descripcion || '') + '</div>' + variedadHTML + fotosHTML + '<div class="servicio-meta">' + ubicacionHTML + '</div></div>';
                     }).join('');
                 }
             } catch (error) {
@@ -1527,797 +1092,8 @@
             }
         }
 
-        window.abrirModalServicio = function() {
-            servicioEditandoId = null;
-            fotosTemporales = [];
-            variedadesTemporales = [];
-            esServicioMovil = false;
-            
-            document.getElementById('modalServicioTitulo').textContent = '➕ Agregar Nuevo Servicio';
-            document.getElementById('servicioId').value = '';
-            document.getElementById('servicioNombre').value = '';
-            document.getElementById('servicioCategoria').value = '';
-            document.getElementById('servicioPrecio').value = '';
-            document.getElementById('servicioDescripcion').value = '';
-            document.getElementById('servicioCiudad').value = proveedorActual.ciudad || '';
-            document.getElementById('servicioEstado').value = proveedorActual.estado || '';
-            document.getElementById('servicioRadio').value = '';
-            document.getElementById('servicioMapsLink').value = '';
-            document.getElementById('servicioCalle').value = '';
-            document.getElementById('servicioNumero').value = '';
-            document.getElementById('servicioColonia').value = '';
-            document.getElementById('servicioCP').value = '';
-            document.getElementById('servicioFotos').value = '';
-            document.getElementById('fotoPreviewContainer').innerHTML = '';
-            document.getElementById('nuevaVariedadInput').value = '';
-            document.getElementById('variedadLista').innerHTML = '<p style="color: #999; font-style: italic;">Aún no hay paquetes agregados</p>';
-            
-            toggleServicioMovil(false);
-            
-            document.getElementById('modalServicio').classList.add('active');
-        };
-
-        window.cerrarModalServicio = function() {
-            document.getElementById('modalServicio').classList.remove('active');
-        };
-
-        window.toggleServicioMovil = function(esMovil) {
-            esServicioMovil = esMovil;
-            const toggleSi = document.getElementById('toggleMovilSi');
-            const toggleNo = document.getElementById('toggleMovilNo');
-            const ubicacionContainer = document.getElementById('ubicacionFijaContainer');
-            
-            if (esMovil) {
-                toggleSi.classList.add('active');
-                toggleSi.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
-                toggleSi.style.color = 'white';
-                toggleSi.style.borderColor = '#FF6B9D';
-                
-                toggleNo.classList.remove('active');
-                toggleNo.style.background = 'white';
-                toggleNo.style.color = '#333';
-                toggleNo.style.borderColor = '#e0e0e0';
-                
-                ubicacionContainer.style.display = 'none';
-            } else {
-                toggleSi.classList.remove('active');
-                toggleSi.style.background = 'white';
-                toggleSi.style.color = '#333';
-                toggleSi.style.borderColor = '#e0e0e0';
-                
-                toggleNo.classList.add('active');
-                toggleNo.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
-                toggleNo.style.color = 'white';
-                toggleNo.style.borderColor = '#FF6B9D';
-                
-                ubicacionContainer.style.display = 'block';
-            }
-        };
-
-        window.agregarVariedadDesdeInput = function() {
-            const input = document.getElementById('nuevaVariedadInput');
-            const nombre = input.value.trim();
-            
-            if (nombre) {
-                variedadesTemporales.push(nombre);
-                input.value = '';
-                renderVariedades();
-            }
-        };
-
-        document.getElementById('nuevaVariedadInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                agregarVariedadDesdeInput();
-            }
-        });
-
-        window.agregarVariedad = function() {
-            document.getElementById('nuevaVariedadInput').focus();
-        };
-
-        window.eliminarVariedad = function(index) {
-            variedadesTemporales.splice(index, 1);
-            renderVariedades();
-        };
-
-        function renderVariedades() {
-            const contenedor = document.getElementById('variedadLista');
-            if (variedadesTemporales.length === 0) {
-                contenedor.innerHTML = '<p style="color: #999; font-style: italic;">Aún no hay paquetes agregados</p>';
-                return;
-            }
-            contenedor.innerHTML = variedadesTemporales.map((v, i) => `
-                <div class="variedad-item">
-                    <span style="flex: 1; font-weight: 500;">${v}</span>
-                    <button type="button" class="btn-remove-variedad" onclick="eliminarVariedad(${i})">✕</button>
-                </div>
-            `).join('');
-        }
-
-        window.previewFotos = function(event) {
-            const files = event.target.files;
-            
-            Array.from(files).forEach(file => {
-                if (fotosTemporales.length >= 5) {
-                    alert('⚠️ Máximo 5 fotos por servicio');
-                    return;
-                }
-                
-                if (file.size > 5 * 1024 * 1024) {
-                    alert(`⚠️ La foto "${file.name}" excede 1MB`);
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    fotosTemporales.push(e.target.result);
-                    renderFotosPreview();
-                };
-                reader.readAsDataURL(file);
-            });
-        };
-
-        window.eliminarFoto = function(index) {
-            fotosTemporales.splice(index, 1);
-            renderFotosPreview();
-        };
-
-        function renderFotosPreview() {
-            const contenedor = document.getElementById('fotoPreviewContainer');
-            contenedor.innerHTML = fotosTemporales.map((f, i) => `
-                <div class="foto-preview-wrapper">
-                    <img src="${f}" class="foto-preview">
-                    <button type="button" class="foto-remove" onclick="eliminarFoto(${i})">✕</button>
-                </div>
-            `).join('');
-        }
-
-        window.editarServicio = function(index) {
-            const docSnap = getDoc(doc(db, "proveedores", proveedorActual.id)).then(snap => {
-                if (snap.exists()) {
-                    const servicios = snap.data().servicios || [];
-                    const s = servicios[index];
-                    if (!s) return;
-                    
-                    servicioEditandoId = index;
-                    fotosTemporales = s.fotos || [];
-                    variedadesTemporales = s.variedad || [];
-                    esServicioMovil = s.esMovil || false;
-                    
-                    document.getElementById('modalServicioTitulo').textContent = '✏️ Editar Servicio';
-                    document.getElementById('servicioId').value = index;
-                    document.getElementById('servicioNombre').value = s.nombre || '';
-                    document.getElementById('servicioCategoria').value = s.categoria || '';
-                    document.getElementById('servicioPrecio').value = s.precio || '';
-                    document.getElementById('servicioDescripcion').value = s.descripcion || '';
-                    document.getElementById('servicioCiudad').value = s.ciudad || '';
-                    document.getElementById('servicioEstado').value = s.estado || '';
-                    document.getElementById('servicioRadio').value = s.radio || '';
-                    document.getElementById('servicioMapsLink').value = s.mapsLink || '';
-                    document.getElementById('servicioCalle').value = s.calle || '';
-                    document.getElementById('servicioNumero').value = s.numero || '';
-                    document.getElementById('servicioColonia').value = s.colonia || '';
-                    document.getElementById('servicioCP').value = s.cp || '';
-                    
-                    toggleServicioMovil(esServicioMovil);
-                    renderVariedades();
-                    renderFotosPreview();
-                    
-                    document.getElementById('modalServicio').classList.add('active');
-                }
-            });
-        };
-
-        window.eliminarServicio = async function(index) {
-            if (!confirm('¿Eliminar este servicio? Esta acción no se puede deshacer.')) return;
-            
-            try {
-                const docSnap = await getDoc(doc(db, "proveedores", proveedorActual.id));
-                if (docSnap.exists()) {
-                    const servicios = docSnap.data().servicios || [];
-                    servicios.splice(index, 1);
-                    await updateDoc(doc(db, "proveedores", proveedorActual.id), { servicios });
-                    cargarServicios();
-                }
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
-        };
-
-        window.guardarServicio = async function() {
-            const alert = document.getElementById('alertModalServicio');
-            
-            const nombre = document.getElementById('servicioNombre').value.trim();
-            const categoria = document.getElementById('servicioCategoria').value;
-            const descripcion = document.getElementById('servicioDescripcion').value.trim();
-            const ciudad = document.getElementById('servicioCiudad').value.trim();
-            
-            if (!nombre || !categoria || !descripcion || !ciudad) {
-                alert.className = 'alert error';
-                alert.textContent = '❌ Nombre, categoría, descripción y ciudad son obligatorios';
-                alert.style.display = 'block';
-                return;
-            }
-            
-            const servicio = {
-                nombre,
-                categoria,
-                descripcion,
-                precio: document.getElementById('servicioPrecio').value.trim(),
-                ciudad,
-                estado: document.getElementById('servicioEstado').value.trim(),
-                radio: parseInt(document.getElementById('servicioRadio').value) || 0,
-                esMovil: esServicioMovil,
-                mapsLink: document.getElementById('servicioMapsLink').value.trim(),
-                variedad: variedadesTemporales,
-                fotos: fotosTemporales,
-                fechaCreacion: new Date().toISOString(),
-                fechaActualizacion: new Date().toISOString()
-            };
-            
-            if (!esServicioMovil) {
-                servicio.calle = document.getElementById('servicioCalle').value.trim();
-                servicio.numero = document.getElementById('servicioNumero').value.trim();
-                servicio.colonia = document.getElementById('servicioColonia').value.trim();
-                servicio.cp = document.getElementById('servicioCP').value.trim();
-            }
-            
-            try {
-                const docSnap = await getDoc(doc(db, "proveedores", proveedorActual.id));
-                let servicios = docSnap.data().servicios || [];
-                
-                if (servicioEditandoId !== null) {
-                    servicios[servicioEditandoId] = servicio;
-                } else {
-                    servicios.push(servicio);
-                }
-                
-                await updateDoc(doc(db, "proveedores", proveedorActual.id), { servicios });
-                
-                alert.className = 'alert success';
-                alert.textContent = '✅ Servicio guardado exitosamente';
-                alert.style.display = 'block';
-                
-                setTimeout(() => {
-                    alert.style.display = 'none';
-                    cerrarModalServicio();
-                    cargarServicios();
-                }, 1500);
-                
-            } catch (error) {
-                alert.className = 'alert error';
-                alert.textContent = '❌ Error: ' + error.message;
-                alert.style.display = 'block';
-            }
-        };
-
         // ==========================================
-        // 🆕 FASE 4: TESTIMONIOS EN 3 SECCIONES
-        // ==========================================
-        
-        async function cargarTestimonios() {
-            try {
-                // Cargar testimonios de clientes
-                const qTestimonios = query(collection(db, "testimonios"), where("proveedorId", "==", proveedorActual.id));
-                const snapTestimonios = await getDocs(qTestimonios);
-                const testimonios = snapTestimonios.docs.map(d => ({ id: d.id, ...d.data() }));
-                
-                document.getElementById('tabTestimoniosCount').textContent = testimonios.length;
-                
-                const contenedorTestimonios = document.getElementById('listaTestimoniosClientes');
-                if (testimonios.length === 0) {
-                    contenedorTestimonios.innerHTML = '<p style="color: #999;">Aún no has enviado testimonios.</p>';
-                } else {
-                    contenedorTestimonios.innerHTML = testimonios.map(t => {
-                        const estadoClass = t.estado === 'aprobado' ? 'aprobado' : t.estado === 'rechazado' ? 'rechazado' : 'pendiente';
-                        const estadoBadge = t.estado === 'aprobado' ? 'estado-aprobado' : t.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
-                        const estrellas = '⭐'.repeat(t.calificacion || 0);
-                        
-                        return `
-                            <div class="testimonio-item ${estadoClass}">
-                                <div class="testimonio-header">
-                                    <div>
-                                        <strong>${t.nombreCliente || 'Anónimo'}</strong> sobre ${t.nombreProveedor || 'Proveedor'}
-                                        <span class="estado-badge ${estadoBadge}">${t.estado || 'pendiente'}</span>
-                                    </div>
-                                </div>
-                                <div class="testimonio-estrellas">${estrellas}</div>
-                                <p style="color: #666; font-style: italic;">"${t.comentario || ''}"</p>
-                                <small style="color: #999;">${t.tipoEvento || ''} - ${t.ciudad || ''} • ${t.fecha ? new Date(t.fecha).toLocaleDateString('es-MX') : ''}</small>
-                                <div class="testimonio-acciones">
-                                    ${t.estado === 'aprobado' ? `
-                                        <button class="btn btn-small btn-secondary" onclick="solicitarCambioTestimonio('${t.id}', 'testimonios')">✏️ Solicitar Cambio</button>
-                                        <button class="btn btn-small btn-danger" onclick="solicitarEliminacionTestimonio('${t.id}', 'testimonios')">🗑️ Solicitar Eliminación</button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                }
-
-                // Cargar experiencias GoParty
-                const qExperiencias = query(collection(db, "testimonios_proveedores"), where("proveedorId", "==", proveedorActual.id));
-                const snapExperiencias = await getDocs(qExperiencias);
-                const experiencias = snapExperiencias.docs.map(d => ({ id: d.id, ...d.data() }));
-                
-                const contenedorExperiencias = document.getElementById('listaExperienciasGoParty');
-                if (experiencias.length === 0) {
-                    contenedorExperiencias.innerHTML = '<p style="color: #999;">Aún no has enviado tu experiencia.</p>';
-                } else {
-                    contenedorExperiencias.innerHTML = experiencias.map(e => {
-                        const estadoClass = e.estado === 'aprobado' ? 'aprobado' : e.estado === 'rechazado' ? 'rechazado' : 'pendiente';
-                        const estadoBadge = e.estado === 'aprobado' ? 'estado-aprobado' : e.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
-                        const estrellas = '⭐'.repeat(e.calificacion || 0);
-                        
-                        return `
-                            <div class="testimonio-item ${estadoClass}">
-                                <div class="testimonio-header">
-                                    <div>
-                                        <strong>Experiencia con GoParty</strong>
-                                        <span class="estado-badge ${estadoBadge}">${e.estado || 'pendiente'}</span>
-                                    </div>
-                                </div>
-                                <div class="testimonio-estrellas">${estrellas}</div>
-                                <p><strong>Tiempo usando:</strong> ${e.tiempo || 'No especificado'}</p>
-                                <p><strong>Me gusta:</strong> ${e.meGusta || ''}</p>
-                                <p><strong>Mejoraría:</strong> ${e.mejoraria || ''}</p>
-                                <p><strong>Recomendaría:</strong> ${e.recomendar === true ? '✅ Sí' : '❌ No'}</p>
-                                <small style="color: #999;">${e.fecha ? new Date(e.fecha).toLocaleDateString('es-MX') : ''}</small>
-                                <div class="testimonio-acciones">
-                                    ${e.estado === 'aprobado' ? `
-                                        <button class="btn btn-small btn-secondary" onclick="solicitarCambioTestimonio('${e.id}', 'experiencias')">✏️ Solicitar Cambio</button>
-                                        <button class="btn btn-small btn-danger" onclick="solicitarEliminacionTestimonio('${e.id}', 'experiencias')">🗑️ Solicitar Eliminación</button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                }
-
-                // Cargar casos de éxito
-                const qCasos = query(collection(db, "casos_exito"), where("proveedorId", "==", proveedorActual.id));
-                const snapCasos = await getDocs(qCasos);
-                const casos = snapCasos.docs.map(d => ({ id: d.id, ...d.data() }));
-                
-                const contenedorCasos = document.getElementById('listaCasosExito');
-                if (casos.length === 0) {
-                    contenedorCasos.innerHTML = '<p style="color: #999;">Aún no has propuesto casos de éxito.</p>';
-                } else {
-                    contenedorCasos.innerHTML = casos.map(c => {
-                        const estadoClass = c.estado === 'aprobado' ? 'aprobado' : c.estado === 'rechazado' ? 'rechazado' : 'pendiente';
-                        const estadoBadge = c.estado === 'aprobado' ? 'estado-aprobado' : c.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
-                        
-                        return `
-                            <div class="testimonio-item ${estadoClass}">
-                                <div class="testimonio-header">
-                                    <div>
-                                        <strong>🏆 ${c.titulo || 'Sin título'}</strong>
-                                        <span class="estado-badge ${estadoBadge}">${c.estado || 'pendiente'}</span>
-                                    </div>
-                                </div>
-                                <p><strong>Tipo:</strong> ${c.tipoEvento || ''} - ${c.ciudad || ''}</p>
-                                <p><strong>Historia:</strong> ${c.historia || ''}</p>
-                                <p><strong>Resultado:</strong> ${c.resultado || ''}</p>
-                                ${c.fotos && c.fotos.length > 0 ? `<div class="servicio-fotos">${c.fotos.map(f => `<img src="${f}" class="servicio-foto" alt="Foto">`).join('')}</div>` : ''}
-                                <small style="color: #999;">${c.fecha ? new Date(c.fecha).toLocaleDateString('es-MX') : ''}</small>
-                                <div class="testimonio-acciones">
-                                    ${c.estado === 'aprobado' ? `
-                                        <button class="btn btn-small btn-secondary" onclick="solicitarCambioTestimonio('${c.id}', 'casos')">️ Solicitar Cambio</button>
-                                        <button class="btn btn-small btn-danger" onclick="solicitarEliminacionTestimonio('${c.id}', 'casos')">🗑️ Solicitar Eliminación</button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                }
-            } catch (error) {
-                console.error("Error cargando testimonios:", error);
-            }
-        }
-
-        // Testimonios de Clientes
-        window.setCalificacion = function(n) {
-            calificacionTestimonio = n;
-            const estrellas = document.querySelectorAll('#estrellasTestimonio span');
-            estrellas.forEach((e, i) => { e.style.opacity = i < n ? '1' : '0.3'; });
-        };
-
-        window.enviarTestimonioCliente = async function() {
-            const alert = document.getElementById('alertTestimonioCliente');
-            const proveedor = document.getElementById('testProveedor').value.trim();
-            const tipoEvento = document.getElementById('testTipoEvento').value;
-            const ciudad = document.getElementById('testCiudad').value.trim();
-            const nombre = document.getElementById('testNombre').value.trim();
-            const comentario = document.getElementById('testComentario').value.trim();
-            
-            if (!proveedor || !tipoEvento || !ciudad || !nombre || !comentario || calificacionTestimonio === 0) {
-                alert.className = 'alert error';
-                alert.textContent = '❌ Completa todos los campos y selecciona una calificación';
-                alert.style.display = 'block';
-                return;
-            }
-            
-            try {
-                await addDoc(collection(db, "testimonios"), {
-                    nombreProveedor: proveedor,
-                    tipoEvento, ciudad,
-                    nombreCliente: nombre,
-                    comentario,
-                    calificacion: calificacionTestimonio,
-                    estado: 'pendiente',
-                    fecha: new Date().toISOString(),
-                    proveedorId: proveedorActual.id
-                });
-                alert.className = 'alert success';
-                alert.textContent = '✅ Testimonio enviado. Será revisado antes de publicarse.';
-                alert.style.display = 'block';
-                document.getElementById('testProveedor').value = '';
-                document.getElementById('testComentario').value = '';
-                setCalificacion(0);
-                setTimeout(() => { alert.style.display = 'none'; cargarTestimonios(); }, 3000);
-            } catch (error) { 
-                alert.className = 'alert error';
-                alert.textContent = '❌ Error: ' + error.message;
-                alert.style.display = 'block';
-            }
-        };
-
-        // Experiencia GoParty
-        window.setCalificacionGoParty = function(n) {
-            calificacionGoParty = n;
-            const estrellas = document.querySelectorAll('#estrellasGoParty span');
-            estrellas.forEach((e, i) => { e.style.opacity = i < n ? '1' : '0.3'; });
-        };
-
-        window.toggleRecomendar = function(recomendar) {
-            recomendarGoParty = recomendar;
-            const toggleSi = document.getElementById('toggleRecomendarSi');
-            const toggleNo = document.getElementById('toggleRecomendarNo');
-            
-            if (recomendar) {
-                toggleSi.classList.add('active');
-                toggleSi.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
-                toggleSi.style.color = 'white';
-                toggleSi.style.borderColor = '#FF6B9D';
-                
-                toggleNo.classList.remove('active');
-                toggleNo.style.background = 'white';
-                toggleNo.style.color = '#333';
-                toggleNo.style.borderColor = '#e0e0e0';
-            } else {
-                toggleSi.classList.remove('active');
-                toggleSi.style.background = 'white';
-                toggleSi.style.color = '#333';
-                toggleSi.style.borderColor = '#e0e0e0';
-                
-                toggleNo.classList.add('active');
-                toggleNo.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
-                toggleNo.style.color = 'white';
-                toggleNo.style.borderColor = '#FF6B9D';
-            }
-        };
-
-        window.enviarExperienciaGoParty = async function() {
-            const alert = document.getElementById('alertExperienciaGoParty');
-            const tiempo = document.getElementById('expTiempo').value;
-            const meGusta = document.getElementById('expGusta').value.trim();
-            const mejoraria = document.getElementById('expMejoraria').value.trim();
-            
-            if (!tiempo || !meGusta || !mejoraria || calificacionGoParty === 0 || recomendarGoParty === null) {
-                alert.className = 'alert error';
-                alert.textContent = '❌ Completa todos los campos y selecciona una calificación';
-                alert.style.display = 'block';
-                return;
-            }
-            
-            try {
-                await addDoc(collection(db, "testimonios_proveedores"), {
-                    tiempo,
-                    calificacion: calificacionGoParty,
-                    meGusta,
-                    mejoraria,
-                    recomendar: recomendarGoParty,
-                    nombreNegocio: proveedorActual.nombreNegocio || '',
-                    estado: 'pendiente',
-                    fecha: new Date().toISOString(),
-                    proveedorId: proveedorActual.id
-                });
-                alert.className = 'alert success';
-                alert.textContent = '✅ Experiencia enviada. Será revisada antes de publicarse.';
-                alert.style.display = 'block';
-                document.getElementById('expTiempo').value = '';
-                document.getElementById('expGusta').value = '';
-                document.getElementById('expMejoraria').value = '';
-                setCalificacionGoParty(0);
-                toggleRecomendar(null);
-                setTimeout(() => { alert.style.display = 'none'; cargarTestimonios(); }, 3000);
-            } catch (error) { 
-                alert.className = 'alert error';
-                alert.textContent = ' Error: ' + error.message;
-                alert.style.display = 'block';
-            }
-        };
-
-        // Casos de Éxito
-        window.previewFotosCaso = function(event) {
-            const files = event.target.files;
-            
-            Array.from(files).forEach(file => {
-                if (fotosCasoTemporales.length >= 5) {
-                    alert('⚠️ Máximo 5 fotos por caso');
-                    return;
-                }
-                
-                if (file.size > 5 * 1024 * 1024) {
-                    alert(`⚠️ La foto "${file.name}" excede 1MB`);
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    fotosCasoTemporales.push(e.target.result);
-                    renderFotosPreviewCaso();
-                };
-                reader.readAsDataURL(file);
-            });
-        };
-
-        function renderFotosPreviewCaso() {
-            const contenedor = document.getElementById('fotoPreviewCaso');
-            contenedor.innerHTML = fotosCasoTemporales.map((f, i) => `
-                <div class="foto-preview-wrapper">
-                    <img src="${f}" class="foto-preview">
-                    <button type="button" class="foto-remove" onclick="eliminarFotoCaso(${i})"></button>
-                </div>
-            `).join('');
-        }
-
-        window.eliminarFotoCaso = function(index) {
-            fotosCasoTemporales.splice(index, 1);
-            renderFotosPreviewCaso();
-        };
-
-        window.enviarCasoExito = async function() {
-            const alert = document.getElementById('alertCasoExito');
-            const titulo = document.getElementById('casoTitulo').value.trim();
-            const tipoEvento = document.getElementById('casoTipoEvento').value;
-            const ciudad = document.getElementById('casoCiudad').value.trim();
-            const historia = document.getElementById('casoHistoria').value.trim();
-            const resultado = document.getElementById('casoResultado').value.trim();
-            
-            if (!titulo || !tipoEvento || !ciudad || !historia || !resultado) {
-                alert.className = 'alert error';
-                alert.textContent = ' Completa todos los campos obligatorios';
-                alert.style.display = 'block';
-                return;
-            }
-            
-            try {
-                await addDoc(collection(db, "casos_exito"), {
-                    titulo,
-                    tipoEvento,
-                    ciudad,
-                    historia,
-                    resultado,
-                    fotos: fotosCasoTemporales,
-                    nombreNegocio: proveedorActual.nombreNegocio || '',
-                    estado: 'pendiente',
-                    fecha: new Date().toISOString(),
-                    proveedorId: proveedorActual.id
-                });
-                alert.className = 'alert success';
-                alert.textContent = '✅ Caso de éxito enviado. Será revisado antes de publicarse en la página principal.';
-                alert.style.display = 'block';
-                document.getElementById('casoTitulo').value = '';
-                document.getElementById('casoTipoEvento').value = '';
-                document.getElementById('casoCiudad').value = '';
-                document.getElementById('casoHistoria').value = '';
-                document.getElementById('casoResultado').value = '';
-                document.getElementById('casoFotos').value = '';
-                document.getElementById('fotoPreviewCaso').innerHTML = '';
-                fotosCasoTemporales = [];
-                setTimeout(() => { alert.style.display = 'none'; cargarTestimonios(); }, 3000);
-            } catch (error) { 
-                alert.className = 'alert error';
-                alert.textContent = ' Error: ' + error.message;
-                alert.style.display = 'block';
-            }
-        };
-
-        // Solicitar cambio/eliminación
-        window.solicitarCambioTestimonio = async function(id, tipo) {
-            const cambio = prompt('Describe el cambio que solicitas:');
-            if (cambio && cambio.trim()) {
-                try {
-                    await addDoc(collection(db, "moderaciones_pendientes"), {
-                        tipo: 'cambio',
-                        coleccion: tipo,
-                        documentoId: id,
-                        solicitud: cambio.trim(),
-                        estado: 'pendiente',
-                        fecha: new Date().toISOString(),
-                        proveedorId: proveedorActual.id
-                    });
-                    alert('✅ Solicitud de cambio enviada. El equipo GoParty la revisará.');
-                } catch (error) {
-                    alert('❌ Error: ' + error.message);
-                }
-            }
-        };
-
-        window.solicitarEliminacionTestimonio = async function(id, tipo) {
-            if (confirm('¿Solicitar la eliminación de este contenido? El equipo GoParty revisará tu solicitud.')) {
-                try {
-                    await addDoc(collection(db, "moderaciones_pendientes"), {
-                        tipo: 'eliminacion',
-                        coleccion: tipo,
-                        documentoId: id,
-                        estado: 'pendiente',
-                        fecha: new Date().toISOString(),
-                        proveedorId: proveedorActual.id
-                    });
-                    alert('✅ Solicitud de eliminación enviada. El equipo GoParty la revisará.');
-                } catch (error) {
-                    alert('❌ Error: ' + error.message);
-                }
-            }
-        };
-
-        // ==========================================
-        // MEMBRESÍA
-        // ==========================================
-        window.actualizarPlan = function(plan) {
-            if (confirm(`¿Actualizar al Plan ${plan}?\n\nSerás redirigido al proceso de pago.`)) {
-                alert(`💳 Redirigiendo a pasarela de pago para Plan ${plan}...`);
-            }
-        };
-
-        // ==========================================
-        // COTIZACIONES
-        // ==========================================
-        window.filtrarCotizaciones = function(filtro) {
-            alert('Filtro: ' + filtro + ' - Pendiente de implementar');
-        };
-
-        // ==========================================
-        // EXPOSICIÓN DE FUNCIONES AL WINDOW
-        // ==========================================
-        window.cargarServicios = cargarServicios;
-        window.cargarTestimonios = cargarTestimonios;
-        window.abrirModalServicio = abrirModalServicio;
-        window.cerrarModalServicio = cerrarModalServicio;
-        window.guardarServicio = guardarServicio;
-        window.editarServicio = editarServicio;
-        window.eliminarServicio = eliminarServicio;
-        window.toggleServicioMovil = toggleServicioMovil;
-        window.agregarVariedad = agregarVariedad;
-        window.agregarVariedadDesdeInput = agregarVariedadDesdeInput;
-        window.eliminarVariedad = eliminarVariedad;
-        window.previewFotos = previewFotos;
-        window.eliminarFoto = eliminarFoto;
-        window.guardarPerfil = guardarPerfil;
-        window.guardarDatosFiscales = guardarDatosFiscales;
-        window.guardarRedes = guardarRedes;
-        window.toggleFactura = toggleFactura;
-        window.login = login;
-        window.loginWithGoogle = loginWithGoogle;
-        window.logout = logout;
-        window.showLogin = showLogin;
-        window.showForgotPassword = showForgotPassword;
-        window.sendPasswordReset = sendPasswordReset;
-        window.setCalificacion = setCalificacion;
-        window.setCalificacionGoParty = setCalificacionGoParty;
-        window.toggleRecomendar = toggleRecomendar;
-        window.enviarTestimonioCliente = enviarTestimonioCliente;
-        window.enviarExperienciaGoParty = enviarExperienciaGoParty;
-        window.previewFotosCaso = previewFotosCaso;
-        window.eliminarFotoCaso = eliminarFotoCaso;
-        window.enviarCasoExito = enviarCasoExito;
-        window.solicitarCambioTestimonio = solicitarCambioTestimonio;
-        window.solicitarEliminacionTestimonio = solicitarEliminacionTestimonio;
-        window.actualizarPlan = actualizarPlan;
-        window.filtrarCotizaciones = filtrarCotizaciones;
-        window.proveedorActual = proveedorActual;
-           // ==========================================
-        // CARGAR RESEÑAS RECIBIDAS (SOLO APROBADAS)
-        // ==========================================
-        async function cargarResenasRecibidas() {
-            const contenedor = document.getElementById('listaResenasRecibidas');
-            const countTotal = document.getElementById('countTotalResenas');
-            const avgCalif = document.getElementById('avgCalificacion');
-            
-            try {
-                // Obtenemos el nombre exacto del negocio del proveedor logueado
-                const nombreNegocio = proveedorActual.nombreNegocio; 
-
-                if (!nombreNegocio) {
-                    contenedor.innerHTML = '<p style="color: #999;">Error: No se pudo identificar tu negocio.</p>';
-                    return;
-                }
-
-                // Consulta a Firestore: Traer testimonios donde nombreProveedor == mi negocio
-                const q = query(collection(db, "testimonios"), where("nombreProveedor", "==", nombreNegocio));
-                const snap = await getDocs(q);
-                
-                let resenas = [];
-                let sumaCalificaciones = 0;
-
-                snap.forEach(doc => {
-                    const data = doc.data();
-                    // FILTRO MANUAL: Solo mostramos si el admin lo aprobó
-                    if (data.estado === 'aprobado') {
-                        resenas.push({ id: doc.id, ...data });
-                        sumaCalificaciones += (data.calificacion || 0);
-                    }
-                });
-
-                // Actualizar contadores
-                if(countTotal) countTotal.textContent = resenas.length;
-                if(avgCalif) {
-                    const promedio = resenas.length > 0 ? (sumaCalificaciones / resenas.length).toFixed(1) : "0.0";
-                    avgCalif.textContent = promedio + " ⭐";
-                }
-
-                // Renderizar lista
-                if (resenas.length === 0) {
-                    contenedor.innerHTML = `
-                        <div style="text-align: center; padding: 2rem; background: #f9f9f9; border-radius: 8px;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
-                            <h4>Aún no tienes reseñas aprobadas</h4>
-                            <p style="color: #666;">Cuando un cliente deje un testimonio y el administrador lo apruebe, aparecerá aquí.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Generar HTML de las tarjetas
-                contenedor.innerHTML = resenas.map(r => {
-                    const estrellas = '⭐'.repeat(r.calificacion || 0);
-                    const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
-                    
-                    return `
-                        <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
-                                <div>
-                                    <strong style="font-size: 1.1rem; color: #333;">${r.nombreCliente || 'Cliente Anónimo'}</strong>
-                                    <span style="background: #4CAF50; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 10px; vertical-align: middle;">Aprobado</span>
-                                </div>
-                                <div style="font-size: 1.2rem;">${estrellas}</div>
-                            </div>
-                            
-                            <div style="font-size: 0.85rem; color: #888; margin-bottom: 1rem;">
-                                ${r.tipoEvento || ''} • ${r.ciudad || ''} • ${fecha}
-                            </div>
-                            
-                            <p style="color: #555; font-style: italic; line-height: 1.6; background: #fdfdfd; padding: 1rem; border-left: 3px solid #FFD93D; border-radius: 4px;">
-                                "${r.comentario || ''}"
-                            </p>
-                        </div>
-                    `;
-                }).join('');
-
-            } catch (error) {
-                console.error("Error cargando reseñas:", error);
-                contenedor.innerHTML = '<p style="color: red;">Error al cargar las reseñas. Intenta recargar la página.</p>';
-            }
-        }
-
-        // Llamar a la función cuando se inicie el dashboard o se cambie de pestaña
-        // Si ya tienes una función iniciarDashboard(), agrega esto dentro:
-        if (typeof iniciarDashboard !== 'undefined') {
-             // Sobrescribimos o agregamos la llamada
-             const originalInit = iniciarDashboard;
-             iniciarDashboard = function() {
-                 originalInit();
-                 cargarResenasRecibidas();
-             }
-        } else {
-            // Si no existe iniciarDashboard, la creamos o llamamos directo
-            cargarResenasRecibidas();
-        }
-                // ==========================================
-        // LÓGICA DE CATEGORÍA "OTRO"
+        // LÓGICA DE CATEGORÍA "OTRO" Y PAQUETES
         // ==========================================
         window.manejarCategoriaOtro = function() {
             const select = document.getElementById('servicioCategoria');
@@ -2336,16 +1112,11 @@
             }
         };
 
-        // ==========================================
-        // GESTIÓN DE PAQUETES EDITABLES
-        // ==========================================
-        
-        // Renderiza la lista de paquetes con inputs editables
         function renderVariedadesEditables() {
             const contenedor = document.getElementById('variedadLista');
             const msgSinPaquetes = document.getElementById('msgSinPaquetes');
             
-            if (variedadesTemporales.length === 0) {
+            if (!variedadesTemporales || variedadesTemporales.length === 0) {
                 contenedor.innerHTML = '';
                 contenedor.appendChild(msgSinPaquetes);
                 msgSinPaquetes.style.display = 'block';
@@ -2357,7 +1128,6 @@
             contenedor.innerHTML = variedadesTemporales.map((v, i) => `
                 <div class="paquete-editable-card">
                     <button type="button" class="btn-remove-paquete" onclick="eliminarVariedad(${i})">✕</button>
-                    
                     <div class="form-row" style="margin-bottom: 0.5rem;">
                         <div class="form-group" style="margin-bottom: 0;">
                             <label style="font-size: 0.8rem; color: #666;">Nombre</label>
@@ -2376,20 +1146,15 @@
             `).join('');
         }
 
-        // Agrega un nuevo paquete desde el formulario inline
         window.agregarPaqueteInline = function() {
             const nombre = document.getElementById('nuevoPaqNombre').value.trim();
             const precio = document.getElementById('nuevoPaqPrecio').value.trim();
             const desc = document.getElementById('nuevoPaqDesc').value.trim();
             
-            if (!nombre) {
-                alert('El nombre del paquete es obligatorio');
-                return;
-            }
+            if (!nombre) { alert('El nombre del paquete es obligatorio'); return; }
             
             variedadesTemporales.push({ nombre, precio, descripcion: desc });
             
-            // Limpiar inputs
             document.getElementById('nuevoPaqNombre').value = '';
             document.getElementById('nuevoPaqPrecio').value = '';
             document.getElementById('nuevoPaqDesc').value = '';
@@ -2397,24 +1162,108 @@
             renderVariedadesEditables();
         };
 
-        // Actualiza un paquete existente cuando se edita
         window.actualizarPaquete = function(index, campo, valor) {
             if (!variedadesTemporales[index]) variedadesTemporales[index] = {};
             variedadesTemporales[index][campo] = valor;
         };
 
-        // Eliminar paquete
         window.eliminarVariedad = function(index) {
             variedadesTemporales.splice(index, 1);
             renderVariedadesEditables();
         };
 
         // ==========================================
-        // ACTUALIZACIÓN DE GUARDAR SERVICIO
+        // FUNCIONES DEL MODAL
         // ==========================================
+        window.abrirModalServicio = function() {
+            servicioEditandoId = null;
+            fotosTemporales = [];
+            variedadesTemporales = [];
+            esServicioMovil = false;
+            
+            document.getElementById('modalServicioTitulo').textContent = '➕ Agregar Nuevo Servicio';
+            document.getElementById('servicioId').value = '';
+            document.getElementById('servicioNombre').value = '';
+            document.getElementById('servicioCategoria').value = '';
+            manejarCategoriaOtro(); 
+            document.getElementById('servicioPrecio').value = '';
+            document.getElementById('servicioDescripcion').value = '';
+            document.getElementById('servicioCiudad').value = proveedorActual.ciudad || '';
+            document.getElementById('servicioEstado').value = proveedorActual.estado || '';
+            document.getElementById('servicioRadio').value = '';
+            document.getElementById('servicioMapsLink').value = '';
+            document.getElementById('servicioCalle').value = '';
+            document.getElementById('servicioNumero').value = '';
+            document.getElementById('servicioColonia').value = '';
+            document.getElementById('servicioCP').value = '';
+            document.getElementById('servicioFotos').value = '';
+            document.getElementById('fotoPreviewContainer').innerHTML = '';
+            
+            document.getElementById('nuevoPaqNombre').value = '';
+            document.getElementById('nuevoPaqPrecio').value = '';
+            document.getElementById('nuevoPaqDesc').value = '';
+            
+            renderVariedadesEditables();
+            toggleServicioMovil(false);
+            
+            document.getElementById('modalServicio').classList.add('active');
+        };
+
+        window.cerrarModalServicio = function() {
+            document.getElementById('modalServicio').classList.remove('active');
+        };
+
+        window.editarServicio = function(index) {
+            const docSnap = getDoc(doc(db, "proveedores", proveedorActual.id)).then(snap => {
+                if (snap.exists()) {
+                    const servicios = snap.data().servicios || [];
+                    const s = servicios[index];
+                    if (!s) return;
+                    
+                    servicioEditandoId = index;
+                    fotosTemporales = s.fotos || [];
+                    // Convertir strings viejos a objetos si es necesario
+                    variedadesTemporales = (s.variedad || []).map(v => 
+                        typeof v === 'string' ? { nombre: v, precio: '', descripcion: '' } : v
+                    );
+                    esServicioMovil = s.esMovil || false;
+                    
+                    document.getElementById('modalServicioTitulo').textContent = '✏️ Editar Servicio';
+                    document.getElementById('servicioId').value = index;
+                    document.getElementById('servicioNombre').value = s.nombre || '';
+                    
+                    if (s.requiereRevisionCategoria) {
+                        document.getElementById('servicioCategoria').value = 'OTRO';
+                        manejarCategoriaOtro();
+                        document.getElementById('servicioCategoriaOtro').value = s.categoria || '';
+                        document.getElementById('servicioDescCategoriaOtro').value = s.descripcionCategoriaSugerida || '';
+                    } else {
+                        document.getElementById('servicioCategoria').value = s.categoria || '';
+                        manejarCategoriaOtro();
+                    }
+                    
+                    document.getElementById('servicioPrecio').value = s.precio || '';
+                    document.getElementById('servicioDescripcion').value = s.descripcion || '';
+                    document.getElementById('servicioCiudad').value = s.ciudad || '';
+                    document.getElementById('servicioEstado').value = s.estado || '';
+                    document.getElementById('servicioRadio').value = s.radio || '';
+                    document.getElementById('servicioMapsLink').value = s.mapsLink || '';
+                    document.getElementById('servicioCalle').value = s.calle || '';
+                    document.getElementById('servicioNumero').value = s.numero || '';
+                    document.getElementById('servicioColonia').value = s.colonia || '';
+                    document.getElementById('servicioCP').value = s.cp || '';
+                    
+                    toggleServicioMovil(esServicioMovil);
+                    renderVariedadesEditables();
+                    renderFotosPreview();
+                    
+                    document.getElementById('modalServicio').classList.add('active');
+                }
+            });
+        };
+
         window.guardarServicio = async function() {
             const alert = document.getElementById('alertModalServicio');
-            
             const nombre = document.getElementById('servicioNombre').value.trim();
             let categoria = document.getElementById('servicioCategoria').value;
             const descripcion = document.getElementById('servicioDescripcion').value.trim();
@@ -2427,7 +1276,6 @@
                 return;
             }
 
-            // Lógica especial para categoría OTRO
             let categoriaFinal = categoria;
             let descCategoriaExtra = null;
             
@@ -2441,35 +1289,29 @@
                     alert.style.display = 'block';
                     return;
                 }
-                
                 if (catOtro.includes(' ')) {
                     alert.className = 'alert error';
                     alert.textContent = '❌ La categoría personalizada debe ser UNA SOLA PALABRA (sin espacios).';
                     alert.style.display = 'block';
                     return;
                 }
-                
                 categoriaFinal = catOtro;
                 descCategoriaExtra = descCatOtro;
             }
             
             const servicio = {
-                nombre,
-                categoria: categoriaFinal,
-                descripcion,
+                nombre, categoria: categoriaFinal, descripcion,
                 precio: document.getElementById('servicioPrecio').value.trim(),
-                ciudad,
-                estado: document.getElementById('servicioEstado').value.trim(),
+                ciudad, estado: document.getElementById('servicioEstado').value.trim(),
                 radio: parseInt(document.getElementById('servicioRadio').value) || 0,
                 esMovil: esServicioMovil,
                 mapsLink: document.getElementById('servicioMapsLink').value.trim(),
-                variedad: variedadesTemporales, // Guarda objetos {nombre, precio, descripcion}
+                variedad: variedadesTemporales, // Ahora guarda objetos {nombre, precio, descripcion}
                 fotos: fotosTemporales,
                 fechaCreacion: new Date().toISOString(),
                 fechaActualizacion: new Date().toISOString()
             };
 
-            // Metadatos para revisión admin si es categoría personalizada
             if (descCategoriaExtra) {
                 servicio.categoriaOriginalSugerida = categoriaFinal;
                 servicio.descripcionCategoriaSugerida = descCategoriaExtra;
@@ -2512,93 +1354,126 @@
             }
         };
 
-        // Modificar abrirModalServicio para resetear correctamente
-        window.abrirModalServicio = function() {
-            servicioEditandoId = null;
-            fotosTemporales = [];
-            variedadesTemporales = [];
-            esServicioMovil = false;
+        // ==========================================
+        // FUNCIONES AUXILIARES (Toggle, Fotos, etc.)
+        // ==========================================
+        window.toggleServicioMovil = function(esMovil) {
+            esServicioMovil = esMovil;
+            const toggleSi = document.getElementById('toggleMovilSi');
+            const toggleNo = document.getElementById('toggleMovilNo');
+            const ubicacionContainer = document.getElementById('ubicacionFijaContainer');
             
-            document.getElementById('modalServicioTitulo').textContent = '➕ Agregar Nuevo Servicio';
-            document.getElementById('servicioId').value = '';
-            document.getElementById('servicioNombre').value = '';
-            document.getElementById('servicioCategoria').value = '';
-            manejarCategoriaOtro(); // Resetear vista de OTRO
-            document.getElementById('servicioPrecio').value = '';
-            document.getElementById('servicioDescripcion').value = '';
-            document.getElementById('servicioCiudad').value = proveedorActual.ciudad || '';
-            document.getElementById('servicioEstado').value = proveedorActual.estado || '';
-            document.getElementById('servicioRadio').value = '';
-            document.getElementById('servicioMapsLink').value = '';
-            document.getElementById('servicioCalle').value = '';
-            document.getElementById('servicioNumero').value = '';
-            document.getElementById('servicioColonia').value = '';
-            document.getElementById('servicioCP').value = '';
-            document.getElementById('servicioFotos').value = '';
-            document.getElementById('fotoPreviewContainer').innerHTML = '';
-            
-            // Limpiar inputs de nuevo paquete
-            document.getElementById('nuevoPaqNombre').value = '';
-            document.getElementById('nuevoPaqPrecio').value = '';
-            document.getElementById('nuevoPaqDesc').value = '';
-            
-            renderVariedadesEditables();
-            toggleServicioMovil(false);
-            
-            document.getElementById('modalServicio').classList.add('active');
+            if (esMovil) {
+                toggleSi.classList.add('active');
+                toggleSi.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+                toggleSi.style.color = 'white';
+                toggleSi.style.borderColor = '#FF6B9D';
+                
+                toggleNo.classList.remove('active');
+                toggleNo.style.background = 'white';
+                toggleNo.style.color = '#333';
+                toggleNo.style.borderColor = '#e0e0e0';
+                
+                ubicacionContainer.style.display = 'none';
+            } else {
+                toggleSi.classList.remove('active');
+                toggleSi.style.background = 'white';
+                toggleSi.style.color = '#333';
+                toggleSi.style.borderColor = '#e0e0e0';
+                
+                toggleNo.classList.add('active');
+                toggleNo.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+                toggleNo.style.color = 'white';
+                toggleNo.style.borderColor = '#FF6B9D';
+                
+                ubicacionContainer.style.display = 'block';
+            }
         };
 
-        // Modificar editarServicio para cargar paquetes complejos
-        window.editarServicio = function(index) {
-            const docSnap = getDoc(doc(db, "proveedores", proveedorActual.id)).then(snap => {
-                if (snap.exists()) {
-                    const servicios = snap.data().servicios || [];
-                    const s = servicios[index];
-                    if (!s) return;
-                    
-                    servicioEditandoId = index;
-                    fotosTemporales = s.fotos || [];
-                    // Asegurar compatibilidad: convertir strings viejos a objetos
-                    variedadesTemporales = (s.variedad || []).map(v => 
-                        typeof v === 'string' ? { nombre: v, precio: '', descripcion: '' } : v
-                    );
-                    esServicioMovil = s.esMovil || false;
-                    
-                    document.getElementById('modalServicioTitulo').textContent = '✏️ Editar Servicio';
-                    document.getElementById('servicioId').value = index;
-                    document.getElementById('servicioNombre').value = s.nombre || '';
-                    
-                    // Manejo de categoría personalizada al editar
-                    if (s.requiereRevisionCategoria) {
-                        document.getElementById('servicioCategoria').value = 'OTRO';
-                        manejarCategoriaOtro();
-                        document.getElementById('servicioCategoriaOtro').value = s.categoria || '';
-                        document.getElementById('servicioDescCategoriaOtro').value = s.descripcionCategoriaSugerida || '';
-                    } else {
-                        document.getElementById('servicioCategoria').value = s.categoria || '';
-                        manejarCategoriaOtro();
-                    }
-                    
-                    document.getElementById('servicioPrecio').value = s.precio || '';
-                    document.getElementById('servicioDescripcion').value = s.descripcion || '';
-                    document.getElementById('servicioCiudad').value = s.ciudad || '';
-                    document.getElementById('servicioEstado').value = s.estado || '';
-                    document.getElementById('servicioRadio').value = s.radio || '';
-                    document.getElementById('servicioMapsLink').value = s.mapsLink || '';
-                    document.getElementById('servicioCalle').value = s.calle || '';
-                    document.getElementById('servicioNumero').value = s.numero || '';
-                    document.getElementById('servicioColonia').value = s.colonia || '';
-                    document.getElementById('servicioCP').value = s.cp || '';
-                    
-                    toggleServicioMovil(esServicioMovil);
-                    renderVariedadesEditables();
-                    renderFotosPreview();
-                    
-                    document.getElementById('modalServicio').classList.add('active');
-                }
+        window.previewFotos = function(event) {
+            const files = event.target.files;
+            Array.from(files).forEach(file => {
+                if (fotosTemporales.length >= 5) { alert('⚠️ Máximo 5 fotos por servicio'); return; }
+                if (file.size > 5 * 1024 * 1024) { alert(`⚠️ La foto "${file.name}" excede 5MB`); return; }
+                const reader = new FileReader();
+                reader.onload = function(e) { fotosTemporales.push(e.target.result); renderFotosPreview(); };
+                reader.readAsDataURL(file);
             });
         };
+
+        window.eliminarFoto = function(index) { fotosTemporales.splice(index, 1); renderFotosPreview(); };
+
+        function renderFotosPreview() {
+            const contenedor = document.getElementById('fotoPreviewContainer');
+            contenedor.innerHTML = fotosTemporales.map((f, i) => '<div class="foto-preview-wrapper"><img src="' + f + '" class="foto-preview"><button type="button" class="foto-remove" onclick="eliminarFoto(' + i + ')"></button></div>').join('');
+        }
+
+        window.eliminarServicio = async function(index) {
+            if (!confirm('¿Eliminar este servicio? Esta acción no se puede deshacer.')) return;
+            try {
+                const docSnap = await getDoc(doc(db, "proveedores", proveedorActual.id));
+                if (docSnap.exists()) {
+                    const servicios = docSnap.data().servicios || [];
+                    servicios.splice(index, 1);
+                    await updateDoc(doc(db, "proveedores", proveedorActual.id), { servicios });
+                    cargarServicios();
+                }
+            } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // ==========================================
+        // FASE 4: TESTIMONIOS RECIBIDOS
+        // ==========================================
+        async function cargarTestimoniosRecibidos() {
+            const contenedor = document.getElementById('listaTestimoniosRecibidos');
+            const countTotal = document.getElementById('statTotalTestimonios');
+            const avgCalif = document.getElementById('statCalificacion'); // Usamos el del dashboard como ejemplo o creamos uno nuevo
+            
+            if (!contenedor || !proveedorActual) return;
+
+            try {
+                const nombreNegocio = proveedorActual.nombreNegocio; 
+                if (!nombreNegocio) { contenedor.innerHTML = '<p style="color: #999;">Error: No se pudo identificar tu negocio.</p>'; return; }
+
+                const q = query(collection(db, "testimonios"), where("nombreProveedor", "==", nombreNegocio));
+                const snap = await getDocs(q);
+                
+                let resenas = [];
+                let sumaCalificaciones = 0;
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    if (data.estado === 'aprobado') {
+                        resenas.push({ id: doc.id, ...data });
+                        sumaCalificaciones += (data.calificacion || 0);
+                    }
+                });
+
+                // Actualizar contadores si existen
+                if(countTotal) countTotal.textContent = resenas.length;
+                
+                // Renderizar lista
+                if (resenas.length === 0) {
+                    contenedor.innerHTML = '<div style="text-align: center; padding: 2rem; background: #f9f9f9; border-radius: 8px;"><div style="font-size: 3rem; margin-bottom: 1rem;">📭</div><h4>Aún no tienes reseñas aprobadas</h4><p style="color: #666;">Cuando un cliente deje un testimonio y el administrador lo apruebe, aparecerá aquí.</p></div>';
+                    return;
+                }
+
+                contenedor.innerHTML = resenas.map(r => {
+                    const estrellas = '⭐'.repeat(r.calificacion || 0);
+                    const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
+                    return '<div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;"><div><strong style="font-size: 1.1rem; color: #333;">' + (r.nombreCliente || 'Cliente Anónimo') + '</strong><span style="background: #4CAF50; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 10px; vertical-align: middle;">Aprobado</span></div><div style="font-size: 1.2rem;">' + estrellas + '</div></div><div style="font-size: 0.85rem; color: #888; margin-bottom: 1rem;">' + (r.tipoEvento || '') + ' • ' + (r.ciudad || '') + ' • ' + fecha + '</div><p style="color: #555; font-style: italic; line-height: 1.6; background: #fdfdfd; padding: 1rem; border-left: 3px solid #FFD93D; border-radius: 4px;">"' + (r.comentario || '') + '"</p></div>';
+                }).join('');
+
+            } catch (error) {
+                console.error("Error cargando reseñas:", error);
+                contenedor.innerHTML = '<p style="color: red;">Error al cargar las reseñas.</p>';
+            }
+        }
+
+        window.actualizarPlan = function(plan) { alert('Función de actualización de plan pendiente de implementar.'); };
+        window.filtrarCotizaciones = function(filtro) { alert('Filtro de cotizaciones pendiente de implementar.'); };
     </script>
 
 </body>
 </html>
+```

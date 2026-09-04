@@ -618,122 +618,172 @@
                 </div>
             </div>
 
-            <!-- 🆕 FASE 4: TESTIMONIOS EN 3 SECCIONES -->
-            <div class="tab-content" id="tab-testimonios">
-                <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios y Casos de Éxito</h2>
-                <p style="color: #666; margin-bottom: 1.5rem;">Comparte tu experiencia y destaca tus mejores eventos. Todo contenido es revisado por el equipo GoParty antes de publicarse.</p>
+<!-- 🆕 FASE 4: TESTIMONIOS Y CASOS DE ÉXITO -->
+<div class="tab-content" id="tab-testimonios">
+    <h2 style="margin-bottom: 1.5rem; color: #333;">⭐ Testimonios y Casos de Éxito</h2>
+    <p style="color: #666; margin-bottom: 1.5rem;">Comparte tu experiencia y destaca tus mejores eventos. Todo contenido es revisado por el equipo GoParty antes de publicarse.</p>
 
-                <!-- Sub-tabs -->
-                <div class="sub-tabs">
-                    <button class="sub-tab active" data-sub="testimonios-clientes">⭐ Testimonios de Clientes</button>
-                    <button class="sub-tab" data-sub="experiencia-goparty"> Experiencia GoParty</button>
-                    <button class="sub-tab" data-sub="casos-exito">🏆 Casos de Éxito</button>
-                </div>
-
-                                <!-- SUB 1: Testimonios de Clientes (VISTA DE PROVEEDOR) -->
-                <div class="sub-content active" id="sub-testimonios-clientes">
-                    <div class="card">
-                        <h3>⭐ Mis Reseñas Aprobadas</h3>
-                        <p style="color: #666; margin-bottom: 1rem;">
-                            Aquí puedes ver los testimonios que tus clientes han dejado sobre ti y que han sido aprobados por el equipo de GoParty. 
-                            Estos son los que aparecen públicamente en tu perfil.
-                        </p>
-                        
-                        <div class="alert" id="alertResenasProveedor"></div>
-
-                        <!-- Estadísticas rápidas de reseñas -->
-                        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                            <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
-                                <div style="font-size: 0.9rem; color: #666;">Total Reseñas</div>
-                                <div style="font-size: 1.5rem; font-weight: bold; color: #4A90E2;" id="countTotalResenas">0</div>
-                            </div>
-                            <div style="background: #fffbe6; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
-                                <div style="font-size: 0.9rem; color: #666;">Calificación Promedio</div>
-                                <div style="font-size: 1.5rem; font-weight: bold; color: #FFD93D;" id="avgCalificacion">0.0 ⭐</div>
-                            </div>
-                        </div>
-
-                        <!-- Lista de testimonios -->
-                        <div id="listaResenasRecibidas">
-                            <div style="text-align: center; padding: 2rem; color: #999;">
-                                Cargando tus reseñas aprobadas...
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-               <!-- SUB 2: Experiencias GoParty -->
-            <div class="sub-content" id="sub-experiencias-goparty">
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
-            <button class="btn btn-secondary" onclick="filtrarTestimonios('todas', 'experiencias')">Todas</button>
-            <button class="btn btn-secondary" onclick="filtrarTestimonios('pendiente', 'experiencias')">Pendientes</button>
-            <button class="btn btn-secondary" onclick="filtrarTestimonios('aprobado', 'experiencias')">Aprobadas</button>
-            <button class="btn btn-secondary" onclick="filtrarTestimonios('rechazado', 'experiencias')">Rechazadas</button>
-        </div>
-        <div class="card">
-            <div id="listaExperienciasGoParty">Cargando experiencias...</div>
-        </div>
+    <!-- Sub-tabs -->
+    <div class="sub-tabs">
+        <button class="sub-tab active" data-sub="testimonios-clientes">⭐ Testimonios de Clientes</button>
+        <button class="sub-tab" data-sub="experiencias-goparty">💬 Experiencia GoParty</button>
+        <button class="sub-tab" data-sub="casos-exito">🏆 Casos de Éxito</button>
     </div>
-                
-                <!-- SUB 3: Casos de Éxito -->
-                <div class="sub-content" id="sub-casos-exito">
-                    <div class="card">
-                        <h3>🏆 Proponer Caso de Éxito</h3>
-                        <p style="color: #666; margin-bottom: 1rem;">Comparte una historia real de un evento exitoso. Si es aprobado, aparecerá en la página principal de GoParty como inspiración para otros.</p>
-                        <div class="alert" id="alertCasoExito"></div>
 
-                        <div class="form-group">
-                            <label>Título del Caso *</label>
-                            <input type="text" id="casoTitulo" placeholder="Ej: Boda de ensueño para 200 invitados en Xalapa">
-                        </div>
+    <!-- SUB 1: Testimonios de Clientes (VISTA DE PROVEEDOR - SOLO LECTURA) -->
+    <div class="sub-content active" id="sub-testimonios-clientes">
+        <div class="card">
+            <h3>⭐ Mis Reseñas Aprobadas</h3>
+            <p style="color: #666; margin-bottom: 1rem;">
+                Aquí puedes ver los testimonios que tus clientes han dejado sobre ti y que han sido aprobados por el equipo de GoParty. 
+                Estos son los que aparecen públicamente en tu perfil.
+            </p>
+            
+            <div class="alert" id="alertResenasProveedor"></div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Tipo de Evento *</label>
-                                <select id="casoTipoEvento">
-                                    <option value="">Selecciona...</option>
-                                    <option>Cumpleaños Infantil</option>
-                                    <option>Cumpleaños Adulto</option>
-                                    <option>Boda</option>
-                                    <option>XV Años</option>
-                                    <option>Evento Corporativo</option>
-                                    <option>Baby Shower</option>
-                                    <option>Graduación</option>
-                                    <option>Otro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Ciudad *</label>
-                                <input type="text" id="casoCiudad" placeholder="Ciudad del evento">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Historia Completa *</label>
-                            <textarea id="casoHistoria" rows="6" placeholder="Cuéntanos la historia completa: el desafío, cómo lo resolviste, qué servicios ofreciste, cómo fue la experiencia del cliente..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Resultado Logrado *</label>
-                            <input type="text" id="casoResultado" placeholder="Ej: 100% de satisfacción, 200 invitados felices, evento sin contratiempos">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Fotos del Evento (hasta 5)</label>
-                            <input type="file" id="casoFotos" accept="image/jpeg,image/png" multiple onchange="previewFotosCaso(event)">
-                            <small style="color: #666;">JPG, PNG (Max 1MB cada una)</small>
-                            <div class="foto-preview-container" id="fotoPreviewCaso"></div>
-                        </div>
-
-                        <button class="btn" onclick="enviarCasoExito()">📤 Enviar Caso de Éxito para Revisión</button>
-                    </div>
-
-                    <div class="card">
-                        <h3>📋 Mis Casos de Éxito Enviados</h3>
-                        <div id="listaCasosExito">Aún no has propuesto casos de éxito.</div>
-                    </div>
+            <!-- Estadísticas rápidas de reseñas -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
+                    <div style="font-size: 0.9rem; color: #666;">Total Reseñas</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #4A90E2;" id="countTotalResenas">0</div>
+                </div>
+                <div style="background: #fffbe6; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px;">
+                    <div style="font-size: 0.9rem; color: #666;">Calificación Promedio</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #FFD93D;" id="avgCalificacion">0.0 ⭐</div>
                 </div>
             </div>
+
+            <!-- Lista de testimonios -->
+            <div id="listaResenasRecibidas">
+                <div style="text-align: center; padding: 2rem; color: #999;">
+                    Cargando tus reseñas aprobadas...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUB 2: Experiencia GoParty -->
+    <div class="sub-content" id="sub-experiencias-goparty">
+        <div class="card">
+            <h3>💬 Tu Experiencia con GoParty</h3>
+            <p style="color: #666; margin-bottom: 1rem;">Cuéntanos cómo ha sido tu experiencia usando la plataforma GoParty. Tu testimonio ayudará a otros proveedores a decidir unirse.</p>
+            <div class="alert" id="alertExperienciaGoParty"></div>
+
+            <div class="form-group">
+                <label>¿Cuánto tiempo llevas usando GoParty? *</label>
+                <select id="expTiempo">
+                    <option value="">Selecciona...</option>
+                    <option value="Menos de 6 meses">Menos de 6 meses</option>
+                    <option value="6-12 meses">6-12 meses</option>
+                    <option value="1-2 años">1-2 años</option>
+                    <option value="Más de 2 años">Más de 2 años</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Calificación de la plataforma GoParty *</label>
+                <div id="estrellasGoParty" style="font-size: 2rem; cursor: pointer;">
+                    <span onclick="setCalificacionGoParty(1)">⭐</span>
+                    <span onclick="setCalificacionGoParty(2)">⭐</span>
+                    <span onclick="setCalificacionGoParty(3)">⭐</span>
+                    <span onclick="setCalificacionGoParty(4)">⭐</span>
+                    <span onclick="setCalificacionGoParty(5)">⭐</span>
+                </div>
+                <small>Haz clic en las estrellas para calificar</small>
+            </div>
+
+            <div class="form-group">
+                <label>¿Qué te gusta más de GoParty? *</label>
+                <textarea id="expGusta" rows="3" placeholder="Ej: La facilidad para conectar con clientes, el soporte técnico..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>¿Qué mejorarías de GoParty? *</label>
+                <textarea id="expMejoraria" rows="3" placeholder="Ej: Más herramientas de marketing, mejor app móvil..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>¿Recomendarías GoParty a otros proveedores? *</label>
+                <div class="toggle-group">
+                    <label class="toggle-option" id="toggleRecomendarSi" onclick="toggleRecomendar(true)">
+                        <input type="radio" name="recomendar" value="si">
+                        ✅ Sí, la recomendaría
+                    </label>
+                    <label class="toggle-option" id="toggleRecomendarNo" onclick="toggleRecomendar(false)">
+                        <input type="radio" name="recomendar" value="no">
+                        ❌ No la recomendaría
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn" onclick="enviarExperienciaGoParty()"> Enviar Experiencia para Revisión</button>
+        </div>
+
+        <div class="card">
+            <h3>📋 Mis Experiencias Enviadas</h3>
+            <div id="listaExperienciasGoParty">Aún no has enviado tu experiencia.</div>
+        </div>
+    </div>
+
+    <!-- SUB 3: Casos de Éxito -->
+    <div class="sub-content" id="sub-casos-exito">
+        <div class="card">
+            <h3>🏆 Proponer Caso de Éxito</h3>
+            <p style="color: #666; margin-bottom: 1rem;">Comparte una historia real de un evento exitoso. Si es aprobado, aparecerá en la página principal de GoParty como inspiración para otros.</p>
+            <div class="alert" id="alertCasoExito"></div>
+
+            <div class="form-group">
+                <label>Título del Caso *</label>
+                <input type="text" id="casoTitulo" placeholder="Ej: Boda de ensueño para 200 invitados en Xalapa">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tipo de Evento *</label>
+                    <select id="casoTipoEvento">
+                        <option value="">Selecciona...</option>
+                        <option>Cumpleaños Infantil</option>
+                        <option>Cumpleaños Adulto</option>
+                        <option>Boda</option>
+                        <option>XV Años</option>
+                        <option>Evento Corporativo</option>
+                        <option>Baby Shower</option>
+                        <option>Graduación</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ciudad *</label>
+                    <input type="text" id="casoCiudad" placeholder="Ciudad del evento">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Historia Completa *</label>
+                <textarea id="casoHistoria" rows="6" placeholder="Cuéntanos la historia completa: el desafío, cómo lo resolviste, qué servicios ofreciste..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Resultado Logrado *</label>
+                <input type="text" id="casoResultado" placeholder="Ej: 100% de satisfacción, 200 invitados felices">
+            </div>
+
+            <div class="form-group">
+                <label>Fotos del Evento (hasta 5)</label>
+                <input type="file" id="casoFotos" accept="image/jpeg,image/png" multiple onchange="previewFotosCaso(event)">
+                <small style="color: #666;">JPG, PNG (Max 1MB cada una para evitar errores de tamaño)</small>
+                <div class="foto-preview-container" id="fotoPreviewCaso"></div>
+            </div>
+
+            <button class="btn" onclick="enviarCasoExito()">📤 Enviar Caso de Éxito para Revisión</button>
+        </div>
+
+        <div class="card">
+            <h3>📋 Mis Casos de Éxito Enviados</h3>
+            <div id="listaCasosExito">Aún no has propuesto casos de éxito.</div>
+        </div>
+    </div>
+</div>
 
             <!-- MEMBRESÍA -->
             <div class="tab-content" id="tab-membresia">

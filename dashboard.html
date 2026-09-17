@@ -1825,6 +1825,316 @@
 
         window.actualizarPlan = function(plan) { alert('Función de actualización de plan pendiente de implementar.'); };
         window.filtrarCotizaciones = function(filtro) { alert('Filtro de cotizaciones pendiente de implementar.'); };
+ // ==========================================
+//  FASE 4: TESTIMONIOS, EXPERIENCIAS Y CASOS
+// ==========================================
+
+let calificacionGoParty = 0;
+let recomendarGoParty = null;
+let fotosCasoTemporales = [];
+
+// ===== CALIFICACIÓN ESTRELLAS GOPARTY =====
+window.setCalificacionGoParty = function(n) {
+    calificacionGoParty = n;
+    const estrellas = document.querySelectorAll('#estrellasGoParty span');
+    if (estrellas) {
+        estrellas.forEach((e, i) => { e.style.opacity = i < n ? '1' : '0.3'; });
+    }
+};
+
+// ===== TOGGLE RECOMENDAR =====
+window.toggleRecomendar = function(recomendar) {
+    recomendarGoParty = recomendar;
+    const toggleSi = document.getElementById('toggleRecomendarSi');
+    const toggleNo = document.getElementById('toggleRecomendarNo');
+    if (!toggleSi || !toggleNo) return;
+    
+    if (recomendar) {
+        toggleSi.classList.add('active');
+        toggleSi.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+        toggleSi.style.color = 'white';
+        toggleSi.style.borderColor = '#FF6B9D';
+        toggleNo.classList.remove('active');
+        toggleNo.style.background = 'white';
+        toggleNo.style.color = '#333';
+        toggleNo.style.borderColor = '#e0e0e0';
+    } else {
+        toggleSi.classList.remove('active');
+        toggleSi.style.background = 'white';
+        toggleSi.style.color = '#333';
+        toggleSi.style.borderColor = '#e0e0e0';
+        toggleNo.classList.add('active');
+        toggleNo.style.background = 'linear-gradient(135deg, #FFD93D, #FF6B9D)';
+        toggleNo.style.color = 'white';
+        toggleNo.style.borderColor = '#FF6B9D';
+    }
+};
+
+// ===== ENVIAR EXPERIENCIA GOPARTY =====
+window.enviarExperienciaGoParty = async function() {
+    const alert = document.getElementById('alertExperienciaGoParty');
+    if (!alert) return;
+    
+    const tiempo = document.getElementById('expTiempo').value;
+    const meGusta = document.getElementById('expGusta').value.trim();
+    const mejoraria = document.getElementById('expMejoraria').value.trim();
+    
+    if (!tiempo || !meGusta || !mejoraria || calificacionGoParty === 0 || recomendarGoParty === null) {
+        alert.className = 'alert error';
+        alert.textContent = '❌ Completa todos los campos y selecciona una calificación';
+        alert.style.display = 'block';
+        return;
+    }
+    
+    try {
+        await addDoc(collection(db, "testimonios_proveedores"), {
+            tiempo,
+            calificacion: calificacionGoParty,
+            meGusta,
+            mejoraria,
+            recomendar: recomendarGoParty,
+            nombreNegocio: proveedorActual.nombreNegocio || '',
+            proveedorId: proveedorActual.id,
+            estado: 'pendiente',
+            fecha: new Date().toISOString()
+        });
+        alert.className = 'alert success';
+        alert.textContent = '✅ Experiencia enviada. Será revisada por el equipo GoParty.';
+        alert.style.display = 'block';
+        document.getElementById('expTiempo').value = '';
+        document.getElementById('expGusta').value = '';
+        document.getElementById('expMejoraria').value = '';
+        setCalificacionGoParty(0);
+        toggleRecomendar(null);
+        setTimeout(() => { alert.style.display = 'none'; }, 3000);
+        cargarExperienciasEnviadas();
+    } catch (error) { 
+        alert.className = 'alert error';
+        alert.textContent = '❌ Error: ' + error.message;
+        alert.style.display = 'block';
+    }
+};
+
+// ===== PREVIEW FOTOS CASO =====
+window.previewFotosCaso = function(event) {
+    const files = event.target.files;
+    Array.from(files).forEach(file => {
+        if (fotosCasoTemporales.length >= 5) {
+            alert('️ Máximo 5 fotos por caso');
+            return;
+        }
+        if (file.size > 1 * 1024 * 1024) {
+            alert(`⚠️ La foto "${file.name}" excede 1MB`);
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            fotosCasoTemporales.push(e.target.result);
+            renderFotosPreviewCaso();
+        };
+        reader.readAsDataURL(file);
+    });
+};
+
+function renderFotosPreviewCaso() {
+    const contenedor = document.getElementById('fotoPreviewCaso');
+    if (!contenedor) return;
+    contenedor.innerHTML = fotosCasoTemporales.map((f, i) => `
+        <div class="foto-preview-wrapper">
+            <img src="${f}" class="foto-preview">
+            <button type="button" class="foto-remove" onclick="eliminarFotoCaso(${i})">✕</button>
+        </div>
+    `).join('');
+}
+
+window.eliminarFotoCaso = function(index) {
+    fotosCasoTemporales.splice(index, 1);
+    renderFotosPreviewCaso();
+};
+
+// ===== ENVIAR CASO DE ÉXITO =====
+window.enviarCasoExito = async function() {
+    const alert = document.getElementById('alertCasoExito');
+    if (!alert) return;
+    
+    const titulo = document.getElementById('casoTitulo').value.trim();
+    const tipoEvento = document.getElementById('casoTipoEvento').value;
+    const ciudad = document.getElementById('casoCiudad').value.trim();
+    const historia = document.getElementById('casoHistoria').value.trim();
+    const resultado = document.getElementById('casoResultado').value.trim();
+    
+    if (!titulo || !tipoEvento || !ciudad || !historia || !resultado) {
+        alert.className = 'alert error';
+        alert.textContent = '❌ Completa todos los campos obligatorios';
+        alert.style.display = 'block';
+        return;
+    }
+    
+    try {
+        await addDoc(collection(db, "casos_exito"), {
+            titulo,
+            tipoEvento,
+            ciudad,
+            historia,
+            resultado,
+            fotos: fotosCasoTemporales,
+            nombreNegocio: proveedorActual.nombreNegocio || '',
+            proveedorId: proveedorActual.id,
+            estado: 'pendiente',
+            publicado: false,
+            fecha: new Date().toISOString()
+        });
+        alert.className = 'alert success';
+        alert.textContent = '✅ Caso de éxito enviado. Será revisado antes de publicarse.';
+        alert.style.display = 'block';
+        document.getElementById('casoTitulo').value = '';
+        document.getElementById('casoTipoEvento').value = '';
+        document.getElementById('casoCiudad').value = '';
+        document.getElementById('casoHistoria').value = '';
+        document.getElementById('casoResultado').value = '';
+        document.getElementById('casoFotos').value = '';
+        document.getElementById('fotoPreviewCaso').innerHTML = '';
+        fotosCasoTemporales = [];
+        setTimeout(() => { alert.style.display = 'none'; }, 3000);
+        cargarCasosEnviados();
+    } catch (error) { 
+        alert.className = 'alert error';
+        alert.textContent = '❌ Error: ' + error.message;
+        alert.style.display = 'block';
+    }
+};
+
+// ===== CARGAR RESEÑAS RECIBIDAS (SOLO APROBADAS) =====
+async function cargarResenasRecibidas() {
+    const contenedor = document.getElementById('listaResenasRecibidas');
+    const countTotal = document.getElementById('countTotalResenas');
+    const avgCalif = document.getElementById('avgCalificacion');
+    
+    if (!contenedor || !proveedorActual) return;
+
+    try {
+        const nombreNegocio = proveedorActual.nombreNegocio; 
+        if (!nombreNegocio) { 
+            contenedor.innerHTML = '<p style="color: #999;">Error: No se pudo identificar tu negocio.</p>'; 
+            return; 
+        }
+
+        const q = query(collection(db, "testimonios"), where("nombreProveedor", "==", nombreNegocio));
+        const snap = await getDocs(q);
+        
+        let resenas = [];
+        let sumaCalificaciones = 0;
+
+        snap.forEach(doc => {
+            const data = doc.data();
+            if (data.estado === 'aprobado') {
+                resenas.push({ id: doc.id, ...data });
+                sumaCalificaciones += (data.calificacion || 0);
+            }
+        });
+
+        if(countTotal) countTotal.textContent = resenas.length;
+        if(avgCalif) {
+            const promedio = resenas.length > 0 ? (sumaCalificaciones / resenas.length).toFixed(1) : "0.0";
+            avgCalif.textContent = promedio + " ⭐";
+        }
+
+        if (resenas.length === 0) {
+            contenedor.innerHTML = '<div style="text-align: center; padding: 2rem; background: #f9f9f9; border-radius: 8px;"><div style="font-size: 3rem; margin-bottom: 1rem;"></div><h4>Aún no tienes reseñas aprobadas</h4><p style="color: #666;">Cuando un cliente deje un testimonio y el administrador lo apruebe, aparecerá aquí.</p></div>';
+            return;
+        }
+
+        contenedor.innerHTML = resenas.map(r => {
+            const estrellas = '⭐'.repeat(r.calificacion || 0);
+            const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString('es-MX') : '';
+            return `<div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;"><div><strong style="font-size: 1.1rem; color: #333;">${r.nombreCliente || 'Cliente Anónimo'}</strong><span style="background: #4CAF50; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 10px; vertical-align: middle;">Aprobado</span></div><div style="font-size: 1.2rem;">${estrellas}</div></div><div style="font-size: 0.85rem; color: #888; margin-bottom: 1rem;">${r.tipoEvento || ''} • ${r.ciudad || ''} • ${fecha}</div><p style="color: #555; font-style: italic; line-height: 1.6; background: #fdfdfd; padding: 1rem; border-left: 3px solid #FFD93D; border-radius: 4px;">"${r.comentario || ''}"</p></div>`;
+        }).join('');
+
+    } catch (error) {
+        console.error("Error cargando reseñas:", error);
+        contenedor.innerHTML = '<p style="color: red;">Error al cargar las reseñas.</p>';
+    }
+}
+
+// ===== CARGAR EXPERIENCIAS ENVIADAS =====
+async function cargarExperienciasEnviadas() {
+    const contenedor = document.getElementById('listaExperienciasGoParty');
+    if (!contenedor || !proveedorActual) return;
+
+    try {
+        const q = query(collection(db, "testimonios_proveedores"), where("proveedorId", "==", proveedorActual.id));
+        const snap = await getDocs(q);
+        const experiencias = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        experiencias.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+        if (experiencias.length === 0) {
+            contenedor.innerHTML = '<p style="color: #999;">Aún no has enviado tu experiencia.</p>';
+            return;
+        }
+
+        contenedor.innerHTML = experiencias.map(e => {
+            const estadoBadge = e.estado === 'aprobado' ? 'estado-aprobado' : e.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
+            const estrellas = '⭐'.repeat(e.calificacion || 0);
+            const fecha = e.fecha ? new Date(e.fecha).toLocaleDateString('es-MX') : '';
+            return `<div class="item-row ${e.estado === 'aprobado' ? 'aprobada' : e.estado === 'rechazado' ? 'rechazada' : 'pendiente'}" style="margin-bottom: 0.8rem;"><div class="item-icon">💬</div><div class="item-info"><div class="item-title">${estrellas} • ${e.tiempo || ''}</div><div class="item-subtitle"><strong>Me gusta:</strong> ${e.meGusta || ''}</div><div class="item-subtitle"><strong>Mejoraría:</strong> ${e.mejoraria || ''}</div><div class="item-subtitle"><strong>Recomendaría:</strong> ${e.recomendar === true ? '✅ Sí' : '❌ No'}</div><div class="item-subtitle">📅 ${fecha}</div></div><span class="estado-badge ${estadoBadge}">${e.estado || 'pendiente'}</span></div>`;
+        }).join('');
+    } catch (error) {
+        console.error("Error cargando experiencias:", error);
+    }
+}
+
+// ===== CARGAR CASOS DE ÉXITO ENVIADOS =====
+async function cargarCasosEnviados() {
+    const contenedor = document.getElementById('listaCasosExito');
+    if (!contenedor || !proveedorActual) return;
+
+    try {
+        const q = query(collection(db, "casos_exito"), where("proveedorId", "==", proveedorActual.id));
+        const snap = await getDocs(q);
+        const casos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        casos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+        if (casos.length === 0) {
+            contenedor.innerHTML = '<p style="color: #999;">Aún no has propuesto casos de éxito.</p>';
+            return;
+        }
+
+        contenedor.innerHTML = casos.map(c => {
+            const estadoBadge = c.estado === 'aprobado' ? 'estado-aprobado' : c.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente';
+            const fecha = c.fecha ? new Date(c.fecha).toLocaleDateString('es-MX') : '';
+            return `<div class="item-row ${c.estado === 'aprobado' ? 'aprobada' : c.estado === 'rechazado' ? 'rechazada' : 'pendiente'}" style="margin-bottom: 0.8rem;"><div class="item-icon">🏆</div><div class="item-info"><div class="item-title">${c.titulo || 'Sin título'}</div><div class="item-subtitle">${c.tipoEvento || ''} • ${c.ciudad || ''}</div><div class="item-subtitle"><strong>Historia:</strong> ${(c.historia || '').substring(0, 100)}...</div><div class="item-subtitle"><strong>Resultado:</strong> ${c.resultado || ''}</div><div class="item-subtitle">📅 ${fecha}</div>${c.fotos && c.fotos.length > 0 ? `<div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">${c.fotos.map(f => `<img src="${f}" style="width: 60px; height: 60px; border-radius: 6px; object-fit: cover;">`).join('')}</div>` : ''}</div><span class="estado-badge ${estadoBadge}">${c.estado || 'pendiente'}</span></div>`;
+        }).join('');
+    } catch (error) {
+        console.error("Error cargando casos:", error);
+    }
+}
+
+// ===== MODAL ACLARACIÓN =====
+window.abrirModalAclaracion = function(id, nombreCliente, comentario, calificacion) {
+    const modal = document.getElementById('modalAclaracion');
+    const originalDiv = document.getElementById('testimonioOriginal');
+    const idInput = document.getElementById('testimonioAclararId');
+    const textoInput = document.getElementById('textoAclaracion');
+    
+    if (!modal || !originalDiv || !idInput || !textoInput) return;
+    
+    idInput.value = id;
+    originalDiv.innerHTML = `<strong>${nombreCliente || 'Cliente'}</strong> - ${'⭐'.repeat(calificacion || 0)}<br><p style="margin-top: 0.5rem; font-style: italic;">"${comentario || ''}"</p>`;
+    textoInput.value = '';
+    modal.classList.add('active');
+};
+
+window.cerrarModalAclaracion = function() {
+    const modal = document.getElementById('modalAclaracion');
+    if (modal) modal.classList.remove('active');
+};
+
+window.enviarAclaracion = async function() {
+    const alert = document.getElementById('alertAclaracion');
+    const id = document.getElementById('testimonioAclararId').value;
+    const aclaracion = document.getElementById('textoAclaracion').value.trim();
+    
+    if (!acl
     </script>
 
 </body>

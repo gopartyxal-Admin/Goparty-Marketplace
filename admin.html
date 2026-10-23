@@ -365,6 +365,7 @@
                 
                 <div class="sub-tabs">
                     <button class="sub-tab active" data-sub="categorias">🎯 Categorías</button>
+                    <button class="sub-tab" data-sub="estados">📍 Estados</button>
                     <button class="sub-tab" data-sub="ciudades">🏙️ Ciudades</button>
                     <button class="sub-tab" data-sub="faq-general">❓ FAQ General</button>
                     <button class="sub-tab" data-sub="faq-proveedores">👨‍💼 FAQ Proveedores</button>
@@ -384,12 +385,24 @@
                     <div class="card"><h3>📋 Categorías Existentes</h3><div id="listaCategorias" class="item-list">Cargando...</div></div>
                 </div>
 
-                <div class="sub-content" id="sub-ciudades">
+                <div class="sub-content" id="sub-estados">
+                        <div class="card">
+                            <h3>➕ Agregar Nuevo Estado</h3>
+                            <div class="alert" id="alertEstado"></div>
+                            <div class="form-group"><label>Nombre del Estado *</label><input type="text" id="estNombre" placeholder="Ej: Veracruz"></div>
+                            <div class="form-group"><label>Descripción / Región</label><input type="text" id="estDescripcion" placeholder="Ej: Golfo de México"></div>
+                            <div class="form-group"><label>Orden de aparición</label><input type="number" id="estOrden" placeholder="1" min="1" value="1"></div>
+                            <button class="btn" onclick="guardarEstado()">💾 Guardar Estado</button>
+                        </div>
+                        <div class="card"><h3>📋 Estados Existentes</h3><div id="listaEstados" class="item-list">Cargando...</div></div>
+                    </div>
+
+                    <div class="sub-content" id="sub-ciudades">
                     <div class="card">
                         <h3>➕ Agregar Nueva Ciudad</h3>
                         <div class="alert" id="alertCiudad"></div>
                         <div class="form-group"><label>Nombre de la Ciudad *</label><input type="text" id="ciuNombre" placeholder="Ej: Xalapa"></div>
-                        <div class="form-group"><label>Estado *</label><input type="text" id="ciuEstado" placeholder="Ej: Veracruz"></div>
+                        <div class="form-group"><label>Estado *</label><select id="ciuEstado"><option value="">Selecciona un estado...</option></select></div>
                         <div class="form-group"><label>Descripción / Eslogan</label><input type="text" id="ciuDescripcion" placeholder="Ej: Puerto y playa"></div>
                         <div class="form-group"><label>Orden de aparición</label><input type="number" id="ciuOrden" placeholder="1" min="1" value="1"></div>
                         <button class="btn" onclick="guardarCiudad()">💾 Guardar Ciudad</button>
@@ -932,6 +945,7 @@
                 if (tab.dataset.tab === 'config') cargarConfiguracion();
                 if (tab.dataset.tab === 'contenido') { 
                     cargarCategorias(); 
+                    cargarEstados(); 
                     cargarCiudades(); 
                     cargarFaqGeneral(); 
                     cargarFaqProveedores(); 
@@ -1059,6 +1073,44 @@
         window.eliminarCategoria = async function(id) {
             if (!confirm('¿Eliminar esta categoría?')) return;
             try { await deleteDoc(doc(db, "categorias", id)); cargarCategorias(); } catch (error) { alert('❌ Error: ' + error.message); }
+        };
+
+        // ==========================================
+        // CRUD ESTADOS
+        // ==========================================
+        async function cargarEstados() {
+            const contenedor = document.getElementById('listaEstados');
+            const selectEstado = document.getElementById('ciuEstado');
+            try {
+                const snap = await getDocs(collection(db, "estados"));
+                const items = [];
+                snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+                items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
+                selectEstado.innerHTML = '<option value="">Selecciona un estado...</option>' +
+                    items.map(i => `<option value="${i.nombre}">${i.nombre}</option>`).join('');
+                if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay estados. Agrega estados para que aparezcan en el registro de proveedores.</div>'; return; }
+                contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">📍</div><div class="item-info"><div class="item-title">${item.nombre}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-danger btn-small" onclick="eliminarEstado('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
+            } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar estados</div>'; }
+        }
+
+        window.guardarEstado = async function() {
+            const alert = document.getElementById('alertEstado');
+            const nombre = document.getElementById('estNombre').value.trim();
+            const descripcion = document.getElementById('estDescripcion').value.trim();
+            const orden = parseInt(document.getElementById('estOrden').value) || 1;
+            if (!nombre) { alert.className = 'alert error'; alert.textContent = '❌ El nombre del estado es obligatorio'; alert.style.display = 'block'; return; }
+            try {
+                await addDoc(collection(db, "estados"), { nombre, descripcion, orden, activo: true, creado: new Date().toISOString() });
+                alert.className = 'alert success'; alert.textContent = '✅ Estado guardado'; alert.style.display = 'block';
+                document.getElementById('estNombre').value = ''; document.getElementById('estDescripcion').value = ''; document.getElementById('estOrden').value = '1';
+                setTimeout(() => { alert.style.display = 'none'; }, 3000);
+                cargarEstados();
+            } catch (error) { alert.className = 'alert error'; alert.textContent = '❌ Error: ' + error.message; alert.style.display = 'block'; }
+        };
+
+        window.eliminarEstado = async function(id) {
+            if (!confirm('¿Eliminar este estado? Las ciudades asociadas no se eliminarán automáticamente.')) return;
+            try { await deleteDoc(doc(db, "estados", id)); cargarEstados(); } catch (error) { alert('❌ Error: ' + error.message); }
         };
 
         // ==========================================

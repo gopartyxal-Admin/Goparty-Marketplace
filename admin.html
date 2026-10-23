@@ -1445,6 +1445,29 @@
                     const fecha = s.fechaSolicitud ? new Date(s.fechaSolicitud).toLocaleDateString('es-MX') : new Date(s.fechaRegistro || 0).toLocaleDateString('es-MX');
                     const servicios = s.servicios && s.servicios.length > 0 ? s.servicios.join(', ') : (s.categoria || 'No especificado');
                     
+                    const docs = s.documentos || {};
+                    let docsHtml = '';
+                    const docLabels = { ine: 'INE/IFE', fotosEvidencia: 'Fotos de Evidencia', constanciaFiscal: 'Constancia Fiscal' };
+                    Object.keys(docLabels).forEach(key => {
+                        if (docs[key] && docs[key].length > 0) {
+                            const links = docs[key].map((url, i) => {
+                                const isImg = url.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+                                return `<a href="${url}" target="_blank" style="display:inline-flex;align-items:center;gap:0.3rem;margin:0.2rem;padding:0.3rem 0.6rem;background:#e8f4fd;border-radius:6px;text-decoration:none;font-size:0.8rem;color:#1976d2;">${isImg ? '🖼️' : '📄'} Ver ${i+1}</a>`;
+                            }).join('');
+                            docsHtml += `<div style="margin-top:0.5rem;"><strong style="font-size:0.85rem;color:#555;">${docLabels[key]}:</strong> ${links}</div>`;
+                        }
+                    });
+                    if (s.fechaReunionPresencial) {
+                        docsHtml += `<div style="margin-top:0.5rem;font-size:0.85rem;"><strong style="color:#b8860b;">📅 Reunión presencial:</strong> ${new Date(s.fechaReunionPresencial).toLocaleString('es-MX')}</div>`;
+                    }
+                    if (s.otrosConcepto) {
+                        docsHtml += `<div style="margin-top:0.5rem;font-size:0.85rem;"><strong style="color:#555;">✨ Concepto:</strong> ${s.otrosConcepto}</div>`;
+                    }
+                    const sinDocs = Object.keys(docLabels).every(key => !docs[key] || docs[key].length === 0) && !docsHtml;
+                    if (sinDocs && !s.fechaReunionPresencial) {
+                        docsHtml = '<div style="margin-top:0.5rem;font-size:0.85rem;color:#999;">Sin documentos subidos</div>';
+                    }
+
                     return `
                         <div class="solicitud-card" style="border-left-color: ${estadoColor};">
                             <div class="solicitud-header">
@@ -1458,6 +1481,10 @@
                                 <span style="background: ${estadoColor}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 600;">${estado}</span>
                             </div>
                             ${s.descripcion ? `<div class="solicitud-descripcion">"${s.descripcion}"</div>` : ''}
+                            <div style="padding: 0.75rem; background: #f8f9fa; border-radius: 8px; margin-top: 0.5rem;">
+                                <strong style="font-size: 0.85rem; color: #333;">📎 Documentos de Verificación:</strong>
+                                ${docsHtml}
+                            </div>
                             <div class="solicitud-acciones">
                                 ${estado === 'Pendiente' ? `
                                     <button class="btn-aprobar" onclick="aprobarSolicitud('${s.id}', '${s.email}')">✅ Aprobar y Activar Cuenta</button>

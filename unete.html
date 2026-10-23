@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Únete a GoParty - Registro de Proveedores</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,7 +13,6 @@
             min-height: 100vh;
         }
 
-        /* Navbar */
         .navbar {
             position: relative;
             background: white;
@@ -36,14 +31,7 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #6BCB77 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        .logo-img { height: 48px; width: auto; }
 
         .nav-links {
             display: flex;
@@ -60,9 +48,7 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover {
-            background: #f0f0f0;
-        }
+        .nav-links a:hover { background: #f0f0f0; }
 
         .hamburger { display: none; border: 0; background: transparent; padding: 0.5rem; cursor: pointer; }
         .hamburger span { display: block; width: 28px; height: 3px; margin: 5px 0; background: #333; border-radius: 3px; }
@@ -71,29 +57,10 @@
         .mobile-menu a { text-decoration: none; color: #333; padding: 0.8rem 1rem; border-radius: 8px; font-weight: 600; }
         .mobile-menu a:hover { background: #f5f7fa; }
 
-        .nav-explorar {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #6BCB77 !important;
-        }
+        .nav-explorar { font-size: 1.1rem; font-weight: 600; color: #6BCB77 !important; }
+        .btn-unete { background: linear-gradient(135deg, #6BCB77, #4D96FF); color: white !important; padding: 0.6rem 1.5rem; border-radius: 25px; font-weight: 600; }
+        .btn-proveedor { background: linear-gradient(135deg, #FF6B9D, #FF8E53); color: white !important; padding: 0.6rem 1.5rem; border-radius: 25px; font-weight: 600; }
 
-        .btn-unete {
-            background: linear-gradient(135deg, #6BCB77, #4D96FF);
-            color: white !important;
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
-        }
-
-        .btn-proveedor {
-            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
-            color: white !important;
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
-        }
-
-        /* Header Section */
         .header-section {
             background: linear-gradient(135deg, #6BCB77 0%, #4D96FF 100%);
             padding: 3rem 2rem;
@@ -101,17 +68,9 @@
             color: white;
         }
 
-        .header-section h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
+        .header-section h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .header-section p { font-size: 1.2rem; opacity: 0.95; }
 
-        .header-section p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-        }
-
-        /* Form Container */
         .form-container {
             max-width: 800px;
             margin: -2rem auto 3rem;
@@ -121,316 +80,175 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* Steps Indicator */
-        .steps-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #999;
-        }
-
-        .step.active {
-            color: #6BCB77;
-            font-weight: 600;
-        }
-
+        .steps-indicator { display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap; }
+        .step { display: flex; align-items: center; gap: 0.5rem; color: #999; }
+        .step.active { color: #6BCB77; font-weight: 600; }
         .step-number {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            transition: all 0.3s;
+            width: 35px; height: 35px; border-radius: 50%; background: #f0f0f0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; transition: all 0.3s;
         }
+        .step.active .step-number { background: linear-gradient(135deg, #6BCB77, #4D96FF); color: white; }
+        .step.completed .step-number { background: #6BCB77; color: white; }
 
-        .step.active .step-number {
-            background: linear-gradient(135deg, #6BCB77, #4D96FF);
-            color: white;
-        }
-
-        .step.completed .step-number {
-            background: #6BCB77;
-            color: white;
-        }
-
-        /* Form Steps */
-        .form-step {
-            display: none;
-        }
-
-        .form-step.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.5s; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .form-step h3 {
-            margin-bottom: 1.5rem;
-            color: #333;
-            font-size: 1.5rem;
+        .form-step h3 { margin-bottom: 1.5rem; color: #333; font-size: 1.5rem; }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0;
+            border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: #6BCB77;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #6BCB77;
-        }
-
-        /* Category Selection */
         .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem; margin-bottom: 2rem;
         }
-
         .category-item {
-            padding: 1.5rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
+            padding: 1.5rem; border: 2px solid #e0e0e0; border-radius: 10px;
+            cursor: pointer; transition: all 0.3s; text-align: center;
         }
+        .category-item:hover { border-color: #6BCB77; transform: translateY(-2px); }
+        .category-item.selected { border-color: #6BCB77; background: #E8F5E9; }
+        .category-icon { font-size: 2rem; margin-bottom: 0.5rem; }
 
-        .category-item:hover {
-            border-color: #6BCB77;
-            transform: translateY(-2px);
-        }
+        #otrosConcepto { display: none; }
 
-        .category-item.selected {
-            border-color: #6BCB77;
-            background: #E8F5E9;
-        }
-
-        .category-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Plan Selection */
         .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem; margin-bottom: 2rem;
         }
-
         .plan-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
+            border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem;
+            text-align: center; cursor: pointer; transition: all 0.3s;
         }
+        .plan-card:hover { border-color: #6BCB77; transform: translateY(-3px); }
+        .plan-card.selected { border-color: #6BCB77; background: #E8F5E9; }
+        .plan-card.gold-plan { border-color: #FFD700; }
+        .plan-card.gold-plan.selected { background: #FFF9E6; }
+        .plan-card h4 { color: #333; margin-bottom: 0.5rem; }
+        .plan-card .price { font-size: 1.8rem; font-weight: bold; color: #6BCB77; margin: 1rem 0; }
+        .plan-card.gold-plan .price { color: #FFD700; }
+        .plan-badge { display: inline-block; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; }
+        .badge-basic { background: #6BCB77; color: white; }
+        .badge-pro { background: #FF6B9D; color: white; }
 
-        .plan-card:hover {
-            border-color: #6BCB77;
-            transform: translateY(-3px);
+        .plan-requirements {
+            display: none; margin-top: 1.5rem; padding: 1.5rem; background: #f8f9fa;
+            border-radius: 10px; border-left: 4px solid #6BCB77;
         }
+        .plan-requirements.visible { display: block; animation: fadeIn 0.4s; }
+        .plan-requirements h4 { margin-bottom: 0.75rem; color: #333; font-size: 1.05rem; }
+        .plan-requirements ul { list-style: none; padding-left: 0; }
+        .plan-requirements li { padding: 0.4rem 0; color: #555; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 0.5rem; }
+        .plan-requirements li::before { content: "✓"; color: #6BCB77; font-weight: bold; flex-shrink: 0; }
 
-        .plan-card.selected {
-            border-color: #6BCB77;
-            background: #E8F5E9;
-        }
-
-        .plan-card.gold-plan {
-            border-color: #FFD700;
-        }
-
-        .plan-card.gold-plan.selected {
-            background: #FFF9E6;
-        }
-
-        .plan-card h4 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .plan-card .price {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #6BCB77;
-            margin: 1rem 0;
-        }
-
-        .plan-card.gold-plan .price {
-            color: #FFD700;
-        }
-
-        .plan-badge {
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-
-        .badge-basic {
-            background: #6BCB77;
-            color: white;
-        }
-
-        .badge-pro {
-            background: #FF6B9D;
-            color: white;
-        }
-
-        /* File Upload */
         .upload-area {
-            border: 2px dashed #4D96FF;
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.3s;
+            border: 2px dashed #4D96FF; border-radius: 10px; padding: 2rem;
+            text-align: center; cursor: pointer; transition: background 0.3s;
+        }
+        .upload-area:hover { background: #F0F7FF; }
+        .upload-area.uploaded { border-color: #6BCB77; background: #E8F5E9; }
+
+        .upload-list { margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .upload-thumb {
+            position: relative; width: 80px; height: 80px; border-radius: 8px;
+            overflow: hidden; border: 2px solid #6BCB77; background: #f0f0f0;
+        }
+        .upload-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .upload-thumb .remove-btn {
+            position: absolute; top: 2px; right: 2px; background: rgba(255,0,0,0.8);
+            color: white; border: none; border-radius: 50%; width: 20px; height: 20px;
+            cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center;
+        }
+        .upload-thumb-pdf {
+            width: 80px; height: 80px; border-radius: 8px; border: 2px solid #6BCB77;
+            background: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; position: relative;
         }
 
-        .upload-area:hover {
-            background: #F0F7FF;
-        }
+        .checkbox-group { display: flex; align-items: flex-start; gap: 0.5rem; margin: 1.5rem 0; }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; margin-top: 3px; }
+        .checkbox-group label { font-weight: normal; color: #666; }
 
-        /* Checkbox */
-        .checkbox-group {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            margin-top: 3px;
-        }
-
-        .checkbox-group label {
-            font-weight: normal;
-            color: #666;
-        }
-
-        /* Buttons */
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
+        .form-actions { display: flex; justify-content: space-between; margin-top: 2rem; gap: 1rem; }
 
         .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
+            background: #f0f0f0; color: #333; border: none; padding: 0.8rem 2rem;
+            border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.3s;
         }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
+        .btn-secondary:hover { background: #e0e0e0; }
 
         .btn-primary {
-            background: linear-gradient(135deg, #6BCB77, #4D96FF);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
+            background: linear-gradient(135deg, #6BCB77, #4D96FF); color: white; border: none;
+            padding: 0.8rem 2rem; border-radius: 8px; cursor: pointer; font-size: 1rem;
+            font-weight: 600; transition: all 0.3s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(107, 203, 119, 0.4); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .calendar-group { display: none; margin-top: 1.5rem; padding: 1.5rem; background: #fffbe6; border-radius: 10px; border: 1px solid #FFD700; }
+        .calendar-group.visible { display: block; animation: fadeIn 0.4s; }
+        .calendar-group label { color: #333; font-weight: 600; margin-bottom: 0.5rem; display: block; }
+        .calendar-group input[type="datetime-local"] {
+            width: 100%; padding: 0.8rem; border: 2px solid #FFD700; border-radius: 8px; font-size: 1rem;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(107, 203, 119, 0.4);
-        }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 4rem; }
+        footer a { color: white; text-decoration: underline; display: inline-block; margin-top: 0.5rem; }
 
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
+        .success-modal {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 200; align-items: center; justify-content: center; padding: 1rem;
         }
+        .success-modal.open { display: flex; }
+        .success-modal-content {
+            background: white; border-radius: 16px; max-width: 480px; width: 100%;
+            padding: 2.5rem; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: scaleIn 0.3s ease;
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .success-icon {
+            width: 72px; height: 72px; margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #6BCB77, #4D96FF); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: white;
+        }
+        .success-modal-content h2 { color: #333; margin-bottom: 0.75rem; font-size: 1.5rem; }
+        .success-modal-content p { color: #666; line-height: 1.6; margin-bottom: 1.5rem; font-size: 1rem; }
+        .success-summary { text-align: left; background: #f8f9fa; border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; }
+        .success-summary p { margin-bottom: 0.5rem; font-size: 0.9rem; color: #555; }
+        .success-summary strong { color: #333; }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .hamburger { display: block; }
-            .header-section h1 {
-                font-size: 1.8rem;
-            }
-            
-            .form-container {
-                margin: -1rem 1rem 2rem;
-                padding: 2rem;
-            }
-            
-            .steps-indicator {
-                gap: 1rem;
-            }
-            
-            .category-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .plans-grid {
-                grid-template-columns: 1fr;
-            }
+            .header-section h1 { font-size: 1.8rem; }
+            .form-container { margin: -1rem 1rem 2rem; padding: 2rem; }
+            .steps-indicator { gap: 1rem; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            .plans-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navegación -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">GOPARTY</div>
+            <a href="index.html"><img src="Logo.png" alt="GoParty" class="logo-img"></a>
             <div class="nav-links">
                 <a href="index.html" class="nav-explorar">Explorar</a>
                 <a href="unete.html" class="btn-unete">Únete a GoParty</a>
@@ -447,15 +265,12 @@
         </div>
     </nav>
 
-    <!-- Header -->
     <section class="header-section">
         <h1>Únete a GoParty</h1>
         <p>Completa tu perfil y elige tu plan de crecimiento</p>
     </section>
 
-    <!-- Form Container -->
     <div class="form-container">
-        <!-- Steps Indicator -->
         <div class="steps-indicator">
             <div class="step active" data-step="1">
                 <div class="step-number">1</div>
@@ -479,7 +294,46 @@
             <!-- Paso 1: Información Básica -->
             <div class="form-step active" data-step="1">
                 <h3>1. Información Básica</h3>
-                
+
+                <div class="form-group">
+                    <label>Estado *</label>
+                    <select id="selectEstado" required>
+                        <option value="">Selecciona tu estado</option>
+                        <option value="Aguascalientes">Aguascalientes</option>
+                        <option value="Baja California">Baja California</option>
+                        <option value="Baja California Sur">Baja California Sur</option>
+                        <option value="Campeche">Campeche</option>
+                        <option value="Chiapas">Chiapas</option>
+                        <option value="Chihuahua">Chihuahua</option>
+                        <option value="Ciudad de México">Ciudad de México</option>
+                        <option value="Coahuila">Coahuila</option>
+                        <option value="Colima">Colima</option>
+                        <option value="Durango">Durango</option>
+                        <option value="Estado de México">Estado de México</option>
+                        <option value="Guanajuato">Guanajuato</option>
+                        <option value="Guerrero">Guerrero</option>
+                        <option value="Hidalgo">Hidalgo</option>
+                        <option value="Jalisco">Jalisco</option>
+                        <option value="Michoacán">Michoacán</option>
+                        <option value="Morelos">Morelos</option>
+                        <option value="Nayarit">Nayarit</option>
+                        <option value="Nuevo León">Nuevo León</option>
+                        <option value="Oaxaca">Oaxaca</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="Querétaro">Querétaro</option>
+                        <option value="Quintana Roo">Quintana Roo</option>
+                        <option value="San Luis Potosí">San Luis Potosí</option>
+                        <option value="Sinaloa">Sinaloa</option>
+                        <option value="Sonora">Sonora</option>
+                        <option value="Tabasco">Tabasco</option>
+                        <option value="Tamaulipas">Tamaulipas</option>
+                        <option value="Tlaxcala">Tlaxcala</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Yucatán">Yucatán</option>
+                        <option value="Zacatecas">Zacatecas</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>Ciudad *</label>
                     <select id="selectCiudad" required>
@@ -514,16 +368,14 @@
                 </div>
 
                 <div class="form-actions" style="justify-content: flex-end;">
-                    <button type="button" class="btn-primary" onclick="nextStep(1)">
-                        Siguiente →
-                    </button>
+                    <button type="button" class="btn-primary" onclick="nextStep(1)">Siguiente →</button>
                 </div>
             </div>
 
             <!-- Paso 2: Servicios -->
             <div class="form-step" data-step="2">
                 <h3>2. ¿Qué servicios ofreces?</h3>
-                
+
                 <div class="category-grid">
                     <div class="category-item" data-categoria="Salones">
                         <div class="category-icon">🏰</div>
@@ -559,6 +411,11 @@
                     </div>
                 </div>
                 <input type="hidden" id="selectCategoria" required>
+
+                <div class="form-group" id="otrosConcepto">
+                    <label>Describe el concepto de tu servicio *</label>
+                    <input type="text" id="otrosConceptoTexto" placeholder="Ej: Pirotecnia, Inflables, Food Truck..." maxlength="80">
+                </div>
 
                 <div class="form-group">
                     <label>Descripción de tus servicios</label>
@@ -601,6 +458,11 @@
                 </div>
                 <input type="hidden" id="selectPlan" value="basic" required>
 
+                <div class="plan-requirements" id="planRequirements">
+                    <h4 id="planReqTitle">Documentación requerida</h4>
+                    <ul id="planReqList"></ul>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" onclick="prevStep(3)">← Atrás</button>
                     <button type="button" class="btn-primary" onclick="nextStep(3)">Siguiente →</button>
@@ -611,24 +473,42 @@
             <div class="form-step" data-step="4">
                 <h3>4. Verificación y Sello GoParty</h3>
                 <p style="margin-bottom: 2rem; color: #666;">
-                    Para obtener el Sello de Verificación, sube tus documentos.
+                    Sube los documentos requeridos según tu plan. Estos serán revisados por el equipo de GoParty.
                 </p>
 
-                <div class="form-group">
-                    <label>Identificación Oficial (INE/IFE)</label>
+                <div class="form-group" id="grpINE">
+                    <label>Identificación Oficial (INE/IFE) *</label>
                     <div class="upload-area" onclick="document.getElementById('file-ine').click()">
                         <p>📄 Haz clic para subir tu identificación</p>
                         <input type="file" id="file-ine" style="display: none;" accept="image/*,.pdf">
                     </div>
+                    <div class="upload-list" id="list-ine"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Constancia de Situación Fiscal</label>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Opcional, pero recomendado para Plan Gold</p>
+                <div class="form-group" id="grpFotos">
+                    <label>Fotos de evidencia de tu servicio *</label>
+                    <div class="upload-area" onclick="document.getElementById('file-fotos').click()">
+                        <p>📸 Haz clic para subir fotos de tus trabajos (puedes subir varias)</p>
+                        <input type="file" id="file-fotos" style="display: none;" accept="image/*" multiple>
+                    </div>
+                    <div class="upload-list" id="list-fotos"></div>
+                </div>
+
+                <div class="form-group" id="grpCSF" style="display:none;">
+                    <label>Constancia de Situación Fiscal *</label>
                     <div class="upload-area" onclick="document.getElementById('file-csf').click()">
                         <p>📄 Haz clic para subir tu constancia</p>
-                        <input type="file" id="file-csf" style="display: none;" accept=".pdf">
+                        <input type="file" id="file-csf" style="display: none;" accept="image/*,.pdf">
                     </div>
+                    <div class="upload-list" id="list-csf"></div>
+                </div>
+
+                <div class="calendar-group" id="grpCalendar">
+                    <label>📅 Agenda tu reunión presencial de verificación *</label>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.75rem;">
+                        Selecciona fecha y hora para una reunión presencial donde verificaremos tus datos y validaremos tus eventos.
+                    </p>
+                    <input type="datetime-local" id="fechaReunion" required>
                 </div>
 
                 <div class="checkbox-group">
@@ -638,19 +518,26 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" onclick="prevStep(4)">← Atrás</button>
-                    <button type="submit" class="btn-primary" id="btnEnviarRegistro">
-                        ✅ Enviar Registro
-                    </button>
+                    <button type="submit" class="btn-primary" id="btnEnviarRegistro">✅ Enviar Registro</button>
                 </div>
             </div>
         </form>
     </div>
 
-    <!-- Footer -->
     <footer>
         <p>© 2026 GoParty - Conectando party people con magia profesional</p>
-        <a href="terminos.html" style="color: white; text-decoration: underline; display: inline-block; margin-top: 0.5rem;">Términos y Condiciones</a>
+        <a href="terminos.html">Términos y Condiciones</a>
     </footer>
+
+    <div class="success-modal" id="successModal">
+        <div class="success-modal-content">
+            <div class="success-icon">✓</div>
+            <h2>¡Registro Exitoso!</h2>
+            <p>Tu solicitud ha sido enviada correctamente. Nuestro equipo revisará tu información en 24-48 horas.</p>
+            <div class="success-summary" id="successSummary"></div>
+            <button class="btn-primary" onclick="window.location.href='dashboard.html'" style="width:100%;">Ir al Dashboard →</button>
+        </div>
+    </div>
 
     <script>
         const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -665,32 +552,21 @@
         }));
     </script>
 
-    <!-- FIREBASE Y JAVASCRIPT -->
     <script type="module">
-        // Importar Firebase
-        import { addDoc, collection, db } from "./firebase-config.js";
+        import { addDoc, collection, db, storage, storageRef, uploadBytes, getDownloadURL } from "./firebase-config.js";
 
-        // Variables globales
         let currentStep = 1;
-        let formData = {
-            ciudad: '',
-            categoria: '',
-            plan: 'basic'
-        };
+        let formData = { estado: '', ciudad: '', categoria: '', plan: 'basic', otrosConcepto: '' };
+        let uploadedFiles = { ine: [], fotos: [], csf: [] };
 
-        // ==========================================
-        // NAVEGACIÓN ENTRE PASOS DEL FORMULARIO
-        // ==========================================
+        // Navigation
         window.nextStep = function(step) {
             if (!validateStep(step)) return;
-
             document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
             document.querySelector(`.form-step[data-step="${step + 1}"]`).classList.add('active');
-            
             document.querySelectorAll('.step')[step-1].classList.remove('active');
             document.querySelectorAll('.step')[step-1].classList.add('completed');
             document.querySelectorAll('.step')[step].classList.add('active');
-            
             currentStep = step + 1;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
@@ -698,106 +574,261 @@
         window.prevStep = function(step) {
             document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
             document.querySelector(`.form-step[data-step="${step - 1}"]`).classList.add('active');
-            
             document.querySelectorAll('.step')[step].classList.remove('active');
             document.querySelectorAll('.step')[step-1].classList.remove('completed');
             document.querySelectorAll('.step')[step-1].classList.add('active');
-            
             currentStep = step - 1;
         };
 
         function validateStep(step) {
             const currentForm = document.querySelector(`.form-step[data-step="${step}"]`);
             const requiredFields = currentForm.querySelectorAll('[required]');
-            
             for (let field of requiredFields) {
-                if (!field.value.trim()) {
+                if (!field.value || !field.value.trim()) {
                     alert('Por favor completa todos los campos obligatorios');
                     field.style.borderColor = 'red';
+                    setTimeout(() => field.style.borderColor = '', 2000);
                     return false;
                 }
+            }
+            if (step === 2 && formData.categoria === 'Otros' && !document.getElementById('otrosConceptoTexto').value.trim()) {
+                alert('Por favor describe el concepto de tu servicio');
+                return false;
             }
             return true;
         }
 
-        // Selección de categoría
+        // Category selection
         document.querySelectorAll('.category-item').forEach(item => {
             item.addEventListener('click', function() {
                 document.querySelectorAll('.category-item').forEach(i => i.classList.remove('selected'));
                 this.classList.add('selected');
                 formData.categoria = this.getAttribute('data-categoria');
                 document.getElementById('selectCategoria').value = formData.categoria;
+
+                const otrosConceptoDiv = document.getElementById('otrosConcepto');
+                if (formData.categoria === 'Otros') {
+                    otrosConceptoDiv.style.display = 'block';
+                } else {
+                    otrosConceptoDiv.style.display = 'none';
+                    document.getElementById('otrosConceptoTexto').value = '';
+                    formData.otrosConcepto = '';
+                }
             });
         });
 
-        // Selección de plan
+        // Track otros concepto
+        document.getElementById('otrosConceptoTexto').addEventListener('input', (e) => {
+            formData.otrosConcepto = e.target.value;
+        });
+
+        // Plan selection with requirements
+        const planRequirements = {
+            basic: {
+                title: 'Plan Básico - Documentación Requerida',
+                items: ['Identificación Oficial (INE/IFE)', 'Fotos de evidencia de tu servicio']
+            },
+            pro: {
+                title: 'Plan Pro - Documentación Requerida',
+                items: ['Identificación Oficial (INE/IFE)', 'Fotos de evidencia de tu servicio', 'Constancia de Situación Fiscal']
+            },
+            gold: {
+                title: 'Plan Gold - Documentación y Verificación Requerida',
+                items: ['Identificación Oficial (INE/IFE)', 'Fotos de evidencia de tu servicio', 'Constancia de Situación Fiscal', 'Reunión presencial para verificación de datos y validación de eventos']
+            }
+        };
+
         window.selectPlan = function(plan) {
             formData.plan = plan;
             document.getElementById('selectPlan').value = plan;
-            
-            ['basic', 'pro', 'gold'].forEach(p => {
-                document.getElementById(`plan-${p}`).classList.remove('selected');
-            });
-            
+            ['basic', 'pro', 'gold'].forEach(p => document.getElementById(`plan-${p}`).classList.remove('selected'));
             document.getElementById(`plan-${plan}`).classList.add('selected');
+
+            const reqDiv = document.getElementById('planRequirements');
+            const reqList = document.getElementById('planReqList');
+            const reqTitle = document.getElementById('planReqTitle');
+
+            reqTitle.textContent = planRequirements[plan].title;
+            reqList.innerHTML = planRequirements[plan].items.map(item => `<li>${item}</li>`).join('');
+            reqDiv.classList.add('visible');
+
+            updateUploadRequirements(plan);
         };
 
-        // ==========================================
-        // GUARDAR PROVEEDOR EN FIREBASE
-        // ==========================================
+        function updateUploadRequirements(plan) {
+            const grpCSF = document.getElementById('grpCSF');
+            const grpCalendar = document.getElementById('grpCalendar');
+
+            if (plan === 'pro' || plan === 'gold') {
+                grpCSF.style.display = 'block';
+                grpCSF.querySelector('input').required = true;
+            } else {
+                grpCSF.style.display = 'none';
+                grpCSF.querySelector('input').required = false;
+            }
+
+            if (plan === 'gold') {
+                grpCalendar.classList.add('visible');
+                document.getElementById('fechaReunion').required = true;
+            } else {
+                grpCalendar.classList.remove('visible');
+                document.getElementById('fechaReunion').required = false;
+            }
+        }
+
+        // File upload handling
+        function setupFileInput(inputId, listId, category) {
+            const input = document.getElementById(inputId);
+            const list = document.getElementById(listId);
+
+            input.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                for (let file of files) {
+                    file._category = category;
+                    uploadedFiles[category].push(file);
+                    renderThumbnail(file, list, category);
+                }
+                const uploadArea = input.closest('.upload-area');
+                if (uploadedFiles[category].length > 0) uploadArea.classList.add('uploaded');
+            });
+        }
+
+        function renderThumbnail(file, list, category) {
+            const thumb = document.createElement('div');
+            thumb.className = file.type.startsWith('image/') ? 'upload-thumb' : 'upload-thumb-pdf';
+            thumb.dataset.fileName = file.name;
+
+            if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                thumb.appendChild(img);
+            } else {
+                thumb.textContent = '📄';
+            }
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = '×';
+            removeBtn.onclick = (e) => {
+                e.stopPropagation();
+                uploadedFiles[category] = uploadedFiles[category].filter(f => f.name !== file.name);
+                thumb.remove();
+                if (uploadedFiles[category].length === 0) {
+                    document.querySelector(`#list-${category}`).closest('.form-group').querySelector('.upload-area').classList.remove('uploaded');
+                }
+            };
+            thumb.appendChild(removeBtn);
+            list.appendChild(thumb);
+        }
+
+        setupFileInput('file-ine', 'list-ine', 'ine');
+        setupFileInput('file-fotos', 'list-fotos', 'fotos');
+        setupFileInput('file-csf', 'list-csf', 'csf');
+
+        // Upload a single file to Firebase Storage
+        async function uploadFile(file, proveedorId, docType) {
+            const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+            const path = `proveedores/${proveedorId}/${docType}/${Date.now()}_${safeName}`;
+            const ref = storageRef(storage, path);
+            await uploadBytes(ref, file);
+            return await getDownloadURL(ref);
+        }
+
+        // Form submit
         document.getElementById('registroProveedor').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const proveedorData = {
-                nombreNegocio: document.getElementById('nombreNegocio').value,
-                nombreContacto: document.getElementById('nombreContacto').value,
-                whatsapp: document.getElementById('whatsapp').value.replace(/\D/g, ''),
-                email: document.getElementById('email').value,
-                ciudad: document.getElementById('selectCiudad').value,
-                categoria: formData.categoria || 'General',
-                plan: formData.plan || 'basic',
-                descripcion: document.getElementById('descripcion').value || '',
-                fechaRegistro: new Date().toISOString(),
-                estadoVerificacion: 'Pendiente',
-                vistas: 0,
-                calificacion: 0,
-                reseñas: []
-            };
+            const btn = document.getElementById('btnEnviarRegistro');
+            btn.disabled = true;
+            btn.textContent = 'Subiendo documentos...';
 
             try {
-                await addDoc(collection(db, "proveedores"), proveedorData);
-                
-                alert('✅ ¡Registro exitoso! Tu perfil será revisado en 24-48 horas. Te contactaremos pronto.');
-                
-                // Resetear formulario
-                document.getElementById('registroProveedor').reset();
-                
-                // Volver al paso 1
-                document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
-                document.querySelector('.form-step[data-step="1"]').classList.add('active');
-                
-                document.querySelectorAll('.step').forEach((step, index) => {
-                    step.classList.remove('active', 'completed');
-                    if (index === 0) step.classList.add('active');
-                });
-                
-                currentStep = 1;
-                formData = { ciudad: '', categoria: '', plan: 'basic' };
-                
-                // Redirigir al dashboard después de 2 segundos
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 2000);
-                
+                const tempId = 'tmp_' + Date.now();
+                let documentos = {};
+
+                // Upload INE
+                if (uploadedFiles.ine.length > 0) {
+                    btn.textContent = 'Subiendo identificación...';
+                    const urls = [];
+                    for (let file of uploadedFiles.ine) {
+                        const url = await uploadFile(file, tempId, 'ine');
+                        urls.push(url);
+                    }
+                    documentos.ine = urls;
+                }
+
+                // Upload Fotos
+                if (uploadedFiles.fotos.length > 0) {
+                    btn.textContent = 'Subiendo fotos de evidencia...';
+                    const urls = [];
+                    for (let file of uploadedFiles.fotos) {
+                        const url = await uploadFile(file, tempId, 'fotos');
+                        urls.push(url);
+                    }
+                    documentos.fotosEvidencia = urls;
+                }
+
+                // Upload CSF (Pro/Gold)
+                if ((formData.plan === 'pro' || formData.plan === 'gold') && uploadedFiles.csf.length > 0) {
+                    btn.textContent = 'Subiendo constancia fiscal...';
+                    const urls = [];
+                    for (let file of uploadedFiles.csf) {
+                        const url = await uploadFile(file, tempId, 'csf');
+                        urls.push(url);
+                    }
+                    documentos.constanciaFiscal = urls;
+                }
+
+                btn.textContent = 'Guardando registro...';
+
+                const proveedorData = {
+                    nombreNegocio: document.getElementById('nombreNegocio').value,
+                    nombreContacto: document.getElementById('nombreContacto').value,
+                    whatsapp: document.getElementById('whatsapp').value.replace(/\D/g, ''),
+                    email: document.getElementById('email').value,
+                    estado: document.getElementById('selectEstado').value,
+                    ciudad: document.getElementById('selectCiudad').value,
+                    categoria: formData.categoria || 'General',
+                    otrosConcepto: formData.otrosConcepto || '',
+                    plan: formData.plan || 'basic',
+                    descripcion: document.getElementById('descripcion').value || '',
+                    documentos: documentos,
+                    fechaRegistro: new Date().toISOString(),
+                    estadoVerificacion: 'Pendiente',
+                    fechaSolicitud: new Date().toISOString(),
+                    vistas: 0,
+                    calificacion: 0,
+                    reseñas: []
+                };
+
+                if (formData.plan === 'gold') {
+                    proveedorData.fechaReunionPresencial = document.getElementById('fechaReunion').value;
+                }
+
+                const docRef = await addDoc(collection(db, "proveedores"), proveedorData);
+
+                // Show success modal
+                const summary = document.getElementById('successSummary');
+                summary.innerHTML = `
+                    <p><strong>Negocio:</strong> ${proveedorData.nombreNegocio}</p>
+                    <p><strong>Contacto:</strong> ${proveedorData.nombreContacto}</p>
+                    <p><strong>Plan:</strong> ${proveedorData.plan.toUpperCase()}</p>
+                    <p><strong>Estado:</strong> ${proveedorData.estado}</p>
+                    <p><strong>Servicio:</strong> ${proveedorData.categoria}${proveedorData.otrosConcepto ? ' - ' + proveedorData.otrosConcepto : ''}</p>
+                    ${proveedorData.fechaReunionPresencial ? `<p><strong>Reunión:</strong> ${new Date(proveedorData.fechaReunionPresencial).toLocaleString('es-MX')}</p>` : ''}
+                    <p><strong>Documentos:</strong> ${Object.keys(documentos).length} categoría(s) subida(s)</p>
+                `;
+                document.getElementById('successModal').classList.add('open');
+
             } catch (error) {
                 console.error("Error al registrar: ", error);
                 alert('❌ Error al guardar. Intenta de nuevo.');
+                btn.disabled = false;
+                btn.textContent = '✅ Enviar Registro';
             }
         });
 
-        // Inicializar selección de plan
         selectPlan('basic');
-
     </script>
 
 </body>

@@ -88,6 +88,9 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <span id="headerNombreProveedor" class="text-sm font-medium text-gray-700 hidden sm:block">Cargando...</span>
+                        <button id="dashboardMenuToggle" type="button" aria-label="Abrir menú" aria-expanded="false" class="md:hidden text-gray-700 p-2 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-bars text-lg"></i>
+                        </button>
                         <button onclick="window.cerrarSesion()" class="text-sm text-red-600 hover:text-red-800 font-medium">
                             <i class="fas fa-sign-out-alt mr-1"></i> Cerrar Sesión
                         </button>
@@ -99,7 +102,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex flex-col md:flex-row gap-8">
                 <!-- Sidebar -->
-                <nav class="w-full md:w-64 flex-shrink-0">
+                <nav id="dashboardNav" class="hidden md:block w-full md:w-64 flex-shrink-0">
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                         <button onclick="window.mostrarSeccion('sec-dashboard')" class="w-full text-left px-4 py-3 hover:bg-purple-50 text-gray-700 font-medium border-l-4 border-transparent hover:border-purple-600 transition flex items-center gap-3 tab-btn active-tab" data-tab="sec-dashboard">
                             <i class="fas fa-chart-pie w-5"></i> Mi Dashboard
@@ -584,23 +587,7 @@
 
     <!-- SCRIPT PRINCIPAL (MÓDULO) -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, query, where, getDocs, addDoc, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
-            authDomain: "goparty-marketplace.firebaseapp.com",
-            projectId: "goparty-marketplace",
-            storageBucket: "goparty-marketplace.firebasestorage.app",
-            messagingSenderId: "95947882678",
-            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
+        import { addDoc, auth, collection, db, deleteDoc, doc, getDoc, getDocs, onAuthStateChanged, provider, query, sendPasswordResetEmail, serverTimestamp, setDoc, signInWithEmailAndPassword, signInWithPopup, signOut, updateDoc, where } from "./firebase-config.js";
 
         let proveedorActual = null;
         let variedadesTemporales = [];
@@ -721,8 +708,17 @@
             document.getElementById('vista' + vista.charAt(0).toUpperCase() + vista.slice(1)).classList.remove('hidden');
         }
 
+        function toggleDashboardMenu() {
+            const menu = document.getElementById('dashboardNav');
+            const button = document.getElementById('dashboardMenuToggle');
+            const isOpen = menu.classList.toggle('hidden') === false;
+            button.setAttribute('aria-expanded', String(isOpen));
+        }
+
         function mostrarSeccion(seccionId) {
             document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('dashboardNav').classList.add('hidden');
+            document.getElementById('dashboardMenuToggle').setAttribute('aria-expanded', 'false');
             document.getElementById(seccionId).classList.remove('hidden');
             
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1257,6 +1253,7 @@
         window.cerrarSesion = cerrarSesion;
         window.mostrarVista = mostrarVista;
         window.mostrarSeccion = mostrarSeccion;
+        window.toggleDashboardMenu = toggleDashboardMenu;
         window.mostrarSubSeccion = mostrarSubSeccion;
         window.abrirModalServicio = abrirModalServicio;
         window.cerrarModalServicio = cerrarModalServicio;
@@ -1279,6 +1276,7 @@
         });
 
         document.getElementById('formRecuperar').addEventListener('submit', recuperarContrasena);
+        document.getElementById('dashboardMenuToggle').addEventListener('click', toggleDashboardMenu);
     </script>
 
     <footer class="bg-gray-900 text-gray-300 text-center py-6 mt-8">

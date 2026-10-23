@@ -690,20 +690,7 @@
 
     <!-- Firebase + Lógica del Formulario -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
-            authDomain: "goparty-marketplace.firebaseapp.com",
-            projectId: "goparty-marketplace",
-            storageBucket: "goparty-marketplace.firebasestorage.app",
-            messagingSenderId: "95947882678",
-            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        import { addDoc, collection, db } from "./firebase-config.js";
 
         // ==========================================
         // MANEJO DE FOTOS (Preview + Base64)

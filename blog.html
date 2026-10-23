@@ -8,9 +8,21 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f7fa; color: #333; line-height: 1.5; }
         header { background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+        header { position: relative; }
         .nav { max-width: 1100px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
         .nav img { height: 50px; width: auto; }
         .nav a { color: #4A90E2; font-weight: 600; text-decoration: none; }
+        .menu-toggle { display: none; border: 0; background: transparent; cursor: pointer; padding: .5rem; }
+        .menu-toggle span { display: block; width: 26px; height: 3px; background: #333; margin: 4px 0; border-radius: 3px; }
+        .mobile-links { display: none; }
+        @media (max-width: 640px) {
+            header { padding: .75rem 1rem; }
+            .nav > a:last-of-type { display: none; }
+            .menu-toggle { display: block; }
+            .mobile-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; padding: 1rem; box-shadow: 0 8px 18px rgba(0,0,0,.12); z-index: 5; }
+            .mobile-links.open { display: grid; gap: .75rem; }
+            .mobile-links a { padding: .7rem; border-radius: 8px; }
+        }
         .hero { background: linear-gradient(135deg, #6BCB77, #4A90E2); color: white; text-align: center; padding: 4rem 1.5rem; }
         .hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: .75rem; }
         .hero p { font-size: 1.1rem; opacity: .95; }
@@ -34,6 +46,11 @@
         <nav class="nav">
             <a href="index.html"><img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty"></a>
             <a href="index.html">Volver al inicio</a>
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+            <div class="mobile-links" id="mobileLinks">
+                <a href="index.html">Volver al inicio</a>
+                <a href="terminos.html">Términos y Condiciones</a>
+            </div>
         </nav>
     </header>
     <section class="hero">
@@ -48,19 +65,16 @@
         <p>© 2026 GoParty - Conectando party people con magia profesional</p>
         <a href="terminos.html">Términos y Condiciones</a>
     </footer>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        const app = initializeApp({
-            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
-            authDomain: "goparty-marketplace.firebaseapp.com",
-            projectId: "goparty-marketplace",
-            storageBucket: "goparty-marketplace.firebasestorage.app",
-            messagingSenderId: "95947882678",
-            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileLinks = document.getElementById('mobileLinks');
+        menuToggle.addEventListener('click', () => {
+            const isOpen = mobileLinks.classList.toggle('open');
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
         });
-        const db = getFirestore(app);
+    </script>
+    <script type="module">
+        import { collection, db, getDocs } from "./firebase-config.js";
         const postsGrid = document.getElementById('postsGrid');
         const filters = document.getElementById('filters');
         let posts = [];

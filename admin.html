@@ -20,6 +20,8 @@
         .topbar-logo img { height: 40px; }
         .topbar-logo span { font-weight: 700; font-size: 1.2rem; color: #333; }
         .topbar-user-info { display: flex; align-items: center; gap: 1rem; }
+        .menu-toggle { display: none; border: 0; background: transparent; cursor: pointer; padding: 0.5rem; }
+        .menu-toggle span { display: block; width: 26px; height: 3px; background: #333; margin: 4px 0; border-radius: 3px; }
         .user-badge { background: linear-gradient(135deg, #FFD93D, #FF6B9D); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
         
         .tabs { display: flex; background: white; border-bottom: 2px solid #f0f0f0; overflow-x: auto; padding: 0 1rem; }
@@ -127,7 +129,28 @@
         .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
         .modal-close:hover { color: #333; }
         
-        @media (max-width: 768px) { .content { padding: 0 1rem; } .stats-grid { grid-template-columns: repeat(2, 1fr); } .form-row { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) {
+            .content { padding: 0 1rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
+            .topbar { padding: 0.75rem 1rem; }
+            .topbar-logo span { font-size: 1rem; }
+            .topbar-user-info { gap: 0.5rem; }
+            .user-badge { display: none; }
+            .menu-toggle { display: block; }
+            .tabs { display: none; flex-direction: column; padding: 0.5rem; border-bottom: 1px solid #e0e0e0; }
+            .tabs.open { display: flex; }
+            .tab { padding: 0.85rem 1rem; border-bottom: 0; border-left: 3px solid transparent; }
+            .tab.active { border-left-color: #FF6B9D; border-bottom-color: transparent; background: #fff5f7; }
+            .item-row { align-items: flex-start; flex-wrap: wrap; }
+            .item-row .item-actions { width: 100%; justify-content: flex-end; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .content { margin-top: 1rem; }
+            .topbar-logo img { height: 32px; }
+            .topbar-user-info .btn { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
@@ -150,10 +173,11 @@
             <div class="topbar-user-info">
                 <span class="user-badge" id="userBadge">Admin</span>
                 <button class="btn btn-secondary" onclick="logout()">Cerrar Sesión</button>
+                <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
             </div>
         </div>
 
-        <div class="tabs">
+        <div class="tabs" id="adminTabs">
             <div class="tab active" data-tab="dashboard">📊 Dashboard</div>
             <div class="tab" data-tab="cotizaciones"> Cotizaciones <span id="tabCotizacionesCount" class="badge">0</span></div>
             <div class="tab" data-tab="cambios">🔄 Solicitudes de Cambio <span id="tabCambiosCount" class="badge">0</span></div>
@@ -751,22 +775,24 @@
         </div>
     </div>
 
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const adminTabs = document.getElementById('adminTabs');
+        menuToggle.addEventListener('click', () => {
+            const isOpen = adminTabs.classList.toggle('open');
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+        adminTabs.addEventListener('click', event => {
+            if (event.target.closest('.tab')) {
+                adminTabs.classList.remove('open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    </script>
+
     <!-- FIREBASE -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, addDoc, deleteDoc, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
-            authDomain: "goparty-marketplace.firebaseapp.com",
-            projectId: "goparty-marketplace",
-            storageBucket: "goparty-marketplace.firebasestorage.app",
-            messagingSenderId: "95947882678",
-            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        import { addDoc, collection, db, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from "./firebase-config.js";
 
         let usuarioActual = null;
         let filtroTestimoniosActual = 'todas';

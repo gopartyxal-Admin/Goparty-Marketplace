@@ -464,20 +464,7 @@
 
     <!-- Firebase -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
-            authDomain: "goparty-marketplace.firebaseapp.com",
-            projectId: "goparty-marketplace",
-            storageBucket: "goparty-marketplace.firebasestorage.app",
-            messagingSenderId: "95947882678",
-            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        import { addDoc, collection, db, doc, getDoc, getDocs, query, where } from "./firebase-config.js";
 
         // ==========================================
         // DATOS POR DEFECTO (fallback si Firebase está vacío)

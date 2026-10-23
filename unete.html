@@ -19,6 +19,7 @@
 
         /* Navbar */
         .navbar {
+            position: relative;
             background: white;
             padding: 1rem 2rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -62,6 +63,13 @@
         .nav-links a:hover {
             background: #f0f0f0;
         }
+
+        .hamburger { display: none; border: 0; background: transparent; padding: 0.5rem; cursor: pointer; }
+        .hamburger span { display: block; width: 28px; height: 3px; margin: 5px 0; background: #333; border-radius: 3px; }
+        .mobile-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; padding: 1rem; box-shadow: 0 8px 18px rgba(0,0,0,.12); z-index: 110; }
+        .mobile-menu.open { display: grid; gap: 0.75rem; }
+        .mobile-menu a { text-decoration: none; color: #333; padding: 0.8rem 1rem; border-radius: 8px; font-weight: 600; }
+        .mobile-menu a:hover { background: #f5f7fa; }
 
         .nav-explorar {
             font-size: 1.1rem;
@@ -392,6 +400,8 @@
         }
 
         @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: block; }
             .header-section h1 {
                 font-size: 1.8rem;
             }
@@ -425,6 +435,14 @@
                 <a href="index.html" class="nav-explorar">Explorar</a>
                 <a href="unete.html" class="btn-unete">Únete a GoParty</a>
                 <a href="dashboard.html" class="btn-proveedor">Soy Proveedor</a>
+            </div>
+            <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="index.html">Explorar</a>
+                <a href="unete.html">Únete a GoParty</a>
+                <a href="dashboard.html">Soy Proveedor</a>
             </div>
         </div>
     </nav>
@@ -634,25 +652,23 @@
         <a href="terminos.html" style="color: white; text-decoration: underline; display: inline-block; margin-top: 0.5rem;">Términos y Condiciones</a>
     </footer>
 
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+        });
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+        }));
+    </script>
+
     <!-- FIREBASE Y JAVASCRIPT -->
     <script type="module">
         // Importar Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
-            authDomain: "goparty-marketplace.firebaseapp.com",
-            projectId: "goparty-marketplace",
-            storageBucket: "goparty-marketplace.firebasestorage.app",
-            messagingSenderId: "95947882678",
-            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        import { addDoc, collection, db } from "./firebase-config.js";
 
         // Variables globales
         let currentStep = 1;

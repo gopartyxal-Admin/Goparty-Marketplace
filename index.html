@@ -240,6 +240,9 @@
             .estadisticas-container { grid-template-columns: 1fr; }
         }
     </style>
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body>
 
@@ -426,6 +429,7 @@
     <!-- Footer -->
     <footer>
         <p id="footerMsg">© 2026 GoParty - Conectando party people con magia profesional</p>
+        <a href="terminos.html" style="color: white; text-decoration: underline; display: inline-block; margin-top: 0.5rem;">Términos y Condiciones</a>
     </footer>
 
     <!-- WhatsApp Flotante -->
@@ -641,9 +645,13 @@
                 if (ciudades.length === 0) ciudades = ciudadesDefault;
                 renderCiudades(ciudades);
 
-                const faqSnap = await getDocs(collection(db, "faq"));
+                    const faqSnaps = await Promise.all([
+                    getDocs(collection(db, "faq_general")),
+                    getDocs(collection(db, "faq_clientes")),
+                    getDocs(collection(db, "faq_proveedores"))
+                ]);
                 let faqs = [];
-                faqSnap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() }));
+                faqSnaps.forEach(faqSnap => faqSnap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() })));
                 faqs.sort((a, b) => (a.orden || 99) - (b.orden || 99));
                 if (faqs.length === 0) faqs = faqDefault;
                 renderFaqs(faqs);

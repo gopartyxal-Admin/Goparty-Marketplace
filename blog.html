@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - GoParty</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f7fa; color: #333; line-height: 1.5; }
+        header { background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+        .nav { max-width: 1100px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .nav img { height: 50px; width: auto; }
+        .nav a { color: #4A90E2; font-weight: 600; text-decoration: none; }
+        .hero { background: linear-gradient(135deg, #6BCB77, #4A90E2); color: white; text-align: center; padding: 4rem 1.5rem; }
+        .hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: .75rem; }
+        .hero p { font-size: 1.1rem; opacity: .95; }
+        main { max-width: 1100px; margin: auto; padding: 3rem 1.5rem; }
+        .filters { display: flex; justify-content: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .filters button { border: 2px solid #e0e0e0; background: white; color: #666; border-radius: 999px; padding: .65rem 1.2rem; cursor: pointer; font-weight: 600; }
+        .filters button.active, .filters button:hover { background: #FF6B9D; color: white; border-color: #FF6B9D; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        article { background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,.08); }
+        article h2 { color: #333; font-size: 1.25rem; margin: .75rem 0; }
+        article p { color: #666; }
+        .category { color: #FF6B9D; font-size: .8rem; font-weight: 700; text-transform: uppercase; }
+        .date { color: #999; display: block; font-size: .85rem; margin-top: 1rem; }
+        .empty { grid-column: 1 / -1; text-align: center; color: #666; padding: 3rem; }
+        footer { background: #333; color: white; text-align: center; padding: 1.5rem; }
+        footer a { color: white; text-decoration: underline; display: inline-block; margin-top: .5rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <a href="index.html"><img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty"></a>
+            <a href="index.html">Volver al inicio</a>
+        </nav>
+    </header>
+    <section class="hero">
+        <h1>Blog GoParty</h1>
+        <p>Consejos, tendencias y recursos para organizar eventos inolvidables.</p>
+    </section>
+    <main>
+        <div class="filters" id="filters"></div>
+        <section class="grid" id="postsGrid"><p class="empty">Cargando artículos...</p></section>
+    </main>
+    <footer>
+        <p>© 2026 GoParty - Conectando party people con magia profesional</p>
+        <a href="terminos.html">Términos y Condiciones</a>
+    </footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const app = initializeApp({
+            apiKey: "AIzaSyDJAYIomhENVR53lor4zfbOZsh7ywzI9_c",
+            authDomain: "goparty-marketplace.firebaseapp.com",
+            projectId: "goparty-marketplace",
+            storageBucket: "goparty-marketplace.firebasestorage.app",
+            messagingSenderId: "95947882678",
+            appId: "1:95947882678:web:77c5cd7556cfe9e3dfa617"
+        });
+        const db = getFirestore(app);
+        const postsGrid = document.getElementById('postsGrid');
+        const filters = document.getElementById('filters');
+        let posts = [];
+        let filtroActual = 'todos';
+
+        function renderFilters() {
+            const categorias = ['todos', ...new Set(posts.map(post => post.categoria).filter(Boolean))];
+            filters.replaceChildren();
+            categorias.forEach(categoria => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = categoria === 'todos' ? 'Todos' : categoria;
+                button.className = categoria === filtroActual ? 'active' : '';
+                button.addEventListener('click', () => {
+                    filtroActual = categoria;
+                    renderFilters();
+                    renderPosts();
+                });
+                filters.appendChild(button);
+            });
+        }
+
+        function renderPosts() {
+            const visibles = filtroActual === 'todos' ? posts : posts.filter(post => post.categoria === filtroActual);
+            postsGrid.replaceChildren();
+            if (visibles.length === 0) {
+                const empty = document.createElement('p');
+                empty.className = 'empty';
+                empty.textContent = 'Aún no hay artículos publicados.';
+                postsGrid.appendChild(empty);
+                return;
+            }
+            visibles.forEach(post => {
+                const article = document.createElement('article');
+                const category = document.createElement('span');
+                category.className = 'category';
+                category.textContent = post.categoria || 'General';
+                const title = document.createElement('h2');
+                title.textContent = post.titulo || 'Sin título';
+                const excerpt = document.createElement('p');
+                excerpt.textContent = (post.resumen || post.contenido || '').substring(0, 220);
+                const date = document.createElement('span');
+                date.className = 'date';
+                date.textContent = post.fechaPublicacion ? new Date(post.fechaPublicacion).toLocaleDateString('es-MX') : '';
+                article.append(category, title, excerpt, date);
+                postsGrid.appendChild(article);
+            });
+        }
+
+        try {
+            const snapshot = await getDocs(collection(db, 'posts'));
+            posts = snapshot.docs.map(post => ({ id: post.id, ...post.data() }));
+            posts.sort((a, b) => new Date(b.fechaPublicacion || 0) - new Date(a.fechaPublicacion || 0));
+            renderFilters();
+            renderPosts();
+        } catch (error) {
+            postsGrid.replaceChildren();
+            const message = document.createElement('p');
+            message.className = 'empty';
+            message.textContent = 'No fue posible cargar los artículos en este momento.';
+            postsGrid.appendChild(message);
+        }
+    </script>
+</body>
+</html>

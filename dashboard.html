@@ -646,7 +646,7 @@
                     await setDoc(doc(db, "proveedores", user.uid), {
                         email: user.email,
                         nombreNegocio: "Pendiente",
-                        estado: "pendiente",
+                        estadoVerificacion: "Pendiente",
                         plan: "basic",
                         fechaRegistro: serverTimestamp()
                     });
@@ -660,12 +660,12 @@
                 
                 console.log("✅ Proveedor encontrado:");
                 console.log("ID:", proveedorActual.id);
-                console.log("Estado:", proveedorActual.estado);
+                console.log("Estado de verificación:", proveedorActual.estadoVerificacion || proveedorActual.estado);
                 console.log("Nombre:", proveedorActual.nombreNegocio);
                 console.log("Todos los datos:", proveedorActual);
                 
                 // Verificación flexible (acepta variaciones de estado)
-                const estadoLower = (proveedorActual.estado || '').toString().toLowerCase().trim();
+                const estadoLower = (proveedorActual.estadoVerificacion || proveedorActual.estado || '').toString().toLowerCase().trim();
                 
                 console.log("Estado normalizado:", estadoLower);
                 
@@ -760,7 +760,7 @@
             document.getElementById('headerNombreProveedor').textContent = proveedorActual.nombreNegocio || 'Proveedor';
             document.getElementById('infoNombre').textContent = proveedorActual.nombreNegocio || 'Cargando...';
             document.getElementById('infoPlan').textContent = (proveedorActual.plan || 'basic').toUpperCase();
-            document.getElementById('infoEstado').textContent = proveedorActual.estado || 'Activo';
+            document.getElementById('infoEstado').textContent = proveedorActual.estadoVerificacion || proveedorActual.estado || 'Pendiente';
             document.getElementById('statVistas').textContent = proveedorActual.vistas || 0;
             
             // Cargar datos en formularios
@@ -768,7 +768,7 @@
             document.getElementById('perfilNombreContacto').value = proveedorActual.nombreContacto || '';
             document.getElementById('perfilEmail').value = proveedorActual.email || '';
             document.getElementById('perfilWhatsApp').value = proveedorActual.whatsapp || '';
-            document.getElementById('perfilEstado').value = proveedorActual.estado || '';
+            document.getElementById('perfilEstado').value = proveedorActual.estadoVerificacion || proveedorActual.estado || ''; 
             document.getElementById('perfilCiudad').value = proveedorActual.ciudad || '';
             document.getElementById('perfilDescripcion').value = proveedorActual.descripcion || '';
 
@@ -1018,7 +1018,7 @@
 
         // --- COTIZACIONES ---
         async function cargarCotizaciones() {
-            const q = query(collection(db, "cotizaciones"), where("proveedorId", "==", proveedorActual.id));
+            const q = query(collection(db, "solicitudes"), where("proveedorAsignado", "==", proveedorActual.id));
             const snapshot = await getDocs(q);
             document.getElementById('statCotizaciones').textContent = snapshot.size;
             document.getElementById('badgeCotizaciones').textContent = snapshot.size;
@@ -1036,12 +1036,12 @@
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                         <div class="flex justify-between items-start mb-2">
                             <h4 class="font-bold text-gray-800">${c.tipoEvento || 'Evento'}</h4>
-                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pendiente</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">${c.estado || 'Pendiente'}</span>
                         </div>
-                        <p class="text-sm text-gray-600 mb-2">Ciudad: ${c.ciudad} | Fecha: ${c.fecha || 'No especificada'}</p>
+                        <p class="text-sm text-gray-600 mb-2">Ciudad: ${c.ciudadEvento || 'No especificada'} | Fecha: ${c.fechaEvento || 'No especificada'}</p>
                         <p class="text-sm text-gray-700 bg-gray-50 p-2 rounded mb-3">${c.descripcion || 'Sin descripción'}</p>
                         <div class="flex gap-2">
-                            <a href="https://wa.me/${c.telefono}?text=Hola, soy ${proveedorActual.nombreNegocio} de GoParty y recibí tu solicitud de cotización." target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-lg text-sm hover:bg-green-600 transition">
+                            <a href="https://wa.me/${c.telefonoCliente || ''}?text=Hola, soy ${proveedorActual.nombreNegocio} de GoParty y recibí tu solicitud de cotización." target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-lg text-sm hover:bg-green-600 transition">
                                 <i class="fab fa-whatsapp mr-1"></i> Contactar por WhatsApp
                             </a>
                             <button class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg text-sm hover:bg-gray-300 transition">Marcar como Atendida</button>
@@ -1280,5 +1280,10 @@
 
         document.getElementById('formRecuperar').addEventListener('submit', recuperarContrasena);
     </script>
+
+    <footer class="bg-gray-900 text-gray-300 text-center py-6 mt-8">
+        <p>© 2026 GoParty - Conectando party people con magia profesional</p>
+        <a href="terminos.html" class="text-white hover:text-yellow-300 underline">Términos y Condiciones</a>
+    </footer>
 </body>
 </html>

@@ -1148,11 +1148,11 @@ function renderCotBudgets() {
 }
 
 function actualizarTotalCotizacion() {
-    const total = Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0);
-    const disp = document.getElementById('cotTotalDisplay');
-    const hid = document.getElementById('cotPresupuesto');
-    if (disp) disp.textContent = `${total.toLocaleString('es-MX')} MXN`;
-    if (hid) hid.value = `${total.toLocaleString('es-MX')}`;
+    const distribuido = Object.values(cotServiceBudgets).reduce((sum, value) => sum + Number(value || 0), 0);
+    const totalInput = document.getElementById('cotTotalInput');
+    const total = Number(totalInput?.value || distribuido);
+    const hidden = document.getElementById('cotPresupuesto');
+    if (hidden) hidden.value = String(total);
 }
 
 // ==========================================
@@ -1167,6 +1167,8 @@ function inicializarNuevosFlujos() {
     range?.addEventListener('input', () => { val.textContent = `${Number(range.value).toLocaleString('es-MX')} MXN`; });
     document.getElementById('matchSubmit')?.addEventListener('click', () => renderMatchingResults(matchService, Number(range?.value || 15000)));
 
+    document.querySelectorAll('input[name="servicios"]').forEach(input => input.addEventListener('change', () => renderCotBudgets()));
+    document.getElementById('cotTotalInput')?.addEventListener('input', actualizarTotalCotizacion);
     document.querySelectorAll('input[name="tipoEvento"]').forEach(input => input.addEventListener('change', () => {
         document.getElementById('otroEventoWrap')?.classList.toggle('hidden', input.value !== 'Otro' || !input.checked);
     }));
@@ -1195,7 +1197,7 @@ function inicializarNuevosFlujos() {
     const originalNext = window.cotSiguiente;
     window.cotSiguiente = function(paso) {
         if (paso === 2) renderCotBudgets();
-        if (paso === 3 && Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0) <= 0) { alert('Asigna al menos un monto a tus servicios.'); return; }
+        if (paso === 3 && (Number(document.getElementById('cotTotalInput')?.value || 0) <= 0 || Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0) <= 0)) { alert('Escribe un presupuesto total y distribuye al menos un monto entre tus servicios.'); return; }
         originalNext(paso);
     };
 
@@ -1204,7 +1206,7 @@ function inicializarNuevosFlujos() {
         const email = document.getElementById('cotEmail').value.trim();
         const password = document.getElementById('cotPassword').value;
         const authMethod = document.querySelector('input[name="cotAuthMethod"]:checked')?.value || 'password';
-        const total = Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0);
+        const total = Number(document.getElementById('cotTotalInput')?.value || Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0));
         const evento = document.querySelector('input[name="tipoEvento"]:checked')?.value || '';
         const otroEvento = document.getElementById('otroEventoTexto')?.value.trim() || '';
         if (evento === 'Otro' && !otroEvento) { alert('Describe qué tipo de evento estás organizando.'); return; }

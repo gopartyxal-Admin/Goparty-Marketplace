@@ -104,6 +104,11 @@ window.resetCotizacion = function() {
     document.querySelectorAll('input[name="servicios"]').forEach(c => c.checked = false);
     document.getElementById('cotFecha').value = '';
     document.getElementById('cotPresupuesto').value = '';
+    document.getElementById('cotTotalInput').value = '';
+    document.getElementById('cotBudgetServices').innerHTML = '';
+    document.getElementById('cotPassword').value = '';
+    document.getElementById('cotPassword').disabled = false;
+    document.querySelector('input[name="cotAuthMethod"][value="password"]').checked = true;
     document.getElementById('cotWhatsapp').value = '';
     document.getElementById('cotEmail').value = '';
 };

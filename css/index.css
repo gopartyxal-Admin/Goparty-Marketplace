@@ -2,8 +2,8 @@
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 50%, #4A90E2 100%); min-height: 100vh; overflow: hidden; }
 
 /* ===================== HEADER ===================== */
-.topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.5rem; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.08); position: relative; z-index: 100; height: 64px; flex-shrink: 0; }
-.topbar-logo { height: 42px; width: auto; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.5rem; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.08); position: relative; z-index: 100; height: 96px; flex-shrink: 0; }
+.topbar-logo { height: 84px; width: auto; }
 .topbar-center { flex: 1; max-width: 500px; margin: 0 1.5rem; }
 .search-bar { display: flex; align-items: center; background: #f5f7fa; border: 2px solid #e0e0e0; border-radius: 25px; padding: 0.5rem 1rem; transition: border-color 0.3s; }
 .search-bar:focus-within { border-color: #FF6B9D; }
@@ -450,8 +450,8 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 }
 
 @media (max-width: 768px) {
-    .topbar { height: 56px; padding: 0.45rem 0.8rem; }
-    .topbar-logo { height: 34px; }
+    .topbar { height: 76px; padding: 0.45rem 0.8rem; }
+    .topbar-logo { height: 68px; }
     .topbar-center { display: none; }
     .topbar-right .btn-cotizar, .topbar-right .btn-proveedor, .topbar-right .btn-explorar { display: none; }
     .topbar-right .btn-favoritos, .topbar-right .user-menu { display: flex; }
@@ -568,7 +568,8 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .auth-tipo-card small { font-size: 0.72rem; color: #999; }
 
 /* ===================== COTIZACIÓN: PRESUPUESTO POR SERVICIO ===================== */
-.cot-total-display { font-size: 1.4rem; font-weight: 700; color: #FF6B9D; padding: 0.6rem 1rem; background: #fff5f8; border-radius: 10px; text-align: center; }
+.cot-total-input { width: 100%; font-size: 1.15rem; font-weight: 700; color: #d93c73; padding: .75rem 1rem; background: #fff5f8; border: 2px solid #ffd2df; border-radius: 10px; text-align: center; outline: none; }
+.cot-total-input:focus { border-color: #FF6B9D; box-shadow: 0 0 0 3px #ff6b9d22; }
 .cot-budget-header { display: flex; flex-direction: column; gap: 0.15rem; margin: 1rem 0 0.5rem; }
 .cot-budget-header span { font-weight: 600; color: #333; font-size: 0.9rem; }
 .cot-budget-header small { color: #999; font-size: 0.78rem; }

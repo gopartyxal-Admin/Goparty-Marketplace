@@ -37,7 +37,11 @@
                     <span class="user-name" id="userName">Mi cuenta</span>
                 </button>
                 <div class="user-dropdown" id="userDropdown">
-                    <a href="#" onclick="abrirPanel('panelFavoritos'); return false;">❤️ Mis Favoritos</a>
+                    <a href="#" onclick="abrirFavoritos(); return false;">❤️ Mis Favoritos <span id="ddFavCount">(0)</span></a>
+                    <a href="#" onclick="abrirMisCotizaciones(); return false;">📋 Mis Cotizaciones</a>
+                    <a href="#" onclick="abrirMisResenas(); return false;">⭐ Mis Reseñas</a>
+                    <a href="#" onclick="abrirMiPerfil(); return false;">⚙️ Mi Perfil</a>
+                    <a href="#" id="ddPanelProveedor" class="hidden" onclick="abrirPanelProveedor(); return false;">📊 Panel de Proveedor</a>
                     <a href="#" onclick="cerrarSesion(); return false;">🚪 Cerrar Sesión</a>
                 </div>
             </div>
@@ -85,7 +89,10 @@
                 <button class="btn-buscar" onclick="filtrarProveedores()">🔍 Buscar Proveedores</button>
             </div>
 
-            <button class="btn-recomendar" onclick="abrirModal('modalProveedor')">🚀 Me gustaría ser proveedor</button>
+            <div class="hero-actions">
+                <button class="btn-recomendar" onclick="abrirModal('modalMatching')">✨ Recomiéndame un plan</button>
+                <button class="btn-recomendar btn-recomendar-outline" onclick="abrirModal('modalProveedor')">🚀 Me gustaría ser proveedor</button>
+            </div>
         </section>
 
         <!-- Grid de comandos -->
@@ -357,24 +364,23 @@
 
                 <!-- Paso 3 -->
                 <div class="cot-step hidden" id="cotStep3">
-                    <h3>Fecha y presupuesto</h3>
+                    <h3>Fecha, presupuesto e inspiración</h3>
                     <div class="cot-form-fields">
                         <div class="cot-field">
                             <label>📅 Fecha estimada</label>
                             <input type="date" id="cotFecha">
                         </div>
                         <div class="cot-field">
-                            <label>💰 Presupuesto (MXN)</label>
-                            <select id="cotPresupuesto">
-                                <option value="">Selecciona un rango</option>
-                                <option value="Menos de $5,000">Menos de $5,000</option>
-                                <option value="$5,000 - $15,000">$5,000 - $15,000</option>
-                                <option value="$15,000 - $50,000">$15,000 - $50,000</option>
-                                <option value="$50,000 - $100,000">$50,000 - $100,000</option>
-                                <option value="Más de $100,000">Más de $100,000</option>
-                            </select>
+                            <label>💰 Presupuesto total aproximado</label>
+                            <div class="cot-total-display" id="cotTotalDisplay">$0 MXN</div>
+                            <input type="hidden" id="cotPresupuesto" value="">
                         </div>
                     </div>
+                    <div class="cot-budget-header"><span>Distribuye tu presupuesto por servicio</span><small>Los proveedores recibirán estos montos</small></div>
+                    <div id="cotBudgetServices" class="cot-budget-services"></div>
+                    <label class="cot-upload-label" for="cotReferencias">📷 Imágenes de referencia (opcional)</label>
+                    <input type="file" id="cotReferencias" class="cot-file-input" accept="image/*" multiple>
+                    <div id="cotReferencePreview" class="cot-reference-preview"></div>
                     <div class="cot-nav">
                         <button class="btn-prev" onclick="cotAtras(3)">← Anterior</button>
                         <button class="btn-next" onclick="cotSiguiente(3)">Siguiente →</button>
@@ -420,6 +426,8 @@
                 <select id="expSort" onchange="aplicarFiltrosExplorar()">
                     <option value="relevancia">Relevancia</option>
                     <option value="calificacion">Calificación</option>
+                    <option value="precioAsc">Precio: menor a mayor</option>
+                    <option value="precioDesc">Precio: mayor a menor</option>
                     <option value="recientes">Más recientes</option>
                 </select>
                 <button class="btn-vista" id="btnVistaGrid" onclick="cambiarVistaExplorar('grid')" title="Vista cuadrícula">▦</button>
@@ -451,6 +459,15 @@
                         <label class="exp-check"><input type="checkbox" class="exp-insignia" value="pro"> ⭐ Pro</label>
                         <label class="exp-check"><input type="checkbox" class="exp-insignia" value="basic"> ✓ Verificado</label>
                     </div>
+                </div>
+                <div class="exp-filter-group">
+                    <label class="exp-filter-label">Rango de precio</label>
+                    <select id="expFilterPrecio">
+                        <option value="">Todos los precios</option>
+                        <option value="economico">Económico · hasta $6,000</option>
+                        <option value="medio">Medio · $6,001 a $15,000</option>
+                        <option value="premium">Premium · más de $15,000</option>
+                    </select>
                 </div>
                 <div class="exp-filter-group">
                     <label class="exp-filter-label">Calificación mínima</label>
@@ -495,6 +512,20 @@
         <div class="lightbox-counter" id="lightboxCounter">1 de 5</div>
     </div>
 
+    <!-- ===================== MODAL: RECOMENDACIONES ===================== -->
+    <div class="modal" id="modalMatching">
+        <div class="modal-content modal-sm matching-modal">
+            <div class="modal-header"><h2>✨ Recomiéndame un plan</h2><button class="modal-close" onclick="cerrarTodo()">&times;</button></div>
+            <div class="modal-body">
+                <div class="matching-progress"><span class="matching-dot active" data-match-step="1">1</span><span class="matching-line"></span><span class="matching-dot" data-match-step="2">2</span><span class="matching-line"></span><span class="matching-dot" data-match-step="3">3</span></div>
+                <div class="matching-step" id="matchStep1"><h3>¿Qué tipo de evento organizas?</h3><div class="matching-options"><button type="button" data-match-event="Boda">💒 Boda</button><button type="button" data-match-event="XV años">👑 XV años</button><button type="button" data-match-event="Cumpleaños">🎂 Cumpleaños</button><button type="button" data-match-event="Corporativo">🏢 Corporativo</button><button type="button" data-match-event="Infantil">🎪 Infantil</button></div></div>
+                <div class="matching-step hidden" id="matchStep2"><h3>¿Qué necesitas principalmente?</h3><div class="matching-options"><button type="button" data-match-service="Fotografía">📸 Fotografía</button><button type="button" data-match-service="Música/DJ">🎵 Música/DJ</button><button type="button" data-match-service="Decoración">🎈 Decoración</button><button type="button" data-match-service="Catering">🍽️ Catering</button><button type="button" data-match-service="Salones">🏰 Salón</button><button type="button" data-match-service="Animación">🎪 Animación</button></div></div>
+                <div class="matching-step hidden" id="matchStep3"><h3>¿Cuál es tu presupuesto?</h3><div class="matching-budget"><input type="range" id="matchBudget" min="3000" max="60000" step="1000" value="15000"><strong id="matchBudgetValue">$15,000 MXN</strong></div><button class="btn-auth" type="button" id="matchSubmit">Ver mis recomendaciones</button></div>
+                <div class="matching-results hidden" id="matchingResults"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===================== MODAL: AUTENTICACIÓN ===================== -->
     <div class="modal" id="modalAuth">
         <div class="modal-content modal-sm">
@@ -509,31 +540,39 @@
                 </div>
                 <form id="authLoginForm" onsubmit="hacerLogin(event)">
                     <div class="auth-field">
-                        <label>Correo</label>
-                        <input type="email" id="loginEmail" placeholder="tu@email.com" required>
+                        <label>Correo electrónico</label>
+                        <input type="email" id="loginEmail" placeholder="tu@gmail.com" required>
                     </div>
                     <div class="auth-field">
                         <label>Contraseña</label>
                         <input type="password" id="loginPass" placeholder="••••••" required>
                     </div>
-                    <p class="auth-hint">Demo: cliente@demo.com / 12345</p>
+                    <p class="auth-hint">Demo: demo@goparty.com / 123456 · También puedes usar Gmail</p>
                     <button type="submit" class="btn-auth">Iniciar Sesión</button>
                 </form>
                 <form id="authRegisterForm" class="hidden" onsubmit="hacerRegistro(event)">
                     <div class="auth-field">
-                        <label>Nombre</label>
+                        <label>Nombre completo</label>
                         <input type="text" id="regNombre" placeholder="Tu nombre" required>
                     </div>
                     <div class="auth-field">
-                        <label>Correo</label>
-                        <input type="email" id="regEmail" placeholder="tu@email.com" required>
+                        <label>Correo electrónico</label>
+                        <input type="email" id="regEmail" placeholder="tu@gmail.com" required>
                     </div>
                     <div class="auth-field">
-                        <label>Contraseña</label>
-                        <input type="password" id="regPass" placeholder="••••••" required>
+                        <label>WhatsApp (10 dígitos)</label>
+                        <input type="tel" id="regWhatsapp" placeholder="2281234567" pattern="[0-9]{10}" maxlength="10" required>
                     </div>
-                    <label class="auth-check-prov"><input type="checkbox" id="regEsProveedor"> ¿Eres proveedor?</label>
-                    <button type="submit" class="btn-auth">Registrarme</button>
+                    <div class="auth-field">
+                        <label>Contraseña (mínimo 6 caracteres)</label>
+                        <input type="password" id="regPass" placeholder="••••••" minlength="6" required>
+                    </div>
+                    <label class="auth-label-tipo">Tipo de cuenta</label>
+                    <div class="auth-tipo-selector">
+                        <button type="button" class="auth-tipo-card active" id="tipoCliente" onclick="seleccionarTipo('cliente')"><span class="auth-tipo-icon">🎉</span><strong>Soy Cliente</strong><small>Busco proveedores</small></button>
+                        <button type="button" class="auth-tipo-card" id="tipoProveedor" onclick="seleccionarTipo('proveedor')"><span class="auth-tipo-icon">💼</span><strong>Soy Proveedor</strong><small>Tengo un negocio</small></button>
+                    </div>
+                    <button type="submit" class="btn-auth">Crear cuenta</button>
                 </form>
                 <div class="auth-msg" id="authMsg"></div>
             </div>

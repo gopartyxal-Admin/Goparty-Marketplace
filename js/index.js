@@ -1,5 +1,23 @@
 import { addDoc, collection, db, doc, getDoc, getDocs, query, where } from "../firebase-config.js";
 
+let demoData = null;
+let tipoRegistroSeleccionado = 'cliente';
+
+async function cargarDataDemo() {
+    if (demoData) return demoData;
+    try { const res = await fetch('data.json'); if (!res.ok) throw new Error('no'); demoData = await res.json(); }
+    catch { demoData = { usuarios: [], proveedores: [], cotizaciones: [] }; }
+    return demoData;
+}
+
+function proveedoresDemoFiltrados(filtros = {}) {
+    return (demoData?.proveedores || []).filter(p =>
+        (!filtros.categoria || p.categoria === filtros.categoria) &&
+        (!filtros.estado || p.estado === filtros.estado) &&
+        (!filtros.ciudad || p.ciudad === filtros.ciudad)
+    );
+}
+
 // ==========================================
 // DATOS POR DEFECTO (fallback si Firebase está vacío)
 // ==========================================
@@ -233,8 +251,14 @@ async function cargarProveedores(filtros = {}) {
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-            contenedor.innerHTML = `<div class="loading-msg"><h3>🎉 ¡Pronto tendremos proveedores!</h3><p>Aún no hay proveedores verificados con estos filtros.</p></div>`;
-            countElement.textContent = '0 proveedores';
+            const demoProv = proveedoresDemoFiltrados(filtros);
+            if (demoProv.length === 0) {
+                contenedor.innerHTML = `<div class="loading-msg"><h3>🎉 ¡Pronto tendremos proveedores!</h3><p>Aún no hay proveedores verificados con estos filtros.</p></div>`;
+                countElement.textContent = '0 proveedores'; return;
+            }
+            explorarProveedores = [...new Map([...explorarProveedores, ...demoProv].map(p => [p.id, p])).values()];
+            contenedor.innerHTML = demoProv.map(renderTarjetaAirbnb).join('');
+            countElement.textContent = `${demoProv.length} proveedores de prueba`;
             return;
         }
 
@@ -266,7 +290,10 @@ async function cargarProveedores(filtros = {}) {
             contenedor.innerHTML += card;
         });
     } catch (error) {
-        contenedor.innerHTML = '<p class="loading-msg">Error al cargar proveedores.</p>';
+        const demoProv = proveedoresDemoFiltrados(filtros);
+        explorarProveedores = [...new Map([...explorarProveedores, ...demoProv].map(p => [p.id, p])).values()];
+        contenedor.innerHTML = demoProv.length ? demoProv.map(renderTarjetaAirbnb).join('') : '<p class="loading-msg">Error al cargar proveedores.</p>';
+        countElement.textContent = demoProv.length ? `${demoProv.length} proveedores de prueba` : '0 proveedores';
     }
 }
 
@@ -468,10 +495,15 @@ function mostrarToast(msg) {
 }
 
 // ==========================================
-// AUTH SIMULADA
+// AUTH (con datos de prueba de data.json)
 // ==========================================
 let usuarioLogueado = null;
-const USUARIO_DEMO = { email: 'cliente@demo.com', pass: '12345', nombre: 'Cliente Demo', esProveedor: false, ha_contratado: true };
+let tipoRegistroSeleccionado = 'cliente';
+
+function buscarUsuarioDemo(email) {
+    const local = JSON.parse(localStorage.getItem('goparty_usuarios') || '[]');
+    return [...(demoData?.usuarios || []), ...local].find(u => u.email.toLowerCase() === email.toLowerCase());
+}
 
 function cargarSesion() {
     try {
@@ -480,39 +512,55 @@ function cargarSesion() {
     } catch {}
 }
 
+window.seleccionarTipo = function(tipo) {
+    tipoRegistroSeleccionado = tipo;
+    document.getElementById('tipoCliente')?.classList.toggle('active', tipo === 'cliente');
+    document.getElementById('tipoProveedor')?.classList.toggle('active', tipo === 'proveedor');
+};
+
 window.hacerLogin = function(e) {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPass').value;
     const msg = document.getElementById('authMsg');
-    if (email === USUARIO_DEMO.email && pass === USUARIO_DEMO.pass) {
-        usuarioLogueado = { email, nombre: USUARIO_DEMO.nombre, esProveedor: false, ha_contratado: true };
-        localStorage.setItem('goparty_user', JSON.stringify(usuarioLogueado));
-        actualizarUIAuth();
-        msg.textContent = '✅ Sesión iniciada'; msg.style.color = '#6BCB77';
-        setTimeout(() => { cerrarTodo(); resetAuthMsg(); }, 1000);
-    } else {
-        msg.textContent = '❌ Credenciales incorrectas (usa cliente@demo.com / 12345)'; msg.style.color = '#FF6B9D';
+    const user = buscarUsuarioDemo(email);
+    if (!user || user.password !== pass) {
+        msg.textContent = '❌ Credenciales incorrectas (usa demo@goparty.com / 123456)'; msg.style.color = '#FF6B9D'; return;
     }
+    usuarioLogueado = { id: user.id, nombre: user.nombre, email: user.email, tipo: user.tipo, whatsapp: user.whatsapp, proveedor_id: user.proveedor_id, ha_contratado: (user.eventos_completados || []).length > 0 };
+    localStorage.setItem('goparty_user', JSON.stringify(usuarioLogueado));
+    actualizarUIAuth();
+    msg.textContent = '✅ Sesión iniciada'; msg.style.color = '#6BCB77';
+    setTimeout(() => { cerrarTodo(); resetAuthMsg(); }, 1000);
 };
 
 window.hacerRegistro = function(e) {
     e.preventDefault();
     const nombre = document.getElementById('regNombre').value.trim();
     const email = document.getElementById('regEmail').value.trim();
+    const whatsapp = document.getElementById('regWhatsapp').value.trim();
     const pass = document.getElementById('regPass').value;
-    const esProv = document.getElementById('regEsProveedor').checked;
     const msg = document.getElementById('authMsg');
-    if (esProv) {
-        window.location.href = 'unete.html';
-        return;
-    }
-    usuarioLogueado = { email, nombre, esProveedor: false, ha_contratado: false };
+    if (!email.toLowerCase().includes('@gmail.com')) { msg.textContent = '❌ Usa una dirección Gmail válida (tu@gmail.com)'; msg.style.color = '#FF6B9D'; return; }
+    if (!/^\d{10}$/.test(whatsapp)) { msg.textContent = '❌ El WhatsApp debe tener 10 dígitos'; msg.style.color = '#FF6B9D'; return; }
+    if (pass.length < 6) { msg.textContent = '❌ La contraseña debe tener al menos 6 caracteres'; msg.style.color = '#FF6B9D'; return; }
+    if (buscarUsuarioDemo(email)) { msg.textContent = '❌ Ya existe una cuenta con este correo'; msg.style.color = '#FF6B9D'; return; }
+    if (tipoRegistroSeleccionado === 'proveedor') { window.location.href = `unete.html?email=${encodeURIComponent(email)}&nombre=${encodeURIComponent(nombre)}&whatsapp=${encodeURIComponent(whatsapp)}`; return; }
+    const newUser = { id: `local-${Date.now()}`, nombre, email, whatsapp, password: pass, tipo: 'cliente', eventos_completados: [], favoritos: [] };
+    const users = JSON.parse(localStorage.getItem('goparty_usuarios') || '[]');
+    users.push(newUser);
+    localStorage.setItem('goparty_usuarios', JSON.stringify(users));
+    usuarioLogueado = { id: newUser.id, nombre, email, whatsapp, tipo: 'cliente', ha_contratado: false };
     localStorage.setItem('goparty_user', JSON.stringify(usuarioLogueado));
     actualizarUIAuth();
     msg.textContent = '✅ Cuenta creada'; msg.style.color = '#6BCB77';
     setTimeout(() => { cerrarTodo(); resetAuthMsg(); }, 1000);
 };
+
+window.abrirMisCotizaciones = function() { document.getElementById('userDropdown')?.classList.remove('active'); mostrarToast('Tus cotizaciones aparecerán aquí'); };
+window.abrirMisResenas = function() { document.getElementById('userDropdown')?.classList.remove('active'); mostrarToast('Tus reseñas aparecerán aquí'); };
+window.abrirMiPerfil = function() { document.getElementById('userDropdown')?.classList.remove('active'); abrirModal('modalAuth'); };
+window.abrirPanelProveedor = function() { window.location.href = 'dashboard.html'; };
 
 window.cerrarSesion = function() {
     usuarioLogueado = null;
@@ -540,6 +588,8 @@ function actualizarUIAuth() {
         if (btnProv) btnProv.classList.add('hidden');
         document.getElementById('userName').textContent = usuarioLogueado.nombre || 'Mi cuenta';
         document.getElementById('userAvatar').textContent = (usuarioLogueado.nombre || '?').charAt(0).toUpperCase();
+        document.getElementById('ddPanelProveedor')?.classList.toggle('hidden', usuarioLogueado.tipo !== 'proveedor');
+        const c = document.getElementById('ddFavCount'); if (c) c.textContent = `(${getFavoritos().length})`;
     } else {
         menu.classList.add('hidden');
         if (btnProv) btnProv.classList.remove('hidden');
@@ -578,6 +628,10 @@ function renderTarjetaAirbnb(p) {
     const coverContent = fotos.length > 0 ? `<img src="${fotos[0]}" alt="${p.nombreNegocio || ''}">` : '📷';
     const cal = p.calificacion || 5;
     const totalRes = p.total_resenas || p.totalResenas || 0;
+    const avgPrice = Number(p.precio_promedio || p.precioPromedio || 0);
+    const tier = avgPrice <= 6000 ? 'economico' : avgPrice <= 15000 ? 'medio' : 'premium';
+    const tierLabel = tier === 'economico' ? 'Económico' : tier === 'medio' ? 'Medio' : 'Premium';
+    const priceHtml = avgPrice ? `<span class="exp-price-tier ${tier}">${tierLabel} · ${avgPrice.toLocaleString('es-MX')}</span>` : '';
     return `<div class="exp-card" onclick="abrirPerfil('${p.id}')">
         <div class="exp-card-cover ${coverClass}">${coverContent}${badge}
             <button class="exp-card-fav ${isFav ? 'active' : ''}" data-id="${p.id}" onclick="event.stopPropagation(); toggleFavorito('${p.id}', '${(p.nombreNegocio || '').replace(/'/g, '')}', this)">${isFav ? '❤️' : '♡'}</button>
@@ -589,6 +643,7 @@ function renderTarjetaAirbnb(p) {
             <div class="exp-card-cat">${p.categoria || 'General'}</div>
             <div class="exp-card-city">📍 ${p.ciudad || ''}, ${p.estado || ''}</div>
             <div class="exp-card-rating"><span class="stars">⭐</span> ${cal.toFixed(1)} (${totalRes} reseñas)</div>
+            ${priceHtml}
             <a href="#" class="exp-card-btn" onclick="event.stopPropagation(); abrirPerfil('${p.id}'); return false;">Ver perfil</a>
         </div>
     </div>`;
@@ -903,14 +958,15 @@ async function cargarProveedoresExplorar() {
         explorarProveedores = [];
         snap.forEach(doc => {
             const d = doc.data();
-            if (d.estadoVerificacion === 'Verificado') {
-                explorarProveedores.push({ id: doc.id, ...d });
-            }
+            if (d.estadoVerificacion === 'Verificado') explorarProveedores.push({ id: doc.id, ...d });
         });
+        if (explorarProveedores.length === 0) explorarProveedores = [...(demoData?.proveedores || [])];
         llenarFiltrosExplorar();
         aplicarFiltrosExplorar();
     } catch (error) {
-        grid.innerHTML = '<div class="loading-msg" style="grid-column:1/-1;">Error al cargar.</div>';
+        explorarProveedores = [...(demoData?.proveedores || [])];
+        llenarFiltrosExplorar();
+        aplicarFiltrosExplorar();
     }
 }
 
@@ -939,6 +995,7 @@ window.aplicarFiltrosExplorar = function() {
     const ciudad = document.getElementById('expFilterCiudad').value;
     const insignias = Array.from(document.querySelectorAll('.exp-insignia:checked')).map(c => c.value);
     const calMin = parseInt(document.getElementById('expFilterCalificacion').value) || 0;
+    const precio = document.getElementById('expFilterPrecio')?.value || '';
     const sort = document.getElementById('expSort').value;
 
     explorarFiltrados = explorarProveedores.filter(p => {
@@ -947,11 +1004,21 @@ window.aplicarFiltrosExplorar = function() {
         if (ciudad && p.ciudad !== ciudad) return false;
         if (insignias.length > 0 && !insignias.includes(p.plan || 'basic')) return false;
         if (calMin > 0 && (p.calificacion || 0) < calMin) return false;
+        const prom = Number(p.precio_promedio || p.precioPromedio || 0);
+        if (precio === 'economico' && prom > 6000) return false;
+        if (precio === 'medio' && (prom < 6001 || prom > 15000)) return false;
+        if (precio === 'premium' && prom <= 15000) return false;
         return true;
     });
 
     if (sort === 'calificacion') {
         explorarFiltrados.sort((a, b) => (b.calificacion || 0) - (a.calificacion || 0));
+    } else if (sort === 'precioAsc' || sort === 'precioDesc') {
+        explorarFiltrados.sort((a, b) => {
+            const aP = Number(a.precio_promedio || a.precioPromedio || 0);
+            const bP = Number(b.precio_promedio || b.precioPromedio || 0);
+            return sort === 'precioAsc' ? aP - bP : bP - aP;
+        });
     } else if (sort === 'recientes') {
         explorarFiltrados.sort((a, b) => new Date(b.fechaRegistro || 0) - new Date(a.fechaRegistro || 0));
     } else {
@@ -1023,6 +1090,7 @@ window.cambiarVistaExplorar = function(vista) {
 // INICIALIZAR
 // ==========================================
 document.addEventListener('DOMContentLoaded', async () => {
+    await cargarDataDemo();
     await cargarConfiguracion();
     await cargarContenidoDinamico();
     cargarProveedores();
@@ -1030,4 +1098,90 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btnVistaGrid').classList.add('active');
     actualizarContadorFav();
     cargarSesion();
+    inicializarNuevosFlujos();
 });
+
+// ==========================================
+// MATCHING (Recomiéndame un plan)
+// ==========================================
+function precioCercano(prov, presupuesto) {
+    const prom = Number(prov.precio_promedio || 0);
+    return prom <= presupuesto ? 2 : Math.max(0, 2 - (prom - presupuesto) / Math.max(presupuesto, 1));
+}
+
+function mostrarPasoMatching(step) {
+    document.querySelectorAll('.matching-step').forEach(el => el.classList.add('hidden'));
+    document.getElementById(`matchStep${step}`)?.classList.remove('hidden');
+    document.querySelectorAll('.matching-dot').forEach((d, i) => d.classList.toggle('active', i < step));
+}
+
+function renderMatchingResults(service, budget) {
+    const pool = [...(demoData?.proveedores || []), ...explorarProveedores];
+    const unique = [...new Map(pool.map(p => [p.id, p])).values()];
+    const scored = unique.map(p => ({ p, score: (p.categoria === service ? 6 : 0) + precioCercano(p, budget) + (p.plan === 'gold' ? 2 : p.plan === 'pro' ? 1 : 0) })).sort((a, b) => b.score - a.score).slice(0, 3);
+    const el = document.getElementById('matchingResults');
+    el.innerHTML = `<h3>Recomendaciones para ti</h3>${scored.map(({ p }) => `<button class="matching-result" onclick="cerrarTodo(); abrirPerfil('${p.id}')"><span class="matching-result-img">${p.fotos?.[0] ? `<img src="${p.fotos[0]}" alt="">` : '📷'}</span><span><strong>${p.nombreNegocio}</strong><small>${p.categoria} · ${p.ciudad}</small><small>Desde ${Number(p.precio_min || 0).toLocaleString('es-MX')} · ⭐ ${Number(p.calificacion || 0).toFixed(1)}</small></span></button>`).join('')}`;
+    document.querySelectorAll('.matching-step').forEach(s => s.classList.add('hidden'));
+    el.classList.remove('hidden');
+}
+
+// ==========================================
+// COTIZACIÓN: presupuesto por servicio
+// ==========================================
+const cotServiceBudgets = {};
+
+function renderCotBudgets() {
+    const container = document.getElementById('cotBudgetServices');
+    if (!container) return;
+    const services = Array.from(document.querySelectorAll('input[name="servicios"]:checked')).map(i => i.value);
+    services.forEach(s => { if (cotServiceBudgets[s] === undefined) cotServiceBudgets[s] = 0; });
+    container.innerHTML = services.map(s => `<label class="cot-budget-row"><span>${s}</span><input type="number" min="0" step="500" data-budget-service="${s}" value="${cotServiceBudgets[s]}" placeholder="0"><strong>$<span data-budget-value="${s}">${Number(cotServiceBudgets[s]).toLocaleString('es-MX')}</span></strong></label>`).join('');
+    container.querySelectorAll('[data-budget-service]').forEach(inp => inp.addEventListener('input', () => { cotServiceBudgets[inp.dataset.budgetService] = Number(inp.value) || 0; actualizarTotalCotizacion(); }));
+    actualizarTotalCotizacion();
+}
+
+function actualizarTotalCotizacion() {
+    const total = Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0);
+    const disp = document.getElementById('cotTotalDisplay');
+    const hid = document.getElementById('cotPresupuesto');
+    if (disp) disp.textContent = `${total.toLocaleString('es-MX')} MXN`;
+    if (hid) hid.value = `${total.toLocaleString('es-MX')}`;
+}
+
+// ==========================================
+// INICIALIZAR NUEVOS FLUJOS
+// ==========================================
+function inicializarNuevosFlujos() {
+    let matchService = '';
+    document.querySelectorAll('[data-match-event]').forEach(btn => btn.addEventListener('click', () => mostrarPasoMatching(2)));
+    document.querySelectorAll('[data-match-service]').forEach(btn => btn.addEventListener('click', () => { matchService = btn.dataset.matchService || ''; mostrarPasoMatching(3); }));
+    const range = document.getElementById('matchBudget');
+    const val = document.getElementById('matchBudgetValue');
+    range?.addEventListener('input', () => { val.textContent = `${Number(range.value).toLocaleString('es-MX')} MXN`; });
+    document.getElementById('matchSubmit')?.addEventListener('click', () => renderMatchingResults(matchService, Number(range?.value || 15000)));
+
+    document.getElementById('cotReferencias')?.addEventListener('change', (e) => {
+        const preview = document.getElementById('cotReferencePreview');
+        preview.innerHTML = '';
+        Array.from(e.target.files || []).slice(0, 6).forEach(f => { const img = document.createElement('img'); img.src = URL.createObjectURL(f); img.alt = 'Referencia'; preview.appendChild(img); });
+    });
+
+    const originalNext = window.cotSiguiente;
+    window.cotSiguiente = function(paso) {
+        if (paso === 2) renderCotBudgets();
+        if (paso === 3 && Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0) <= 0) { alert('Asigna al menos un monto a tus servicios.'); return; }
+        originalNext(paso);
+    };
+
+    window.enviarCotizacion = async function() {
+        const whatsapp = document.getElementById('cotWhatsapp').value.trim();
+        const email = document.getElementById('cotEmail').value.trim();
+        const total = Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0);
+        if (!/^\d{10}$/.test(whatsapp) || !email || total <= 0) { alert('Completa tus datos y asigna un presupuesto.'); return; }
+        const payload = { usuario_id: usuarioLogueado?.id || null, tipoEvento: document.querySelector('input[name="tipoEvento"]:checked')?.value || '', servicios: Object.entries(cotServiceBudgets).filter(([, v]) => Number(v) > 0).map(([nombre, presupuesto]) => ({ nombre, presupuesto })), fecha: document.getElementById('cotFecha').value, presupuesto_total: total, whatsapp, email, estado: 'Pendiente', fechaSolicitud: new Date().toISOString() };
+        try { await addDoc(collection(db, 'solicitudes'), payload); }
+        catch { const saved = JSON.parse(localStorage.getItem('goparty_cotizaciones') || '[]'); saved.push(payload); localStorage.setItem('goparty_cotizaciones', JSON.stringify(saved)); }
+        document.querySelectorAll('.cot-step').forEach(s => s.classList.add('hidden'));
+        document.getElementById('cotConfirm').classList.remove('hidden');
+    };
+}

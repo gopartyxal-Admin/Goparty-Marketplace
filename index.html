@@ -6,139 +6,135 @@
     <title>GoParty - Directorio de Proveedores Verificados</title>
     <meta name="description" content="Encuentra los mejores proveedores verificados para tu evento.">
     <link rel="stylesheet" href="css/index.css">
-  <meta property="og:image" content="https://bolt.new/static/og_default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+    <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body>
 
-    <!-- Navegación -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
+    <!-- ===================== HEADER ===================== -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <img src="Logo.png" alt="GoParty Logo" class="topbar-logo">
+        </div>
+        <div class="topbar-center">
+            <div class="search-bar">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="topbarSearch" placeholder="Buscar proveedor, ciudad o servicio...">
             </div>
-            <div class="nav-links">
-                <a href="index.html" class="nav-explorar">Explorar</a>
-                <a href="cotizacion.html" class="btn-cotizar">Solicitar Cotización</a>
-                <a href="unete.html" class="btn-unete">Únete a GoParty</a>
-                <a href="dashboard.html" class="btn-proveedor">Soy Proveedor</a>
-            </div>
+        </div>
+        <div class="topbar-right">
+            <button class="btn-cotizar" onclick="abrirModal('modalCotizacion')">Solicitar Cotización</button>
+            <button class="btn-proveedor" onclick="abrirModal('modalProveedor')">Soy Proveedor</button>
             <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
                 <span></span><span></span><span></span>
             </button>
         </div>
-    </nav>
+    </header>
 
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <img src="https://raw.githubusercontent.com/gopartyxal-Admin/Goparty-Marketplace/main/Logo.png" alt="GoParty Logo">
-            <button class="close-btn" id="closeBtn">&times;</button>
-        </div>
-        <div class="sidebar-links">
-            <a href="index.html">🔍 Explorar</a>
-            <a href="cotizacion.html">📝 Solicitar Cotización</a>
-            <a href="unete.html">🎉 Únete a GoParty</a>
-            <a href="dashboard.html"> Soy Proveedor</a>
-        </div>
-    </div>
+    <!-- ===================== HERO + GRID (pantalla única) ===================== -->
+    <main class="dashboard-main">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Haz que tu fiesta sea inolvidable</h1>
+                <p>Encuentra a los mejores proveedores verificados en cualquier ciudad</p>
+                <a href="#" class="como-funciona-link" onclick="abrirModal('modalComoFunciona'); return false;">¿Cómo funciona?</a>
+            </div>
+
+            <div class="search-container">
+                <div class="search-grid">
+                    <div class="search-group">
+                        <label>🏷️ Categoría</label>
+                        <select class="search-select" id="filterCategoria">
+                            <option value="">Todas las categorías</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <label>📍 Estado</label>
+                        <select class="search-select" id="filterEstado">
+                            <option value="">Todos los estados</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <label>🏙️ Ciudad</label>
+                        <select class="search-select" id="filterCiudad">
+                            <option value="">Todas las ciudades</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <label>📅 Disponibilidad</label>
+                        <input type="date" class="search-select" id="filterFecha">
+                    </div>
+                </div>
+                <button class="btn-buscar" onclick="filtrarProveedores()">🔍 Buscar Proveedores</button>
+            </div>
+
+            <button class="btn-recomendar" onclick="recomendarPlan()">✨ Recomiéndame un plan</button>
+        </section>
+
+        <!-- Grid de comandos -->
+        <section class="command-grid">
+            <div class="command-card" onclick="abrirPanel('panelDestacados')">
+                <div class="command-icon">⭐</div>
+                <h3>Proveedores Destacados</h3>
+                <p>Profesionales verificados y listos para tu evento</p>
+            </div>
+            <div class="command-card" onclick="abrirPanel('panelBlog')">
+                <div class="command-icon">📚</div>
+                <h3>Blog &amp; Tips</h3>
+                <p>Consejos, tendencias y formatos gratuitos</p>
+            </div>
+            <div class="command-card" onclick="abrirModal('modalTestimonios')">
+                <div class="command-icon">💬</div>
+                <h3>Testimonios</h3>
+                <p>Historias reales de eventos inolvidables</p>
+            </div>
+            <div class="command-card" onclick="abrirModal('modalFaq')">
+                <div class="command-icon">❓</div>
+                <h3>FAQ</h3>
+                <p>Resolvemos tus dudas más comunes</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===================== FOOTER MINIMALISTA ===================== -->
+    <footer class="footer-min">
+        <span>© 2026 GoParty - Conectando party people con magia profesional</span>
+        <a href="terminos.html">Términos y Condiciones</a>
+        <a href="#" onclick="abrirModal('modalNewsletter'); return false;">Newsletter</a>
+    </footer>
+
+    <!-- ===================== WHATSAPP FLOTANTE ===================== -->
+    <a href="#" class="whatsapp-float" id="whatsappFloat" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        <span class="whatsapp-tooltip">¿Necesitas ayuda?</span>
+    </a>
+
+    <!-- ===================== OVERLAY ===================== -->
     <div class="overlay" id="overlay"></div>
 
-    <!-- Hero -->
-    <section class="hero" id="inicio">
-        <h1>Haz que tu fiesta sea inolvidable</h1>
-        <p>Encuentra a los mejores proveedores verificados en cualquier ciudad</p>
-        <div class="search-container">
-            <div class="search-grid">
-                <div class="search-group">
-                    <label>️ Categoría</label>
-                    <select class="search-select" id="filterCategoria">
-                        <option value="">Todas las categorías</option>
-                    </select>
-                </div>
-                <div class="search-group">
-                    <label> Estado</label>
-                    <select class="search-select" id="filterEstado">
-                        <option value="">Todos los estados</option>
-                    </select>
-                </div>
-                <div class="search-group">
-                    <label>🏙️ Ciudad</label>
-                    <select class="search-select" id="filterCiudad">
-                        <option value="">Todas las ciudades</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn-buscar" onclick="filtrarProveedores()">🔍 Buscar Proveedores</button>
+    <!-- ===================== PANEL LATERAL: PROVEEDORES DESTACADOS ===================== -->
+    <aside class="side-panel" id="panelDestacados">
+        <div class="panel-header">
+            <h2>⭐ Proveedores Destacados</h2>
+            <button class="panel-close" onclick="cerrarTodo()">&times;</button>
         </div>
-    </section>
-
-    <!-- Categorías (dinámicas) -->
-    <section class="categorias-section" id="categorias">
-        <div class="categorias-container">
-            <div class="categorias-header">
-                <h2>🎯 Explora por Categoría</h2>
-                <p>Encuentra exactamente lo que necesitas para tu evento</p>
-            </div>
-            <div class="categorias-grid" id="categoriasGrid"></div>
-        </div>
-    </section>
-
-    <!-- Proveedores -->
-    <section class="section" id="proveedores">
-        <div class="section-header">
-            <div>
-                <h2>Proveedores Destacados</h2>
-                <p class="section-subtitle">Profesionales verificados y listos para tu evento</p>
-            </div>
+        <div class="panel-body">
             <span class="proveedores-count" id="proveedoresCount">0 proveedores</span>
-        </div>
-        <div id="contenedorProveedores" class="proveedores-grid">
-            <p style="text-align: center; color: #666; grid-column: 1/-1;">Cargando proveedores...</p>
-        </div>
-    </section>
-
-    <!-- Cómo funciona -->
-    <section class="como-funciona">
-        <div class="como-funciona-container">
-            <h2>¿Cómo funciona GoParty?</h2>
-            <div class="pasos-grid">
-                <div class="paso-card"><div class="paso-numero">1</div><h3>Busca</h3><p>Filtra por categoría, ciudad y tipo de servicio. Solo verificados, solo los mejores.</p></div>
-                <div class="paso-card"><div class="paso-numero">2</div><h3>Compara</h3><p>Revisa perfiles, insignias Gold/Pro y elige al proveedor ideal para tu evento.</p></div>
-                <div class="paso-card"><div class="paso-numero">3</div><h3>Contacta</h3><p>Conecta directo por WhatsApp. Sin intermediarios, sin comisiones ocultas.</p></div>
+            <div id="contenedorProveedores" class="proveedores-grid">
+                <p class="loading-msg">Cargando proveedores...</p>
             </div>
         </div>
-    </section>
+    </aside>
 
-    <!-- Estadísticas -->
-    <section class="estadisticas-section">
-        <div class="estadisticas-container">
-            <div class="estadistica-item"><div class="estadistica-icono">🎉</div><div class="estadistica-numero" id="statEventos">0</div><div class="estadistica-label">Eventos Realizados</div></div>
-            <div class="estadistica-item"><div class="estadistica-icono"></div><div class="estadistica-numero" id="statProveedores">0</div><div class="estadistica-label">Proveedores Verificados</div></div>
-            <div class="estadistica-item"><div class="estadistica-icono">⭐</div><div class="estadistica-numero" id="statSatisfaccion">0</div><div class="estadistica-label">% Satisfacción</div></div>
-            <div class="estadistica-item"><div class="estadistica-icono">🏙️</div><div class="estadistica-numero" id="statCiudades">0</div><div class="estadistica-label">Ciudades Activas</div></div>
+    <!-- ===================== PANEL LATERAL: BLOG ===================== -->
+    <aside class="side-panel" id="panelBlog">
+        <div class="panel-header">
+            <h2>📚 Blog &amp; Utilería</h2>
+            <button class="panel-close" onclick="cerrarTodo()">&times;</button>
         </div>
-    </section>
-
-    <!-- Ciudades (dinámicas) -->
-    <section class="ciudades-section">
-        <div class="ciudades-container">
-            <div class="ciudades-header">
-                <h2>🏙️ Ciudades con Más Proveedores</h2>
-                <p>Encuentra proveedores cerca de ti</p>
-            </div>
-            <div class="ciudades-grid" id="ciudadesGrid"></div>
-        </div>
-    </section>
-
-    <!-- Blog -->
-    <section class="blog-section" id="blog">
-        <div class="blog-container">
-            <div class="blog-header">
-                <h2>📚 Blog & Utilería para tu Evento</h2>
-                <p>Consejos, tendencias y formatos gratuitos para organizar tu fiesta perfecta</p>
-            </div>
+        <div class="panel-body">
             <div class="blog-tabs">
                 <button class="blog-tab active" data-filter="todos">📋 Todos</button>
                 <button class="blog-tab" data-filter="Consejos">💡 Consejos</button>
@@ -151,414 +147,227 @@
             </div>
             <div class="blog-cta"><a href="blog.html" class="btn-ver-mas">Ver todos los artículos →</a></div>
         </div>
-    </section>
+    </aside>
 
-    <!-- 🆕 Testimonios (dinámicos - FASE 3) -->
-    <section class="testimonios-section">
-        <div class="testimonios-container">
-            <div class="testimonios-header">
-                <h2>💬 Lo que dicen nuestros clientes</h2>
-                <p>Historias reales de eventos inolvidables</p>
+    <!-- ===================== PANEL LATERAL: CIUDADES ===================== -->
+    <aside class="side-panel" id="panelCiudades">
+        <div class="panel-header">
+            <h2>🏙️ Ciudades con Más Proveedores</h2>
+            <button class="panel-close" onclick="cerrarTodo()">&times;</button>
+        </div>
+        <div class="panel-body">
+            <div class="ciudades-grid" id="ciudadesGrid"></div>
+        </div>
+    </aside>
+
+    <!-- ===================== MODAL: CÓMO FUNCIONA ===================== -->
+    <div class="modal" id="modalComoFunciona">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>¿Cómo funciona GoParty?</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
             </div>
-            <div class="testimonios-grid" id="testimoniosGrid"></div>
-        </div>
-    </section>
-
-    <!-- FAQ (dinámica) -->
-    <section class="faq-section" id="faq">
-        <div class="faq-container">
-            <div class="faq-header"><h2>❓ Preguntas Frecuentes</h2><p>Resolvemos tus dudas más comunes</p></div>
-            <div id="faqContainer"></div>
-        </div>
-    </section>
-
-    <!-- Newsletter -->
-    <section class="newsletter-section">
-        <div class="newsletter-container">
-            <h2>📬 Recibe Tips y Ofertas Exclusivas</h2>
-            <p>Suscríbete y recibe ideas para tu evento, descuentos de proveedores y contenido exclusivo.</p>
-            <form class="newsletter-form" id="newsletterForm" onsubmit="suscribirNewsletter(event)">
-                <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
-                <button type="submit">Suscribirme</button>
-            </form>
-            <div class="newsletter-msg" id="newsletterMsg"></div>
-        </div>
-    </section>
-
-    <!-- Banner Proveedor -->
-    <section class="banner-proveedor">
-        <h2>¿Tienes un negocio de eventos?</h2>
-        <p>Únete a la red de proveedores verificados más grande. Aumenta tu visibilidad, recibe cotizaciones y haz crecer tu negocio.</p>
-        <a href="unete.html" class="btn-banner">🚀 Registrarme como Proveedor</a>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p id="footerMsg">© 2026 GoParty - Conectando party people con magia profesional</p>
-        <a href="terminos.html" style="color: white; text-decoration: underline; display: inline-block; margin-top: 0.5rem;">Términos y Condiciones</a>
-    </footer>
-
-    <!-- WhatsApp Flotante -->
-    <a href="#" class="whatsapp-float" id="whatsappFloat" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        <span class="whatsapp-tooltip">¿Necesitas ayuda?</span>
-    </a>
-
-    <!-- JavaScript Menú + FAQ -->
-    <script src="js/index-ui.js"></script>
-
-    <!-- Firebase -->
-    <script type="module">
-        import { addDoc, collection, db, doc, getDoc, getDocs, query, where } from "../firebase-config.js";
-
-        // ==========================================
-        // DATOS POR DEFECTO (fallback si Firebase está vacío)
-        // ==========================================
-        const categoriasDefault = [
-            { nombre: 'Salones', icono: '🏰', descripcion: 'Espacios únicos', orden: 1 },
-            { nombre: 'Alimentos', icono: '️', descripcion: 'Sabores increíbles', orden: 2 },
-            { nombre: 'Fotografía', icono: '📸', descripcion: 'Momentos eternos', orden: 3 },
-            { nombre: 'Música/DJ', icono: '🎵', descripcion: 'El ritmo perfecto', orden: 4 },
-            { nombre: 'Decoración', icono: '🎈', descripcion: 'Ambientes mágicos', orden: 5 },
-            { nombre: 'Animación', icono: '🎪', descripcion: 'Diversión garantizada', orden: 6 }
-        ];
-
-        const ciudadesDefault = [
-            { nombre: 'Xalapa', estado: 'Veracruz', descripcion: 'Capital de Veracruz', orden: 1 },
-            { nombre: 'Veracruz', estado: 'Veracruz', descripcion: 'Puerto y playa', orden: 2 },
-            { nombre: 'Puebla', estado: 'Puebla', descripcion: 'Tradición y sabor', orden: 3 },
-            { nombre: 'CDMX', estado: 'Ciudad de México', descripcion: 'La gran ciudad', orden: 4 },
-            { nombre: 'Córdoba', estado: 'Veracruz', descripcion: 'Café y cultura', orden: 5 },
-            { nombre: 'Orizaba', estado: 'Veracruz', descripcion: 'Ciudad de las aguas', orden: 6 }
-        ];
-
-        const faqDefault = [
-            { pregunta: '¿Cómo sé que un proveedor es confiable?', respuesta: 'Todos los proveedores en GoParty pasan por un proceso de verificación. Los que tienen insignia Gold o Pro han sido validados por nuestro equipo y cuentan con reseñas de clientes reales.', orden: 1 },
-            { pregunta: '¿GoParty cobra comisión por las reservas?', respuesta: 'No. GoParty no cobra comisiones a los clientes. Los proveedores pagan una membresía mensual por estar en la plataforma, pero tú contactas directamente con ellos sin costos adicionales.', orden: 2 },
-            { pregunta: '¿Qué diferencia hay entre los planes Gold, Pro y Basic?', respuesta: 'Basic: aparece en el directorio general. Pro: tiene sello verificado y mayor visibilidad. Gold: posición destacada en búsquedas, borde dorado y soporte prioritario.', orden: 3 },
-            { pregunta: '¿Cómo solicito una cotización personalizada?', respuesta: 'Haz clic en "Solicitar Cotización" en el menú, llena el formulario con los detalles de tu evento (tipo, fecha, presupuesto, servicios) y nuestro equipo te conectará con los proveedores ideales.', orden: 4 },
-            { pregunta: '¿En qué ciudades opera GoParty?', respuesta: 'Actualmente operamos en Xalapa, Veracruz, Córdoba, Orizaba, Coatepec, Puebla y CDMX. Estamos expandiéndonos constantemente a más ciudades de México.', orden: 5 },
-            { pregunta: '¿Soy proveedor, cómo me registro?', respuesta: 'Haz clic en "Únete a GoParty" o "Soy Proveedor" en el menú. Completa el formulario de 4 pasos con tu información, servicios y elige tu plan. Tu perfil será revisado en 24-48 horas.', orden: 6 }
-        ];
-
-        // 🆕 FASE 3: Testimonios por defecto
-        const testimoniosDefault = [
-            {
-                nombreCliente: 'María González',
-                inicial: 'M',
-                tipoEvento: 'Cumpleaños Infantil',
-                ciudad: 'Xalapa',
-                calificacion: 5,
-                comentario: 'Encontré al decorador perfecto para la fiesta de mi hija. Todo salió increíble y el proceso fue súper fácil.'
-            },
-            {
-                nombreCliente: 'Juan Pérez',
-                inicial: 'J',
-                tipoEvento: 'Boda',
-                ciudad: 'Veracruz',
-                calificacion: 5,
-                comentario: 'La mejor plataforma para encontrar proveedores. Los Gold realmente valen la pena, calidad garantizada.'
-            },
-            {
-                nombreCliente: 'Ana Ramírez',
-                inicial: 'A',
-                tipoEvento: 'Evento Corporativo',
-                ciudad: 'Puebla',
-                calificacion: 5,
-                comentario: 'Me encantó poder comparar varios proveedores y ver sus reseñas. Mi evento corporativo fue un éxito total.'
-            }
-        ];
-
-        // ==========================================
-        // RENDER CATEGORÍAS
-        // ==========================================
-        function renderCategorias(categorias) {
-            const grid = document.getElementById('categoriasGrid');
-            const select = document.getElementById('filterCategoria');
-            while (select.options.length > 1) select.remove(1);
-            grid.innerHTML = categorias.map(cat => `
-                <a href="#proveedores" class="categoria-card" onclick="filtrarPorCategoria('${cat.nombre}')">
-                    <div class="categoria-icon">${cat.icono || '📁'}</div>
-                    <h3>${cat.nombre}</h3>
-                    <p>${cat.descripcion || ''}</p>
-                </a>
-            `).join('');
-            categorias.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.nombre;
-                option.textContent = `${cat.icono || ''} ${cat.nombre}`;
-                select.appendChild(option);
-            });
-        }
-
-        // ==========================================
-        // RENDER CIUDADES
-        // ==========================================
-        function renderCiudades(ciudades) {
-            const grid = document.getElementById('ciudadesGrid');
-            const selectCiudad = document.getElementById('filterCiudad');
-            const selectEstado = document.getElementById('filterEstado');
-            while (selectCiudad.options.length > 1) selectCiudad.remove(1);
-            while (selectEstado.options.length > 1) selectEstado.remove(1);
-            const estadosUnicos = [...new Set(ciudades.map(c => c.estado))];
-            const gradientes = ['#FFD93D,#FF6B9D','#FF6B9D,#4A90E2','#6BCB77,#4A90E2','#4A90E2,#FFD93D','#FF6B9D,#FFD93D','#4A90E2,#6BCB77'];
-            grid.innerHTML = ciudades.map((ciu, idx) => `
-                <a href="#proveedores" class="ciudad-card" onclick="filtrarPorCiudad('${ciu.nombre}')" style="background: linear-gradient(135deg, ${gradientes[idx % gradientes.length].split(',')[0]} 0%, ${gradientes[idx % gradientes.length].split(',')[1]} 100%);">
-                    <div class="ciudad-info"><h3>${ciu.nombre}</h3><p>${ciu.descripcion || ciu.estado}</p></div>
-                </a>
-            `).join('');
-            ciudades.forEach(ciu => {
-                const option = document.createElement('option');
-                option.value = ciu.nombre;
-                option.textContent = ciu.nombre;
-                selectCiudad.appendChild(option);
-            });
-            estadosUnicos.forEach(est => {
-                const option = document.createElement('option');
-                option.value = est;
-                option.textContent = est;
-                selectEstado.appendChild(option);
-            });
-        }
-
-        // ==========================================
-        // RENDER FAQ
-        // ==========================================
-        function renderFaqs(faqs) {
-            const container = document.getElementById('faqContainer');
-            container.innerHTML = faqs.map(faq => `
-                <div class="faq-item">
-                    <div class="faq-pregunta"><span>${faq.pregunta}</span><span class="faq-icono">+</span></div>
-                    <div class="faq-respuesta">${faq.respuesta}</div>
+            <div class="modal-body">
+                <div class="pasos-grid">
+                    <div class="paso-card"><div class="paso-numero">1</div><h3>Busca</h3><p>Filtra por categoría, ciudad y tipo de servicio. Solo verificados, solo los mejores.</p></div>
+                    <div class="paso-card"><div class="paso-numero">2</div><h3>Compara</h3><p>Revisa perfiles, insignias Gold/Pro y elige al proveedor ideal para tu evento.</p></div>
+                    <div class="paso-card"><div class="paso-numero">3</div><h3>Contacta</h3><p>Conecta directo por WhatsApp. Sin intermediarios, sin comisiones ocultas.</p></div>
                 </div>
-            `).join('');
-        }
+                <div class="estadisticas-container">
+                    <div class="estadistica-item"><div class="estadistica-icono">🎉</div><div class="estadistica-numero" id="statEventos">0</div><div class="estadistica-label">Eventos Realizados</div></div>
+                    <div class="estadistica-item"><div class="estadistica-icono">✅</div><div class="estadistica-numero" id="statProveedores">0</div><div class="estadistica-label">Proveedores Verificados</div></div>
+                    <div class="estadistica-item"><div class="estadistica-icono">⭐</div><div class="estadistica-numero" id="statSatisfaccion">0</div><div class="estadistica-label">% Satisfacción</div></div>
+                    <div class="estadistica-item"><div class="estadistica-icono">🏙️</div><div class="estadistica-numero" id="statCiudades">0</div><div class="estadistica-label">Ciudades Activas</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // ==========================================
-        // 🆕 FASE 3: RENDER TESTIMONIOS
-        // ==========================================
-        function renderTestimonios(testimonios) {
-            const grid = document.getElementById('testimoniosGrid');
-            if (!grid) return;
-            grid.innerHTML = testimonios.map(t => {
-                const estrellas = '⭐'.repeat(t.calificacion || 5);
-                return `
-                    <div class="testimonio-card">
-                        <div class="testimonio-estrellas">${estrellas}</div>
-                        <p class="testimonio-texto">${t.comentario || ''}</p>
-                        <div class="testimonio-autor">
-                            <div class="testimonio-avatar">${t.inicial || t.nombreCliente?.charAt(0) || '?'}</div>
-                            <div class="testimonio-info">
-                                <h4>${t.nombreCliente || 'Cliente'}</h4>
-                                <p>${t.tipoEvento || ''} - ${t.ciudad || ''}</p>
-                            </div>
+    <!-- ===================== MODAL: TESTIMONIOS ===================== -->
+    <div class="modal" id="modalTestimonios">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💬 Lo que dicen nuestros clientes</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="testimonios-grid" id="testimoniosGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: FAQ ===================== -->
+    <div class="modal" id="modalFaq">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>❓ Preguntas Frecuentes</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="faqContainer"></div>
+                <div class="faq-soporte">
+                    <p>¿Tienes más dudas?</p>
+                    <a href="#" onclick="abrirWhatsApp(); return false;" class="btn-soporte">💬 Contactar soporte</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: NEWSLETTER ===================== -->
+    <div class="modal" id="modalNewsletter">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>📬 Recibe Tips y Ofertas Exclusivas</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Suscríbete y recibe ideas para tu evento, descuentos de proveedores y contenido exclusivo.</p>
+                <form class="newsletter-form" id="newsletterForm" onsubmit="suscribirNewsletter(event)">
+                    <input type="email" id="newsletterEmail" placeholder="tu@email.com" required>
+                    <button type="submit">Suscribirme</button>
+                </form>
+                <div class="newsletter-msg" id="newsletterMsg"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: SOY PROVEEDOR ===================== -->
+    <div class="modal" id="modalProveedor">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>🚀 Soy Proveedor</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Tienes un negocio de eventos? Únete a la red de proveedores verificados más grande. Aumenta tu visibilidad, recibe cotizaciones y haz crecer tu negocio.</p>
+                <a href="unete.html" class="btn-banner">🚀 Registrarme como Proveedor</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: SOLICITAR COTIZACIÓN (multi-step) ===================== -->
+    <div class="modal" id="modalCotizacion">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 Solicitar Cotización</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Progress -->
+                <div class="step-progress">
+                    <div class="step-dot active" data-step="1">1</div>
+                    <div class="step-line"></div>
+                    <div class="step-dot" data-step="2">2</div>
+                    <div class="step-line"></div>
+                    <div class="step-dot" data-step="3">3</div>
+                    <div class="step-line"></div>
+                    <div class="step-dot" data-step="4">4</div>
+                </div>
+
+                <!-- Paso 1 -->
+                <div class="cot-step" id="cotStep1">
+                    <h3>Tipo de evento</h3>
+                    <div class="cot-options">
+                        <label class="cot-option"><input type="radio" name="tipoEvento" value="Boda"> 💒 Boda</label>
+                        <label class="cot-option"><input type="radio" name="tipoEvento" value="XV años"> 👑 XV años</label>
+                        <label class="cot-option"><input type="radio" name="tipoEvento" value="Cumpleaños"> 🎂 Cumpleaños</label>
+                        <label class="cot-option"><input type="radio" name="tipoEvento" value="Corporativo"> 🏢 Corporativo</label>
+                        <label class="cot-option"><input type="radio" name="tipoEvento" value="Infantil"> 🧒 Infantil</label>
+                        <label class="cot-option"><input type="radio" name="tipoEvento" value="Otro"> 📋 Otro</label>
+                    </div>
+                    <button class="btn-next" onclick="cotSiguiente(1)">Siguiente →</button>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="cot-step hidden" id="cotStep2">
+                    <h3>Servicios necesarios</h3>
+                    <div class="cot-checkboxes">
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Fotografía"> 📸 Fotografía</label>
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Música/DJ"> 🎵 Música/DJ</label>
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Catering"> 🍽️ Catering</label>
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Decoración"> 🎈 Decoración</label>
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Salón"> 🏰 Salón</label>
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Animación"> 🎪 Animación</label>
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Videografía"> 🎥 Videografía</label>
+                        <label class="cot-check"><input type="checkbox" name="servicios" value="Flores"> 💐 Flores</label>
+                    </div>
+                    <div class="cot-nav">
+                        <button class="btn-prev" onclick="cotAtras(2)">← Anterior</button>
+                        <button class="btn-next" onclick="cotSiguiente(2)">Siguiente →</button>
+                    </div>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="cot-step hidden" id="cotStep3">
+                    <h3>Fecha y presupuesto</h3>
+                    <div class="cot-form-fields">
+                        <div class="cot-field">
+                            <label>📅 Fecha estimada</label>
+                            <input type="date" id="cotFecha">
+                        </div>
+                        <div class="cot-field">
+                            <label>💰 Presupuesto (MXN)</label>
+                            <select id="cotPresupuesto">
+                                <option value="">Selecciona un rango</option>
+                                <option value="Menos de $5,000">Menos de $5,000</option>
+                                <option value="$5,000 - $15,000">$5,000 - $15,000</option>
+                                <option value="$15,000 - $50,000">$15,000 - $50,000</option>
+                                <option value="$50,000 - $100,000">$50,000 - $100,000</option>
+                                <option value="Más de $100,000">Más de $100,000</option>
+                            </select>
                         </div>
                     </div>
-                `;
-            }).join('');
-        }
+                    <div class="cot-nav">
+                        <button class="btn-prev" onclick="cotAtras(3)">← Anterior</button>
+                        <button class="btn-next" onclick="cotSiguiente(3)">Siguiente →</button>
+                    </div>
+                </div>
 
-        // ==========================================
-        // CARGAR CONTENIDO DINÁMICO
-        // ==========================================
-        async function cargarContenidoDinamico() {
-            try {
-                const catSnap = await getDocs(collection(db, "categorias"));
-                let categorias = [];
-                catSnap.forEach(doc => categorias.push({ id: doc.id, ...doc.data() }));
-                categorias.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-                if (categorias.length === 0) categorias = categoriasDefault;
-                renderCategorias(categorias);
+                <!-- Paso 4 -->
+                <div class="cot-step hidden" id="cotStep4">
+                    <h3>Datos de contacto</h3>
+                    <div class="cot-form-fields">
+                        <div class="cot-field">
+                            <label>📱 WhatsApp</label>
+                            <input type="tel" id="cotWhatsapp" placeholder="Ej: 2281234567">
+                        </div>
+                        <div class="cot-field">
+                            <label>📧 Email</label>
+                            <input type="email" id="cotEmail" placeholder="tu@email.com">
+                        </div>
+                    </div>
+                    <div class="cot-nav">
+                        <button class="btn-prev" onclick="cotAtras(4)">← Anterior</button>
+                        <button class="btn-enviar" onclick="enviarCotizacion()">Enviar solicitud</button>
+                    </div>
+                </div>
 
-                const ciuSnap = await getDocs(collection(db, "ciudades"));
-                let ciudades = [];
-                ciuSnap.forEach(doc => ciudades.push({ id: doc.id, ...doc.data() }));
-                ciudades.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-                if (ciudades.length === 0) ciudades = ciudadesDefault;
-                renderCiudades(ciudades);
+                <!-- Confirmación -->
+                <div class="cot-confirm hidden" id="cotConfirm">
+                    <div class="cot-confirm-icon">✅</div>
+                    <h3>Recibido. Te contactaremos pronto con opciones verificadas.</h3>
+                    <button class="btn-next" onclick="cerrarTodo(); resetCotizacion()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    const faqSnaps = await Promise.all([
-                    getDocs(collection(db, "faq_general")),
-                    getDocs(collection(db, "faq_clientes")),
-                    getDocs(collection(db, "faq_proveedores"))
-                ]);
-                let faqs = [];
-                faqSnaps.forEach(faqSnap => faqSnap.forEach(doc => faqs.push({ id: doc.id, ...doc.data() })));
-                faqs.sort((a, b) => (a.orden || 99) - (b.orden || 99));
-                if (faqs.length === 0) faqs = faqDefault;
-                renderFaqs(faqs);
+    <!-- ===================== SIDEBAR MÓVIL ===================== -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Logo.png" alt="GoParty Logo">
+            <button class="close-btn" id="closeBtn">&times;</button>
+        </div>
+        <div class="sidebar-links">
+            <a href="index.html">🔍 Explorar</a>
+            <a href="#" onclick="abrirModal('modalCotizacion'); cerrarSidebar(); return false;">📝 Solicitar Cotización</a>
+            <a href="unete.html">🎉 Únete a GoParty</a>
+            <a href="dashboard.html">👤 Soy Proveedor</a>
+        </div>
+    </div>
 
-                // 🆕 FASE 3: Cargar testimonios aprobados
-                const testSnap = await getDocs(collection(db, "testimonios"));
-                let testimonios = [];
-                testSnap.forEach(doc => testimonios.push({ id: doc.id, ...doc.data() }));
-                testimonios = testimonios
-                    .filter(t => t.estado === 'aprobado')
-                    .sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
-                if (testimonios.length === 0) testimonios = testimoniosDefault;
-                renderTestimonios(testimonios.slice(0, 6));
-
-            } catch (error) {
-                console.error("Error cargando contenido dinámico:", error);
-                renderCategorias(categoriasDefault);
-                renderCiudades(ciudadesDefault);
-                renderFaqs(faqDefault);
-                renderTestimonios(testimoniosDefault);
-            }
-        }
-
-        // ==========================================
-        // CONFIGURACIÓN (WhatsApp, Footer, Stats)
-        // ==========================================
-        async function cargarConfiguracion() {
-            try {
-                const docRef = doc(db, "configuracion", "general");
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if (data.whatsapp) {
-                        document.getElementById('whatsappFloat').href = `https://wa.me/${data.whatsapp}?text=Hola%20GoParty%2C%20necesito%20información`;
-                    }
-                    if (data.footer) {
-                        document.getElementById('footerMsg').textContent = `© 2026 GoParty - ${data.footer}`;
-                    }
-                    if (data.modoStats === 'manual') {
-                        document.getElementById('statEventos').textContent = (data.eventosManual || 0) + '+';
-                        document.getElementById('statSatisfaccion').textContent = (data.satisfaccionManual || 0) + '%';
-                    } else {
-                        const proveedoresSnap = await getDocs(collection(db, "proveedores"));
-                        const verificados = proveedoresSnap.docs.filter(d => d.data().estadoVerificacion === 'Verificado').length;
-                        const ciudades = [...new Set(proveedoresSnap.docs.map(d => d.data().ciudad).filter(c => c))];
-                        const cotizacionesSnap = await getDocs(collection(db, "solicitudes"));
-                        document.getElementById('statEventos').textContent = cotizacionesSnap.size + '+';
-                        document.getElementById('statProveedores').textContent = verificados + '+';
-                        document.getElementById('statSatisfaccion').textContent = '98%';
-                        document.getElementById('statCiudades').textContent = ciudades.length + '+';
-                    }
-                } else {
-                    document.getElementById('statProveedores').textContent = '0+';
-                    document.getElementById('statCiudades').textContent = '0+';
-                }
-            } catch (error) { console.error("Error cargando config:", error); }
-        }
-
-        // Newsletter
-        window.suscribirNewsletter = async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('newsletterEmail').value.trim();
-            const msg = document.getElementById('newsletterMsg');
-            if (!email) return;
-            try {
-                const q = query(collection(db, "suscriptores"), where("email", "==", email));
-                const existing = await getDocs(q);
-                if (!existing.empty) { msg.textContent = 'ℹ️ Este email ya está suscrito.'; msg.style.color = '#FFD93D'; return; }
-                await addDoc(collection(db, "suscriptores"), { email, fecha: new Date().toISOString(), activo: true });
-                msg.textContent = '✅ ¡Gracias por suscribirte!';
-                msg.style.color = 'white';
-                document.getElementById('newsletterForm').reset();
-                setTimeout(() => { msg.textContent = ''; }, 5000);
-            } catch (error) { msg.textContent = '❌ Error al suscribir.'; msg.style.color = '#FFD93D'; }
-        };
-
-        // Proveedores
-        async function cargarProveedores(filtros = {}) {
-            const contenedor = document.getElementById('contenedorProveedores');
-            const countElement = document.getElementById('proveedoresCount');
-            contenedor.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">Cargando proveedores...</p>';
-            try {
-                let q = collection(db, "proveedores");
-                const constraints = [];
-                constraints.push(where("estadoVerificacion", "==", "Verificado"));
-                if (filtros.categoria) constraints.push(where("categoria", "==", filtros.categoria));
-                if (filtros.estado) constraints.push(where("estado", "==", filtros.estado));
-                if (filtros.ciudad) constraints.push(where("ciudad", "==", filtros.ciudad));
-                if (constraints.length > 0) q = query(q, ...constraints);
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    contenedor.innerHTML = `<div style="text-align: center; padding: 40px; color: #666; grid-column: 1/-1;"><h3>🎉 ¡Pronto tendremos proveedores!</h3><p>Aún no hay proveedores verificados.</p><p><a href="unete.html" style="color: #FF6B9D; font-weight: bold;">¿Eres proveedor? Únete aquí</a></p></div>`;
-                    countElement.textContent = '0 proveedores';
-                    return;
-                }
-
-                const proveedoresArray = [];
-                querySnapshot.forEach((doc) => proveedoresArray.push({ id: doc.id, ...doc.data() }));
-                proveedoresArray.sort((a, b) => {
-                    const rankA = a.planRank || (a.plan === 'gold' ? 3 : a.plan === 'pro' ? 2 : 1);
-                    const rankB = b.planRank || (b.plan === 'gold' ? 3 : b.plan === 'pro' ? 2 : 1);
-                    return rankB - rankA;
-                });
-
-                contenedor.innerHTML = '';
-                countElement.textContent = `${proveedoresArray.length} proveedor${proveedoresArray.length !== 1 ? 'es' : ''}`;
-
-                proveedoresArray.forEach((data) => {
-                    let badge = '', cardClass = '';
-                    if (data.plan === 'gold') { badge = '<span class="badge badge-gold">👑 Gold</span>'; cardClass = 'gold'; }
-                    else if (data.plan === 'pro') { badge = '<span class="badge badge-pro">⭐ Pro</span>'; }
-                    else { badge = '<span class="badge badge-basic">✓ Verificado</span>'; }
-                    const tarjeta = `<div class="proveedor-card ${cardClass}">${badge}<div class="camera-icon">📷</div><h3 style="margin: 0; font-size: 1.3rem; text-align: center;">${data.nombreNegocio}</h3><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p><p style="margin: 0.5rem 0; opacity: 0.95; text-align: center;">️ ${data.categoria || 'General'}</p></div>`;
-                    contenedor.innerHTML += tarjeta;
-                });
-            } catch (error) { contenedor.innerHTML = "<p style='color: red; text-align: center; grid-column: 1/-1;'>Error al cargar.</p>"; }
-        }
-
-        // Blog
-        let blogFiltroActual = 'todos';
-        async function cargarBlog() {
-            const blogGrid = document.getElementById('blogGrid');
-            try {
-                let q = collection(db, "posts");
-                const constraints = [];
-                if (blogFiltroActual !== 'todos') constraints.push(where("categoria", "==", blogFiltroActual));
-                if (constraints.length > 0) q = query(q, ...constraints);
-                const querySnapshot = await getDocs(q);
-                if (querySnapshot.empty) {
-                    blogGrid.innerHTML = `<div class="blog-empty"><div class="blog-empty-icon">📝</div><h3>Próximamente</h3><p>Estamos preparando contenido increíble.</p></div>`;
-                    return;
-                }
-                blogGrid.innerHTML = '';
-                const posts = [];
-                querySnapshot.forEach((doc) => posts.push({ id: doc.id, ...doc.data() }));
-                posts.sort((a, b) => new Date(b.fechaPublicacion || 0) - new Date(a.fechaPublicacion || 0));
-                posts.slice(0, 6).forEach(post => {
-                    const iconos = { 'Consejos': '💡', 'Tendencias': '🔥', 'Recursos Descargables': '📥', 'General': '📰' };
-                    const icono = iconos[post.categoria] || '';
-                    const fecha = post.fechaPublicacion ? new Date(post.fechaPublicacion).toLocaleDateString('es-MX') : '';
-                    const tieneRecurso = post.recursoURL && post.recursoURL.trim() !== '';
-                    const card = `<div class="blog-card"><div class="blog-card-image"><span class="blog-card-category">${post.categoria || 'General'}</span>${icono}</div><div class="blog-card-content"><h3 class="blog-card-title">${post.titulo || 'Sin título'}</h3><p class="blog-card-excerpt">${(post.resumen || post.contenido || '').substring(0, 120)}...</p><div class="blog-card-footer"><span class="blog-card-date">${fecha}</span><a href="${tieneRecurso ? post.recursoURL : '#'}" class="blog-card-action ${tieneRecurso ? 'download' : ''}" ${tieneRecurso ? 'download' : ''} target="_blank">${tieneRecurso ? '📥 Descargar' : ' Leer más'}</a></div></div></div>`;
-                    blogGrid.innerHTML += card;
-                });
-            } catch (error) { console.error("Error al cargar blog: ", error); }
-        }
-
-        document.querySelectorAll('.blog-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.blog-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                blogFiltroActual = tab.getAttribute('data-filter');
-                cargarBlog();
-            });
-        });
-
-        // Filtros
-        window.filtrarProveedores = function() {
-            const filtros = { categoria: document.getElementById('filterCategoria').value, estado: document.getElementById('filterEstado').value, ciudad: document.getElementById('filterCiudad').value };
-            cargarProveedores(filtros);
-            document.getElementById('proveedores').scrollIntoView({ behavior: 'smooth' });
-        };
-        window.filtrarPorCategoria = function(categoria) { document.getElementById('filterCategoria').value = categoria; cargarProveedores({ categoria }); };
-        window.filtrarPorCiudad = function(ciudad) { document.getElementById('filterCiudad').value = ciudad; cargarProveedores({ ciudad }); };
-
-        // ==========================================
-        // INICIALIZAR
-        // ==========================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            await cargarConfiguracion();
-            await cargarContenidoDinamico(); // Incluye testimonios (Fase 3)
-            cargarProveedores();
-            cargarBlog();
+    <!-- JS -->
+    <script src="js/index-ui.js"></script>
     <script type="module" src="js/index.js"></script>
-
 </body>
 </html>

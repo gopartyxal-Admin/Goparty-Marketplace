@@ -24,9 +24,23 @@
             </div>
         </div>
         <div class="topbar-right">
+            <button class="btn-favoritos" id="btnFavoritos" onclick="abrirPanel('panelFavoritos')" title="Mis favoritos">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span class="fav-count" id="favCount">0</span>
+            </button>
             <button class="btn-explorar" onclick="mostrarExplorar()">Explorar</button>
             <button class="btn-cotizar" onclick="abrirModal('modalCotizacion')">Solicitar Cotización</button>
-            <button class="btn-proveedor" onclick="abrirModal('modalProveedor')">Soy Proveedor</button>
+            <button class="btn-proveedor" id="btnProveedorHeader" onclick="abrirModal('modalProveedor')">Soy Proveedor</button>
+            <div class="user-menu hidden" id="userMenu">
+                <button class="user-avatar-btn" id="userAvatarBtn" onclick="toggleUserMenu(event)">
+                    <span class="user-avatar" id="userAvatar">👤</span>
+                    <span class="user-name" id="userName">Mi cuenta</span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="#" onclick="abrirPanel('panelFavoritos'); return false;">❤️ Mis Favoritos</a>
+                    <a href="#" onclick="cerrarSesion(); return false;">🚪 Cerrar Sesión</a>
+                </div>
+            </div>
             <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
                 <span></span><span></span><span></span>
             </button>
@@ -445,6 +459,121 @@
             </div>
         </div>
     </div>
+
+    <!-- ===================== MODAL: PERFIL DE PROVEEDOR (estilo Airbnb) ===================== -->
+    <div class="modal modal-perfil" id="modalPerfil">
+        <div class="modal-content modal-perfil-content">
+            <div class="modal-header">
+                <h2 id="perfilNombre">Proveedor</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body perfil-body" id="perfilBody"></div>
+        </div>
+    </div>
+
+    <!-- ===================== LIGHTBOX (visor de fotos) ===================== -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="cerrarLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-prev" onclick="navegarLightbox(-1)">‹</button>
+        <img src="" id="lightboxImg" alt="Foto">
+        <button class="lightbox-nav lightbox-next" onclick="navegarLightbox(1)">›</button>
+        <div class="lightbox-counter" id="lightboxCounter">1 de 5</div>
+    </div>
+
+    <!-- ===================== MODAL: AUTENTICACIÓN ===================== -->
+    <div class="modal" id="modalAuth">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>Cuenta GoParty</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+                    <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Registrarse</button>
+                </div>
+                <form id="authLoginForm" onsubmit="hacerLogin(event)">
+                    <div class="auth-field">
+                        <label>Correo</label>
+                        <input type="email" id="loginEmail" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>Contraseña</label>
+                        <input type="password" id="loginPass" placeholder="••••••" required>
+                    </div>
+                    <p class="auth-hint">Demo: cliente@demo.com / 12345</p>
+                    <button type="submit" class="btn-auth">Iniciar Sesión</button>
+                </form>
+                <form id="authRegisterForm" class="hidden" onsubmit="hacerRegistro(event)">
+                    <div class="auth-field">
+                        <label>Nombre</label>
+                        <input type="text" id="regNombre" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>Correo</label>
+                        <input type="email" id="regEmail" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>Contraseña</label>
+                        <input type="password" id="regPass" placeholder="••••••" required>
+                    </div>
+                    <label class="auth-check-prov"><input type="checkbox" id="regEsProveedor"> ¿Eres proveedor?</label>
+                    <button type="submit" class="btn-auth">Registrarme</button>
+                </form>
+                <div class="auth-msg" id="authMsg"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== PANEL LATERAL: FAVORITOS ===================== -->
+    <aside class="side-panel" id="panelFavoritos">
+        <div class="panel-header">
+            <h2>❤️ Mis Favoritos</h2>
+            <button class="panel-close" onclick="cerrarTodo()">&times;</button>
+        </div>
+        <div class="panel-body" id="favoritosBody">
+            <p class="loading-msg">No tienes favoritos guardados aún.</p>
+        </div>
+    </aside>
+
+    <!-- ===================== MODAL: DEJAR RESEÑA ===================== -->
+    <div class="modal" id="modalResena">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>✍️ Dejar una reseña</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="resenaForm">
+                    <div class="resena-cat">
+                        <label>Puntualidad</label>
+                        <div class="star-input" data-cat="puntualidad"></div>
+                    </div>
+                    <div class="resena-cat">
+                        <label>Calidad</label>
+                        <div class="star-input" data-cat="calidad"></div>
+                    </div>
+                    <div class="resena-cat">
+                        <label>Atención</label>
+                        <div class="star-input" data-cat="atencion"></div>
+                    </div>
+                    <div class="resena-cat">
+                        <label>Precio</label>
+                        <div class="star-input" data-cat="precio"></div>
+                    </div>
+                    <div class="auth-field">
+                        <label>Cuéntanos tu experiencia...</label>
+                        <textarea id="resenaTexto" maxlength="500" rows="4" placeholder="Tu experiencia con este proveedor..."></textarea>
+                    </div>
+                    <button class="btn-auth" onclick="enviarResena()">Enviar reseña</button>
+                </div>
+                <div class="auth-msg" id="resenaMsg"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== TOAST ===================== -->
+    <div class="toast" id="toast"></div>
 
     <!-- ===================== SIDEBAR MÓVIL ===================== -->
     <div class="sidebar" id="sidebar">

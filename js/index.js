@@ -249,13 +249,21 @@ async function cargarProveedores(filtros = {}) {
         contenedor.innerHTML = '';
         countElement.textContent = `${proveedoresArray.length} proveedor${proveedoresArray.length !== 1 ? 'es' : ''}`;
 
+        // Asegurar que los proveedores del panel también estén en explorarProveedores
+        explorarProveedores = proveedoresArray.map(p => {
+            if (!explorarProveedores.find(ep => ep.id === p.id)) return p;
+            return explorarProveedores.find(ep => ep.id === p.id);
+        }).concat(explorarProveedores.filter(ep => !proveedoresArray.find(p => p.id === ep.id)));
+        // Deduplicar
+        explorarProveedores = [...new Map(explorarProveedores.map(p => [p.id, p])).values()];
+
         proveedoresArray.forEach((data) => {
-            let badge = '', cardClass = '';
-            if (data.plan === 'gold') { badge = '<span class="badge badge-gold">👑 Gold</span>'; cardClass = 'gold'; }
-            else if (data.plan === 'pro') { badge = '<span class="badge badge-pro">⭐ Pro</span>'; }
-            else { badge = '<span class="badge badge-basic">✓ Verificado</span>'; }
-            const tarjeta = `<div class="proveedor-card ${cardClass}">${badge}<div class="camera-icon">📷</div><h3 style="margin:0;font-size:1.1rem;text-align:center;">${data.nombreNegocio}</h3><p style="margin:0.3rem 0;opacity:0.95;text-align:center;font-size:0.85rem;">📍 ${data.ciudad || 'Xalapa'}, ${data.estado || 'Veracruz'}</p><p style="margin:0.3rem 0;opacity:0.95;text-align:center;font-size:0.85rem;">🏷️ ${data.categoria || 'General'}</p></div>`;
-            contenedor.innerHTML += tarjeta;
+            if (!data.fotos) data.fotos = [];
+            if (!data.resenas) data.resenas = [];
+            if (!data.calificacion) data.calificacion = 5;
+            if (!data.total_resenas) data.total_resenas = 0;
+            const card = renderTarjetaAirbnb(data);
+            contenedor.innerHTML += card;
         });
     } catch (error) {
         contenedor.innerHTML = '<p class="loading-msg">Error al cargar proveedores.</p>';
@@ -397,6 +405,485 @@ function setStat(id, val) {
     if (el2) el2.textContent = val;
 }
 
+// ==========================================
+// FAVORITOS (localStorage)
+// ==========================================
+function getFavoritos() {
+    try { return JSON.parse(localStorage.getItem('goparty_favoritos') || '[]'); } catch { return []; }
+}
+function saveFavoritos(favs) {
+    localStorage.setItem('goparty_favoritos', JSON.stringify(favs));
+    actualizarContadorFav();
+}
+function actualizarContadorFav() {
+    const count = getFavoritos().length;
+    const el = document.getElementById('favCount');
+    if (el) el.textContent = count;
+}
+window.toggleFavorito = function(id, nombre, btnEl) {
+    let favs = getFavoritos();
+    const idx = favs.indexOf(id);
+    if (idx >= 0) {
+        favs.splice(idx, 1);
+        mostrarToast('♡ Quitado de favoritos');
+    } else {
+        favs.push(id);
+        mostrarToast(usuarioLogueado ? '♡ Agregado a tus favoritos.' : '♡ Guardado en este navegador. Inicia sesión para sincronizar tus favoritos.');
+    }
+    saveFavoritos(favs);
+    if (btnEl) btnEl.classList.toggle('active', favs.includes(id));
+    document.querySelectorAll('.exp-card-fav[data-id="' + id + '"]').forEach(b => b.classList.toggle('active', favs.includes(id)));
+};
+
+window.abrirFavoritos = function() { abrirPanel('panelFavoritos'); renderFavoritos(); };
+
+function renderFavoritos() {
+    const body = document.getElementById('favoritosBody');
+    const favs = getFavoritos();
+    if (favs.length === 0) {
+        body.innerHTML = '<p class="loading-msg">No tienes favoritos guardados aún.</p>';
+        return;
+    }
+    const items = favs.map(id => {
+        const p = buscarProveedorPorId(id);
+        if (!p) return '';
+        return `<div class="fav-item" onclick="abrirPerfil('${id}')">
+            <div class="fav-item-cover">📷</div>
+            <div class="fav-item-info"><h4>${p.nombreNegocio || 'Proveedor'}</h4><p>${p.categoria || ''} · ${p.ciudad || ''}</p></div>
+            <button class="fav-item-remove" onclick="event.stopPropagation(); toggleFavorito('${id}', '', this.closest('.fav-item')); this.closest('.fav-item').remove();">×</button>
+        </div>`;
+    }).join('');
+    body.innerHTML = items || '<p class="loading-msg">No tienes favoritos guardados aún.</p>';
+}
+
+// ==========================================
+// TOAST
+// ==========================================
+function mostrarToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('active');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('active'), 3000);
+}
+
+// ==========================================
+// AUTH SIMULADA
+// ==========================================
+let usuarioLogueado = null;
+const USUARIO_DEMO = { email: 'cliente@demo.com', pass: '12345', nombre: 'Cliente Demo', esProveedor: false, ha_contratado: true };
+
+function cargarSesion() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('goparty_user') || 'null');
+        if (saved) { usuarioLogueado = saved; actualizarUIAuth(); }
+    } catch {}
+}
+
+window.hacerLogin = function(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const msg = document.getElementById('authMsg');
+    if (email === USUARIO_DEMO.email && pass === USUARIO_DEMO.pass) {
+        usuarioLogueado = { email, nombre: USUARIO_DEMO.nombre, esProveedor: false, ha_contratado: true };
+        localStorage.setItem('goparty_user', JSON.stringify(usuarioLogueado));
+        actualizarUIAuth();
+        msg.textContent = '✅ Sesión iniciada'; msg.style.color = '#6BCB77';
+        setTimeout(() => { cerrarTodo(); resetAuthMsg(); }, 1000);
+    } else {
+        msg.textContent = '❌ Credenciales incorrectas (usa cliente@demo.com / 12345)'; msg.style.color = '#FF6B9D';
+    }
+};
+
+window.hacerRegistro = function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('regNombre').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value;
+    const esProv = document.getElementById('regEsProveedor').checked;
+    const msg = document.getElementById('authMsg');
+    if (esProv) {
+        window.location.href = 'unete.html';
+        return;
+    }
+    usuarioLogueado = { email, nombre, esProveedor: false, ha_contratado: false };
+    localStorage.setItem('goparty_user', JSON.stringify(usuarioLogueado));
+    actualizarUIAuth();
+    msg.textContent = '✅ Cuenta creada'; msg.style.color = '#6BCB77';
+    setTimeout(() => { cerrarTodo(); resetAuthMsg(); }, 1000);
+};
+
+window.cerrarSesion = function() {
+    usuarioLogueado = null;
+    localStorage.removeItem('goparty_user');
+    actualizarUIAuth();
+    mostrarToast('Sesión cerrada');
+    document.getElementById('userDropdown').classList.remove('active');
+};
+
+window.switchAuthTab = function(tab) {
+    document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+    document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+    document.getElementById('authLoginForm').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('authRegisterForm').classList.toggle('hidden', tab !== 'register');
+    resetAuthMsg();
+};
+
+function resetAuthMsg() { const m = document.getElementById('authMsg'); if (m) { m.textContent = ''; } }
+
+function actualizarUIAuth() {
+    const menu = document.getElementById('userMenu');
+    const btnProv = document.getElementById('btnProveedorHeader');
+    if (usuarioLogueado) {
+        menu.classList.remove('hidden');
+        if (btnProv) btnProv.classList.add('hidden');
+        document.getElementById('userName').textContent = usuarioLogueado.nombre || 'Mi cuenta';
+        document.getElementById('userAvatar').textContent = (usuarioLogueado.nombre || '?').charAt(0).toUpperCase();
+    } else {
+        menu.classList.add('hidden');
+        if (btnProv) btnProv.classList.remove('hidden');
+    }
+}
+
+window.toggleUserMenu = function(e) {
+    e.stopPropagation();
+    document.getElementById('userDropdown').classList.toggle('active');
+};
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('#userMenu')) {
+        const dd = document.getElementById('userDropdown');
+        if (dd) dd.classList.remove('active');
+    }
+});
+
+// ==========================================
+// BUSCAR PROVEEDOR POR ID (busca en caché)
+// ==========================================
+function buscarProveedorPorId(id) {
+    return explorarProveedores.find(p => p.id === id) || null;
+}
+
+// ==========================================
+// RENDER TARJETA AIRBNB (compartida)
+// ==========================================
+function renderTarjetaAirbnb(p) {
+    let badge = '', coverClass = '';
+    if (p.plan === 'gold') { badge = '<span class="exp-card-badge gold">👑 Gold</span>'; coverClass = 'gold'; }
+    else if (p.plan === 'pro') { badge = '<span class="exp-card-badge pro">⭐ Pro</span>'; coverClass = 'pro'; }
+    else { badge = '<span class="exp-card-badge basic">✓ Verificado</span>'; }
+    const favs = getFavoritos();
+    const isFav = favs.includes(p.id);
+    const fotos = p.fotos || [];
+    const coverContent = fotos.length > 0 ? `<img src="${fotos[0]}" alt="${p.nombreNegocio || ''}">` : '📷';
+    const cal = p.calificacion || 5;
+    const totalRes = p.total_resenas || p.totalResenas || 0;
+    return `<div class="exp-card" onclick="abrirPerfil('${p.id}')">
+        <div class="exp-card-cover ${coverClass}">${coverContent}${badge}
+            <button class="exp-card-fav ${isFav ? 'active' : ''}" data-id="${p.id}" onclick="event.stopPropagation(); toggleFavorito('${p.id}', '${(p.nombreNegocio || '').replace(/'/g, '')}', this)">${isFav ? '❤️' : '♡'}</button>
+        </div>
+        <div class="exp-card-body">
+            <div class="exp-card-top-row">
+                <span class="exp-card-name">${p.nombreNegocio || 'Proveedor'}</span>
+            </div>
+            <div class="exp-card-cat">${p.categoria || 'General'}</div>
+            <div class="exp-card-city">📍 ${p.ciudad || ''}, ${p.estado || ''}</div>
+            <div class="exp-card-rating"><span class="stars">⭐</span> ${cal.toFixed(1)} (${totalRes} reseñas)</div>
+            <a href="#" class="exp-card-btn" onclick="event.stopPropagation(); abrirPerfil('${p.id}'); return false;">Ver perfil</a>
+        </div>
+    </div>`;
+}
+
+// ==========================================
+// PERFIL DE PROVEEDOR (modal estilo Airbnb)
+// ==========================================
+let perfilActualId = null;
+let lightboxFotos = [];
+let lightboxIndex = 0;
+let resenaPagina = 1;
+const resenasPorPagina = 3;
+
+window.abrirPerfil = function(id) {
+    const p = buscarProveedorPorId(id);
+    if (!p) { mostrarToast('No se pudo cargar el perfil'); return; }
+    perfilActualId = id;
+    const body = document.getElementById('perfilBody');
+    const nombre = document.getElementById('perfilNombre');
+    nombre.textContent = p.nombreNegocio || 'Proveedor';
+
+    const fotos = p.fotos || [];
+    const favs = getFavoritos();
+    const isFav = favs.includes(id);
+
+    let badgeHtml = '';
+    if (p.plan === 'gold') badgeHtml = '<span class="perfil-badge gold">👑 Gold</span>';
+    else if (p.plan === 'pro') badgeHtml = '<span class="perfil-badge pro">⭐ Pro</span>';
+    badgeHtml += '<span class="perfil-badge verif">✅ Verificado</span>';
+
+    // Galería
+    let galHtml = '';
+    if (fotos.length === 0) {
+        galHtml = `<div class="perfil-galeria"><div class="perfil-gal-main">📷<div style="font-size:0.9rem;margin-top:0.5rem;">Sin fotos disponibles</div></div><div class="perfil-gal-side"><div class="perfil-gal-empty"></div><div class="perfil-gal-empty"></div><div class="perfil-gal-empty"></div><div class="perfil-gal-empty"></div></div></div>`;
+    } else {
+        const main = `<div class="perfil-gal-main" onclick="abrirLightbox(0)">${fotos[0] ? `<img src="${fotos[0]}" alt="Foto 1">` : '📷'}</div>`;
+        const thumbs = [];
+        for (let i = 1; i <= 4; i++) {
+            if (fotos[i]) {
+                thumbs.push(`<div class="perfil-gal-thumb" onclick="abrirLightbox(${i})"><img src="${fotos[i]}" alt="Foto ${i+1}"></div>`);
+            } else {
+                thumbs.push(`<div class="perfil-gal-empty"></div>`);
+            }
+        }
+        galHtml = `<div class="perfil-galeria">${main}<div class="perfil-gal-side">${thumbs.join('')}</div></div>`;
+    }
+
+    // Desglose calificación
+    const dc = p.desglose_calificacion || p.desgloseCalificacion || { puntualidad: 5, calidad: 5, atencion: 5, precio: 5 };
+    const barras = ['puntualidad', 'calidad', 'atencion', 'precio'].map(k => {
+        const val = dc[k] || 5;
+        const pct = (val / 5) * 100;
+        return `<div class="cal-barra-row"><span class="cal-barra-label">${k.charAt(0).toUpperCase() + k.slice(1)}</span><div class="cal-barra-track"><div class="cal-barra-fill" style="width:${pct}%"></div></div><span class="cal-barra-val">${val.toFixed(1)}</span></div>`;
+    }).join('');
+
+    // Reseñas
+    const resenas = p.resenas || [];
+    const totalRes = resenas.length;
+    const calProm = p.calificacion || 5;
+    resenaPagina = 1;
+    const resenasVisibles = resenas.slice(0, resenasPorPagina);
+    let resenasHtml = resenasVisibles.map(r => renderResenaItem(r)).join('');
+    if (resenasHtml === '') resenasHtml = '<p style="color:#888;font-size:0.9rem;">Aún no hay reseñas. ¡Sé el primero!</p>';
+    const verMasBtn = totalRes > resenasPorPagina ? `<div class="resena-ver-mas"><button onclick="verMasResenas()">Ver más reseñas</button></div>` : '';
+
+    // Servicios
+    const servicios = p.servicios || [];
+    const servHtml = servicios.length > 0 ? `<ul class="perfil-servicios">${servicios.map(s => `<li>${s}</li>`).join('')}</ul>` : '<p style="color:#888;font-size:0.9rem;">Información no disponible.</p>';
+
+    // Zona cobertura
+    const zona = p.zona_cobertura || p.zonaCobertura || [];
+    const zonaHtml = zona.length > 0 ? `<div class="perfil-zona">${zona.map(z => `<span>${z}</span>`).join('')}</div>` : '<p style="color:#888;font-size:0.9rem;">Información no disponible.</p>';
+
+    // Descripción
+    const desc = p.descripcion || '';
+    const descCorta = desc.length > 300 ? desc.substring(0, 300) + '...' : desc;
+    const descHtml = desc.length > 300 ? `<p id="descCorta">${descCorta} <a href="#" onclick="mostrarDescCompleta(); return false;" style="color:#FF6B9D;font-weight:600;">Leer más</a></p><p id="descCompleta" class="hidden">${desc}</p>` : `<p>${descCorta || 'Sin descripción disponible.'}</p>`;
+
+    // Similares
+    const similares = explorarProveedores.filter(x => x.id !== id && x.categoria === p.categoria).slice(0, 4);
+    let simHtml = '';
+    if (similares.length > 0) {
+        simHtml = `<div class="perfil-section"><h3>✨ Otros proveedores que te pueden interesar</h3><div class="similares-grid">${similares.map(s => {
+            const sf = s.fotos || [];
+            const cover = sf.length > 0 ? `<img src="${sf[0]}" alt="${s.nombreNegocio || ''}">` : '📷';
+            return `<div class="similar-card" onclick="abrirPerfil('${s.id}')"><div class="similar-card-cover">${cover}</div><div class="similar-card-body"><h4>${s.nombreNegocio || 'Proveedor'}</h4><p>⭐ ${(s.calificacion || 5).toFixed(1)} · ${s.ciudad || ''}</p></div></div>`;
+        }).join('')}</div></div>`;
+    }
+
+    // WhatsApp
+    const waNum = p.whatsapp || p.telefono || '';
+    const waHref = waNum ? `https://wa.me/${waNum}?text=Hola%20${encodeURIComponent(p.nombreNegocio || '')}%2C%20vi%20tu%20perfil%20en%20GoParty%20y%20me%20interesa%20cotizar%20un%20evento.` : '#';
+
+    body.innerHTML = `${galHtml}
+    <div class="perfil-info">
+        <h2>${p.nombreNegocio || 'Proveedor'}</h2>
+        <p class="perfil-subtitle">${p.categoria || 'General'} · ${p.ciudad || ''}, ${p.estado || ''}</p>
+        <div class="perfil-badge-row">${badgeHtml}<span class="perfil-rating-summary">⭐ ${calProm.toFixed(1)} · ${totalRes} reseñas</span></div>
+
+        <div class="perfil-section"><h3>Sobre mí</h3>${descHtml}</div>
+        <div class="perfil-section"><h3>Servicios que ofrezco</h3>${servHtml}</div>
+        <div class="perfil-section"><h3>Zona de cobertura</h3>${zonaHtml}</div>
+
+        <div class="perfil-section">
+            <h3>Calificación y Reseñas</h3>
+            <div class="cal-desglose">
+                <div class="cal-promedio">
+                    <div class="cal-promedio-num">${calProm.toFixed(1)}</div>
+                    <div class="cal-promedio-stars">${'⭐'.repeat(Math.round(calProm))}</div>
+                    <div class="cal-promedio-total">${totalRes} reseñas</div>
+                </div>
+                <div class="cal-barras">${barras}</div>
+            </div>
+            <button class="btn-dejar-resena" onclick="iniciarResena('${id}')">✍️ Dejar una reseña</button>
+            <h4 style="margin-bottom:0.8rem;color:#333;font-size:1rem;">Reseñas de clientes (${totalRes})</h4>
+            <div class="resena-list" id="resenaList">${resenasHtml}</div>
+            ${verMasBtn}
+        </div>
+
+        ${simHtml}
+    </div>
+    <div class="perfil-actions">
+        <a href="${waHref}" target="_blank" class="btn-wa-perfil">💬 Contactar por WhatsApp</a>
+        <a href="#" class="btn-cot-perfil" onclick="cerrarTodo(); abrirModal('modalCotizacion'); return false;">📋 Solicitar Cotización</a>
+        <button class="btn-fav-perfil ${isFav ? 'active' : ''}" id="btnFavPerfil" onclick="toggleFavoritoPerfil('${id}')">${isFav ? '❤️' : '♡'}</button>
+    </div>`;
+
+    abrirModal('modalPerfil');
+};
+
+window.mostrarDescCompleta = function() {
+    document.getElementById('descCorta').classList.add('hidden');
+    document.getElementById('descCompleta').classList.remove('hidden');
+};
+
+function renderResenaItem(r) {
+    const inicial = (r.cliente || r.nombreCliente || '?').charAt(0).toUpperCase();
+    const estrellas = '⭐'.repeat(r.estrellas || 5);
+    return `<div class="resena-item">
+        <div class="resena-item-header">
+            <div class="resena-avatar">${inicial}</div>
+            <div class="resena-autor-info"><h4>${r.cliente || r.nombreCliente || 'Cliente'}</h4><span>${r.fecha || ''}</span></div>
+            <span class="resena-stars">${estrellas}</span>
+        </div>
+        <p class="resena-texto">${r.comentario || ''}</p>
+    </div>`;
+}
+
+window.verMasResenas = function() {
+    resenaPagina++;
+    const p = buscarProveedorPorId(perfilActualId);
+    if (!p) return;
+    const resenas = p.resenas || [];
+    const visibles = resenas.slice(0, resenaPagina * resenasPorPagina);
+    const list = document.getElementById('resenaList');
+    list.innerHTML = visibles.map(r => renderResenaItem(r)).join('');
+    if (resenas.length <= visibles.length) {
+        const btn = document.querySelector('.resena-ver-mas');
+        if (btn) btn.style.display = 'none';
+    }
+};
+
+window.toggleFavoritoPerfil = function(id) {
+    let favs = getFavoritos();
+    const idx = favs.indexOf(id);
+    if (idx >= 0) favs.splice(idx, 1); else favs.push(id);
+    saveFavoritos(favs);
+    const btn = document.getElementById('btnFavPerfil');
+    if (btn) { btn.classList.toggle('active', favs.includes(id)); btn.textContent = favs.includes(id) ? '❤️' : '♡'; }
+    mostrarToast(favs.includes(id) ? '♡ Agregado a favoritos' : '♡ Quitado de favoritos');
+};
+
+// ==========================================
+// LIGHTBOX
+// ==========================================
+window.abrirLightbox = function(index) {
+    const p = buscarProveedorPorId(perfilActualId);
+    if (!p) return;
+    lightboxFotos = p.fotos || [];
+    if (lightboxFotos.length === 0) return;
+    lightboxIndex = index;
+    mostrarLightboxImg();
+    document.getElementById('lightbox').classList.add('active');
+};
+
+window.cerrarLightbox = function() {
+    document.getElementById('lightbox').classList.remove('active');
+};
+
+window.navegarLightbox = function(dir) {
+    lightboxIndex = (lightboxIndex + dir + lightboxFotos.length) % lightboxFotos.length;
+    mostrarLightboxImg();
+};
+
+function mostrarLightboxImg() {
+    document.getElementById('lightboxImg').src = lightboxFotos[lightboxIndex] || '';
+    document.getElementById('lightboxCounter').textContent = `${lightboxIndex + 1} de ${lightboxFotos.length}`;
+}
+
+document.addEventListener('keydown', (e) => {
+    const lb = document.getElementById('lightbox');
+    if (lb && lb.classList.contains('active')) {
+        if (e.key === 'ArrowLeft') navegarLightbox(-1);
+        if (e.key === 'ArrowRight') navegarLightbox(1);
+        if (e.key === 'Escape') cerrarLightbox();
+    }
+});
+
+// ==========================================
+// RESEÑA FORM
+// ==========================================
+let resenaCategorias = { puntualidad: 0, calidad: 0, atencion: 0, precio: 0 };
+
+window.iniciarResena = function(provId) {
+    if (!usuarioLogueado) {
+        mostrarToast('Debes iniciar sesión para dejar una reseña');
+        abrirModal('modalAuth');
+        return;
+    }
+    const p = buscarProveedorPorId(provId);
+    const contratados = JSON.parse(localStorage.getItem('goparty_contratados') || '{}');
+    const haContratado = usuarioLogueado.ha_contratado || contratados[provId];
+    if (!haContratado) {
+        const msg = document.getElementById('resenaMsg');
+        msg.textContent = 'Solo los clientes que han contratado este servicio pueden dejar una reseña.';
+        msg.style.color = '#FF6B9D';
+        abrirModal('modalResena');
+        return;
+    }
+    resenaCategorias = { puntualidad: 0, calidad: 0, atencion: 0, precio: 0 };
+    document.getElementById('resenaTexto').value = '';
+    const msg = document.getElementById('resenaMsg');
+    msg.textContent = '';
+    document.querySelectorAll('.star-input').forEach(si => {
+        const cat = si.getAttribute('data-cat');
+        si.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.textContent = '☆';
+            star.onclick = () => setStarInput(cat, i);
+            si.appendChild(star);
+        }
+    });
+    abrirModal('modalResena');
+};
+
+function setStarInput(cat, val) {
+    resenaCategorias[cat] = val;
+    const si = document.querySelector('.star-input[data-cat="' + cat + '"]');
+    if (!si) return;
+    si.querySelectorAll('span').forEach((s, i) => {
+        s.textContent = i < val ? '⭐' : '☆';
+        s.classList.toggle('filled', i < val);
+    });
+}
+
+window.enviarResena = function() {
+    for (const k of ['puntualidad', 'calidad', 'atencion', 'precio']) {
+        if (resenaCategorias[k] === 0) {
+            const msg = document.getElementById('resenaMsg');
+            msg.textContent = 'Califica las 4 categorías'; msg.style.color = '#FF6B9D';
+            return;
+        }
+    }
+    const texto = document.getElementById('resenaTexto').value.trim();
+    if (!texto) {
+        const msg = document.getElementById('resenaMsg');
+        msg.textContent = 'Escribe tu experiencia'; msg.style.color = '#FF6B9D';
+        return;
+    }
+    const p = buscarProveedorPorId(perfilActualId);
+    if (!p) return;
+    const prom = (resenaCategorias.puntualidad + resenaCategorias.calidad + resenaCategorias.atencion + resenaCategorias.precio) / 4;
+    const nuevaResena = {
+        cliente: usuarioLogueado.nombre,
+        fecha: new Date().toLocaleDateString('es-MX', { month: 'long', year: 'numeric' }),
+        estrellas: Math.round(prom),
+        comentario: texto
+    };
+    if (!p.resenas) p.resenas = [];
+    p.resenas.unshift(nuevaResena);
+    p.total_resenas = (p.total_resenas || 0) + 1;
+    p.calificacion = p.resenas.reduce((s, r) => s + (r.estrellas || 5), 0) / p.resenas.length;
+    if (p.desglose_calificacion) {
+        p.desglose_calificacion.puntualidad = (p.desglose_calificacion.puntualidad * (p.total_resenas - 1) + resenaCategorias.puntualidad) / p.total_resenas;
+        p.desglose_calificacion.calidad = (p.desglose_calificacion.calidad * (p.total_resenas - 1) + resenaCategorias.calidad) / p.total_resenas;
+        p.desglose_calificacion.atencion = (p.desglose_calificacion.atencion * (p.total_resenas - 1) + resenaCategorias.atencion) / p.total_resenas;
+        p.desglose_calificacion.precio = (p.desglose_calificacion.precio * (p.total_resenas - 1) + resenaCategorias.precio) / p.total_resenas;
+    }
+    const msg = document.getElementById('resenaMsg');
+    msg.textContent = '✅ ¡Gracias por tu reseña!'; msg.style.color = '#6BCB77';
+    setTimeout(() => { cerrarTodo(); abrirPerfil(perfilActualId); }, 1200);
+};
+
 window.mostrarExplorar = async function() {
     document.getElementById('explorarView').classList.add('active');
     if (explorarProveedores.length === 0) {
@@ -495,23 +982,7 @@ function renderExplorar() {
         return;
     }
 
-    grid.innerHTML = paginaItems.map(p => {
-        let badge = '', coverClass = '';
-        if (p.plan === 'gold') { badge = '<span class="exp-card-badge gold">👑 Gold</span>'; coverClass = 'gold'; }
-        else if (p.plan === 'pro') { badge = '<span class="exp-card-badge pro">⭐ Pro</span>'; coverClass = 'pro'; }
-        else { badge = '<span class="exp-card-badge basic">✓ Verificado</span>'; }
-        const estrellas = '⭐'.repeat(Math.round(p.calificacion || 5));
-        return `<div class="exp-card" onclick="abrirModal('modalProveedor')">
-            <div class="exp-card-cover ${coverClass}">📷${badge}</div>
-            <div class="exp-card-body">
-                <div class="exp-card-name">${p.nombreNegocio || 'Proveedor'}</div>
-                <div class="exp-card-cat">${p.categoria || 'General'}</div>
-                <div class="exp-card-rating">${estrellas} ${p.calificacion || '5.0'}</div>
-                <div class="exp-card-city">📍 ${p.ciudad || ''}, ${p.estado || ''}</div>
-                <a href="#" class="exp-card-btn" onclick="event.stopPropagation();return false;">Ver perfil</a>
-            </div>
-        </div>`;
-    }).join('');
+    grid.innerHTML = paginaItems.map(p => renderTarjetaAirbnb(p)).join('');
 
     renderPaginacion(total);
 }
@@ -557,4 +1028,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     cargarProveedores();
     cargarBlog();
     document.getElementById('btnVistaGrid').classList.add('active');
+    actualizarContadorFav();
+    cargarSesion();
 });

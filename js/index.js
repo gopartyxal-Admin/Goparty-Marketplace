@@ -1,4 +1,4 @@
-import { addDoc, collection, db, doc, getDoc, getDocs, query, where } from "../firebase-config.js";
+import { addDoc, auth, collection, db, doc, getDoc, getDocs, provider, query, signInWithPopup, where } from "../firebase-config.js";
 
 let demoData = null;
 let tipoRegistroSeleccionado = 'cliente';
@@ -1129,14 +1129,21 @@ function renderMatchingResults(service, budget) {
 // COTIZACIÓN: presupuesto por servicio
 // ==========================================
 const cotServiceBudgets = {};
+let cotGmailConnected = false;
 
 function renderCotBudgets() {
     const container = document.getElementById('cotBudgetServices');
     if (!container) return;
-    const services = Array.from(document.querySelectorAll('input[name="servicios"]:checked')).map(i => i.value);
-    services.forEach(s => { if (cotServiceBudgets[s] === undefined) cotServiceBudgets[s] = 0; });
-    container.innerHTML = services.map(s => `<label class="cot-budget-row"><span>${s}</span><input type="number" min="0" step="500" data-budget-service="${s}" value="${cotServiceBudgets[s]}" placeholder="0"><strong>$<span data-budget-value="${s}">${Number(cotServiceBudgets[s]).toLocaleString('es-MX')}</span></strong></label>`).join('');
-    container.querySelectorAll('[data-budget-service]').forEach(inp => inp.addEventListener('input', () => { cotServiceBudgets[inp.dataset.budgetService] = Number(inp.value) || 0; actualizarTotalCotizacion(); }));
+    const services = Array.from(document.querySelectorAll('input[name="servicios"]:checked')).map(input => input.value);
+    services.forEach(service => { if (cotServiceBudgets[service] === undefined) cotServiceBudgets[service] = 0; });
+    container.innerHTML = services.map(service => `<div class="cot-budget-row"><span>${service}</span><input type="number" min="0" step="500" data-budget-service="${service}" value="${cotServiceBudgets[service]}" placeholder="$0"><label class="cot-photo-cell"><input type="file" accept="image/*" data-budget-photo="${service}" aria-label="Fotografía de referencia para ${service}"><span>Elegir imagen</span><div class="cot-row-preview" data-budget-preview="${service}"></div></label></div>`).join('');
+    container.querySelectorAll('[data-budget-service]').forEach(input => input.addEventListener('input', () => { cotServiceBudgets[input.dataset.budgetService] = Number(input.value) || 0; actualizarTotalCotizacion(); }));
+    container.querySelectorAll('[data-budget-photo]').forEach(input => input.addEventListener('change', () => {
+        const preview = container.querySelector(`[data-budget-preview="${input.dataset.budgetPhoto}"]`);
+        preview.innerHTML = '';
+        const file = input.files?.[0];
+        if (file) { const image = document.createElement('img'); image.src = URL.createObjectURL(file); image.alt = `Referencia de ${input.dataset.budgetPhoto}`; preview.appendChild(image); }
+    }));
     actualizarTotalCotizacion();
 }
 
@@ -1160,10 +1167,29 @@ function inicializarNuevosFlujos() {
     range?.addEventListener('input', () => { val.textContent = `${Number(range.value).toLocaleString('es-MX')} MXN`; });
     document.getElementById('matchSubmit')?.addEventListener('click', () => renderMatchingResults(matchService, Number(range?.value || 15000)));
 
-    document.getElementById('cotReferencias')?.addEventListener('change', (e) => {
-        const preview = document.getElementById('cotReferencePreview');
-        preview.innerHTML = '';
-        Array.from(e.target.files || []).slice(0, 6).forEach(f => { const img = document.createElement('img'); img.src = URL.createObjectURL(f); img.alt = 'Referencia'; preview.appendChild(img); });
+    document.querySelectorAll('input[name="tipoEvento"]').forEach(input => input.addEventListener('change', () => {
+        document.getElementById('otroEventoWrap')?.classList.toggle('hidden', input.value !== 'Otro' || !input.checked);
+    }));
+    document.querySelectorAll('input[name="cotAuthMethod"]').forEach(input => input.addEventListener('change', () => {
+        const password = document.getElementById('cotPassword');
+        password.disabled = input.value === 'gmail';
+        password.required = input.value === 'password';
+    }));
+    document.getElementById('cotGmailButton')?.addEventListener('click', async () => {
+        const button = document.getElementById('cotGmailButton');
+        try {
+            button.disabled = true;
+            const result = await signInWithPopup(auth, provider);
+            document.getElementById('cotEmail').value = result.user.email || '';
+            document.querySelector('input[name="cotAuthMethod"][value="gmail"]').checked = true;
+            document.getElementById('cotPassword').disabled = true;
+            cotGmailConnected = true;
+            button.textContent = 'Gmail conectado';
+        } catch {
+            button.disabled = false;
+            cotGmailConnected = false;
+            button.textContent = 'No se pudo conectar con Gmail';
+        }
     });
 
     const originalNext = window.cotSiguiente;
@@ -1176,9 +1202,22 @@ function inicializarNuevosFlujos() {
     window.enviarCotizacion = async function() {
         const whatsapp = document.getElementById('cotWhatsapp').value.trim();
         const email = document.getElementById('cotEmail').value.trim();
+        const password = document.getElementById('cotPassword').value;
+        const authMethod = document.querySelector('input[name="cotAuthMethod"]:checked')?.value || 'password';
         const total = Object.values(cotServiceBudgets).reduce((s, v) => s + Number(v || 0), 0);
-        if (!/^\d{10}$/.test(whatsapp) || !email || total <= 0) { alert('Completa tus datos y asigna un presupuesto.'); return; }
-        const payload = { usuario_id: usuarioLogueado?.id || null, tipoEvento: document.querySelector('input[name="tipoEvento"]:checked')?.value || '', servicios: Object.entries(cotServiceBudgets).filter(([, v]) => Number(v) > 0).map(([nombre, presupuesto]) => ({ nombre, presupuesto })), fecha: document.getElementById('cotFecha').value, presupuesto_total: total, whatsapp, email, estado: 'Pendiente', fechaSolicitud: new Date().toISOString() };
+        const evento = document.querySelector('input[name="tipoEvento"]:checked')?.value || '';
+        const otroEvento = document.getElementById('otroEventoTexto')?.value.trim() || '';
+        if (evento === 'Otro' && !otroEvento) { alert('Describe qué tipo de evento estás organizando.'); return; }
+        if (!/^\d{10}$/.test(whatsapp) || !email || total <= 0) { alert('Completa tu correo, WhatsApp y presupuesto.'); return; }
+        if (authMethod === 'password' && password.length < 6) { alert('La contraseña debe tener al menos 6 caracteres.'); return; }
+        if (authMethod === 'gmail' && !cotGmailConnected) { alert('Pulsa “Continuar con Gmail” para autenticar tu cuenta.'); return; }
+        if (authMethod === 'password' && !usuarioLogueado) {
+            const users = JSON.parse(localStorage.getItem('goparty_usuarios') || '[]');
+            const existing = users.find(user => user.email.toLowerCase() === email.toLowerCase());
+            if (existing && existing.password !== password) { alert('El correo ya tiene otra contraseña. Inicia sesión primero.'); return; }
+            if (!existing) { users.push({ id: `local-${Date.now()}`, nombre: email.split('@')[0], email, password, whatsapp, tipo: 'cliente', eventos_completados: [], favoritos: [] }); localStorage.setItem('goparty_usuarios', JSON.stringify(users)); }
+        }
+        const payload = { usuario_id: usuarioLogueado?.id || null, tipoEvento: evento, otroEvento, servicios: Object.entries(cotServiceBudgets).filter(([, value]) => Number(value) > 0).map(([nombre, presupuesto]) => ({ nombre, presupuesto })), fecha: document.getElementById('cotFecha').value, presupuesto_total: total, whatsapp, email, authMethod, estado: 'Pendiente', fechaSolicitud: new Date().toISOString() };
         try { await addDoc(collection(db, 'solicitudes'), payload); }
         catch { const saved = JSON.parse(localStorage.getItem('goparty_cotizaciones') || '[]'); saved.push(payload); localStorage.setItem('goparty_cotizaciones', JSON.stringify(saved)); }
         document.querySelectorAll('.cot-step').forEach(s => s.classList.add('hidden'));

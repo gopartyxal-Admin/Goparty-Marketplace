@@ -90,8 +90,8 @@
             </div>
 
             <div class="hero-actions">
-                <button class="btn-recomendar" onclick="abrirModal('modalMatching')">✨ Recomiéndame un plan</button>
-                <button class="btn-recomendar btn-recomendar-outline" onclick="abrirModal('modalProveedor')">🚀 Me gustaría ser proveedor</button>
+                <a class="btn-recomendar btn-promociones" href="promociones.html">✨ Recomiéndame un plan</a>
+                <button class="btn-recomendar btn-proveedor-hero" onclick="abrirModal('modalProveedor')">🚀 Quiero ser proveedor</button>
             </div>
         </section>
 
@@ -338,8 +338,9 @@
                         <label class="cot-option"><input type="radio" name="tipoEvento" value="Cumpleaños"> 🎂 Cumpleaños</label>
                         <label class="cot-option"><input type="radio" name="tipoEvento" value="Corporativo"> 🏢 Corporativo</label>
                         <label class="cot-option"><input type="radio" name="tipoEvento" value="Infantil"> 🧒 Infantil</label>
-                        <label class="cot-option"><input type="radio" name="tipoEvento" value="Otro"> 📋 Otro</label>
+                        <label class="cot-option"><input type="radio" name="tipoEvento" value="Otro" id="tipoEventoOtro"> 📋 Otro</label>
                     </div>
+                    <div id="otroEventoWrap" class="cot-other-wrap hidden"><label for="otroEventoTexto">¿Qué tipo de evento estás organizando?</label><input id="otroEventoTexto" type="text" maxlength="100" placeholder="Ej. aniversario, graduación, lanzamiento..."></div>
                     <button class="btn-next" onclick="cotSiguiente(1)">Siguiente →</button>
                 </div>
 
@@ -377,10 +378,7 @@
                         </div>
                     </div>
                     <div class="cot-budget-header"><span>Distribuye tu presupuesto por servicio</span><small>Los proveedores recibirán estos montos</small></div>
-                    <div id="cotBudgetServices" class="cot-budget-services"></div>
-                    <label class="cot-upload-label" for="cotReferencias">📷 Imágenes de referencia (opcional)</label>
-                    <input type="file" id="cotReferencias" class="cot-file-input" accept="image/*" multiple>
-                    <div id="cotReferencePreview" class="cot-reference-preview"></div>
+                    <div class="cot-budget-table"><div class="cot-budget-table-head"><span>Concepto o servicio</span><span>Presupuesto</span><span>Fotografía de ejemplo</span></div><div id="cotBudgetServices" class="cot-budget-services"></div></div>
                     <div class="cot-nav">
                         <button class="btn-prev" onclick="cotAtras(3)">← Anterior</button>
                         <button class="btn-next" onclick="cotSiguiente(3)">Siguiente →</button>
@@ -389,17 +387,9 @@
 
                 <!-- Paso 4 -->
                 <div class="cot-step hidden" id="cotStep4">
-                    <h3>Datos de contacto</h3>
-                    <div class="cot-form-fields">
-                        <div class="cot-field">
-                            <label>📱 WhatsApp</label>
-                            <input type="tel" id="cotWhatsapp" placeholder="Ej: 2281234567">
-                        </div>
-                        <div class="cot-field">
-                            <label>📧 Email</label>
-                            <input type="email" id="cotEmail" placeholder="tu@email.com">
-                        </div>
-                    </div>
+                    <h3>Crea tu cuenta para recibir propuestas</h3><p class="cot-auth-intro">Regístrate con contraseña o continúa con Gmail para guardar tu solicitud.</p>
+                    <div class="cot-auth-choice"><label><input type="radio" name="cotAuthMethod" value="password" checked> Contraseña</label><label><input type="radio" name="cotAuthMethod" value="gmail"> Gmail</label></div>
+                    <div class="cot-form-fields"><div class="cot-field"><label>📧 Correo electrónico</label><input type="email" id="cotEmail" placeholder="tu@gmail.com" required></div><div class="cot-field"><label>🔒 Contraseña</label><input type="password" id="cotPassword" placeholder="Mínimo 6 caracteres" minlength="6"></div><div class="cot-field cot-field-full"><label>📱 WhatsApp (10 dígitos)</label><input type="tel" id="cotWhatsapp" placeholder="2281234567" pattern="[0-9]{10}" maxlength="10" required></div></div><button type="button" class="btn-gmail" id="cotGmailButton">Continuar con Gmail</button>
                     <div class="cot-nav">
                         <button class="btn-prev" onclick="cotAtras(4)">← Anterior</button>
                         <button class="btn-enviar" onclick="enviarCotizacion()">Enviar solicitud</button>

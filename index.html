@@ -24,6 +24,7 @@
             </div>
         </div>
         <div class="topbar-right">
+            <button class="btn-explorar" onclick="mostrarExplorar()">Explorar</button>
             <button class="btn-cotizar" onclick="abrirModal('modalCotizacion')">Solicitar Cotización</button>
             <button class="btn-proveedor" onclick="abrirModal('modalProveedor')">Soy Proveedor</button>
             <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
@@ -70,7 +71,7 @@
                 <button class="btn-buscar" onclick="filtrarProveedores()">🔍 Buscar Proveedores</button>
             </div>
 
-            <button class="btn-recomendar" onclick="recomendarPlan()">✨ Recomiéndame un plan</button>
+            <button class="btn-recomendar" onclick="abrirModal('modalProveedor')">🚀 Me gustaría ser proveedor</button>
         </section>
 
         <!-- Grid de comandos -->
@@ -94,6 +95,11 @@
                 <div class="command-icon">❓</div>
                 <h3>FAQ</h3>
                 <p>Resolvemos tus dudas más comunes</p>
+            </div>
+            <div class="command-card" onclick="abrirModal('modalQuienesSomos')">
+                <div class="command-icon">👥</div>
+                <h3>Quiénes Somos</h3>
+                <p>Conoce la magia detrás de GoParty</p>
             </div>
         </section>
     </main>
@@ -159,6 +165,29 @@
             <div class="ciudades-grid" id="ciudadesGrid"></div>
         </div>
     </aside>
+
+    <!-- ===================== MODAL: QUIÉNES SOMOS ===================== -->
+    <div class="modal" id="modalQuienesSomos">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>¿Cómo funciona GoParty?</h2>
+                <button class="modal-close" onclick="cerrarTodo()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="pasos-grid">
+                    <div class="paso-card"><div class="paso-numero">1</div><h3>Busca</h3><p>Filtra por categoría, ciudad y tipo de servicio. Solo verificados, solo los mejores.</p></div>
+                    <div class="paso-card"><div class="paso-numero">2</div><h3>Compara</h3><p>Revisa perfiles, insignias Gold/Pro y elige al proveedor ideal para tu evento.</p></div>
+                    <div class="paso-card"><div class="paso-numero">3</div><h3>Contacta</h3><p>Conecta directo por WhatsApp. Sin intermediarios, sin comisiones ocultas.</p></div>
+                </div>
+                <div class="estadisticas-container">
+                    <div class="estadistica-item"><div class="estadistica-icono">🎉</div><div class="estadistica-numero" id="statEventos2">0</div><div class="estadistica-label">Eventos Realizados</div></div>
+                    <div class="estadistica-item"><div class="estadistica-icono">⭐</div><div class="estadistica-numero" id="statProveedores2">0</div><div class="estadistica-label">Proveedores Verificados</div></div>
+                    <div class="estadistica-item"><div class="estadistica-icono">💯</div><div class="estadistica-numero" id="statSatisfaccion2">0</div><div class="estadistica-label">% Satisfacción</div></div>
+                    <div class="estadistica-item"><div class="estadistica-icono">🏙️</div><div class="estadistica-numero" id="statCiudades2">0</div><div class="estadistica-label">Ciudades Activas</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ===================== MODAL: CÓMO FUNCIONA ===================== -->
     <div class="modal" id="modalComoFunciona">
@@ -352,6 +381,71 @@
         </div>
     </div>
 
+    <!-- ===================== VISTA EXPLORAR (tipo Booking) ===================== -->
+    <div class="explorar-view" id="explorarView">
+        <!-- Barra superior de Explorar -->
+        <div class="explorar-topbar">
+            <button class="btn-volver" onclick="ocultarExplorar()">← Volver</button>
+            <h2 class="explorar-title">Explorar Proveedores</h2>
+            <div class="explorar-controls">
+                <select id="expSort" onchange="aplicarFiltrosExplorar()">
+                    <option value="relevancia">Relevancia</option>
+                    <option value="calificacion">Calificación</option>
+                    <option value="recientes">Más recientes</option>
+                </select>
+                <button class="btn-vista" id="btnVistaGrid" onclick="cambiarVistaExplorar('grid')" title="Vista cuadrícula">▦</button>
+                <button class="btn-vista" id="btnVistaList" onclick="cambiarVistaExplorar('list')" title="Vista lista">☰</button>
+            </div>
+        </div>
+
+        <div class="explorar-body">
+            <!-- Panel de filtros izquierdo -->
+            <aside class="exp-filters">
+                <h3>Filtros</h3>
+                <div class="exp-filter-group">
+                    <label class="exp-filter-label">Categoría</label>
+                    <div class="exp-checkbox-list" id="expFilterCategorias"></div>
+                </div>
+                <div class="exp-filter-group">
+                    <label class="exp-filter-label">Ubicación</label>
+                    <select id="expFilterEstado" onchange="actualizarCiudadesExplorar()">
+                        <option value="">Todos los estados</option>
+                    </select>
+                    <select id="expFilterCiudad">
+                        <option value="">Todas las ciudades</option>
+                    </select>
+                </div>
+                <div class="exp-filter-group">
+                    <label class="exp-filter-label">Insignia</label>
+                    <div class="exp-checkbox-list">
+                        <label class="exp-check"><input type="checkbox" class="exp-insignia" value="gold"> 👑 Gold</label>
+                        <label class="exp-check"><input type="checkbox" class="exp-insignia" value="pro"> ⭐ Pro</label>
+                        <label class="exp-check"><input type="checkbox" class="exp-insignia" value="basic"> ✓ Verificado</label>
+                    </div>
+                </div>
+                <div class="exp-filter-group">
+                    <label class="exp-filter-label">Calificación mínima</label>
+                    <select id="expFilterCalificacion">
+                        <option value="0">Todas</option>
+                        <option value="5">⭐ 5 estrellas</option>
+                        <option value="4">⭐ 4 o más</option>
+                        <option value="3">⭐ 3 o más</option>
+                    </select>
+                </div>
+                <button class="btn-aplicar-filtros" onclick="aplicarFiltrosExplorar()">Aplicar Filtros</button>
+            </aside>
+
+            <!-- Área de resultados -->
+            <div class="exp-results">
+                <div class="exp-results-header">
+                    <span id="expCounter">Mostrando 0 de 0 proveedores</span>
+                </div>
+                <div class="exp-grid" id="expGrid"></div>
+                <div class="exp-pagination" id="expPagination"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===================== SIDEBAR MÓVIL ===================== -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -359,7 +453,7 @@
             <button class="close-btn" id="closeBtn">&times;</button>
         </div>
         <div class="sidebar-links">
-            <a href="index.html">🔍 Explorar</a>
+            <a href="#" onclick="mostrarExplorar(); cerrarSidebar(); return false;">🔍 Explorar</a>
             <a href="#" onclick="abrirModal('modalCotizacion'); cerrarSidebar(); return false;">📝 Solicitar Cotización</a>
             <a href="unete.html">🎉 Únete a GoParty</a>
             <a href="dashboard.html">👤 Soy Proveedor</a>

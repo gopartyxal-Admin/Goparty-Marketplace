@@ -176,21 +176,21 @@ async function cargarConfiguracion() {
                 document.getElementById('whatsappFloat').href = `https://wa.me/${data.whatsapp}?text=Hola%20GoParty%2C%20necesito%20información`;
             }
             if (data.modoStats === 'manual') {
-                document.getElementById('statEventos').textContent = (data.eventosManual || 0) + '+';
-                document.getElementById('statSatisfaccion').textContent = (data.satisfaccionManual || 0) + '%';
+                setStat('statEventos', (data.eventosManual || 0) + '+');
+                setStat('statSatisfaccion', (data.satisfaccionManual || 0) + '%');
             } else {
                 const proveedoresSnap = await getDocs(collection(db, "proveedores"));
                 const verificados = proveedoresSnap.docs.filter(d => d.data().estadoVerificacion === 'Verificado').length;
                 const ciudadesCount = [...new Set(proveedoresSnap.docs.map(d => d.data().ciudad).filter(c => c))];
                 const cotizacionesSnap = await getDocs(collection(db, "solicitudes"));
-                document.getElementById('statEventos').textContent = cotizacionesSnap.size + '+';
-                document.getElementById('statProveedores').textContent = verificados + '+';
-                document.getElementById('statSatisfaccion').textContent = '98%';
-                document.getElementById('statCiudades').textContent = ciudadesCount.length + '+';
+                setStat('statEventos', cotizacionesSnap.size + '+');
+                setStat('statProveedores', verificados + '+');
+                setStat('statSatisfaccion', '98%');
+                setStat('statCiudades', ciudadesCount.length + '+');
             }
         } else {
-            document.getElementById('statProveedores').textContent = '0+';
-            document.getElementById('statCiudades').textContent = '0+';
+            setStat('statProveedores', '0+');
+            setStat('statCiudades', '0+');
         }
     } catch (error) { console.error("Error cargando config:", error); }
 }
@@ -328,30 +328,6 @@ window.filtrarPorCategoria = function(categoria) {
 };
 
 // ==========================================
-// RECOMENDAR PLAN
-// ==========================================
-window.recomendarPlan = function() {
-    const categoria = document.getElementById('filterCategoria').value;
-    const estado = document.getElementById('filterEstado').value;
-    const mensajes = [
-        '🌟 Te recomendamos el plan Gold: máxima visibilidad, borde dorado y soporte prioritario.',
-        '⭐ El plan Pro es ideal: sello verificado y mayor visibilidad para tu evento.',
-        '✨ Basado en tu búsqueda, te conectaremos con los mejores proveedores verificados de tu zona.'
-    ];
-    const msg = categoria && estado ? mensajes[0] : categoria || estado ? mensajes[1] : mensajes[2];
-    abrirModal('modalProveedor');
-    setTimeout(() => {
-        const modalBody = document.querySelector('#modalProveedor .modal-body');
-        if (modalBody) {
-            const recDiv = document.createElement('div');
-            recDiv.style.cssText = 'background:#f5f7fa;padding:1rem;border-radius:10px;margin-bottom:1rem;font-weight:600;color:#333;';
-            recDiv.textContent = msg;
-            modalBody.insertBefore(recDiv, modalBody.firstChild);
-        }
-    }, 100);
-};
-
-// ==========================================
 // ENVIAR COTIZACIÓN
 // ==========================================
 window.enviarCotizacion = async function() {
@@ -406,6 +382,173 @@ document.getElementById('topbarSearch').addEventListener('keypress', (e) => {
 });
 
 // ==========================================
+// VISTA EXPLORAR (tipo Booking)
+// ==========================================
+let explorarProveedores = [];
+let explorarFiltrados = [];
+let explorarPagina = 1;
+const explorarPorPagina = 12;
+let explorarVista = 'grid';
+
+function setStat(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+    const el2 = document.getElementById(id + '2');
+    if (el2) el2.textContent = val;
+}
+
+window.mostrarExplorar = async function() {
+    document.getElementById('explorarView').classList.add('active');
+    if (explorarProveedores.length === 0) {
+        await cargarProveedoresExplorar();
+    }
+};
+
+window.ocultarExplorar = function() {
+    document.getElementById('explorarView').classList.remove('active');
+};
+
+async function cargarProveedoresExplorar() {
+    const grid = document.getElementById('expGrid');
+    grid.innerHTML = '<div class="loading-msg" style="grid-column:1/-1;">Cargando proveedores...</div>';
+    try {
+        const snap = await getDocs(collection(db, "proveedores"));
+        explorarProveedores = [];
+        snap.forEach(doc => {
+            const d = doc.data();
+            if (d.estadoVerificacion === 'Verificado') {
+                explorarProveedores.push({ id: doc.id, ...d });
+            }
+        });
+        llenarFiltrosExplorar();
+        aplicarFiltrosExplorar();
+    } catch (error) {
+        grid.innerHTML = '<div class="loading-msg" style="grid-column:1/-1;">Error al cargar.</div>';
+    }
+}
+
+function llenarFiltrosExplorar() {
+    const cats = [...new Set(explorarProveedores.map(p => p.categoria).filter(c => c))];
+    const cont = document.getElementById('expFilterCategorias');
+    cont.innerHTML = cats.map(c => `<label class="exp-check"><input type="checkbox" class="exp-cat" value="${c}"> ${c}</label>`).join('');
+
+    const estados = [...new Set(explorarProveedores.map(p => p.estado).filter(e => e))];
+    const selEstado = document.getElementById('expFilterEstado');
+    while (selEstado.options.length > 1) selEstado.remove(1);
+    estados.forEach(e => { const o = document.createElement('option'); o.value = e; o.textContent = e; selEstado.appendChild(o); });
+}
+
+window.actualizarCiudadesExplorar = function() {
+    const estado = document.getElementById('expFilterEstado').value;
+    const selCiudad = document.getElementById('expFilterCiudad');
+    while (selCiudad.options.length > 1) selCiudad.remove(1);
+    const ciudades = [...new Set(explorarProveedores.filter(p => !estado || p.estado === estado).map(p => p.ciudad).filter(c => c))];
+    ciudades.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; selCiudad.appendChild(o); });
+};
+
+window.aplicarFiltrosExplorar = function() {
+    const catsSel = Array.from(document.querySelectorAll('.exp-cat:checked')).map(c => c.value);
+    const estado = document.getElementById('expFilterEstado').value;
+    const ciudad = document.getElementById('expFilterCiudad').value;
+    const insignias = Array.from(document.querySelectorAll('.exp-insignia:checked')).map(c => c.value);
+    const calMin = parseInt(document.getElementById('expFilterCalificacion').value) || 0;
+    const sort = document.getElementById('expSort').value;
+
+    explorarFiltrados = explorarProveedores.filter(p => {
+        if (catsSel.length > 0 && !catsSel.includes(p.categoria)) return false;
+        if (estado && p.estado !== estado) return false;
+        if (ciudad && p.ciudad !== ciudad) return false;
+        if (insignias.length > 0 && !insignias.includes(p.plan || 'basic')) return false;
+        if (calMin > 0 && (p.calificacion || 0) < calMin) return false;
+        return true;
+    });
+
+    if (sort === 'calificacion') {
+        explorarFiltrados.sort((a, b) => (b.calificacion || 0) - (a.calificacion || 0));
+    } else if (sort === 'recientes') {
+        explorarFiltrados.sort((a, b) => new Date(b.fechaRegistro || 0) - new Date(a.fechaRegistro || 0));
+    } else {
+        explorarFiltrados.sort((a, b) => {
+            const rA = a.planRank || (a.plan === 'gold' ? 3 : a.plan === 'pro' ? 2 : 1);
+            const rB = b.planRank || (b.plan === 'gold' ? 3 : b.plan === 'pro' ? 2 : 1);
+            return rB - rA;
+        });
+    }
+
+    explorarPagina = 1;
+    renderExplorar();
+};
+
+function renderExplorar() {
+    const grid = document.getElementById('expGrid');
+    const counter = document.getElementById('expCounter');
+    const total = explorarFiltrados.length;
+    const inicio = (explorarPagina - 1) * explorarPorPagina;
+    const fin = Math.min(inicio + explorarPorPagina, total);
+    const paginaItems = explorarFiltrados.slice(inicio, fin);
+
+    counter.textContent = `Mostrando ${total > 0 ? inicio + 1 : 0}-${fin} de ${total} proveedores`;
+
+    if (paginaItems.length === 0) {
+        grid.innerHTML = '<div class="loading-msg" style="grid-column:1/-1;">No se encontraron proveedores con estos filtros.</div>';
+        document.getElementById('expPagination').innerHTML = '';
+        return;
+    }
+
+    grid.innerHTML = paginaItems.map(p => {
+        let badge = '', coverClass = '';
+        if (p.plan === 'gold') { badge = '<span class="exp-card-badge gold">👑 Gold</span>'; coverClass = 'gold'; }
+        else if (p.plan === 'pro') { badge = '<span class="exp-card-badge pro">⭐ Pro</span>'; coverClass = 'pro'; }
+        else { badge = '<span class="exp-card-badge basic">✓ Verificado</span>'; }
+        const estrellas = '⭐'.repeat(Math.round(p.calificacion || 5));
+        return `<div class="exp-card" onclick="abrirModal('modalProveedor')">
+            <div class="exp-card-cover ${coverClass}">📷${badge}</div>
+            <div class="exp-card-body">
+                <div class="exp-card-name">${p.nombreNegocio || 'Proveedor'}</div>
+                <div class="exp-card-cat">${p.categoria || 'General'}</div>
+                <div class="exp-card-rating">${estrellas} ${p.calificacion || '5.0'}</div>
+                <div class="exp-card-city">📍 ${p.ciudad || ''}, ${p.estado || ''}</div>
+                <a href="#" class="exp-card-btn" onclick="event.stopPropagation();return false;">Ver perfil</a>
+            </div>
+        </div>`;
+    }).join('');
+
+    renderPaginacion(total);
+}
+
+function renderPaginacion(total) {
+    const cont = document.getElementById('expPagination');
+    const totalPaginas = Math.ceil(total / explorarPorPagina);
+    if (totalPaginas <= 1) { cont.innerHTML = ''; return; }
+
+    let html = '';
+    if (explorarPagina > 1) html += `<button class="exp-page-btn" onclick="cambiarPagina(${explorarPagina - 1})">←</button>`;
+    for (let i = 1; i <= totalPaginas; i++) {
+        if (i === 1 || i === totalPaginas || (i >= explorarPagina - 1 && i <= explorarPagina + 1)) {
+            html += `<button class="exp-page-btn ${i === explorarPagina ? 'active' : ''}" onclick="cambiarPagina(${i})">${i}</button>`;
+        } else if (i === explorarPagina - 2 || i === explorarPagina + 2) {
+            html += `<span class="exp-page-btn" style="border:none;background:none;cursor:default;">...</span>`;
+        }
+    }
+    if (explorarPagina < totalPaginas) html += `<button class="exp-page-btn" onclick="cambiarPagina(${explorarPagina + 1})">→</button>`;
+    cont.innerHTML = html;
+}
+
+window.cambiarPagina = function(n) {
+    explorarPagina = n;
+    renderExplorar();
+    document.getElementById('expGrid').scrollTop = 0;
+};
+
+window.cambiarVistaExplorar = function(vista) {
+    explorarVista = vista;
+    const grid = document.getElementById('expGrid');
+    grid.classList.toggle('list-view', vista === 'list');
+    document.getElementById('btnVistaGrid').classList.toggle('active', vista === 'grid');
+    document.getElementById('btnVistaList').classList.toggle('active', vista === 'list');
+};
+
+// ==========================================
 // INICIALIZAR
 // ==========================================
 document.addEventListener('DOMContentLoaded', async () => {
@@ -413,4 +556,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     await cargarContenidoDinamico();
     cargarProveedores();
     cargarBlog();
+    document.getElementById('btnVistaGrid').classList.add('active');
 });

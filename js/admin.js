@@ -52,6 +52,80 @@ const MUNICIPIOS_POR_ESTADO = {
 };
 
 // ==========================================
+// SEEDING - Precarga inicial de estados, ciudades y categorías
+// ==========================================
+const CATEGORIAS_BASE = [
+    { nombre: 'Salones', icono: '🏰', descripcion: 'Espacios para eventos', orden: 1 },
+    { nombre: 'Alimentos', icono: '🍽️', descripcion: 'Catering y banquetes', orden: 2 },
+    { nombre: 'Fotografía', icono: '📸', descripcion: 'Fotografía de eventos', orden: 3 },
+    { nombre: 'Música/DJ', icono: '🎵', descripcion: 'Música y sonido', orden: 4 },
+    { nombre: 'Decoración', icono: '🎈', descripcion: 'Decoración de eventos', orden: 5 },
+    { nombre: 'Animación', icono: '🎪', descripcion: 'Animación y shows', orden: 6 },
+    { nombre: 'Mobiliario', icono: '🪑', descripcion: 'Renta de mobiliario', orden: 7 },
+    { nombre: 'Vestuario', icono: '👗', descripcion: 'Vestuario y disfraces', orden: 8 },
+    { nombre: 'Transporte', icono: '🚗', descripcion: 'Transporte para eventos', orden: 9 }
+];
+
+async function precargarDatosBase() {
+    try {
+        // Verificar si ya se sembraron los estados
+        const seedSnap = await getDoc(doc(db, "configuracion", "seed_version"));
+        if (seedSnap.exists() && seedSnap.data().version === 1) return;
+
+        // Sembrar estados
+        const estadosSnap = await getDocs(collection(db, "estados"));
+        if (estadosSnap.empty) {
+            let orden = 1;
+            for (const nombre of ESTADOS_MEXICO) {
+                await addDoc(collection(db, "estados"), {
+                    nombre,
+                    descripcion: '',
+                    orden: orden++,
+                    activo: true,
+                    creado: new Date().toISOString()
+                });
+            }
+        }
+
+        // Sembrar municipios como ciudades
+        const ciudadesSnap = await getDocs(collection(db, "ciudades"));
+        if (ciudadesSnap.empty) {
+            for (const [estado, municipios] of Object.entries(MUNICIPIOS_POR_ESTADO)) {
+                let orden = 1;
+                for (const nombre of municipios) {
+                    await addDoc(collection(db, "ciudades"), {
+                        nombre: nombre.trim(),
+                        estado,
+                        descripcion: '',
+                        orden: orden++,
+                        activa: true,
+                        disponible: true,
+                        creado: new Date().toISOString()
+                    });
+                }
+            }
+        }
+
+        // Sembrar categorías base
+        const categoriasSnap = await getDocs(collection(db, "categorias"));
+        if (categoriasSnap.empty) {
+            for (const cat of CATEGORIAS_BASE) {
+                await addDoc(collection(db, "categorias"), {
+                    ...cat,
+                    activa: true,
+                    creado: new Date().toISOString()
+                });
+            }
+        }
+
+        // Marcar la versión del seed
+        await setDoc(doc(db, "configuracion", "seed_version"), { version: 1, fecha: new Date().toISOString() });
+    } catch (error) {
+        console.error("Error en precarga de datos base:", error);
+    }
+}
+
+// ==========================================
 // LOGIN
 // ==========================================
 window.login = async function() {
@@ -112,6 +186,7 @@ function iniciarSesionAdmin(userData) {
     document.getElementById('loginContainer').style.display = 'none';
     document.getElementById('adminPanel').classList.add('active');
     aplicarPermisos(userData);
+    precargarDatosBase();
     cargarDashboard();
 }
 
@@ -170,9 +245,9 @@ document.querySelectorAll('.tab').forEach(tab => {
         document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
         if (tab.dataset.tab === 'dashboard') cargarDashboard();
         if (tab.dataset.tab === 'perfil') {
-            cargarConfiguracion(); cargarCategorias(); cargarEstados(); cargarCiudades();
+            cargarPerfilAdmin(); cargarConfiguracion(); cargarCategorias(); cargarEstados(); cargarCiudades();
             cargarFaqGeneral(); cargarFaqProveedores(); cargarFaqClientes();
-            cargarUsuarios(); cargarBlog(); cargarEstadosUsuario();
+            cargarUsuarios(); cargarBlog(); cargarEstadosUsuario(); cargarColaboradores();
         }
         if (tab.dataset.tab === 'proveedores') {
             cargarProveedores(); cargarSolicitudes(); cargarCambios(); cargarResenas();
@@ -248,7 +323,8 @@ async function cargarDashboard() {
         } catch(e) {}
         document.getElementById('dashCambiosPend').textContent = camPend;
         document.getElementById('tabCambiosCount').textContent = camPend;
-        document.getElementById('tabTestimoniosCount').textContent = comPend;
+        const modCountEl = document.getElementById('tabModeracionesCount');
+        if (modCountEl) modCountEl.textContent = comPend;
 
         let ingresosMes = 0;
         try {
@@ -323,7 +399,7 @@ window.previewPerfilFoto = function(input) {
 
 window.guardarPerfilAdmin = async function() {
     try {
-        const perfilId = usuarioActual ? (usuarioActual.id || usuarioActual.email) : 'principal';
+        const perfilId = (usuarioActual && usuarioActual.email) ? usuarioActual.email : 'principal';
         const fotoInput = document.getElementById('perfilFoto');
         let fotoURL = document.getElementById('perfilFotoPreview').src || '';
 
@@ -353,7 +429,7 @@ window.guardarPerfilAdmin = async function() {
 
 async function cargarPerfilAdmin() {
     try {
-        const perfilId = usuarioActual ? (usuarioActual.id || usuarioActual.email) : 'principal';
+        const perfilId = (usuarioActual && usuarioActual.email) ? usuarioActual.email : 'principal';
         const docSnap = await getDoc(doc(db, "admin_perfil", perfilId));
         if (docSnap.exists()) {
             const data = docSnap.data();
@@ -429,7 +505,10 @@ async function cargarEstados() {
             selectEstado.innerHTML = '<option value="">Selecciona un estado...</option>' + items.map(i => `<option value="${i.nombre}">${i.nombre}</option>`).join('');
         }
         if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay estados. Agrega estados para que aparezcan en el registro de proveedores.</div>'; return; }
-        contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">📍</div><div class="item-info"><div class="item-title">${item.nombre}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-small btn-secondary" onclick="editarEstado('${item.id}')">✏️ Editar</button><button class="btn btn-danger btn-small" onclick="eliminarEstado('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
+        contenedor.innerHTML = items.map(item => {
+            const disponible = item.disponible !== false;
+            return `<div class="item-row"><div class="item-icon">📍</div><div class="item-info"><div class="item-title">${item.nombre}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1} • ${disponible ? '✅ Disponible' : '⛔ No disponible'}</div></div><div class="item-actions"><button class="btn btn-small ${disponible ? 'btn-secondary' : ''}" onclick="toggleDisponibleEstado('${item.id}', ${!disponible})">${disponible ? '⛔ Ocultar' : '✅ Mostrar'}</button><button class="btn btn-small btn-secondary" onclick="editarEstado('${item.id}')">✏️ Editar</button><button class="btn btn-danger btn-small" onclick="eliminarEstado('${item.id}')">🗑️ Eliminar</button></div></div>`;
+        }).join('');
     } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar estados</div>'; }
 }
 
@@ -475,7 +554,10 @@ async function cargarCiudades() {
         snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
         items.sort((a, b) => (a.orden || 99) - (b.orden || 99));
         if (items.length === 0) { contenedor.innerHTML = '<div class="empty-state">📭 No hay ciudades.</div>'; return; }
-        contenedor.innerHTML = items.map(item => `<div class="item-row"><div class="item-icon">🏙️</div><div class="item-info"><div class="item-title">${item.nombre}, ${item.estado}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1}</div></div><div class="item-actions"><button class="btn btn-small btn-secondary" onclick="editarCiudad('${item.id}')">✏️ Editar</button><button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">🗑️ Eliminar</button></div></div>`).join('');
+        contenedor.innerHTML = items.map(item => {
+            const disponible = item.disponible !== false;
+            return `<div class="item-row"><div class="item-icon">🏙️</div><div class="item-info"><div class="item-title">${item.nombre}, ${item.estado}</div><div class="item-subtitle">${item.descripcion || 'Sin descripción'} • Orden: ${item.orden || 1} • ${disponible ? '✅ Disponible' : '⛔ No disponible'}</div></div><div class="item-actions"><button class="btn btn-small ${disponible ? 'btn-secondary' : ''}" onclick="toggleDisponibleCiudad('${item.id}', ${!disponible})">${disponible ? '⛔ Ocultar' : '✅ Mostrar'}</button><button class="btn btn-small btn-secondary" onclick="editarCiudad('${item.id}')">✏️ Editar</button><button class="btn btn-danger btn-small" onclick="eliminarCiudad('${item.id}')">🗑️ Eliminar</button></div></div>`;
+        }).join('');
     } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar</div>'; }
 }
 
@@ -1063,7 +1145,8 @@ async function cargarTestimonios() {
         document.getElementById('statTotalTestimonios').textContent = total;
         document.getElementById('statTestimoniosPendientes').textContent = pendientes;
         document.getElementById('statTestimoniosAprobados').textContent = aprobados;
-        document.getElementById('tabTestimoniosCount').textContent = pendientes;
+        const modBadge = document.getElementById('tabModeracionesCount');
+        if (modBadge) modBadge.textContent = pendientes;
 
         renderizarLista(testimonios, 'listaTestimoniosClientes', filtroTestimoniosActual, 'testimonio');
         renderizarLista(experiencias, 'listaExperienciasGoParty', filtroExperienciasActual, 'experiencia');
@@ -1268,8 +1351,62 @@ window.eliminarPost = async function(id) {
 // ==========================================
 window.abrirModalPost = () => document.getElementById('modalPost').style.display = 'flex';
 window.cerrarModalPost = () => document.getElementById('modalPost').style.display = 'none';
-window.abrirModalColaborador = () => document.getElementById('modalColaborador').style.display = 'flex';
+window.abrirModalColaborador = async function() {
+    const selectEstado = document.getElementById('colabEstado');
+    selectEstado.innerHTML = '<option value="">Selecciona un estado...</option>';
+    try {
+        const snap = await getDocs(collection(db, "estados"));
+        if (!snap.empty) {
+            const estados = [];
+            snap.forEach(d => estados.push(d.data().nombre));
+            estados.sort();
+            selectEstado.innerHTML = '<option value="">Selecciona un estado...</option><option value="Matriz Principal">Matriz Principal</option>' +
+                estados.map(e => `<option value="${e}">${e}</option>`).join('');
+        } else {
+            selectEstado.innerHTML = '<option value="">Selecciona un estado...</option><option value="Matriz Principal">Matriz Principal</option>' +
+                ESTADOS_MEXICO.map(e => `<option value="${e}">${e}</option>`).join('');
+        }
+    } catch (e) {
+        selectEstado.innerHTML = '<option value="">Selecciona un estado...</option><option value="Matriz Principal">Matriz Principal</option>' +
+            ESTADOS_MEXICO.map(e => `<option value="${e}">${e}</option>`).join('');
+    }
+    document.getElementById('modalColaborador').style.display = 'flex';
+};
 window.cerrarModalColaborador = () => document.getElementById('modalColaborador').style.display = 'none';
+
+async function cargarColaboradores() {
+    const contenedor = document.getElementById('listaColaboradores');
+    if (!contenedor) return;
+    try {
+        const snap = await getDocs(collection(db, "colaboradores"));
+        const colaboradores = [];
+        snap.forEach(doc => colaboradores.push({ id: doc.id, ...doc.data() }));
+        document.getElementById('totalColaboradores').textContent = colaboradores.length;
+        if (colaboradores.length === 0) {
+            contenedor.innerHTML = '<div class="empty-state">📭 No hay colaboradores registrados</div>';
+            return;
+        }
+        contenedor.innerHTML = colaboradores.map(c => {
+            const nivelColor = c.nivel === 'Matriz (Global)' ? '#FFD93D' : c.nivel === 'Supervisor de Zona' ? '#6BCB77' : '#4A90E2';
+            return `<div class="item-row" style="border-left-color: ${nivelColor};">
+                <div class="item-icon">🤝</div>
+                <div class="item-info">
+                    <div class="item-title">${c.nombre || 'Sin nombre'}</div>
+                    <div class="item-subtitle">${c.puesto || ''} • 📧 ${c.email || ''} • 📍 ${c.estado || ''} • Nivel: ${c.nivel || ''}</div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn btn-danger btn-small" onclick="eliminarColaborador('${c.id}')">🗑️</button>
+                </div>
+            </div>`;
+        }).join('');
+    } catch (error) { contenedor.innerHTML = '<div class="empty-state">❌ Error al cargar colaboradores</div>'; }
+}
+
+window.eliminarColaborador = async function(id) {
+    if (!confirm('¿Eliminar este colaborador?')) return;
+    try { await deleteDoc(doc(db, "colaboradores", id)); cargarColaboradores(); }
+    catch (error) { alert('❌ Error: ' + error.message); }
+};
 
 window.guardarPost = async function() {
     const titulo = document.getElementById('postTitulo').value;
@@ -1343,5 +1480,4 @@ window.enviarMensaje = async function() {
     } catch (error) { alert('❌ Error: ' + error.message); }
 };
 
-// Cargar perfil admin al entrar a la pestaña de perfil
-cargarPerfilAdmin();
+// (perfil admin cargado al abrir la pestaña)
